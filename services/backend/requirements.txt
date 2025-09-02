@@ -1,0 +1,9 @@
+fastapi==0.88.0
+uvicorn==0.20.0
+psycopg2==2.9.6
+mapclassify==2.6.1
+yoyo-migrations==9.0.0
+SQLAlchemy==2.0.34
+GeoAlchemy2==0.15.2
+isodate==0.7.2
+requests==2.32.3

@@ -1,0 +1,147 @@
+{
+    "message": {
+      "hello": "Hello World!",
+      "welcome": "Welcome to my app"
+    },
+    "cartography":{
+        "point":{
+            "style": "Style",
+            "type": "Type",
+            "circle-parameters": "Circle Parameters",
+            "circle":{
+                "size": "Size",
+                "color": "Color",
+                "opacity": "Opacity",
+                "stroke": "Stroke",
+                "stroke-width": "Stroke Width",
+                "blur": "Blur"
+            },
+            "label":{
+                "label": "Label",
+                "value": "Value"
+            }
+        },
+        "line":{
+            "style": "Style",
+            "type": "Type",
+            "parameters": "Parameters",
+            "simple":{
+                "opacity": "Opacity",
+                "color": "Color",
+                "width": "Width",
+                "blur": "Blur",
+                "cap": "Cap"
+            },
+            "graduated":{
+                "category": "Category",
+                "value": "Value",
+                "color-palette": "Color Palette"
+            }
+        },
+        "polygon":{
+            "style": "Style",
+            "type": "Type",
+            "fill":{
+                "fill": "Fill",
+                "opacity": "Opacity",
+                "fill-color": "Fill Color",
+                "outline-color": "Outline Color"
+            },
+            "categorized":{
+                "category": "Category",
+                "value": "Value",
+                "color":"Color"
+            },
+            "outline":{
+                "outline": "Outline",
+                "opacity": "Opacity",
+                "width": "Width",
+                "color": "Color",
+                "cap": "Cap"
+            }
+        },
+        "raster":{
+            "opacity": "Opacity",
+            "saturation": "Saturation",
+            "contrast": "Contrast"
+        }
+       
+    },
+    "app-header":{
+        "export": "Export",
+        "about": "About MOSIDI"
+    },
+    "dataset-search-landing":{
+        "indicator":{
+            "title":"Add Indicator",
+            "subtitle": "Start by searching and adding an indicator from the library."
+        },
+        "geo":{
+            "title":"Add geodata",
+            "subtitle": "Start by searching and adding a geodata from the library."
+        }
+    },
+    
+    "added-datasets":{
+        "title":"No Dataset Selected",
+        "subtitle": "Once you've added a dataset from the search, the entry will be displayed here.",
+        "dataset-count": "Added Datasets",
+        "hide": "Hide Layer",
+        "show": "Show Layer",
+        "metadata": "Metadata",
+        "zoom": "Zoom to Extent",
+        "remove": "Remove"
+    },
+    "dataset-filter":{
+        "title": "Search Data",
+        "search": "Enter Dataset Name",
+        "filter-label":{
+            "type":"Type",
+            "source":"Source",
+            "geometry":"Geometry",
+            "time":"Time"
+        },
+        "results": "Results",
+        "custom":{
+            "title":"Custom data",
+            "subtitle": "Create your own indicator",
+            "header":"Custom Indicator"
+        },
+        "metadata":{
+            "title":"Metadata",
+            "empty-msg": "No metaData available for"
+        }
+
+    },
+    "custom-indicator":{
+        "select-labels":{
+            "indicator": "Select Indicator",
+            "year": "Year",
+            "operator": "Operator"
+        },
+        "add": "Add Indicator",
+        "formula": "Formula",
+        "calculate": "Calculate"
+    },
+    "dataset":{
+        "year-filter-title":"Select Year",
+        "histogram":{
+            "title":"Histogram",
+            "x-axis":"Value Rangee",
+            "y-axis":"Frequency",
+            "linear":"Linear",
+            "logarithmic":"Logarithmic"
+        },
+        "classification":"Classification",
+        "color":"Color"
+    },
+    "bivariate":{
+        "title": "Combine data",
+        "subtitle":"Create Bivariate Map",
+        "select-indicator": "Select Indicator",
+        "select-year": "Select Year"
+    },
+    "geocoding":{
+        "search-placeholder": "Search address or place"
+    }
+  }

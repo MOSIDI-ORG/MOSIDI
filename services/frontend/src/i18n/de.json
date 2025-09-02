@@ -1,0 +1,146 @@
+{
+    "message": {
+      "hello": "Hallo Welt!",
+      "welcome": "Willkommen in meiner App"
+    },
+    "cartography":{
+        "point":{
+            "style": "Stil",
+            "type": "Typ",
+            "circle-parameters": "Kreis-Parameter",
+            "circle":{
+                "size": "Größe",
+                "color": "Farbe",
+                "opacity": "Transparenz",
+                "stroke": "Kontur",
+                "stroke-width": "Strichstärke",
+                "blur": "Weichzeichner"
+            },
+            "label":{
+                "label": "Label",
+                "value": "Wert"
+            }
+        },
+        "line":{
+            "style": "Stil",
+            "type": "Typ",
+            "parameters": "Parameter",
+            "simple":{
+                "opacity": "Transparenz",
+                "color": "Farbe",
+                "width": "Breite",
+                "blur": "Weichzeichner",
+                "cap": "Linienenden"
+            },
+            "graduated":{
+                "category": "Kategorie",
+                "value": "Wert",
+                "color-palette": "Farbpalette"
+            }
+        },
+        "polygon":{
+            "style": "Stil",
+            "type": "Typ",
+            "fill":{
+                "fill": "Füllung",
+                "opacity": "Transparent",
+                "fill-color": "Füllfarbe",
+                "outline-color": "Konturfarbe"
+            },
+            "categorized":{
+                "category": "Kategorie",
+                "value": "Wert",
+                "color":"Farbe"
+            },
+            "outline":{
+                "outline": "Kontur",
+                "opacity": "Transparenz",
+                "width": "Strichstärke",
+                "color": "Farbe",
+                "cap": "Linienenden"
+            }
+        },
+        "raster":{
+            "opacity": "Transparenz",
+            "saturation": "Sättigung",
+            "contrast": "Kontrast"
+        }
+       
+    },
+    "app-header":{
+        "export": "Export",
+        "about": "Über MOSIDI"
+    },
+    "dataset-search-landing":{
+        "indicator":{
+            "title":"Indikator hinzufügen",
+            "subtitle": "Beginne mit dem Suchen und Hinzufügen eines Indikator aus dem Katalog."
+        },
+        "geo":{
+            "title":"Geodaten hinzufügen",
+            "subtitle": "Beginne mit dem Suchen und Hinzufügen eines Geodaten aus dem Katalog."
+        }
+    },
+    "added-datasets":{
+        "title":"Kein Datensatz ausgewählt",
+        "subtitle": "Sobald ein Datensatz ausgewählt wurde, wird dieser hier angezeigt.",
+        "dataset-count": "Hinzugefügte Datensätze",
+        "hide": "Layer ausblenden",
+        "show": "Layer anzeigen",
+        "metadata": "Metadaten",
+        "zoom": "Auf Datensatz zoomen",
+        "remove": "Entfernen"
+    },
+    "dataset-filter":{
+        "title": "Suche Daten",
+        "search": "Datensatz Namen eingeben",
+        "filter-label":{
+            "type":"Typ",
+            "source":"Quelle",
+            "geometry":"Geometrie",
+            "time":"Zeit"
+        },
+        "results": "Ergebnisse",
+        "custom":{
+            "title":"Formel erstellen",
+            "subtitle": "um eigenen Datensatz zu erstellen",
+            "header":"Formel erstellen"
+        },
+        "metadata":{
+            "title":"Metadaten",
+            "empty-msg": "Keine Metadaten verfügbar für"
+        }
+
+    },
+    "custom-indicator":{
+        "select-labels":{
+            "indicator": "Indikator auswählen",
+            "year": "Jahr",
+            "operator": "Operator"
+        },
+        "add": "Indikator hinzufügen",
+        "formula": "Formel",
+        "calculate": "Kalkulieren"
+    },
+    "dataset":{
+        "year-filter-title":"Jahr auswählen",
+        "histogram":{
+            "title":"Histogram",
+            "x-axis":"Werte",
+            "y-axis":"Fequenz",
+            "linear":"Linear",
+            "logarithmic":"Logarithmisch"
+        },
+        "classification":"Klassifikation",
+        "color":"Farbe"
+    },
+    "bivariate":{
+        "title": "Daten kombinieren",
+        "subtitle": "Gleichzeitige Visualisierung mehrer Daten",
+        "select-indicator": "Indikator auswählen",
+        "select-year": "Jahr auswählen"
+    },
+    "geocoding":{
+        "search-placeholder": "Addresse or Ort suchen"
+    }
+  }

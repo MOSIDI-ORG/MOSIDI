@@ -1,0 +1,138 @@
+{
+  "Portalconfig": {
+    "treeType": "light",
+    "searchBar": {
+      "komoot": {
+        "minChars": 3,
+        "serviceId": "11",
+        "limit": 20,
+        "lang": "de",
+        "lat": 52.471621,
+        "lon": 13.352241,
+        "bbox": "2.592938,50.727909,18.413250,55.321463"
+      },
+      "visibleVector": {},
+      "tree": {},
+      "startZoomLevel": 1,
+      "placeholder": "Suche nach: - Adresse - Aktiven WFS"
+    },
+    "mapView": {
+      "backgroundImage": "./resources/img/backgroundCanvas.jpeg",
+      "startCenter": [
+        799060.757162197,
+        5828396.3870386565
+      ],
+      "extent": [58554.48289258301,5638151.549327516, 1105863.4510948965, 6172206.032328499], 
+      
+      "startZoomLevel": 1
+    },
+    "menu": {
+      "tree": {
+        "name": "Themen"
+      },
+      "tools": {
+        "name": "Werkzeuge",
+        "children": {
+          "gfi": {
+            "name": "Informationen abfragen",
+            "active": true
+          },
+          "coordToolkit": {
+            "name": "Koordinaten"
+          },
+          "measure": {
+            "name": "Strecke / Fläche messen"
+          },
+          "draw": {
+            "name": "Zeichnen / Schreiben"
+          },
+          "fileImport": {
+            "name": "Datei Import"
+          },
+          "saveSelection": {
+            "name": "Auswahl speichern"
+          }
+        }
+      },
+      "legend": {
+        "name": "Legende"
+      },
+      "info": {
+        "name": "Informationen",
+        "children": {
+          "staticlinks": [
+            {
+              "name": "Masterportal",
+              "url": "https://masterportal.org"
+            }
+          ]
+        }
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "orientation": {
+        "zoomMode": "once"
+      },
+      "attributions": true,
+      "mousePosition": true
+    }
+  },
+  "Themenconfig": {
+    "Hintergrundkarten": {
+      "Layer": [
+        {
+          "id": "453",
+          "visibility": true
+        }
+      ]
+    },
+    "Fachdaten": {
+      "Layer": [
+        {
+          "id": "1",
+          "name": "KITA-Zugänglichkeit"
+        },
+        {
+          "id": "2",
+          "name": "hochwasserrisikogebeite"
+        },
+        {
+          "id": "3",
+          "name": "landcover"
+        },
+        {
+          "id": "4",
+          "name": "tree_cover_density",
+          "styleId": "4"
+        },
+        {
+          "id": "5",
+          "name": "kommunales_gebiet"
+        },
+        {
+          "id": "6",
+          "name": "wasser"
+        },
+        {
+          "id": "7",
+          "name": "gebaeude"
+        },
+        {
+          "id": "8",
+          "name": "kita"
+        },
+        {
+          "id": "9",
+          "name": "windkraftanlagen"
+        },
+       
+        
+        {
+          "id": "18105",
+          "name": "STA Anzahl frei verfügbarer Fahrräder je StadtRad-Station"
+        }
+      ]
+    }
+  }
+}
