@@ -62,4 +62,4 @@ jobs:
         run: docker-compose build
       
       - name: Start newly built containers in detached mode
-        run: docker-compose -p mosidi up -d
+        run: docker-compose up -d --no-recreate
