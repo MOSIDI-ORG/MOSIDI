@@ -1,0 +1,65 @@
+name: Build and Deploy Docker Containers
+
+on:
+  push:
+    branches: 
+      - master
+      - dev
+  pull_request:
+    branches: 
+      - master
+      - dev
+
+jobs:
+  build-production:
+    name: "Build and Deploy to Production"
+    runs-on: [self-hosted-prod]  # Targets the production runner
+    if: github.ref == 'refs/heads/master'  # Only run this job for the master branch
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          clean: false
+          set-safe-directory: false
+
+      - name: Listing containers
+        run: docker-compose ps
+      
+      - name: Stop running containers
+        run: docker-compose down
+
+      - name: Create container data directory
+        run: mkdir -p /opt/container-data
+
+      - name: (Re)build containers
+        run: docker-compose build
+      
+      - name: Start newly built containers in detached mode
+        run: docker-compose up --detach
+
+  build-development:
+    name: "Build and Deploy to Development"
+    runs-on: [self-hosted-dev]  # Targets the development runner
+    if: github.ref == 'refs/heads/dev'  # Only run this job for the dev branch
+
+    steps:
+    
+      - uses: actions/checkout@v3
+        with:
+          clean: false
+          set-safe-directory: false
+
+      - name: Listing containers
+        run: docker-compose ps
+      
+      - name: Stop running containers
+        run: docker-compose down
+
+      - name: Create container data directory
+        run: mkdir -p /opt/container-data
+
+      - name: (Re)build containers
+        run: docker-compose build
+      
+      - name: Start newly built containers in detached mode
+        run: docker-compose up --detach

@@ -1,0 +1,11 @@
+fastapi==0.88.0
+uvicorn==0.20.0
+psycopg2==2.9.6
+mapclassify==2.6.1
+yoyo-migrations==9.0.0
+SQLAlchemy==2.0.35
+GeoAlchemy2==0.15.2
+pandas==2.2.2
+requests==2.32.3
+patool==3.0.2
+openpyxl==3.1.3
