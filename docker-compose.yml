@@ -10,7 +10,7 @@ services:
       - .env
     volumes:
       - ./data:/work
-      - brandenburg_db:/var/lib/postgresql/data
+      - innowest_brandenburg_db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -140,7 +140,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  brandenburg_db:
+  innowest_brandenburg_db:
   geoserver_data:
   forest_fire_data:
   demographic_data:
