@@ -2,7 +2,6 @@ services:
 
   brandenburg_db:
     image: postgis/postgis
-    container_name: brandenburg_db
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
@@ -18,7 +17,6 @@ services:
 
   backend:
     build: ./services/backend
-    container_name: backend
     networks: 
       default:
         aliases:
@@ -51,7 +49,6 @@ services:
     build: 
       context: ./services/frontend
       dockerfile: Dockerfile
-    container_name: app
     networks: 
       default:
         aliases:
@@ -62,7 +59,6 @@ services:
     restart: unless-stopped
   
   tileserv:
-    container_name: tileserv
     image: pramsey/pg_tileserv:20231005
     #image: pramsey/pg_tileserv:latest
     env_file:
@@ -83,7 +79,6 @@ services:
       default:
         aliases:
           - geoserver
-    container_name: geoserver
     restart: unless-stopped
     volumes:
       - geoserver_data:/opt/geoserver/data_dir
@@ -100,7 +95,6 @@ services:
     
   masterportal:
     image: nginx
-    container_name: masterportal
     volumes:
       - ./services/masterportal:/usr/share/nginx/html/masterportal
     networks: 
@@ -113,7 +107,6 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
