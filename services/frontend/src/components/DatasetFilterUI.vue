@@ -57,16 +57,20 @@
                         <v-col>
                             <v-select
                                 :items=dataSources
+                                item-value="value"
+                                item-title="label"
                                 :label="$t('dataset-filter.filter-label.source')"
                                 dense
                                 outlined
                                 single-line
-                                 density="compact"
+                                density="compact"
                                 hide-details
                                 rounded
                                 solo 
                                 v-model="selectedDatasetSource"
-                            ></v-select>
+                            >
+                               
+                            </v-select>
                         </v-col>
                         
                        
@@ -75,6 +79,8 @@
                         <v-col>
                             <v-select
                                 :items=geometryTypes
+                                item-value="value"
+                                item-title="label"
                                 :label="$t('dataset-filter.filter-label.geometry')"
                                 dense
                                 outlined
@@ -84,11 +90,15 @@
                                  density="compact"
                                 solo 
                                 v-model="selectedGeometryTypee"
-                            ></v-select>
+                            >
+                            
+                        </v-select>
                         </v-col>
                         <v-col>
                             <v-select
                                 :items=availableYearsForIndicatorFilter
+                                item-value="value"
+                                item-title="label"
                                 :label="$t('dataset-filter.filter-label.time')"
                                 dense
                                 outlined
@@ -98,7 +108,9 @@
                                  density="compact"
                                 solo 
                                 v-model="selectedYearIndicatorFilter"
-                            ></v-select>
+                            >
+                                
+                            </v-select>
                         </v-col>
                     </v-row>
                 </div>
@@ -240,7 +252,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, defineEmits } from 'vue';
+import { onMounted, ref, computed, defineEmits, watch } from 'vue';
 import {getTableMetadata, getIndicatorData, classification, externalLayerFromDB} from "../services/backend.calls";
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 //import { useMetadataDialogStore } from '../stores/metadataDialog'
@@ -309,19 +321,26 @@ let selectedDatasetType = ref(null)
 
 
 
-let dataSources = ref(null)
-let geometryTypes = ref(null)
+//let dataSources = ref(null)
+//let geometryTypes = ref(null)
 let selectedGeometryTypee = ref(null)
 let selectedDatasetSource = ref(null)
 let selectedLayerMetadata = ref(null)
 let selectedLayerName= ref(null)
 let selectedYearIndicatorFilter = ref(null)
-let availableYearsForIndicatorFilter =ref(null)
+//let availableYearsForIndicatorFilter =ref(null)
 onMounted(()=>{
     tableMetadataRequest()
     getExternalWMSLayers()
 })
 
+// reset the selected filter when toggling the activatedDatasetSearch (geodata and indicator)
+watch(activatedDatasetSearch, () => {
+  // Reset dependent filters
+  selectedGeometryTypee.value = null
+  selectedDatasetSource.value = null
+  selectedLayerMetadata.value = null
+})
 const filteredItems = computed(() => {
     return tableMetadata.value.filter(item => {
         const matchesSearchText = layerSearchText.value
@@ -339,7 +358,6 @@ const filteredItems = computed(() => {
                 return true; 
             }
         })();
-
         const matchesDatasetSource = selectedDatasetSource.value && selectedDatasetSource.value !== 'All'
             ? item.dct_catalog_publisher === selectedDatasetSource.value
             : true;
@@ -393,18 +411,81 @@ const toggleFilterUI = ()=>{
         filterInitiated : false
     })
 }
-const tableMetadataRequest= async ()=>{
-    const response =  await getTableMetadata()
-    tableMetadata.value= response
-    datasetSearchStore.setTableMetadata(response)
-    dataSources.value = [ ...new Set(tableMetadata.value.map(item => item.dct_catalog_publisher)), "All"];
-    geometryTypes.value = [ ...new Set(tableMetadata.value.map(item => item.geometry_type)), "All"];
-    //availableYearsForIndicatorFilter.value = [ ...new Set(tableMetadata.value.map(item => item.dct_temporal_enddate)), "All"];
-    availableYearsForIndicatorFilter.value = [
-    ...new Set(tableMetadata.value.map(item => new Date(item.dct_temporal_enddate).getFullYear()).sort()),
-    "All"
-    ];
+const tableMetadataRequest = async () => {
+  const response = await getTableMetadata()
+  tableMetadata.value = response
+  datasetSearchStore.setTableMetadata(response)
+  // --- filter based on activatedDatasetSearch ---
+  
 }
+// reactive filtered metadata based on activatedDatasetSearch
+const filteredMeta = computed(() => {
+  if (!tableMetadata.value) return []
+
+  const typeFilter = activatedDatasetSearch.value?.toLowerCase()
+
+  return tableMetadata.value.filter(item => {
+    if (!item.dct_type) return false
+    const itemType = item.dct_type.trim().toLowerCase()
+
+    if (typeFilter === 'indicator') return itemType === 'indikator'
+    if (typeFilter === 'geodata') return itemType === 'raster'
+    return true
+  })
+})
+
+// reactive dataSources with counts
+const dataSources = computed(() => {
+  const counts = filteredMeta.value.reduce((acc, item) => {
+    const key = item.dct_catalog_publisher
+    acc[key] = (acc[key] || 0) + 1
+    return acc
+  }, {})
+
+  return [
+    ...Object.entries(counts).map(([value, count]) => ({
+      value,
+      count,
+      label: `${value} (${count})`
+    })),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
+
+// reactive geometryTypes with counts
+const geometryTypes = computed(() => {
+  const counts = filteredMeta.value.reduce((acc, item) => {
+    const key = item.geometry_type
+    acc[key] = (acc[key] || 0) + 1
+    return acc
+  }, {})
+
+  return [
+    ...Object.entries(counts).map(([value, count]) => ({
+      value,
+      count,
+      label: `${value} (${count})`
+    })),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
+
+// reactive availableYears with counts
+const availableYearsForIndicatorFilter = computed(() => {
+  const years = filteredMeta.value.map(item => new Date(item.dct_temporal_enddate).getFullYear())
+  const uniqueYears = Array.from(new Set(years)).sort((a,b)=>a-b)
+
+  return [
+    ...uniqueYears.map(year => {
+      const count = years.filter(y => y >= year).length
+      return { value: year, count, label: `>=${year} (${count})` }
+    }),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
+
+
+
 
 const showLayerMetadata= (layerName)=>{
     
