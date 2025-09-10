@@ -53,7 +53,7 @@ jobs:
         run: docker-compose ps
       
       - name: Stop running containers
-        run: docker-compose down
+        run: docker-compose down --volumes --remove-orphans
 
       - name: Create container data directory
         run: mkdir -p /opt/container-data
@@ -62,4 +62,4 @@ jobs:
         run: docker-compose build --no-cache
       
       - name: Start newly built containers in detached mode
-        run: docker-compose --project-name innowest up -d --force-recreate
+        run: docker-compose --project-name innowest up -d
