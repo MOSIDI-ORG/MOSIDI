@@ -62,4 +62,4 @@ jobs:
         run: docker-compose build --no-cache
       
       - name: Start newly built containers in detached mode
-        run: docker-compose --project-name innowest up -d --no-recreate
+        run: docker-compose --project-name innowest up -d --force-recreate
