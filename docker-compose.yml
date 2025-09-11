@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     volumes:
-      - innowest_brandenburg_db:/var/lib/postgresql/data
+      - brandenburg_db:/var/lib/postgresql/data
       - ./brandenburg.sql:/docker-entrypoint-initdb.d/brandenburg.sql:ro
     ports:
       - "5432:5432"
@@ -141,7 +141,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  innowest_brandenburg_db:
+  brandenburg_db:
   geoserver_data:
   forest_fire_data:
   demographic_data:
