@@ -141,7 +141,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  brandenburg_db:
+  innowest_brandenburg_db:
   geoserver_data:
   forest_fire_data:
   demographic_data:
