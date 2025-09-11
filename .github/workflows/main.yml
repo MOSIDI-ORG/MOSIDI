@@ -53,7 +53,7 @@ jobs:
         run: docker-compose ps
       
       - name: Stop running containers
-        run: docker-compose --project-name innowest down --rmi all --volumes --remove-orphans
+        run: docker-compose --project-name innowest down --rmi all --remove-orphans
 
       - name: Create container data directory
         run: mkdir -p /opt/container-data
