@@ -14,6 +14,8 @@ services:
       - ./brandenburg.sql:/docker-entrypoint-initdb.d/brandenburg.sql:ro
     ports:
       - "5432:5432"
+    command: >
+      bash -c "psql -U $${POSTGRES_USER} -d $${POSTGRES_DB} -f /docker-entrypoint-initdb.d/brandenburg.sql && docker-entrypoint.sh postgres"
     restart: unless-stopped
 
   backend:
