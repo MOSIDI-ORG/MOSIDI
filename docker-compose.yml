@@ -10,8 +10,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/work
-      - brandenburg_db:/var/lib/postgresql/data
+      - innowest_brandenburg_db:/var/lib/postgresql/data
       - ./brandenburg.sql:/docker-entrypoint-initdb.d/brandenburg.sql:ro
     ports:
       - "5432:5432"
