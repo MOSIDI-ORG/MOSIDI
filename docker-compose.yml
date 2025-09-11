@@ -12,7 +12,7 @@ services:
     volumes:
       - ./data:/work
       - brandenburg_db:/var/lib/postgresql/data
-      - ./brandenburg.sql:/docker-entrypoint-initdb.d/brandenburg.sql
+      - ./brandenburg.sql:/docker-entrypoint-initdb.d/brandenburg.sql:ro
     ports:
       - "5432:5432"
     restart: unless-stopped
