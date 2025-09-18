@@ -1,6 +1,5 @@
 .DS_Store
-.env
-pg_tileserv.env
-._.DS_Store
 **/.DS_Store
-**/._.DS_Store.DS_Store.DS_Store
+node_modules/
+.astro/
+dist/
