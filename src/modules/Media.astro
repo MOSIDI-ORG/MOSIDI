@@ -1,0 +1,14 @@
+---
+import { cn } from "../components/utils/cn";
+
+export interface Props {
+	fullWidth?: boolean;
+	class?: string;
+}
+
+const { fullWidth = false } = Astro.props;
+---
+
+<div class={cn("flex", !fullWidth && "p-12", Astro.props.class)}>
+	<slot />
+</div>

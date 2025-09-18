@@ -1,0 +1,30 @@
+---
+import { cn } from "../../../utils/cn";
+import type { Evolution02Props } from "./type";
+
+export interface Props extends Evolution02Props {}
+
+const { innerShape = "text-set-1-400", outerShape = "text-set-1-200" } =
+	Astro.props;
+---
+
+<svg
+	width="80"
+	height="80"
+	viewBox="0 0 80 80"
+	fill="none"
+	class={cn("w-full h-full", Astro.props.class)}
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<rect width="80" height="80" rx="40" class={outerShape} fill="currentColor"
+	></rect>
+	<rect
+		x="40"
+		y="65"
+		width="35.6885"
+		height="35.6885"
+		rx="2.52101"
+		transform="rotate(-135 40 65)"
+		class={innerShape}
+		fill="currentColor"></rect>
+</svg>

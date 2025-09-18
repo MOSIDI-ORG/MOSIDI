@@ -1,0 +1,34 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "cva";
+
+const textGrid = cva({
+	base: "pt-12 px-12 pb-[120px] default-grid",
+	// **or**
+	// base: ["font-semibold", "border", "rounded"],
+	variants: {
+		colour: {
+			default: "bg-white text-black",
+			coloured: "bg-set-1-500 text-white",
+			black: "bg-black text-white",
+		},
+		variant: {
+			image: "",
+			textOnly: "",
+		},
+	},
+	defaultVariants: {
+		colour: "default",
+	},
+});
+
+export interface Props
+	extends HTMLAttributes<"button">,
+		VariantProps<typeof textGrid> {}
+
+const { colour = "default" } = Astro.props;
+---
+
+<div class={textGrid({ colour })}>
+	<slot />
+</div>

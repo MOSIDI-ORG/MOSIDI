@@ -1,0 +1,42 @@
+---
+export interface Props {
+	innerShape?: string;
+	middleShape?: string;
+	outerShape?: string;
+}
+
+const {
+	innerShape = "text-set-1-400",
+	middleShape = "text-set-1-300",
+	outerShape = "text-set-1-200",
+} = Astro.props;
+---
+
+<svg
+	width="120"
+	height="120"
+	viewBox="0 0 120 120"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	class="bg- h-full w-full"
+>
+	<circle cx="60" cy="60" r="60" fill="currentColor" class={outerShape}
+	></circle>
+	<rect
+		x="25.3276"
+		y="24.6205"
+		width="70.7585"
+		height="70.7585"
+		rx="3.78151"
+		class={middleShape}
+		fill="currentColor"></rect>
+	<rect
+		x="60.707"
+		y="88.2353"
+		width="39.9311"
+		height="39.9311"
+		rx="2.52101"
+		transform="rotate(-135 60.707 88.2353)"
+		class={innerShape}
+		fill="currentColor"></rect>
+</svg>
