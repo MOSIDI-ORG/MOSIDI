@@ -68,6 +68,7 @@ onMounted(() => {
     compact: true,
 
   }), 'bottom-left');
+  console.log("Map initialized")
 
 
   
