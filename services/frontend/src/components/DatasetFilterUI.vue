@@ -118,7 +118,7 @@
         
 
         </v-card>
-        <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="filterInitiated==true" class="dataset-filter-ui mx-auto text-left animated-transform"  max-width="371">
+        <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="filterInitiated==true" class="dataset-filter-ui mx-auto text-left animated-transform"  width="371">
             <v-list lines="two" style="background-color:transparent; height: 81%;" class="ml-1 mr-1">
                 <span style="font-size: 1rem; font-weight: 500;" class="ml-2">{{filteredItems?.length + ' '+  $t('dataset-filter.results')}}</span>
 
