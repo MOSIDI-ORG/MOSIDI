@@ -35,7 +35,7 @@
         
         </div>
   
-        <v-card class="legend-ui">
+        <v-card class="legend-ui" max-width="400">
         
             <v-card-item v-if="isMaximized && Object.keys(addedLayersLegendSpec).length>0">
                 <div v-if="classIntervalsAndColorHexagon" >
@@ -196,10 +196,16 @@
                 
                 
             </v-card-item>
-            <v-card-item v-if="isMaximized && activatedExternalWMSMapLegendURL">
+            <v-card-item v-if="isMaximized && activatedExternalWMSMapLegendURL" >
+              
+               
                 <div   class="bivariate-legend-container" style="max-width: 300px; max-height: 400px; overflow: scroll;">
                     <img :src="activatedExternalWMSMapLegendURL" />
                 </div>
+                 <div >
+                    {{ activatedExternalWMSMapLegendURLTitle}}
+                </div>
+               
             </v-card-item>
         
         
@@ -223,7 +229,7 @@ let {indicatorArray} = storeToRefs(useIndicatorStore())
 const emit = defineEmits(["setFilterForLegendInteraction", "resetFilter", "zoomIn" , "zoomOut", "addLayerToMap", "removeLayerFromMap", "fitBoundsToBBOX"]);
 
 
-let { classIntervalsAndColor, classIntervalsAndRadius, classIntervalsAndColorHexagon, clickedlegendItems, /*completeIndicatorName*/ completeSecondIndicatorName, addedLayersLegendSpec, isMaximized, geocodingToggle, activatedExternalWMSMapLegendURL} = storeToRefs(useMapLegendStore())
+let { classIntervalsAndColor, classIntervalsAndRadius, classIntervalsAndColorHexagon, clickedlegendItems, /*completeIndicatorName*/ completeSecondIndicatorName, addedLayersLegendSpec, isMaximized, geocodingToggle, activatedExternalWMSMapLegendURL, activatedExternalWMSMapLegendURLTitle} = storeToRefs(useMapLegendStore())
 let { bivariateColorpalette, /*bivariateLegend*/ } = storeToRefs(useBivariateStore())
 let clickedIndicator = ref(null)
 let {addedLayers}=storeToRefs(useaddedDatasetsStore())

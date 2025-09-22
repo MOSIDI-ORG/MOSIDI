@@ -341,7 +341,8 @@ const activateStylePanel = (datasetName,geomType)=>{
         rasterLayerSpecification.value=layerSpec
         rasterStyleStore.addLayerStyle(datasetName)
         mapLegendStore.setActivatedWMSLegendItem({
-            legend_url: addedDatasetsStore.addedLayers[datasetName].legend_url
+            legend_url: addedDatasetsStore.addedLayers[datasetName].legend_url,
+            legend_title: datasetName
         })
 
    }

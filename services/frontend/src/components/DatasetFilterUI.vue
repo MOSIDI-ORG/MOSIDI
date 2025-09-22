@@ -532,11 +532,10 @@ const addExternaWMSLayerToMap=(item)=>{
     //console.log(addedDatasetsStore.addedLayers, "added layers")
   
     if(addedDatasetsStore.addedLayers[item.dct_title]== undefined){
-        emit("addExternaWMSLayerToMap", item)
-
         addedDatasetsStore.addLayer({layerName:item.dct_title, metadata:item})
         mapLegendStore.setActivatedWMSLegendItem({
             legend_url: item.legend_url,
+            legend_title: item.dct_title
         })
         
        
