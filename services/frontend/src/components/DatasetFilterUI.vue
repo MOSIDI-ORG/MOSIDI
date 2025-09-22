@@ -118,20 +118,20 @@
         
 
         </v-card>
-        <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="filterInitiated==true" class="dataset-filter-ui mx-auto text-left animated-transform"  width="371">
+        <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="filterInitiated==true" class="dataset-filter-ui mx-auto text-left animated-transform"  max-width="371">
             <v-list lines="two" style="background-color:transparent; height: 81%;" class="ml-1 mr-1">
                 <span style="font-size: 1rem; font-weight: 500;" class="ml-2">{{filteredItems?.length + ' '+  $t('dataset-filter.results')}}</span>
 
                 <v-list-item
                     v-for="(metadata, index) in filteredItems"
                     :key="index"
-                    :subtitle="metadata.dct_catalog_publisher"
-                    :title="metadata.dct_title"
                     @click="addLayerToMap(metadata.dct_title, metadata.geometry_type)"
                     style="border-radius: 5px;"
                     @mouseover="hoveredItem = index"
                     @mouseleave="hoveredItem = null"
                 >
+                    <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
+                    <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
                     <template v-slot:prepend>
                         <v-avatar>
                             <v-img 
@@ -155,6 +155,7 @@
                             <img src="icons/information.svg" alt="Information Icon" width="18" height="18" />
                         </v-btn> 
                     </template>
+                     
                 </v-list-item>
                 
         

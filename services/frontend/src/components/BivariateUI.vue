@@ -84,14 +84,14 @@
                     <v-list-item
                         v-for="(metadata, index) in filteredItems"
                         :key="index"
-                        :subtitle="metadata.dct_catalog_publisher"
-                        :title="metadata.dct_title"
                         v-model="indicatorArray[selectedDataset]['secondIndicatorName']"
                         @click=addSecondIndicator(metadata)
                         @mouseover="hoveredItem = index"
                         @mouseleave="hoveredItem = null"
                         style="border-radius: 5px;"
                     >
+                        <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
+                        <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
                         <template v-slot:prepend>
                             <v-avatar>
                                 <v-img 
