@@ -20,7 +20,9 @@ export const useMapLegendStore = defineStore ({
         completeSecondIndicatorName: null,
         isMaximized: true,
         geocodingToggle:false,
-        activatedExternalWMSMapLegendURL: null
+        activatedExternalWMSMapLegendURL: null,
+        activatedExternalWMSMapLegendURLTitle: null
+
 
     }),
     actions: {
@@ -60,12 +62,34 @@ export const useMapLegendStore = defineStore ({
             }
         },
         setActivatedWMSLegendItem(payload) {
-            this.activatedExternalWMSMapLegendURL = payload.legend_url;
+            let url = payload.legend_url;
+
+            // Check if URL looks like a WMS GetLegendGraphic request
+            const isWMSLegend = url?.toLowerCase().includes("request=getlegendgraphic");
+
+            if (isWMSLegend) {
+                const legendOptions = "fontAntiAliasing:true;";
+
+                // Add LEGEND_OPTIONS if not present
+                if (!url.includes("LEGEND_OPTIONS")) {
+                url += `&LEGEND_OPTIONS=${legendOptions}`;
+                }
+
+                // Add transparency if not present
+                if (!url.includes("TRANSPARENT")) {
+                url += "&TRANSPARENT=TRUE";
+                }
+            }
+
+            // Store URL as-is for static PNGs or modified for WMS
+            this.activatedExternalWMSMapLegendURL = url;
+            this.activatedExternalWMSMapLegendURLTitle =  payload.legend_title;
            
         },
         removeWMSLegendItem(payload){
-            if(payload.legend_url === this.activatedExternalWMSMapLegendURL) {
+            if(payload.layername === this.activatedExternalWMSMapLegendURLTitle) {
                 this.activatedExternalWMSMapLegendURL = null;
+                this.activatedExternalWMSMapLegendURLTitle = null;
             }
         }
      
