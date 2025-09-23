@@ -104,7 +104,7 @@
 <script setup>
 import { ref, onMounted, defineEmits, computed} from "vue"
 import {
-    getTableNames, getGeoserverCoverageSources, getLayerExtent, /*createhexagonFunction*/
+    getTableNames, /*getGeoserverCoverageSources,*/ getLayerExtent, /*createhexagonFunction*/
 } from "../services/backend.calls";
 import { useMetadataDialogStore } from '../stores/metadataDialog'
 import { storeToRefs } from 'pinia'
@@ -270,7 +270,7 @@ const filteredItems = computed(() => {
   
 });
 
-const readGeoserverCoverageSources = async ()=> {
+/*const readGeoserverCoverageSources = async ()=> {
     const response =  await getGeoserverCoverageSources()
     for (let i in response.coverageStores.coverageStore) {
         tableNames.value.push({"name": response.coverageStores.coverageStore[i].name,
@@ -278,7 +278,7 @@ const readGeoserverCoverageSources = async ()=> {
         "checked": false
         });
     }
-}
+}*/
 
 const getLayerExtentFromDB = async(layerName) =>{
     const layerExtent =  await getLayerExtent(layerName)
@@ -306,7 +306,7 @@ const activateStylePanel = async (item)=>{
 }
 onMounted(() => {
   sendQuestRequest();
-  readGeoserverCoverageSources()
+  //readGeoserverCoverageSources()
 })
 
 </script>

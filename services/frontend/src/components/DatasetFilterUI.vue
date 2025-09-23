@@ -282,7 +282,7 @@ const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressi
 let {  filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
 
 
-
+let externalWMSLayers = ref([])
 let { circleStyleParams } = storeToRefs(usePointStyleStore())
 let { polygonStyleParams } = storeToRefs(usePolygonStyleStore())
 let {  lineStyleParams } = storeToRefs(useLineStyleStore())
@@ -415,6 +415,7 @@ const toggleFilterUI = ()=>{
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
   tableMetadata.value = response
+  tableMetadata.value = [...tableMetadata.value, ...externalLayers]
   datasetSearchStore.setTableMetadata(response)
   // --- filter based on activatedDatasetSearch ---
   
@@ -498,7 +499,7 @@ const showLayerMetadata= (layerName)=>{
 const addLayerToMap = async (layerName,geomType)=>{
     
     if (geomType=='raster'){
-        let item = externalLayers.find(item => item.dct_title === layerName)
+        let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
         addExternaWMSLayerToMap(item)
     }
     let selectedLayerMetadata = tableMetadata.value.find(item => item['dct_title'] === layerName)
@@ -528,7 +529,6 @@ const addLayerToMap = async (layerName,geomType)=>{
 
 }
 const addExternaWMSLayerToMap=(item)=>{
-    
     //console.log(addedDatasetsStore.addedLayers, "added layers")
   
     if(addedDatasetsStore.addedLayers[item.dct_title]== undefined){
@@ -816,16 +816,18 @@ const updateDeckglLayer = (geojson, style)=>{
 const getExternalWMSLayers = async ()=>{
     const response = await externalLayerFromDB()
     response.forEach(newLayer => {
-        const index = externalLayers.findIndex(l => l.id === newLayer.id);
+        const index = externalWMSLayers.value.findIndex(l => l.id === newLayer.id);
         if (index !== -1) {
             // Replace existing layer
-            externalLayers[index] = newLayer;
+            externalWMSLayers.value[index] = newLayer;
         } else {
             // Add new layer
-            externalLayers.push(newLayer);
+            externalWMSLayers.value.push(newLayer);
         }
     });
-
+     externalLayers.forEach(newLayer => {
+        externalWMSLayers.value.push(newLayer);
+    });
 }
 
 </script>
