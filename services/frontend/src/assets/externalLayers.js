@@ -11,6 +11,7 @@ export const externalLayers = [
       attribution: 'GeoBasis BB-BE',
       metadata: "https://isk.geobasis-bb.de/mapproxy/bdom/service/wms?REQUEST=GetCapabilities&SERVICE=WMS",
       geometry_type: 'raster',
+      dct_catalog_publisher:"GeoBasis",
     },
     {
       id: 'dgm_wms',
@@ -24,6 +25,7 @@ export const externalLayers = [
       attribution: 'GeoBasis BB-BE',
       metadata: "https://isk.geobasis-bb.de/mapproxy/dgm/service/wms?REQUEST=GetCapabilities&SERVICE=WMS",
       geometry_type: 'raster',
+      dct_catalog_publisher:"GeoBasis",
     },
     {
       id: 'Orthophoto_wms',
@@ -36,6 +38,7 @@ export const externalLayers = [
       attribution: 'GeoBasis BB-BE',
       metadata: "https://isk.geobasis-bb.de/mapproxy/dgm/service/wms?REQUEST=GetCapabilities&SERVICE=WMS",
       geometry_type: 'raster',
+      dct_catalog_publisher:"GeoBasis",
     },
     {
       id: 'Landcover_wms_inspire',
@@ -49,6 +52,7 @@ export const externalLayers = [
       attribution: 'Bundesamt für Kartographie und Geodäsie: (BKG)',
       metadata: "https://mis.bkg.bund.de/csw?REQUEST=GetRecordById&SERVICE=CSW&VERSION=2.0.2&elementSetName=full&id=206F9836-0493-4E76-872A-33F4A723A321",
       geometry_type: 'raster',
+      dct_catalog_publisher:"Bundesamt für Kartographie und Geodäsie: (BKG)",
     },
     {
       id: 'solaratlas_solarbericht_energieportal_brandenburg_wms',
