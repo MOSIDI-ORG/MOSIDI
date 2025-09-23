@@ -199,7 +199,7 @@
             <v-card-item v-if="isMaximized && activatedExternalWMSMapLegendURL" >
               
                
-                <div   class="bivariate-legend-container" style="max-width: 300px; max-height: 400px; overflow: scroll;">
+                <div   class="bivariate-legend-container" style="max-width: 500px; overflow-x: scroll; max-height: 400px; overflow: scroll;">
                     <img :src="activatedExternalWMSMapLegendURL" />
                 </div>
                  <div >
