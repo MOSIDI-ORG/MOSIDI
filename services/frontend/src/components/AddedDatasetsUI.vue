@@ -157,8 +157,10 @@ import { usePointStyleStore } from '../stores/pointStyle'
 import { usePolygonStyleStore } from '../stores/polygonStyle'
 import { useLineStyleStore } from '../stores/lineStyle'
 import { useRasterStyleStore } from '../stores/rasterStyle'
-
+import { useAlertStore } from '@/stores/alert'
 import { useMenuStore } from '../stores/menu'
+const alertStore = useAlertStore()
+
 let { isMinimized } = storeToRefs(useMenuStore())
 const cartographyStore = useCartographyStore()
 const pointStyleStore = usePointStyleStore()
@@ -344,6 +346,12 @@ const activateStylePanel = (datasetName,geomType)=>{
             legend_url: addedDatasetsStore.addedLayers[datasetName].legend_url,
             legend_title: datasetName
         })
+        if (addedDatasetsStore.addedLayers[datasetName].legend_url== undefined){
+        alertStore.setAlert({
+                text: `There is no legend for ${addedDatasetsStore.addedLayers[datasetName].dct_title}`,
+                timeout: 2000
+            });
+        }
 
    }
    

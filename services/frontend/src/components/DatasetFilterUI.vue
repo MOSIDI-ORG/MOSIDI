@@ -528,9 +528,15 @@ const addLayerToMap = async (layerName,geomType)=>{
    
 
 }
+
 const addExternaWMSLayerToMap=(item)=>{
     //console.log(addedDatasetsStore.addedLayers, "added layers")
-  
+    if (item.legend_url== undefined){
+        alertStore.setAlert({
+                text: `There is no legend for ${item.dct_title}`,
+                timeout: 2000
+            });
+    }
     if(addedDatasetsStore.addedLayers[item.dct_title]== undefined){
         emit("addExternaWMSLayerToMap", item)
         addedDatasetsStore.addLayer({layerName:item.dct_title, metadata:item})
