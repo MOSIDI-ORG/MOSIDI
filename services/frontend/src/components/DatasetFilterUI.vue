@@ -480,7 +480,7 @@ const availableYearsForIndicatorFilter = computed(() => {
   return [
     ...uniqueYears.map(year => {
       const count = years.filter(y => y >= year).length
-      return { value: year, count, label: `>=${year} (${count})` }
+      return { value: year, count, label: `${year} (${count})` }
     }),
     { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
   ]
