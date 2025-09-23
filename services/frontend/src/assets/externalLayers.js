@@ -54,7 +54,7 @@ export const externalLayers = [
       id: 'solaratlas_solarberichter_wms',
       dct_type: 'raster',
       dct_title: 'Eignung der Dachflächen für Photovoltaikanlagen',
-      url: 'https://energieportal-brandenburg.de/geoserver/solaratlas/ows?',
+      url: 'https://energieportal-brandenburg.de/geoserver/solaratlas/ows',
       legend_url: "https://energieportal-brandenburg.de/geoserver/solaratlas/ows?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=solaratlas_solarbericht&",
       layer: 'solaratlas_solarbericht',
       format: 'image/png',
