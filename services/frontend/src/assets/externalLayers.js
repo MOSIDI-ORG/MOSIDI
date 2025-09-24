@@ -136,6 +136,38 @@ export const externalLayers = [
       dct_description: "Der Darstellungsdienst beinhaltet die Ergebnisse der Potenzialanalyse über nutzbare Flächen für solartechnische Anlagen im Land Brandenburg. Es werden die für Photovoltaik-Freiflächenanlagen geeigneten EEG-Basisflächen gezeigt, d.h. die Flächen, die nach dem Erneuerbaren-Energien-Gesetz für Freiflächenanlagen genutzt werden sollen und bei denen keine übergeordneten naturschutzrechtlichen oder landesplanerischen Belange entgegenstehen. Weiter werden die Potenziale für Photovoltaik-Freiflächenanlagen (Agri-Photovoltaikanlagen) außerhalb der EEG-förderfähigen Flächenkulisse dargestellt."
     },
     
+    {
+      id: 'gewaessernetz_route_wms',
+      dct_type: 'raster',
+      dct_title: 'Gewässernetz mit Kilometrierung im Land Brandenburg – Route',
+      url: 'https://maps.brandenburg.de/services/wms/gewnet',
+      legend_url: "https://maps.brandenburg.de/WMS/wasser/gewnet/legenden/gewnet25_bb.png",
+      layer: 'Gewaessernetz_Route',
+      format: 'image/png',
+      crs: 'EPSG:3857',
+      attribution: 'GeoBasis',
+      metadata: "https://geoportal.brandenburg.de/gs-json/xml?fileid=B9D461F1-99A1-4C10-97B4-9C36C0BD40B9",
+      geometry_type: 'raster',
+      dct_catalog_publisher:"GeoBasis",
+      dct_catalog_title:"Gewässernetz mit Kilometrierung im Land Brandenburg",
+      dct_description: "Darstellungsdienst Gewässernetz Version 4.4.1 mit Kilometrierung im Land Brandenburg. Bitte beachten Sie die Links zu den Nutzungsbedingungen (siehe AccessConstraints) sowie zu Metainformationen und Download (https://mluk.brandenburg.de/mluk/de/service/geoinformationen/). Das Gewässernetz 25 wurde für jedes Gewässer nach seiner Lauflänge kilometriert. Die Kilometrierung erfolgte nach der Gewässerkennzahl als Schlüssel. Sie beginnt mit dem Wert 0,0 km an der Gewässermündung und steigt bis zur Quelle entsprechend der Lauflänge an. Eine Ausnahme bilden die Gewässer Oder und Westoder die nach dem System der Wasser- und Schiffahrtsverwaltung kilometriert sind. Im Darstellungsdienst Gewässernetz wird die Kilometrierung mit Hilfe maßstabsabhängiger Punktsymbole dargestellt."
+    },
     
+    {
+      id: 'gk25',
+      dct_type: 'raster',
+      dct_title: 'Geologische Karte Brandenburg 1 : 25 000',
+      url: 'https://inspire.brandenburg.de/services/gk_wms',
+      legend_url: "https://inspire.brandenburg.de/services/gk_wms?language=ger&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=gk25&format=image/png&STYLE=default",
+      layer: 'gk25',
+      format: 'image/png',
+      crs: 'EPSG:3857',
+      attribution: 'GeoBasis',
+      metadata: "https://geoportal.brandenburg.de/gs-json/xml?fileid=26701d68-f49b-46d1-b9c4-884d15e22c49",
+      geometry_type: 'raster',
+      dct_catalog_publisher:"GeoBasis",
+      dct_catalog_title:"WMS Geologische Karten BB (WMS-GK)",
+      dct_description: "Für ca. 80 % der Landesfläche Brandenburgs liegt die Geologischen Karte 1 : 25 000 (GK 25) vor. Diese Karte stellt die an der Oberfläche anstehenden geologischen Bildungen (Gesteine) mit einer Abbildungstiefe bis 2 m unter Gelände dar."
+    },
 
   ];
