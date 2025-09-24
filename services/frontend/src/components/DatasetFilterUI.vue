@@ -416,6 +416,9 @@ const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
   tableMetadata.value = response
   tableMetadata.value = [...tableMetadata.value, ...externalLayers]
+  tableMetadata.value.sort((a, b) =>
+        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+    );
   datasetSearchStore.setTableMetadata(response)
   // --- filter based on activatedDatasetSearch ---
   
