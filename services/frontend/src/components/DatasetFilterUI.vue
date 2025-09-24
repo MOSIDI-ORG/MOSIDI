@@ -452,7 +452,10 @@ const dataSources = computed(() => {
       value,
       count,
       label: `${value} (${count})`
-    })),
+    }))
+    .sort((a, b) =>
+      a.value.localeCompare(b.value, 'de', { sensitivity: 'base' }) // handles German chars
+    ),
     { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
   ]
 })
