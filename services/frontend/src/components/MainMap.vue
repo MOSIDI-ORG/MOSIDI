@@ -125,7 +125,7 @@ const addLayerToMap = (layerSpecification)=>{
       selectedFeature.value = {
         layerId:  layerSpecification.id,
         featureId: e.features[0].properties.nationalco,
-        featureName: e.features[0].properties.gen
+        featureName: e.features[0].properties.name
       }
       removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
       map.addSource( "highlight",{"type": "geojson", data: e.features[0]} )
