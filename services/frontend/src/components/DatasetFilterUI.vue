@@ -721,7 +721,7 @@ const mapLegend = (indicatorName) => {
         minMax: classification_result.value.minMax,
         classIntervalsAndColor,
         selectedIndicator: indicatorName,
-        completeIndicatorName: metadata.value.name
+        completeIndicatorName: indicatorName
     });
     function getColorBasedOnIndex(index) {
        

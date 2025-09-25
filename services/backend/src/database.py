@@ -115,7 +115,7 @@ def get_indicator_data(indicator):
     
     cur.close()
     conn.close()
-    return {'indicator': data, 'metadata': metadata, 'availabeYears': availabeYears}
+    return {'indicator': data, 'availabeYears': availabeYears}
 
 def get_geojson_data(tablename):
     conn = connect()
