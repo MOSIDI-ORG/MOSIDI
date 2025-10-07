@@ -170,4 +170,22 @@ export const externalLayers = [
       dct_description: "Für ca. 80 % der Landesfläche Brandenburgs liegt die Geologischen Karte 1 : 25 000 (GK 25) vor. Diese Karte stellt die an der Oberfläche anstehenden geologischen Bildungen (Gesteine) mit einer Abbildungstiefe bis 2 m unter Gelände dar."
     },
 
+    {
+      id: 'de_basemapde_web_raster_grau_wms',
+      dct_type: 'raster',
+      dct_title: 'Basemap DE grau',
+      url: 'https://sgx.geodatenzentrum.de/wms_basemapde',
+      legend_url: "https://sgx.geodatenzentrum.de/wms_basemapde?format=image%2Fpng&layer=de_basemapde_web_raster_grau&sld_version=1.1.0&request=GetLegendGraphic&service=WMS&version=1.1.1&styles=",
+      layer: 'de_basemapde_web_raster_grau',
+      format: 'image/png',
+      crs: 'EPSG:3857',
+      attribution: 'Bundesamt für Kartographie und Geodäsie: (BKG)',
+      metadata: "https://mis.bkg.bund.de/csw?REQUEST=GetRecordById&SERVICE=CSW&VERSION=2.0.2&id=69264016-D304-4DD6-BCEF-509C1ED19F14",
+      geometry_type: 'raster',
+      dct_catalog_publisher:"Bundesamt für Kartographie und Geodäsie: (BKG)",
+      dct_catalog_title:"WMS DE BASEMAP.DE WEB RASTER",
+      dct_description: "Der WMS DE basemap.de Web Raster hat als Datengrundlage die basemap.de Web Vektor. Die Darstellung dieser beruht auf einer bundesweit einheitlichen Definition des Webkarten-Signaturenkataloges (basemap.de Web-SK) der AdV. Es wird die basemap.de Web-SK Version in der jeweils aktuellen Fassung verwendet. Informationen zur Aktualität der Daten und zur jeweiligen Version können unter https://www.basemap.de/data/produkte/web_raster/meta/bm_web_raster_datenaktualitaet.html eingesehen werden. Der Layer enthält eine kombinierte Darstellung von ATKIS®- Landschaftsmodellen, der Hauskoordinaten und der Hausumringe, die nach basemap.de WebSK in der jeweils aktuellen Version eine Kartensignatur haben, inklusive ihrer Beschriftung."
+    },
+
+
   ];
