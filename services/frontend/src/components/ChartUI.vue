@@ -141,11 +141,19 @@ watch(() => selectedFeature.value, () => {
         const filteredArray = indicator.value[0][0]
             .filter(item => item.kennziffer === selectedFeature.value?.featureId)
             .sort((a, b) => a.zeitbezug - b.zeitbezug);
-
+        
         if (filteredArray.length > 0) {
             const labels = filteredArray?.map(item => item.zeitbezug);
             const dataValues = filteredArray?.map(item => item.wert);
-            renderChart(labels, dataValues, selectedIndicatorName);
+            console.log(labels, dataValues, "labels, dataValues");
+            if (labels[0] !== undefined || dataValues[0] !== undefined) {
+                renderChart(labels, dataValues, selectedIndicatorName);
+            }
+            else{
+                closeChart();
+            }
+           
+            
         } else {
             alertStore.setAlert({
                 text: 'There is no information for the selected indicator',
