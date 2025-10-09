@@ -332,10 +332,9 @@ watch(() => clickedlegendItems.value.second, () => {
 
 const lastLegendItem = computed(() => {
   const keyWithCheckedTrue = Object.entries(addedLayers.value).find(
-    (entry) => entry[1]?.checked === true && entry[1]?.dct_type === 'indikator' // Ensure safe navigation
+    (entry) => entry[1]?.checked === true && (entry[1]?.dct_type === 'indikator' || entry[1]?.dct_type === 'custom indikator') // Ensure safe navigation
   )?.[0];
   
-
   if (!keyWithCheckedTrue) {
     console.warn("No layer with checked = true found."); // Optional debugging
     return null; // Handle the case where no matching key is found
