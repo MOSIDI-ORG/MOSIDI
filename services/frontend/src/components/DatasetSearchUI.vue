@@ -16,8 +16,8 @@
     <v-card
         class="mx-auto dataset-search-ui animated-width" :width="isMinimized?'80':'371'" height="50" 
         :style="{
-            'bottom': searchInitiated ? '10px' : '',
-            'height':isMinimized? 'fit-content':''
+            'bottom': searchInitiated ||isMinimized ? '10px' : '',
+            'height':isMinimized? 'fit-content':'',
         }"
     >
         <DatasetSearchLandingUI v-if="searchInitiated==false || filterInitiated==false"/>
