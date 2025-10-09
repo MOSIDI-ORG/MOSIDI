@@ -113,11 +113,11 @@ import { defineProps, ref, computed, onMounted, defineEmits } from 'vue'
 import {getIndicatorData, getGeojsonDataFromDB, classification} from "../services/backend.calls";
 import { useAlertStore } from '@/stores/alert'
 import { hexToRgb } from '@/utils/generateColors';
-import { useMapLegendStore } from '@/stores/mapLegend'
+//import { useMapLegendStore } from '@/stores/mapLegend'
 
 const alertStore = useAlertStore()
-const mapLegendStore = useMapLegendStore();
-const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer"]);
+//const mapLegendStore = useMapLegendStore();
+const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer", "customMapStylization"]);
 
 let kommunales_gebiet_geojson = ref(null)
 let hexagonLayerAdded = ref(false)
@@ -351,17 +351,18 @@ const classifyAndStylize = async (filteredArray) => {
         })
     }
     if (hexagonLayerAdded.value==false){
-        emit("addDeckglLayer", kommunales_gebiet_geojson.value,  stylization);
+       // emit("addDeckglLayer", kommunales_gebiet_geojson.value,  stylization);
         hexagonLayerAdded.value =true
     }
     else {
-        emit("updateDeckglLayer", kommunales_gebiet_geojson.value, stylization)
+       emit("updateDeckglLayer", kommunales_gebiet_geojson.value, stylization)
     }
-    mapLegend()
+    //mapLegend()
+    emit("customMapStylization",filteredArray, classification_result.value, formula)
     
 }
 
-const mapLegend = () => {
+/*const mapLegend = () => {
     const classIntervalsAndColorHexagon = []
     for (let i = 0; i < classification_result.value.intervals.length; i++) {
         const intervalName = `interval${i + 1}`;
@@ -385,7 +386,7 @@ const mapLegend = () => {
        const colors = props.selectedColorPalette
        return colors[index % colors.length];
     }
-}
+}*/
 
 </script>
 

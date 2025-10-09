@@ -202,6 +202,7 @@
                 :selectedColorPalette="selectedColorPalette"
                 @addDeckglLayer="addDeckglLayer"
                 @updateDeckglLayer="updateDeckglLayer"
+                @customMapStylization="customMapStylization"
         ></CustomIndicatorUI>
     </v-card>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
@@ -527,9 +528,7 @@ const addLayerToMap = async (layerName,geomType)=>{
             }
               
         }
-        addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})
-      
-       
+        addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})       
     }
    
 
@@ -583,7 +582,6 @@ const getIndicator = async (indicatorName) => {
         progress: true
     })
     const indocatorData =  await getIndicatorData(indicatorName)
-
     indicatorStore.setIndicatordata({
         indicator: indocatorData.indicator,
         indicatorName: indicatorName,
@@ -667,6 +665,7 @@ const mapStylization = (indicatorName) => {
     classification_result.value = indicatorStore.indicatorArray[indicatorName]['classification_result']
     selectedColorPalette.value = indicatorStore.indicatorArray[indicatorName]['colorPalette']
 
+
     // conditions for each communale gebiete code
     for (const row of selectedYear.value) {
         const value = row['wert'];
@@ -699,6 +698,69 @@ const mapStylization = (indicatorName) => {
     indicatorStore.setColorPalette({
             selectedColorPalette: selectedColorPalette.value
     })
+}
+const customMapStylization = (array,classes, formula)=>{
+    let customMetadata = {
+        dct_title: formula.value,
+        dct_type: "custom indikator",
+        geometry_type: "Polygon",
+        dct_language: "de",
+        dct_catalog_description: "Custom Indicator",
+        dct_catalog_publisher: "Custom",
+    }
+    
+    addedDatasetsStore.addLayer({layerName:formula.value, metadata:customMetadata})
+    indicatorStore.setIndicatordata({
+        indicator: [[array]],
+        indicatorName: formula.value,
+        availailableYearsForSelectedIndicator: [2024],
+        selectedYear: 2024,
+        colorPalette: colorbrewer.default.RdPu[5]
+    })
+    indicatorStore.setIndicatorClassificationResults({
+            indicatorName: formula.value,
+            classification_result: classes,
+            classification_result_3_intervals: classes,
+            classificationMethod: selectedClassificationMethod.value
+        })
+    addCommuneTileLayer(formula.value)
+    matchExpression = ['match', ['get', 'nationalco']];
+    classification_result.value = classes
+    //selectedColorPalette.value = indicatorStore.indicatorArray[indicatorName]['colorPalette']
+
+    // conditions for each communale gebiete code
+    for (const row of array) {
+        const value = row['calculatedWert'];
+       
+        let color;
+
+        if (value <= classification_result.value.intervals[0]) {
+            //color = '#feebe2'; // Class 1
+            color = selectedColorPalette.value[0]
+            //color = colorbrewer.default.selectedColorPalette.value.title
+        } else if (value <= classification_result.value.intervals[1]) {
+            //color = '#fbb4b9'; // Class 2
+            color = selectedColorPalette.value[1]
+        } else if (value <= classification_result.value.intervals[2]) {
+            //color = '#f768a1'; // Class 3
+            color = selectedColorPalette.value[2]
+        } else if (value <= classification_result.value.intervals[3]) {
+            //color = '#c51b8a'; // Class 4
+            color = selectedColorPalette.value[3]
+        } else {
+            //color = '#7a0177'; // Class 5 (Default color)
+            color = selectedColorPalette.value[4]
+        }
+        matchExpression.push(row['kennziffer'].toString(), color);
+    }
+
+    // Last value is the default color, used where there is no data
+    matchExpression.push('rgba(169,169,169, 1)');
+    emit("addStyleExpressionByYear",'kommunales_gebiet_dashboard' + formula.value , 'fill-color', matchExpression)
+    indicatorStore.setColorPalette({
+            selectedColorPalette: selectedColorPalette.value
+    })
+    mapLegend(formula.value)
 }
 const mapLegend = (indicatorName) => {
 
