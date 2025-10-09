@@ -24,13 +24,13 @@
             <v-list-item
                v-for="(addedLayer, index) in Object.keys(addedLayers).reverse().map(key => addedLayers[key])"
                 :key="addedLayer.dct_title"
-                :subtitle="addedLayer.dct_catalog_publisher"
-                :title="addedLayer.dct_title"
                 style="border-radius: 5px;"
                 @click="addDataUI(addedLayer.dct_title, addedLayer.dct_type,addedLayer.geometry_type )"
                 @mouseover="hoveredItem = index"
                 @mouseleave="hoveredItem = null"
             >
+                <v-list-item-title v-show="isMinimized==false" class="text-wrap" v-text="addedLayer.dct_title"></v-list-item-title>
+                <v-list-item-subtitle v-show="isMinimized==false" class="text-wrap" v-text="addedLayer.dct_catalog_publisher"></v-list-item-subtitle>
                 <template v-slot:prepend>
                     <v-avatar>
                         <v-img 
@@ -51,7 +51,7 @@
                     >
                         <template v-slot:activator="{ props }">
                             <v-btn 
-                           v-show="isMinimized==false"
+                                v-show="isMinimized==false"
                                 v-bind="props"
                                 density="compact" 
                                 variant="text" 
@@ -197,7 +197,6 @@ let { filterInitiated} = storeToRefs(useDatasetSearchStore())
 let hoveredItem = ref(null)
 
 const addDataUI = (datasetName, datasetType, geomType)=>{
-    
     if (datasetSearchStore.selectedDataset==datasetName && filterInitiated==false){
         removeLayer(datasetName, datasetType)
     }
@@ -217,7 +216,7 @@ const addDataUI = (datasetName, datasetType, geomType)=>{
             for(let layer in addedDatasetsStore.addedLayers){
                 if (layer!=datasetName){
                     emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'none')
-                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='indikator'){
+                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='indikator' || addedDatasetsStore.addedLayers[layer]['dct_type']=='custom indikator' ){
                         addedDatasetsStore.addedLayers[layer]['checked'] = false;
                     }
                 }
@@ -239,6 +238,24 @@ const addDataUI = (datasetName, datasetType, geomType)=>{
         }
         else if(datasetType=='raster'){
             activateStylePanel(datasetName,geomType)
+        }
+        else if(datasetType=='custom indikator'){
+            for(let layer in addedDatasetsStore.addedLayers){
+                if (layer!=datasetName){
+                    emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'none')
+                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='custom indikator' || addedDatasetsStore.addedLayers[layer]['dct_type']=='indikator'){
+                        addedDatasetsStore.addedLayers[layer]['checked'] = false;
+                    }
+                }
+                else {
+                    emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'visible')
+                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='custom indikator'){
+                        addedDatasetsStore.addedLayers[layer]['checked'] = true;
+                    }
+                    
+                }
+                
+            }
         }
     }
     
@@ -313,6 +330,13 @@ const removeLayer = (layerName, layerType)=>{
         })
 
        
+    }
+    else if (layerType=='custom indikator'){
+        console.log("custom indikator removed")
+        emit("removeLayerFromMap",  {layerId:  'kommunales_gebiet_dashboard' + layerName, sourceId: 'kommunales_gebiet_dashboard' + layerName})
+        emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
+        mapLegendStore.removeLegendItem(layerName);
+        indicatorStore.removeIndicator(layerName)
     }
    
     delete addedLayers.value[layerName]
