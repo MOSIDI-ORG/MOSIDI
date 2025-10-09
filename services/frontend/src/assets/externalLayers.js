@@ -1485,4 +1485,21 @@ export const externalLayers = [
     'Der Dienst stellt den Ökologischen Stadtplan der Stadt Freiburg bereit, mit Informationen zu Maßnahmen im Bereich Stadtökologie, Grünflächen und nachhaltiger Stadtentwicklung.'
 },
 
+{
+  id: 'bb_bodenertrag_lw_wms',
+  dct_type: 'raster',
+  dct_title: 'Landwirtschaftliches Ertragspotenzial Brandenburg',
+  url: 'https://inspire.brandenburg.de/services/boertrag_wms?language=ger',
+  legend_url: 'https://inspire.brandenburg.de/services/boertrag_wms?map=/usr/lib/cgi-bin/map/inspire_lbgr_boertrag.map&language=ger&version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=boertrag_lw&format=image/png&STYLE=default',
+  layer: 'boertrag_lw',
+  format: 'image/png',
+  crs: 'EPSG:3857',
+  attribution: '© Landesamt für Bergbau, Geologie und Rohstoffe Brandenburg (LBGR), Datenlizenz Deutschland – Namensnennung – Version 2.0 (dl-de/by-2-0)',
+  metadata: 'https://geoportal.brandenburg.de/gs-json/xml?fileid=5ade3af0-d7f9-40d4-acc9-4750106c7ae4',
+  geometry_type: 'raster',
+  dct_catalog_publisher: 'Landesvermessung und Geobasisinformation Brandenburg (LGB)',
+  dct_catalog_title: 'WMS Landwirtschaftliches Ertragspotenzial des Bodens (BOERTRAG)',
+  dct_description: 'Darstellungsdienst zum geschätzten ackerbaulichen Ertragspotenzial in Brandenburg auf Basis verbreiteter Bodenformen und Bodenformengesellschaften; Legendeneinheiten weisen dominierende und subdominierende Anteile mit unterschiedlicher Schätzung des Ertragspotenzials aus.'
+},
+
   ];
