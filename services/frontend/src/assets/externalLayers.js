@@ -1461,6 +1461,28 @@ export const externalLayers = [
     'Für inhaltliche Auskünfte sind die jeweiligen Gemeinden zuständig.'
 },
 
-
+{
+  id: 'freiburg_oekologischer_stadtplan_massnahmen',
+  dct_type: 'raster',
+  dct_title: 'Ökologischer Stadtplan Freiburg – Maßnahmen (WMS)',
+  url: 'https://geoportal.freiburg.de/wms/uwsa_oekol_stdplan/uwsa_oekol_stdplan?',
+  layer: 'oekol_stdplan', // Layername lt. GetCapabilities
+  format: 'image/png',
+  crs: 'EPSG:3857', // unterstützt auch 25832, 31467, 4326
+  transparent: true,
+  tiled: false,
+  attribution:
+    '© Stadt Freiburg i. Br. – Datenlizenz Deutschland – Namensnennung – Version 2.0 (Datengrundlage: Stadt Freiburg, www.freiburg.de)',
+  legend_url:
+    'https://geoportal.freiburg.de/wms/uwsa_oekol_stdplan/uwsa_oekol_stdplan?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=oekol_stdplan&format=image/png&STYLE=default',
+  metadata:
+    'https://geoportal.freiburg.de/wms/uwsa_oekol_stdplan/uwsa_oekol_stdplan?service=WMS&request=GetCapabilities&version=1.3.0',
+  geometry_type: 'raster',
+  dct_catalog_publisher: 'Stadt Freiburg im Breisgau – Stabsstelle Digitales Bauen und GeoIT',
+  dct_catalog_title: 'Ökologischer Stadtplan Freiburg',
+  dct_description:
+    'Darstellung ökologischer Maßnahmen im Stadtgebiet von Freiburg im Breisgau. ' +
+    'Der Dienst stellt den Ökologischen Stadtplan der Stadt Freiburg bereit, mit Informationen zu Maßnahmen im Bereich Stadtökologie, Grünflächen und nachhaltiger Stadtentwicklung.'
+},
 
   ];
