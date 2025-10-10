@@ -203,6 +203,7 @@
                 @addDeckglLayer="addDeckglLayer"
                 @updateDeckglLayer="updateDeckglLayer"
                 @customMapStylization="customMapStylization"
+                @addCustomLayer="addCustomLayer"
         ></CustomIndicatorUI>
     </v-card>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
@@ -699,8 +700,8 @@ const mapStylization = (indicatorName) => {
             selectedColorPalette: selectedColorPalette.value
     })
 }
-const customMapStylization = (array,classes, formula)=>{
-    let customMetadata = {
+const addCustomLayer= (array,classes, formula)=>{
+let customMetadata = {
         dct_title: formula.value,
         dct_type: "custom indikator",
         geometry_type: "Polygon",
@@ -724,6 +725,10 @@ const customMapStylization = (array,classes, formula)=>{
             classificationMethod: selectedClassificationMethod.value
         })
     addCommuneTileLayer(formula.value)
+    customMapStylization(array,classes, formula)
+}
+const customMapStylization = (array,classes, formula)=>{
+    
     matchExpression = ['match', ['get', 'nationalco']];
     classification_result.value = classes
     //selectedColorPalette.value = indicatorStore.indicatorArray[indicatorName]['colorPalette']

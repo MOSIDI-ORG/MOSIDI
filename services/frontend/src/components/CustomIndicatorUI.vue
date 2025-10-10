@@ -112,15 +112,14 @@
 import { defineProps, ref, computed, onMounted, defineEmits } from 'vue'
 import {getIndicatorData, getGeojsonDataFromDB, classification} from "../services/backend.calls";
 import { useAlertStore } from '@/stores/alert'
-import { hexToRgb } from '@/utils/generateColors';
+//import { hexToRgb } from '@/utils/generateColors';
 //import { useMapLegendStore } from '@/stores/mapLegend'
 
 const alertStore = useAlertStore()
 //const mapLegendStore = useMapLegendStore();
-const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer", "customMapStylization"]);
+const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer", "customMapStylization", "addCustomLayer"]);
 
 let kommunales_gebiet_geojson = ref(null)
-let hexagonLayerAdded = ref(false)
 let classification_result = ref(null)
 
 
@@ -327,7 +326,8 @@ const classifyAndStylize = async (filteredArray) => {
 
     const response =  await classification(AttributeArray, 'NaturalBreaks')
     classification_result.value = response.intervals_5_classes
-    const stylization = (x) => {
+    console.log(props)
+    /*const stylization = (x) => {
         if (x <= classification_result.value.intervals[0]) {
             return hexToRgb(props.selectedColorPalette[0])
         } else if (x <= classification_result.value.intervals[1]) {
@@ -342,7 +342,7 @@ const classifyAndStylize = async (filteredArray) => {
         else {
             console.log(x)
         }
-    }
+    }*/
     
     if(classification_result.value.warnings){
         alertStore.setAlert({
@@ -350,15 +350,10 @@ const classifyAndStylize = async (filteredArray) => {
             timeout: 2000
         })
     }
-    if (hexagonLayerAdded.value==false){
-       // emit("addDeckglLayer", kommunales_gebiet_geojson.value,  stylization);
-        hexagonLayerAdded.value =true
-    }
-    else {
-       emit("updateDeckglLayer", kommunales_gebiet_geojson.value, stylization)
-    }
+    
     //mapLegend()
-    emit("customMapStylization",filteredArray, classification_result.value, formula)
+    emit("addCustomLayer", filteredArray, classification_result.value, formula)
+    //emit("customMapStylization",filteredArray, classification_result.value, formula)
     
 }
 
