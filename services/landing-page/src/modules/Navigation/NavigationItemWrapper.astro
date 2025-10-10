@@ -1,0 +1,37 @@
+---
+import Type2 from "../../components/Shapes/Evolution/02/Type2.astro";
+
+const shape = new Map([
+	[
+		"default",
+		{
+			innerShape: "text-white",
+			outerShape: "text-black",
+		},
+	],
+	[
+		"coloured",
+		{
+			innerShape: "text-white",
+			outerShape: "text-black",
+		},
+	],
+	[
+		"black",
+		{
+			innerShape: "text-black",
+			outerShape: "text-white",
+		},
+	],
+]);
+const { colour = "default" } = Astro.props;
+---
+
+<div class="flex flex-wrap items-center gap-4">
+	<Type2
+		class="h-4 w-4"
+		innerShape={shape.get(colour)!.innerShape}
+		outerShape={shape.get(colour)!.outerShape}
+	/>
+	<slot />
+</div>

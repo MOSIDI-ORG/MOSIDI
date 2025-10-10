@@ -1,0 +1,90 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "cva";
+import Type4 from "../components/Shapes/Evolution/02/Type4.astro";
+import Type3 from "../components/Shapes/Evolution/02/Type3.astro";
+
+const copyHighlight = cva({
+	base: "default-grid pt-16 px-12 pb-[160px]",
+	variants: {
+		colour: {
+			default: "bg-white text-black",
+			coloured: "bg-set-1-200 text-black",
+			black: "bg-black text-white",
+		},
+	},
+	defaultVariants: {
+		colour: "default",
+	},
+});
+
+export interface Props
+	extends HTMLAttributes<"button">,
+		VariantProps<typeof copyHighlight> {}
+
+const { colour = "default" } = Astro.props;
+---
+
+<div class={copyHighlight({ colour })}>
+	<div class="col-span-full flex flex-wrap items-center gap-4">
+		<p class="headline-h3">
+			Daten verwalten
+			<svg
+				width="285"
+				height="80"
+				viewBox="0 0 285 80"
+				fill="none"
+				class="inline-block"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<rect
+					x="2"
+					y="2"
+					width="275"
+					height="76"
+					rx="38"
+					stroke="black"
+					stroke-width="4"></rect>
+				<path
+					d="M48.2256 56.1246C58.2772 56.1246 66.4256 47.9762 66.4256 37.9246C66.4256 27.873 58.2772 19.7246 48.2256 19.7246C38.1741 19.7246 30.0256 27.873 30.0256 37.9246C30.0256 47.9762 38.1741 56.1246 48.2256 56.1246Z"
+					stroke="black"
+					stroke-width="3.9"
+					stroke-linecap="round"
+					stroke-linejoin="round"></path>
+				<path
+					d="M70.9756 60.6755L61.0793 50.7793"
+					stroke="black"
+					stroke-width="3.9"
+					stroke-linecap="round"
+					stroke-linejoin="round"></path>
+			</svg>
+			nutzen
+			<span class="inline-flex translate-y-3">
+				<Type3
+					innerShape="text-set-1-200"
+					outerShape="text-set-1-100"
+				/>
+				<Type4
+					innerShape="text-set-1-200"
+					outerShape="text-set-1-500"
+				/>
+			</span>
+			und teilen
+			<svg
+				width="100"
+				height="100"
+				viewBox="0 0 100 100"
+				fill="none"
+				class="inline-block"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M87.5 50C87.5 59.9456 83.5491 69.4839 76.5165 76.5165C69.4839 83.5491 59.9456 87.5 50 87.5M87.5 50C87.5 40.0544 83.5491 30.5161 76.5165 23.4835C69.4839 16.4509 59.9456 12.5 50 12.5M87.5 50H12.5M50 87.5C40.0544 87.5 30.5161 83.5491 23.4835 76.5165C16.4509 69.4839 12.5 59.9456 12.5 50M50 87.5C56.9042 87.5 62.5 70.7083 62.5 50C62.5 29.2917 56.9042 12.5 50 12.5M50 87.5C43.0958 87.5 37.5 70.7083 37.5 50C37.5 29.2917 43.0958 12.5 50 12.5M50 12.5C40.0544 12.5 30.5161 16.4509 23.4835 23.4835C16.4509 30.5161 12.5 40.0544 12.5 50"
+					stroke="black"
+					stroke-width="4"
+					stroke-linecap="round"
+					stroke-linejoin="round"></path>
+			</svg>
+		</p>
+	</div>
+</div>

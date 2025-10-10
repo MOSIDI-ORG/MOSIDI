@@ -1,0 +1,15 @@
+---
+import Media from "../Media.astro";
+---
+
+<div class="col-span-2 flex flex-col gap-6 md:col-span-4 lg:col-span-3">
+	<Media fullWidth>
+		<slot name="media" />
+	</Media>
+	<h4 class="headline-h6">
+		<slot name="headline" />
+	</h4>
+	<p class="copy-500">
+		<slot name="copy" />
+	</p>
+</div>
