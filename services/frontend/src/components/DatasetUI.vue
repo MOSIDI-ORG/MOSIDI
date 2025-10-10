@@ -21,14 +21,14 @@
                         @click="toggleDataUI"
                     ></v-img>
                 </div>
-                <div class="d-flex align-center"  v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]">
+                <div class="d-flex align-center"  v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset] && addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='indikator'">
                     <span style="font-size: 1rem; font-weight: 500;" class="ml-2 white--text">
                         {{ formatYears(indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator) }}
 
                     </span>
                 </div>
                    
-                <div  v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]">
+                <div  v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset] && addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='indikator'">
                     <v-col >
                         <v-select
                             :items="indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator"
@@ -99,7 +99,7 @@
                         </template>
                         <v-list style="max-height:300px" >
                             <v-list-item  v-for="([, item], i) in Object.entries(colorbrewer.default).filter(([key]) => key !== 'schemeGroups')"  :key="i" >
-                                    <div @click="assignColorPalette(item[5])" >
+                                    <div @click="assignColorPalette(item[5], addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type)" >
                                         <span
                                             v-for="(colorItem, j) in (item[5])"
                                             :key="j"
@@ -134,6 +134,53 @@
                     </v-avatar>
                 </template>
             </v-list-item>
+        </v-card>
+        <v-card v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='custom indikator'" :style="{ left: isMinimized ? '90px' : '382px'}" class="added-custom-indikator-ui mx-auto animated-transform"  width="371">
+            <v-row no-gutters style="" class="d-flex mt-4 mb-4" >
+                <v-col cols="12" sm="2" class=" ">
+                    <div class="v-label" >{{$t('dataset.color')}}</div>
+                </v-col>
+                <v-col cols="12" sm="9" class="d-flex justify-end align-center">
+                    <v-menu :close-on-content-click="true"  location="start">
+                        <template v-slot:activator="{ props }">
+                            <span
+                                v-for="(colorItem, j) in indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]?.colorPalette"
+                                :key="j"
+                                v-bind="props"
+                                :style="{
+                                    backgroundColor: colorItem,
+                                    width: '36px',
+                                    height: '12px',
+                                    display: 'inline-block',
+                                    margin: '0px',
+                                    cursor: 'pointer'
+                                }"
+                            ></span>
+                        </template>
+                        <v-list style="max-height:300px" >
+                            <v-list-item  v-for="([, item], i) in Object.entries(colorbrewer.default).filter(([key]) => key !== 'schemeGroups')"  :key="i" >
+                                    <div @click="assignColorPalette(item[5], addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type)" >
+                                        <span
+                                            v-for="(colorItem, j) in (item[5])"
+                                            :key="j"
+                                            :style="{
+                                                backgroundColor: colorItem,
+                                                width: '30px',
+                                                height: '20px',
+                                                display: 'inline-block',
+                                                margin: '0px',
+                                                cursor: 'pointer'
+                                            }"
+                                        ></span>
+                                    </div>
+                                    
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                
+                </v-col>
+
+            </v-row>
         </v-card>
         <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="bivariateUI==true" class="dataset-bivariate-ui mx-auto text-left animated-transform"  width="371">
             <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
@@ -176,7 +223,7 @@ let { isMinimized } = storeToRefs(useMenuStore())
 let classificationMethods = ref([ "NaturalBreaks", "Quantiles", "EqualInterval"])
 //let selectedClassificationMethod = ref("NaturalBreaks")
 let bivariateUI = ref(false)
-const emit = defineEmits(["filterByYear", "mapLegend", "mapStylization", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleExpressionByYear", "addLayerToMap"]);
+const emit = defineEmits(["filterByYear", "mapLegend", "mapStylization", "customMapStylization", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleExpressionByYear", "addLayerToMap"]);
 
 
 const datasetSearchStore = useDatasetSearchStore()
@@ -196,7 +243,7 @@ const filterByYear = (indicatorName)=>{
 
 }
 
-const assignColorPalette =  (colorPalette)=> {
+const assignColorPalette =  (colorPalette, datatype)=> {
     indicatorStore.setIndicatorColorPalette(
       {
         colorPalette: colorPalette,
@@ -204,7 +251,18 @@ const assignColorPalette =  (colorPalette)=> {
       }
     )
     emit('mapLegend', datasetSearchStore.selectedDataset)
-    emit('mapStylization', datasetSearchStore.selectedDataset)
+    if (datatype=='indikator'){
+        emit('mapStylization', datasetSearchStore.selectedDataset)
+    }
+    else if (datatype=='custom indikator'){
+        console.log( indicatorStore.indicatorArray[datasetSearchStore.selectedDataset], "custom indikator")
+        emit('customMapStylization',
+        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset][0][0],
+        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['classification_result'],
+        ref(datasetSearchStore.selectedDataset)
+    )
+    }
+    
 }
 
 const formatYears = (years)=> {
@@ -266,6 +324,25 @@ const addLayerToMap = (layerSpecifications)=>{
     border-radius: 8px;
     position: absolute;
     top: 190px;
+    bottom: 10px;
+    left: 381px;
+    z-index: 10;
+    height: fit-content;
+    background-color: rgba(255,255,255,0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    -moz-backdrop-filter: blur(5px);
+    -ms-backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.2); 
+    
+   
+}
+.added-custom-indikator-ui{
+    overflow-y: scroll; 
+    background: transparent; 
+    border-radius: 8px;
+    position: absolute;
+    top: 104px;
     bottom: 10px;
     left: 381px;
     z-index: 10;

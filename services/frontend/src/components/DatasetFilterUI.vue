@@ -1,7 +1,7 @@
 <template>
 
 <div v-if="activatedDatasetSearch?.value!==null">
-    <DatasetUI @addStyleExpressionByYear="addStyleExpressionByYear" @filterByYear="filterByYear" @mapLegend="mapLegend" @mapStylization="mapStylization" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty" @addStyleLayerToMap="addStyleLayerToMap" v-show="dataUiInitiated==true"></DatasetUI>
+    <DatasetUI @addStyleExpressionByYear="addStyleExpressionByYear" @filterByYear="filterByYear" @mapLegend="mapLegend" @mapStylization="mapStylization" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty" @addStyleLayerToMap="addStyleLayerToMap" @customMapStylization="customMapStylization" v-show="dataUiInitiated==true"></DatasetUI>
     <div v-show="filterInitiated==true && dataUiInitiated==false">
 
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
@@ -731,8 +731,7 @@ const customMapStylization = (array,classes, formula)=>{
     
     matchExpression = ['match', ['get', 'nationalco']];
     classification_result.value = classes
-    //selectedColorPalette.value = indicatorStore.indicatorArray[indicatorName]['colorPalette']
-
+    selectedColorPalette.value = indicatorStore.indicatorArray[formula.value]['colorPalette']
     // conditions for each communale gebiete code
     for (const row of array) {
         const value = row['calculatedWert'];
