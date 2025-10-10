@@ -9,7 +9,7 @@
         
     >
         <template #subtitle>
-            <div style="white-space: normal; overflow: visible; text-overflow: unset;">
+            <div style="white-space: normal; overflow: visible; text-overflow: unset;" v-show="isMinimized==false">
                 {{ $t('added-datasets.subtitle') }}
             </div>
         </template>
