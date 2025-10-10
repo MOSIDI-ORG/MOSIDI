@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "cva";
+
+export * from "./NavigationItemWrapper.astro";
+
+const navigation = cva({
+	base: "flex py-6 px-12 justify-between flex-wrap",
+	// **or**
+	// base: ["font-semibold", "border", "rounded"],
+	variants: {
+		colour: {
+			default: "bg-white text-black",
+			coloured: "bg-set-1-200 text-black",
+			black: "bg-black text-white",
+		},
+	},
+	defaultVariants: {
+		colour: "default",
+	},
+});
+
+export interface Props
+	extends HTMLAttributes<"button">,
+		VariantProps<typeof navigation> {}
+
+const { colour = "default" } = Astro.props;
+---
+
+<div class={navigation({ colour })} id="top">
+	<slot name="navigationItemWrapper" />
+	<slot name="navigationCTA" />
+</div>

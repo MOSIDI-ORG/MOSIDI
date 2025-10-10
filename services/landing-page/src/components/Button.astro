@@ -1,0 +1,51 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { cva, type VariantProps } from "cva";
+
+const button = cva({
+	base: "flex gap-2 px-2 py-1 items-center group rounded transition-colors h-auto",
+	variants: {
+		variant: {
+			default: "",
+			display: "",
+			filled: "copy-500 py-0.5 px-2 backdrop-blur transition-colors",
+		},
+		size: {
+			300: "h-8 px-3 py-0.5",
+			800: "h-11",
+		},
+		colour: {
+			white: "text-white",
+			black: "text-black",
+		},
+	},
+	compoundVariants: [
+		{
+			variant: "filled",
+			// size: [300, 800],
+			colour: "black",
+			class: "hover:text-white bg-gray-alpha-200 hover:bg-black",
+		},
+		{
+			variant: "filled",
+			// size: [300, 800],
+			colour: "white",
+			class: "hover:text-black bg-white/20 hover:bg-white",
+		},
+	],
+	defaultVariants: {
+		variant: "default",
+	},
+});
+
+export interface Props
+	extends HTMLAttributes<"a">,
+		VariantProps<typeof button> {}
+
+const { variant = "default", colour, size } = Astro.props;
+---
+
+<a {...Astro.props} class={button({ variant, colour, size })}>
+	<slot />
+</a>

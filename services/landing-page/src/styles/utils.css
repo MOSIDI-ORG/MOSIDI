@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	/* Grid */
+	.default-grid {
+		@apply grid lg:grid-cols-12 grid-cols-2 md:grid-cols-8 gap-6;
+	}
+
+	/* 
+	Typography
+	*/
+
+	/* Headline */
+	.headline-h3 {
+		@apply font-manrope text-5xl font-medium leading-[112%] tracking-[-0.96px] md:text-7xl md:leading-[105%] md:tracking-[-1.44px] lg:text-[100px] lg:tracking-[-2px];
+	}
+	.headline-h4 {
+		@apply font-manrope text-xl font-semibold leading-[120%] tracking-[-0.045rem] md:text-4xl md:tracking-[-0.0675rem] lg:text-[40px] lg:tracking-[-1.2px];
+	}
+	.heading-h6 {
+		@apply font-manrope text-[1.0625rem] font-medium leading-[115%] tracking-[-0.02125rem] md:text-[1.1875rem] md:tracking-[-0.02375];
+	}
+
+	/* Copy */
+	.copy-1000 {
+		@apply font-manrope text-[2rem] font-medium leading-[110%] tracking-[-0.04rem] md:text-[3rem] md:tracking-[-0.06rem] lg:text-[4rem] lg:tracking-[-0.08rem];
+	}
+	.copy-800 {
+		@apply font-manrope text-[2rem] font-medium leading-[115%] tracking-[-0.04rem] md:text-[2.5rem] md:tracking-[-0.05rem] lg:text-[2.5rem] lg:tracking-[-0.05rem];
+	}
+	.copy-700 {
+		@apply font-manrope text-[1.25rem] font-medium leading-[115%] tracking-[-0.025rem] md:text-[2rem] md:tracking-[-0.06rem] md:leading-[130%] lg:text-[2rem] lg:tracking-[-0.04rem] lg:leading-[120%];
+	}
+	.copy-500 {
+		@apply font-manrope text-[1rem] font-medium leading-[140%] tracking-[-0.02rem] md:text-[1.125rem] md:tracking-[-0.0225rem];
+	}
+
+	/* Interface */
+	.button-large-default {
+		@apply font-manrope text-[2rem] font-medium leading-[100%] underline tracking-[-0.04rem] lg:text-[4rem] lg:tracking-[-0.08rem];
+	}
+	.button-large-display {
+		@apply font-speziaMono text-[1.875rem] font-medium leading-[100%] underline tracking-[-0.0375rem] uppercase md:text-[2rem] md:no-underline md:tracking-[0.04rem] lg:text-[3.5rem] lg:leading-[110%] lg:tracking-[0.035rem];
+	}
+	.button-display, .badge {
+		@apply font-speziaMono text-[0.875rem] font-medium leading-[1.75rem] tracking-[0.035rem] uppercase md:text-[0.9375rem] md:tracking-[0.0375rem];
+	}
+	.button-default {
+		@apply font-manrope text-[1rem] font-semibold leading-[100%] underline md:text-[1.125rem];
+	}
+}
+
+* {
+	scroll-behavior: smooth;
+}

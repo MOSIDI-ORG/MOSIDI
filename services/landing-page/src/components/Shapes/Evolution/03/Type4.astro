@@ -1,0 +1,41 @@
+---
+export interface Props {
+	innerShape?: string;
+	middleShape?: string;
+	outerShape?: string;
+}
+
+const {
+	innerShape = "text-set-1-400",
+	middleShape = "text-set-1-300",
+	outerShape = "text-set-1-200",
+} = Astro.props;
+---
+
+<svg
+	width="124"
+	height="127"
+	viewBox="0 0 124 127"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	class="h-full w-full"
+>
+	<path
+		d="M24.9032 113.169C18.0718 113.318 12.4948 107.741 12.644 100.91L14.2408 27.789C14.3811 21.3669 19.5538 16.1941 25.976 16.0539L99.0968 14.457C105.928 14.3079 111.505 19.8848 111.356 26.7162L109.759 99.837C109.619 106.259 104.446 111.432 98.024 111.572L24.9032 113.169Z"
+		class={outerShape}
+		fill="currentColor"></path>
+	<path
+		d="M73.558 121.926C67.258 128.507 56.742 128.507 50.442 121.926L5.40413 74.877C-0.518507 68.6899 -0.518514 58.9361 5.40412 52.749L50.442 5.70018C56.742 -0.881161 67.258 -0.881166 73.558 5.70017L118.596 52.749C124.519 58.9361 124.519 68.6899 118.596 74.877L73.558 121.926Z"
+		class={middleShape}
+		fill="currentColor"></path>
+	<circle cx="61.5" cy="63.5" r="40.5" fill="white"></circle>
+	<rect
+		x="61.8447"
+		y="91.8088"
+		width="40.191"
+		height="40.191"
+		rx="3.49288"
+		transform="rotate(-135 61.8447 91.8088)"
+		class={innerShape}
+		fill="currentColor"></rect>
+</svg>

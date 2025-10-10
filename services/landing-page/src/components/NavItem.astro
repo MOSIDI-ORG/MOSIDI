@@ -1,0 +1,32 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Polygon from "./Shapes/Evolution/01/Polygon.astro";
+
+import { cva, type VariantProps } from "cva";
+
+const navItem = cva({
+	base: "flex gap-2 px-2 py-1 items-center group rounded transition-colors",
+	variants: {
+		colour: {
+			white: "text-white hover:bg-white/20",
+			black: "text-black",
+		},
+	},
+	defaultVariants: {
+		colour: "black",
+	},
+});
+
+export interface Props
+	extends HTMLAttributes<"a">,
+		VariantProps<typeof navItem> {}
+
+const { colour = "black" } = Astro.props;
+---
+
+<a {...Astro.props} class={navItem({ colour })}>
+	<Polygon
+		class="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100"
+	/>
+	<slot />
+</a>

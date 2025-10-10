@@ -1,0 +1,24 @@
+---
+import { cn } from "./utils/cn";
+
+export interface Props {
+	showCopy?: boolean;
+	headerClass?: string;
+	paragraphClass?: string;
+}
+
+const { showCopy = true, headerClass, paragraphClass } = Astro.props;
+---
+
+<div class="default-grid relative gap-y-12">
+	<h3 class={cn("copy-1000", headerClass)}>
+		<slot name="header" />
+	</h3>
+	{
+		showCopy && (
+			<p class={cn("copy-700", paragraphClass)}>
+				<slot name="copy" />
+			</p>
+		)
+	}
+</div>

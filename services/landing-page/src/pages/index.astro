@@ -1,0 +1,202 @@
+---
+// Astro Imports
+import { Image } from "astro:assets";
+
+// Layout Import
+import Default from "../layouts/Default.astro";
+
+// Module Imports
+import CopyHighlight from "../modules/CopyHighlight/CopyHighlight.astro";
+import Footer from "../modules/Footer/Footer.astro";
+import HeadlineHighlight from "../modules/HeadlineHighlight.astro";
+import InlineDecoration from "../modules/InlineDecoration.astro";
+import Navigation from "../modules/Navigation/Navigation.astro";
+import Stage from "../modules/Stage.astro";
+import TextGrid from "../modules/TextGrid/TextGrid.astro";
+import NavigationItemWrapper from "../modules/Navigation/NavigationItemWrapper.astro";
+import CopyHighlightItemWrapper from "../modules/CopyHighlight/CopyHighlightItemWrapper.astro";
+import TextGridItem from "../modules/TextGrid/TextGridItem.astro";
+import FooterFundingContainer from "../modules/Footer/FooterFundingContainer.astro";
+import FooterFundingLogoContainer from "../modules/Footer/FooterFundingLogoContainer.astro";
+import FooterNavigationRow from "../modules/Footer/FooterNavigationRow.astro";
+// import FooterLink from "../modules/Footer/FooterLink.astro";
+
+// Component Imports
+import NavItem from "../components/NavItem.astro";
+import Button from "../components/Button.astro";
+import TextBadge from "../components/TextBadge.astro";
+
+// Image/Media Imports
+import innovativeHochschule from "../assets/Innovative Hochschule BMFTR GWK RGB png C1.png";
+import fhp from "../assets/logo-fhpotsdam-innowest-c-fhpostdam-2016-11-16.svg";
+import innowest from "../assets/innowest.svg";
+import thb from "../assets/logo-thbrandenburg-innowest-c-thb-2015-10-05.svg";
+import hnee from "../assets/logo-hne-eberswalde-innowest-c-hne-eberswalde.svg";
+import stageImage from "../assets/stage.jpg";
+import teaser1 from "../assets/teaser-sources.jpg";
+import teaser2 from "../assets/teaser-federal.jpg";
+import teaser3 from "../assets/teaser-open.jpg";
+import teaser4 from "../assets/teaser-network.jpg";
+import teaserBStPub from "../assets/BStPub.png"
+import teaserSCCON from "../assets/SCCONbitkommasterclass.png"
+---
+
+<Default title="MOSIDI" description="Landing Page">
+	<Navigation colour="black">
+		<NavigationItemWrapper colour="black" slot="navigationItemWrapper">
+			<NavItem href="#" colour="white">MOSIDI</NavItem>
+		</NavigationItemWrapper>
+		<Button
+			variant="filled"
+			size={800}
+			colour="white"
+			href="https://tv4-geo.innowest-brandenburg.de/app/"
+			slot="navigationCTA">Prototypen testen</Button
+		>
+	</Navigation>
+	<Stage colour="coloured">
+		<!-- Fragments are "empty" tags in Astro.
+		 This way, only the content is put
+		 in the <h3> of the header, without
+		 additional DOM Elements  -->
+		<Fragment slot="header">Setze alles auf eine Karte.</Fragment>
+		<Fragment slot="copy"
+			>Mit MOSIDI einfach Daten von verschiedenen Portalen zusammenführen, mit eigenen Daten verschneiden, auswerten, visualisieren und bereitstellen. Die modulare Open Source-Lösung für eine nachhaltige datenbasierte Kommunalentwicklung.</Fragment
+		>
+		<Image src={stageImage} alt="Mockup der MOSIDI Anwendung auf einem Dekstop und einem Smartphone" slot="media" class="w-full" />
+	</Stage>
+	<HeadlineHighlight colour="coloured" orientation="textLeft">
+		<Fragment slot="headline">
+			Open Source. Modular. Gemacht für Kommunen.
+		</Fragment>
+	</HeadlineHighlight>
+	<TextGrid colour="coloured">
+		<TextGridItem>
+			<Image src={teaser1} alt="Logos von Datenbereitsteller:innen" slot="media" />
+			<Fragment slot="headline">Daten zusammenführen</Fragment>
+			<Fragment slot="copy">
+				MOSIDI führt Daten unterschiedlichster Bereitsteller:innen zusammen. Von kommunalen Bevölkerungsdaten bis hin zu aktuellen Wetter- und Klimadaten.
+			</Fragment>
+		</TextGridItem>
+		<TextGridItem>
+			<Image src={teaser2} alt="Verschiedene föderale Datenebenen" slot="media" />
+			<Fragment slot="headline">Daten verschneiden</Fragment>
+			<Fragment slot="copy">
+				Die Daten können nicht nur visualisiert sondern auch einfach miteinander verschnitten werden, um neue Analysen und Erktennise zu ermöglichen.
+			</Fragment>
+		</TextGridItem>
+		<TextGridItem>
+			<Image src={teaser3} alt="Logos von Open Source Werkzeugen" slot="media" />
+			<Fragment slot="headline">Offen &amp; Nachhaltig</Fragment>
+			<Fragment slot="copy">
+				MOSIDI ist Open Source und nutzt Open Source Technologien. Hierdurch sind wir offen für Partner:innen mit Blick auf Wartung und Weiterentwicklung.
+			</Fragment>
+		</TextGridItem>
+		<TextGridItem>
+			<Image src={teaser4} alt="Bild eines Netzwerks" slot="media" />
+			<Fragment slot="headline">Von Kommunen für Kommunen</Fragment>
+			<Fragment slot="copy">
+				Die Anwendung wird aktuell gemeinsam mit Kommunen entlang realer kommunaler Bedarfe und Herausforderungen entwickelt.
+			</Fragment>
+		</TextGridItem>
+	</TextGrid>
+<TextGrid colour="coloured" class="my-12">
+ <h2 class="col-span-full text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight tracking-tight mb-4">
+  Aktuelles
+</h2>
+
+  <div class="md:col-span-4 space-y-4">
+
+    <TextGridItem>
+      <Image src={teaserBStPub} alt="Vorschau Publikation Bertelsmann Stiftung" slot="media" />
+      
+<Fragment slot="copy">
+  <h3 class="text-sm md:text-base font-semibold tracking-wide uppercase/relaxed opacity-80">
+      Publikation
+    </h3>
+        Im Analysen und Konzepte-Heft 2/2024 der Bertelsmann Stiftung stellen wir neben dem konzeptionellen Ansatz von MOSIDI mehrere Partner und ihre Datenherausforderungen im Rahmen der nachhaltigen Kommunalentwicklung vor.
+      </Fragment>
+    </TextGridItem>
+
+    <a
+      href="https://www.bertelsmann-stiftung.de/de/publikationen/publikation/did/datennutzung-fuer-nachhaltige-kommunalentwicklung"
+      class="inline-block underline"
+    >
+      Zur Publikation
+    </a>
+ 
+  </div>
+
+ <div class="md:col-span-4 space-y-4">
+
+    <TextGridItem>
+      <Image src={teaserSCCON} alt="Vorschau Publikation Bertelsmann Stiftung" slot="media" />
+      <Fragment slot="copy">
+  <h3 class="text-sm md:text-base font-semibold tracking-wide uppercase/relaxed opacity-80">
+      Smart Country Convention Berlin 2025
+    </h3>  <span class="whitespace-pre-line">
+
+Mit einem Input und bei der anschließenden Diskussion sind wir am 01. Oktober 2025 mit MOSIDI vertreten bei der bitkom Masterclass "Hitze, Hochwasser, Handlungsdruck – Wie offene Daten zur
+Resilienz von Kommunen und Regionen beitragen“. 
+Veranstaltet von den Bitkom Arbeitskreisen "Smart City/Smart Region“ & „Open Data / Open API". </Fragment>
+   </span>
+ </TextGridItem>
+
+    <a
+      href="https://www.smartcountry.berlin/de/programm/programmueberblick#eventdate--Hitze,-Hochwasser,-Handlungsdruck-–-Wie-offene-Daten-zur-Resilienz-von-Kommunen-und-Regionen-beitragen--e8c1307f-a30b-4640-86ee-ff897ab8adb3"
+      class="inline-block underline"
+    >
+      Zur Veranstaltung
+    </a>
+ 
+  </div>
+ 
+  <div class="md:col-span-6">
+
+
+
+  </div>
+</TextGrid>
+
+	<CopyHighlight>
+		<Fragment slot="copy">
+			MOSIDI wird vom Verbundvorhaben InNoWest mit Brandenburger Kommunen entwickelt. Interesse dabei zu sein? Kontaktieren Sie uns!
+		</Fragment>
+		<CopyHighlightItemWrapper slot="itemWrapper">
+			<a href="https://www.innowest-brandenburg.de"><TextBadge form="badge">Mehr zum Verbundvorhaben erfahren &raquo;</TextBadge></a>
+			<a href="mailto:leonard.higi@fh-potsdam.de"><TextBadge form="badge">Jetzt Kontakt aufnehmen &raquo;</TextBadge></a>
+		</CopyHighlightItemWrapper>
+	</CopyHighlight>
+	<InlineDecoration colour="coloured" />
+	<Footer>
+		<FooterFundingContainer slot="funding">
+			<FooterFundingLogoContainer slot="fundingLogos">
+				<Image src={innovativeHochschule} alt="Innovative Hochschule" />
+				<Image
+					src={fhp}
+					alt="Fachhochschule Potsdam"
+				/>
+				<Image
+					src={thb}
+					alt="Technische Hochschule Brandenburg"
+					height="39"
+				/>
+				<Image
+					src={hnee}
+					alt="Hochschule für nachhaltige Entwicklung Eberswalde"
+					height="39"
+				/>
+				<Image
+					src={innowest}
+					alt="InNoWest"
+					height="39"
+				/>
+			</FooterFundingLogoContainer>
+		</FooterFundingContainer>
+		<FooterNavigationRow slot="navigationRow">
+			<!-- <FooterLink href="#">Nav Item 1</FooterLink>
+			<FooterLink href="#">Nav Item 2</FooterLink>
+			<FooterLink href="#">Nav Item 3</FooterLink> -->
+		</FooterNavigationRow>
+	</Footer>
+</Default>
