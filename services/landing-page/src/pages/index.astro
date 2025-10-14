@@ -50,7 +50,7 @@ import teaserSCCON from "../assets/SCCONbitkommasterclass.png"
 			variant="filled"
 			size={800}
 			colour="white"
-			href="https://tv4-geo.innowest-brandenburg.de/app/"
+			href="https://tv4-geo-dev.innowest-brandenburg.de/app/"
 			slot="navigationCTA">Prototypen testen</Button
 		>
 	</Navigation>
@@ -63,7 +63,20 @@ import teaserSCCON from "../assets/SCCONbitkommasterclass.png"
 		<Fragment slot="copy"
 			>Mit MOSIDI einfach Daten von verschiedenen Portalen zusammenführen, mit eigenen Daten verschneiden, auswerten, visualisieren und bereitstellen. Die modulare Open Source-Lösung für eine nachhaltige datenbasierte Kommunalentwicklung.</Fragment
 		>
-		<Image src={stageImage} alt="Mockup der MOSIDI Anwendung auf einem Dekstop und einem Smartphone" slot="media" class="w-full" />
+		<div slot="media" class="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden rounded-2xl">
+  <video
+    class="absolute inset-0 w-full h-full object-cover"
+    autoplay
+    muted
+    playsinline
+    loop
+    poster={stageImage.src}
+  >
+    <source src="/video/hero.webm" type="video/webm" />
+    <source src="/src/assets/Hero Video Landing Page_medium_wide.mp4" />
+    Dein Browser unterstützt das Video-Tag nicht.
+  </video>
+</div>
 	</Stage>
 	<HeadlineHighlight colour="coloured" orientation="textLeft">
 		<Fragment slot="headline">
@@ -134,9 +147,8 @@ import teaserSCCON from "../assets/SCCONbitkommasterclass.png"
       <Fragment slot="copy">
   <h3 class="text-sm md:text-base font-semibold tracking-wide uppercase/relaxed opacity-80">
       Smart Country Convention Berlin 2025
-    </h3>  <span class="whitespace-pre-line">
-
-Mit einem Input und bei der anschließenden Diskussion sind wir am 01. Oktober 2025 mit MOSIDI vertreten bei der bitkom Masterclass "Hitze, Hochwasser, Handlungsdruck – Wie offene Daten zur
+    </h3>  
+Mit einem Input und bei der anschließenden Diskussion waren wir am 01. Oktober 2025 mit MOSIDI vertreten bei der bitkom Masterclass "Hitze, Hochwasser, Handlungsdruck – Wie offene Daten zur
 Resilienz von Kommunen und Regionen beitragen“. 
 Veranstaltet von den Bitkom Arbeitskreisen "Smart City/Smart Region“ & „Open Data / Open API". </Fragment>
    </span>
