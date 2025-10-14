@@ -1,88 +1,73 @@
 <template>
     <div style="overflow-x: hidden;" >
-        <v-row dense  v-for="(item, i) in addedIndicator" :key="i">
-            <v-col
-                cols="12"
-                sm="6"
-               
-            >
-                <v-autocomplete
-                    :items="indicatorNames"
-                    v-model="item.selectedIndicator"
-                    item-value="dct_title"
-                    item-title="dct_title"
-                    density="compact"
-                    :label="$t('custom-indicator.select-labels.indicator')"
-                    variant="solo"
-                    :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                    style="margin-left: 15px; margin-top:15px"
-                >
-                
-                <template v-slot:item="{ props, item }">
-                   
+        <div style="background-color:transparent; overflow-y: scroll; max-height: 300px;">
+            
+            <v-list lines="two" style="background-color:transparent; height: 81%;" class="ml-1 mr-1">           
                 <v-list-item
-                    @click=handleItemClick(item)
-                    v-bind="props"
-                    :title= "item.raw.dct_title"
+                    v-for="(metadata, index) in indicatorNames"
+                    :key="index"
+                    style="border-radius: 5px;"
+                    @click=handleItemClick(metadata)
+                    @mouseover="hoveredItem = index"
+                    @mouseleave="hoveredItem = null"
                 >
-                    <v-list-item-subtitle >
-                        {{ item.raw.dct_catalog_publisher }}
-                    </v-list-item-subtitle>
+                    <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
+                    <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
+                   <template v-slot:prepend>
+                        <v-avatar>
+                            <v-img 
+                                :src="getIcon(metadata.dct_title, index, metadata.geometry_type)"
+                                max-height="40"
+                                max-width="40"
+                                style="cursor: pointer;"
+                                
+                            ></v-img>
+                        </v-avatar>
+                    </template>
+                    <template v-slot:append>
+                        <v-col
+                        style="float: right;"
+                        >
+                    
+                        <div 
+                            @click.stop 
+                            @mousedown.stop 
+                            @mouseup.stop 
+                            @touchstart.stop 
+                            @touchend.stop
+                            v-if="addedIndicator!==null"
+                            >
+                           
+                           
+                        <v-select
+                            v-show="Object.values(addedIndicator).some(innerItem => innerItem.selectedIndicator === metadata.dct_title)"
+                            :items="metadata.availailableYears"
+                            v-model="metadata.selectedYear"
+                            density="compact"
+                            :label="$t('custom-indicator.select-labels.year')"
+                            variant="outlined"
+                            hide-details
+                            :menu-props="{ 'max-height': '200', 'max-width': '300'}"
+                           
+                            
+                        >
+                        </v-select>
+                        </div>
+                        </v-col>
+                    </template>
+                    
                 </v-list-item>
-                </template>
                 
-                </v-autocomplete>
-            </v-col>
-            <v-col
-                cols="12"
-                sm="3"
-            >
-                <v-select
-                    v-show="item.indicatorArray"
-                    :items="item.availailableYears"
-                    v-model="item.selectedYear"
-                    density="compact"
-                    :label="$t('custom-indicator.select-labels.year')"
-                    variant="solo"
-                    :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                    style=" margin-left: 0px; margin-top:15px; "
-                >
-                </v-select>
-            </v-col>
-            <v-col
-                cols="12"
-                sm="3"
-            >
-                <v-select
-                    v-show="item.indicatorArray"
-                    :items="['+', '-', '/', '*']"
-                    v-model="item.selectedOperator"
-                    density="compact"
-                    :label="$t('custom-indicator.select-labels.operator')"
-                    variant="solo"
-                    :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                    style=" margin-left: 0px; margin-top:15px;margin-right: 15px;"
-                >
-                </v-select>
-            </v-col>
-        </v-row>
         
-        <div 
-            style="float:left; margin-left: 15px; margin-bottom:15px" 
-            v-if="addedIndicator[`indicator${Object.keys(addedIndicator)?.length-1}`]?.selectedIndicator!==null"
-        >
+            </v-list>
+            
            
-
-            <v-icon
-                @click="addIndicatorRow()"
-                color="green"
-            >
-                mdi-plus-circle-outline
-            </v-icon>
-            <span class="ml-2">{{ $t('custom-indicator.add') }}</span>
-
+           
+            
+                
 
         </div>
+       <v-divider></v-divider>
         <v-container fluid >
             <v-textarea
                 style="width: 100%;"
@@ -96,7 +81,7 @@
         </v-container>
         <div style="float:left; margin-left: 15px; margin-bottom:15px">
             <v-btn 
-                :disabled= "addedIndicator.indicator0.indicatorArray!== null ? false: true" 
+                :disabled= "addedIndicator.indicator0?.indicatorArray!== null ? false: true" 
                 size="small" 
                 color="green" 
                 @click="calculate()"
@@ -112,16 +97,13 @@
 import { defineProps, ref, computed, onMounted, defineEmits } from 'vue'
 import {getIndicatorData, getGeojsonDataFromDB, classification} from "../services/backend.calls";
 import { useAlertStore } from '@/stores/alert'
-//import { hexToRgb } from '@/utils/generateColors';
-//import { useMapLegendStore } from '@/stores/mapLegend'
 
 const alertStore = useAlertStore()
-//const mapLegendStore = useMapLegendStore();
 const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer", "customMapStylization", "addCustomLayer"]);
 
 let kommunales_gebiet_geojson = ref(null)
 let classification_result = ref(null)
-
+let hoveredItem = ref(null)
 
 
 onMounted(()=>{
@@ -139,34 +121,41 @@ const getKommunalesGebietCentroidGeojson = async () => {
     }
     
 }
-const props = defineProps(['indicatorNames', 'selectedColorPalette'])
+const props = defineProps(['indicatorNames', 'selectedColorPalette', "isMinimized"])
 
 
-let addedIndicator = ref({
-    indicator0: {
-        selectedIndicator: null,
-        indicatorArray: null,
-        availailableYears: null,
-        selectedYear: null,
-        selectedOperator: null
-    }
-})
+let addedIndicator = ref({})
 
 
 const handleItemClick = async (item) => {
-    item.selectedIndicator = item.raw.dct_title
-    const indocatorData =  await getIndicatorData(item.raw.dct_title)
-    item.indicatorArray = indocatorData.indicator
-    item.availailableYears = indocatorData.availabeYears[0][0]
-    item.selectedYear = item.availailableYears[item.availailableYears.length - 1];
-    const Index = Object.keys(addedIndicator.value).length;
-    addedIndicator.value[`indicator${Index-1}`] = {
-        selectedIndicator: item.selectedIndicator,
-        indicatorArray: item.indicatorArray,
-        availailableYears: item.availailableYears,
-        selectedYear: item.selectedYear,
-        selectedOperator: null
-    };
+    const existingKey = Object.keys(addedIndicator.value).find(
+        key => addedIndicator.value[key].selectedIndicator === item.dct_title
+    );
+     const alreadyAdded = Object.values(addedIndicator.value).some(
+        innerItem => innerItem.selectedIndicator === item.dct_title
+    );
+    
+    if (alreadyAdded==true ) {
+      delete addedIndicator.value[existingKey];
+    }
+    
+    else {
+        addIndicatorRow()
+        item.selectedIndicator = item.dct_title
+        const indocatorData =  await getIndicatorData(item.dct_title)
+        item.indicatorArray = indocatorData.indicator
+        item.availailableYears = indocatorData.availabeYears[0][0]
+        item.selectedYear = item.availailableYears[item.availailableYears.length - 1];
+        const Index = Object.keys(addedIndicator.value).length;
+        addedIndicator.value[`indicator${Index-1}`] = {
+            selectedIndicator: item.selectedIndicator,
+            indicatorArray: item.indicatorArray,
+            availailableYears: item.availailableYears,
+            selectedYear: item.selectedYear,
+            selectedOperator: null
+        };
+    }
+    
 }
 
 const addIndicatorRow = () => {
@@ -185,7 +174,7 @@ const addIndicatorRow = () => {
 
 const calculate = () => {
     
-   
+   console.log(addedIndicator.value, "addedIndicator.value")
     let filteredarrayByYear = []
     for (let i = 0; i < Object.keys(addedIndicator.value).length; i++){
         let obj = {};
@@ -194,7 +183,7 @@ const calculate = () => {
     }
 
     for (let i=0; i<Object.keys(addedIndicator.value).length; i++){
-        addedIndicator.value[`indicator${i}`].indicatorArray.forEach(element => {
+        addedIndicator.value[`indicator${i}`]?.indicatorArray?.forEach(element => {
             element.forEach(array => {
                 filteredarrayByYear[i][`indicator${i}`].push(
                     ...array.filter(
@@ -307,6 +296,7 @@ const formula = computed(() => {
     const indicator = addedIndicator.value[key];
     if (indicator.selectedIndicator) {
       text += '( '+indicator.selectedIndicator+' )' + ( ` ${indicator.selectedOperator?indicator.selectedOperator:''} `) ;
+      console.log(text, "text")
     }
   }
   return text;
@@ -352,10 +342,42 @@ const classifyAndStylize = async (filteredArray) => {
     }
     
     //mapLegend()
-    emit("addCustomLayer", filteredArray, classification_result.value, formula)
-    //emit("customMapStylization",filteredArray, classification_result.value, formula)
+    emit("addCustomLayer", filteredArray, classification_result.value, ref(document.getElementById("formulatext").value))
     
 }
+const getIcon = (layerName, index, geomType)=> {
+    const alreadyAdded = Object.values(addedIndicator.value).some(
+    item => item.selectedIndicator === layerName
+  );
+
+    if (alreadyAdded && hoveredItem.value === index) {
+        return 'icons/minus.svg';
+    }
+
+    if (alreadyAdded) {
+        return 'icons/check.svg';
+    }
+
+    if (hoveredItem.value === index) {
+        return 'icons/plus.svg';
+    }
+   
+    else {
+        if (geomType=='Point'){
+            return 'icons/point-blue.svg';
+        }
+        else if (geomType == "MultiLineString" || geomType == "LineString" || geomType == "Line"){
+            return 'icons/line-blue.svg';
+        }
+        else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
+            return 'icons/polygon-blue.svg';
+        }
+      else {
+            return 'icons/raster.svg';
+        }
+    }
+    
+  }
 
 /*const mapLegend = () => {
     const classIntervalsAndColorHexagon = []
