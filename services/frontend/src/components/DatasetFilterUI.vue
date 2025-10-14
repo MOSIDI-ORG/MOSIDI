@@ -200,6 +200,7 @@
         <CustomIndicatorUI
                 :indicatorNames="tableMetadata.filter(item => item.dct_type === 'indikator')"
                 :selectedColorPalette="selectedColorPalette"
+                :isMinimized="isMinimized"
                 @addDeckglLayer="addDeckglLayer"
                 @updateDeckglLayer="updateDeckglLayer"
                 @customMapStylization="customMapStylization"

@@ -174,7 +174,6 @@ const addIndicatorRow = () => {
 
 const calculate = () => {
     
-   console.log(addedIndicator.value, "addedIndicator.value")
     let filteredarrayByYear = []
     for (let i = 0; i < Object.keys(addedIndicator.value).length; i++){
         let obj = {};
