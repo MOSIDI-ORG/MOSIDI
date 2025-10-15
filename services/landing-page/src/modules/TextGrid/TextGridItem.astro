@@ -9,7 +9,10 @@ import Media from "../Media.astro";
 	<h4 class="headline-h6">
 		<slot name="headline" />
 	</h4>
-	<p class="copy-500">
-		<slot name="copy" />
-	</p>
+	<div class="copy-500 text-left m-0
+              [&_p]:m-0
+              [&_a]:block [&_a]:mt-3 [&_a]:ml-0 [&_a]:pl-0
+             [&_a]:underline [&_a:hover]:no-underline">
+    <slot name="copy" />
+  </div>
 </div>
