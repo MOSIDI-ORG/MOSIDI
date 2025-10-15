@@ -179,7 +179,7 @@
         </v-card>
         
     </div>
-    <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
+    <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
         <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
@@ -936,6 +936,24 @@ const getExternalWMSLayers = async ()=>{
     border-radius: 8px;
     position: absolute;
     top: 272px;
+    bottom: 10px;
+    left: 1000px;
+    z-index: 10;
+    background-color: rgba(255,255,255,0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    -moz-backdrop-filter: blur(5px);
+    -ms-backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.2); 
+    
+   
+}
+.custom-formula-ui{
+    overflow-y: scroll; 
+    background: transparent; 
+    border-radius: 8px;
+    position: absolute;
+    top: 110px;
     bottom: 10px;
     left: 1000px;
     z-index: 10;
