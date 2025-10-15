@@ -100,7 +100,7 @@
         </v-card>
        
 
-        <div style="background-color:transparent; overflow-y: scroll; max-height: 300px;">
+        <div style="background-color:transparent; overflow-y: scroll; max-height: 310px;">
             <v-list lines="two" style="background-color:transparent; height: 81%;" class="ml-1 mr-1">   
                 <span style="font-size: 1rem; font-weight: 500;" class="ml-2">{{filteredItems?.length + ' '+  $t('dataset-filter.results')}}</span>        
                 <v-list-item
@@ -175,11 +175,12 @@
                 :model-value="formula? formula: ''"
                 rows="2"
                 id="formulatext"
+                hide-details
             >
            
         </v-textarea>
         </v-container>
-        <div style="float:left; margin-left: 15px; margin-bottom:15px">
+        <div style="float:left; margin-left: 15px; margin-bottom:10px; margin-top:10px">
             <v-btn 
                 :disabled= "addedIndicator?.['indicator0'] ? false: true" 
                 size="small" 

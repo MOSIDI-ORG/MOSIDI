@@ -953,7 +953,7 @@ const getExternalWMSLayers = async ()=>{
     background: transparent; 
     border-radius: 8px;
     position: absolute;
-    top: 110px;
+    top: 62px;
     bottom: 10px;
     left: 1000px;
     z-index: 10;
