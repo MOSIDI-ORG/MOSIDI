@@ -67,10 +67,10 @@
                 
 
         </div>
-       <v-divider></v-divider>
+       <v-divider class=" mt-1 mb-0"></v-divider>
         <v-container fluid >
             <v-textarea
-                style="width: 100%;"
+                style="width: 100%; margin-top: 0;"
                 :label="$t('custom-indicator.formula')"
                 :model-value="formula? formula: ''"
                 rows="2"
@@ -81,10 +81,11 @@
         </v-container>
         <div style="float:left; margin-left: 15px; margin-bottom:15px">
             <v-btn 
-                :disabled= "addedIndicator.indicator0?.indicatorArray!== null ? false: true" 
+                :disabled= "addedIndicator?.['indicator0'] ? false: true" 
                 size="small" 
                 color="green" 
                 @click="calculate()"
+                prepend-icon="mdi-calculator-variant"
             >
             {{$t('custom-indicator.calculate')}}
             </v-btn>
