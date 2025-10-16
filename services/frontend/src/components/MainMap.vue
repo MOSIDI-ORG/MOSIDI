@@ -15,7 +15,7 @@
   </v-app>
   <MetadataDialog> </MetadataDialog>
   <AlertUI> </AlertUI>
-  <MapExport> </MapExport>
+  <MapExport @export-map="onExportMap"> </MapExport>
   <ProgressUI> </ProgressUI>
   
 </template>
@@ -46,7 +46,15 @@ import { useChartStore } from '../stores/chart'
 import { setMapFilterForLegendInteraction } from '../utils/setMapFilterForLegendInteraction';
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { ColumnLayer } from '@deck.gl/layers'
-
+import 'maplibre-gl/dist/maplibre-gl.css';
+	import {
+		MaplibreExportControl,
+		Size,
+		PageOrientation,
+		Format,
+		DPI
+	} from '@watergis/maplibre-gl-export';
+	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
 const { center, zoom, style, pitch } = storeToRefs(useMapStore())
 let { selectedFeature } = storeToRefs(useChartStore())
 //let { catographyUIVisibility } = storeToRefs(useCartographyStore())
@@ -56,7 +64,7 @@ let vectorServer = process.env.VUE_APP_GEOSERVER_URL+'/';
 let map = null;
 let selectedFeatureId = null;
 let mapboxOverlayLayer = ref(null)
-
+let exportControl = null
 
 onMounted(() => {
 
@@ -74,9 +82,53 @@ onMounted(() => {
     compact: true,
 
   }), 'bottom-left');
-  console.log("Map initialized!!")
+  exportControl = new MaplibreExportControl({
+		PageSize: Size.A3,
+		PageOrientation: PageOrientation.Portrait,
+		Format: Format.PDF,
+		DPI: DPI[96],
+		Crosshair: true,
+		PrintableArea: true,
+		Local: 'de',
+		
+	});
+  map.addControl(exportControl, "bottom-left");
+
 })
 
+const onExportMap = (payload)=> {
+  if (exportControl) {
+    map.removeControl(exportControl);
+  }
+
+ 
+  const pageSize = Size[payload.selectedPageSize.toUpperCase()] || Size.A4;
+  const pageOrientation = PageOrientation[payload.selectedPageOrientation] || PageOrientation.Landscape; // or make dynamic if needed
+  const format = Format[payload.selectedFormat.toUpperCase()] || Format.PNG;
+  const dpi = DPI[payload.selectedDPI] || DPI[96];
+
+  exportControl = new MaplibreExportControl({
+    PageSize: pageSize,
+    PageOrientation: pageOrientation,
+    Format: format,
+    DPI: dpi,
+    Crosshair: true,
+    PrintableArea: true,
+    Local: "de",
+  });
+
+  // Add control to the map (needed to initialize button and internal map reference)
+  map.addControl(exportControl);
+  const btn = document.getElementsByClassName('generate-button')[0];
+
+  if (btn) {
+    btn.click(); // Programmatically click the button
+  } else {
+    console.error("Export button not found in DOM");
+  }
+  
+ 
+}
 const addLayerToMap = (layerSpecification)=>{
   let vectorSourceLayer = layerSpecification.layerNameInDatabase;
   let vectorUrl = vectorServer + 'gwc/service/tms/1.0.0/brandenburg:' + vectorSourceLayer + '@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf';
@@ -390,7 +442,9 @@ const zoomOut = ()=>{
     transform: scale(1);
   }
 }
-
+::v-deep .maplibregl-ctrl-group{
+  display: none;
+}
 
 
 </style>
