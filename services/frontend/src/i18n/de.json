@@ -89,7 +89,8 @@
         "show": "Layer anzeigen",
         "metadata": "Metadaten",
         "zoom": "Auf Datensatz zoomen",
-        "remove": "Entfernen"
+        "remove": "Entfernen",
+        "export": "Als GeoJSON exportieren"
     },
     "dataset-filter":{
         "title": "Suche Daten",

@@ -90,7 +90,8 @@
         "show": "Show Layer",
         "metadata": "Metadata",
         "zoom": "Zoom to Extent",
-        "remove": "Remove"
+        "remove": "Remove",
+        "export": "Export to GeoJSON"
     },
     "dataset-filter":{
         "title": "Search Data",
