@@ -174,6 +174,9 @@ import { useLineStyleStore } from '../stores/lineStyle'
 import { useRasterStyleStore } from '../stores/rasterStyle'
 import { useAlertStore } from '@/stores/alert'
 import { useMenuStore } from '../stores/menu'
+import { useProgressStore } from '@/stores/progress'
+
+const progressStore = useProgressStore()
 const alertStore = useAlertStore()
 
 let { isMinimized } = storeToRefs(useMenuStore())
@@ -431,6 +434,10 @@ const getIcon = (checked, geomType)=> {
     }
   }
 const exportToGeojson = async(layerName, type)=>{
+    progressStore.setProgressBar({
+        text: `Exporting ${layerName} to GeoJSON...`,
+        progress: true
+    })
     let indicatorArray = indicatorStore.indicatorArray[layerName][0][0]
     
     let selectedYear = indicatorStore.indicatorArray[layerName].selectedYear
@@ -476,6 +483,9 @@ const exportToGeojson = async(layerName, type)=>{
     a.download = `${layerName}_${selectedYear}.geojson`;
     a.click();
     URL.revokeObjectURL(url);
+    progressStore.setProgressBar({
+        progress: false
+    })
    
 }
 </script>
