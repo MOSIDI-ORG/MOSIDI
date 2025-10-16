@@ -124,6 +124,21 @@
                                     <v-list-item-title class="ml-3">{{ $t('added-datasets.remove') }}</v-list-item-title>
                                 </template>
                             </v-list-item>
+                            <v-list-item
+                                v-if="addedLayers[addedLayer.dct_title]['dct_type']=='indikator' || addedLayers[addedLayer.dct_title]['dct_type']=='custom indikator'"
+                                @click="exportToGeojson(addedLayer.dct_title, addedLayer.dct_type) "
+                            >
+                                <template v-slot:prepend>
+                                    <v-btn 
+                                        density="compact" 
+                                        variant="text" 
+                                        icon 
+                                    >
+                                        <img src="icons/export.svg" alt="Information Icon" width="18" height="18" />
+                                    </v-btn> 
+                                    <v-list-item-title class="ml-3">{{ $t('added-datasets.export') }}</v-list-item-title>
+                                </template>
+                            </v-list-item>
                            
                         </v-list>
                     </v-menu>
@@ -177,8 +192,10 @@ let { rasterLayerSpecification } = storeToRefs(useRasterStyleStore())
 
 
 import {
-    getLayerExtent
+    getLayerExtent,
+    getGeojsonDataFromDB
 } from "../services/backend.calls";
+
 const emit = defineEmits(["addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "toggleLayerVisibilityWithValue", "moveLayerToTop"]);
 
 const metadataDialogStore = useMetadataDialogStore();
@@ -413,7 +430,54 @@ const getIcon = (checked, geomType)=> {
         return 'icons/raster.svg';
     }
   }
+const exportToGeojson = async(layerName, type)=>{
+    let indicatorArray = indicatorStore.indicatorArray[layerName][0][0]
+    
+    let selectedYear = indicatorStore.indicatorArray[layerName].selectedYear
+    let filteredArray
+    if (type =="indikator"){
+        filteredArray = indicatorArray.filter(item => item.zeitbezug === selectedYear);
+    }
+    else if (type =="custom indikator"){
+        filteredArray = indicatorArray
+    }
 
+    const data =  await getGeojsonDataFromDB("Kommunale Gebiete Deutschland")
+    const valueMap = new Map(
+    filteredArray.map(item => [String(item.kennziffer), item])
+    );
+
+    // 2️⃣ Merge attributes into the GeoJSON
+    data.features = data.features.map(feature => {
+        const nationalco = String(feature.properties.nationalco);
+        const match = valueMap.get(nationalco);
+
+        if (match) {
+            feature.properties = {
+            ...feature.properties,
+            ...match, // adds wert, zeitbezug, etc.
+            };
+        } else {
+            // If no match, you can assign default/null values
+            feature.properties = {
+            ...feature.properties,
+            wert: null
+            };
+        }
+
+        return feature;
+    });
+    // Export to .geojson file
+    const geojsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([geojsonStr], { type: "application/geo+json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${layerName}_${selectedYear}.geojson`;
+    a.click();
+    URL.revokeObjectURL(url);
+   
+}
 </script>
 
 <style scoped>
