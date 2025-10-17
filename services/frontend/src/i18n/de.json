@@ -90,7 +90,7 @@
         "metadata": "Metadaten",
         "zoom": "Auf Datensatz zoomen",
         "remove": "Entfernen",
-        "export": "Als GeoJSON exportieren"
+        "export": "Daten exportieren"
     },
     "dataset-filter":{
         "title": "Suche Daten",

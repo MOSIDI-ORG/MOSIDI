@@ -91,7 +91,7 @@
         "metadata": "Metadata",
         "zoom": "Zoom to Extent",
         "remove": "Remove",
-        "export": "Export to GeoJSON"
+        "export": "Export data"
     },
     "dataset-filter":{
         "title": "Search Data",
