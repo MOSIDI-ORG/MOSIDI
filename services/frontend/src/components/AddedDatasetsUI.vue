@@ -124,21 +124,55 @@
                                     <v-list-item-title class="ml-3">{{ $t('added-datasets.remove') }}</v-list-item-title>
                                 </template>
                             </v-list-item>
-                            <v-list-item
-                                v-if="addedLayers[addedLayer.dct_title]['dct_type']=='indikator' || addedLayers[addedLayer.dct_title]['dct_type']=='custom indikator'"
-                                @click="exportToGeojson(addedLayer.dct_title, addedLayer.dct_type) "
+                            <v-menu 
+                                open-on-click 
+                                location="end" 
+                                offset-x
                             >
-                                <template v-slot:prepend>
-                                    <v-btn 
-                                        density="compact" 
-                                        variant="text" 
-                                        icon 
+                                <template v-slot:activator="{ props }">
+                                    <v-list-item
+                                        v-if="addedLayers[addedLayer.dct_title]['dct_type'] == 'indikator' || addedLayers[addedLayer.dct_title]['dct_type'] == 'custom indikator'"
+                                        v-bind="props" 
+                                        class="v-list-item-export"
                                     >
-                                        <img src="icons/export.svg" alt="Information Icon" width="18" height="18" />
-                                    </v-btn> 
-                                    <v-list-item-title class="ml-3">{{ $t('added-datasets.export') }}</v-list-item-title>
+                                        <template v-slot:prepend>
+                                            <v-btn 
+                                                density="compact" 
+                                                variant="text" 
+                                                icon 
+                                                aria-label="Export Menu"
+                                            >
+                                                <img src="icons/export.svg" alt="Export Icon" width="18" height="18" />
+                                            </v-btn> 
+                                        </template>
+                                        
+                                        <v-list-item-title class="ml-3">{{ $t('added-datasets.export') }}</v-list-item-title>
+
+                                        <template v-slot:append>
+                                            <v-icon 
+                                                size="small"
+                                                aria-label="Submenu Indicator"
+                                            >
+                                                mdi-chevron-right
+                                            </v-icon> 
+                                        </template>
+                                    </v-list-item>
                                 </template>
-                            </v-list-item>
+
+                                <v-list>
+                                    <v-list-item 
+                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type, {mode: 'geojson'})"
+                                    >
+                                        <v-list-item-title>GeoJSON</v-list-item-title>
+                                    </v-list-item>
+
+                                    <v-list-item 
+                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type,{mode: 'csv'})"
+                                    >
+                                        <v-list-item-title>CSV</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
                            
                         </v-list>
                     </v-menu>
@@ -433,9 +467,9 @@ const getIcon = (checked, geomType)=> {
         return 'icons/raster.svg';
     }
   }
-const exportToGeojson = async(layerName, type)=>{
+const exportData = async(layerName, type, exportType)=>{
     progressStore.setProgressBar({
-        text: `Exporting ${layerName} to GeoJSON...`,
+        text: `Exporting ${layerName} to ${exportType.mode}...`,
         progress: true
     })
     let indicatorArray = indicatorStore.indicatorArray[layerName][0][0]
@@ -474,15 +508,44 @@ const exportToGeojson = async(layerName, type)=>{
 
         return feature;
     });
-    // Export to .geojson file
-    const geojsonStr = JSON.stringify(data, null, 2);
-    const blob = new Blob([geojsonStr], { type: "application/geo+json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${layerName}_${selectedYear}.geojson`;
-    a.click();
-    URL.revokeObjectURL(url);
+    if (exportType.mode === "geojson"){
+        const geojsonStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([geojsonStr], { type: "application/geo+json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${layerName}_${selectedYear}.geojson`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    else if (exportType.mode === "csv") {
+        const csvRows = [];
+        const headers = Object.keys(data.features[0].properties);
+        csvRows.push(headers.join(",")); // header row
+
+        data.features.forEach(f => {
+        const row = headers.map(h => {
+            let val = f.properties[h];
+            if (val === null || val === undefined) return "";
+            if (typeof val === "string" && val.includes(",")) {
+            // Escape commas and quotes
+            return `"${val.replace(/"/g, '""')}"`;
+            }
+            return val;
+        });
+        csvRows.push(row.join(","));
+        });
+
+        const csvStr = csvRows.join("\n");
+        const blob = new Blob([csvStr], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${layerName}_${selectedYear}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
     progressStore.setProgressBar({
         progress: false
     })
