@@ -145,7 +145,6 @@ watch(() => selectedFeature.value, () => {
         if (filteredArray.length > 0) {
             const labels = filteredArray?.map(item => item.zeitbezug);
             const dataValues = filteredArray?.map(item => item.wert);
-            console.log(labels, dataValues, "labels, dataValues");
             if (labels[0] !== undefined || dataValues[0] !== undefined) {
                 renderChart(labels, dataValues, selectedIndicatorName);
             }
