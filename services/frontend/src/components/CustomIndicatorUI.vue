@@ -132,9 +132,7 @@
                         <div 
                             @click.stop 
                             @mousedown.stop 
-                            @mouseup.stop 
-                            @touchstart.stop 
-                            @touchend.stop
+                            @mouseup.stop
                             v-if="addedIndicator!==null"
                             >
                            
