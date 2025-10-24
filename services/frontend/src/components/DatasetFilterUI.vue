@@ -589,7 +589,8 @@ const getIndicator = async (indicatorName) => {
         indicatorName: indicatorName,
         availailableYearsForSelectedIndicator: indocatorData.availabeYears[0][0],
         selectedYear: indocatorData.availabeYears[0][0].at(-1),
-        colorPalette: colorbrewer.default.RdPu[5]
+        colorPalette: colorbrewer.default.RdPu[5],
+        type: "indikator"
     })
     
     //indicatorArray.value[indicatorName] = (indocatorData.indicator)
@@ -717,7 +718,8 @@ let customMetadata = {
         indicatorName: formula.value,
         availailableYearsForSelectedIndicator: [2024],
         selectedYear: 2024,
-        colorPalette: colorbrewer.default.RdPu[5]
+        colorPalette: colorbrewer.default.RdPu[5],
+        type: "custom indikator"
     })
     indicatorStore.setIndicatorClassificationResults({
             indicatorName: formula.value,
