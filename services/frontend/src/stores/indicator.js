@@ -13,7 +13,8 @@ export const useIndicatorStore = defineStore ({
         this.indicatorArray[data.indicatorName]['availailableYearsForSelectedIndicator'] = data.availailableYearsForSelectedIndicator
         this.indicatorArray[data.indicatorName]['selectedYear']=data.selectedYear,
         this.indicatorArray[data.indicatorName]['colorPalette']=data.colorPalette,
-        this.indicatorArray[data.indicatorName]['secondIndicatorName']=null
+        this.indicatorArray[data.indicatorName]['secondIndicatorName']=null,
+        this.indicatorArray[data.indicatorName]['type']=data.type
         
        },
        setIndicatorClassificationResults(payload){

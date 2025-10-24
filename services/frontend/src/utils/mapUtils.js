@@ -1,4 +1,7 @@
 import { Popup } from 'maplibre-gl';
+import { useChartStore } from '../stores/chart'
+
+
 import { createHTMLAttributeTable } from './createHTMLAttributeTable';
 let popup = null
 let hoverpopup = null
@@ -10,6 +13,13 @@ export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId
 
     const coordinates = [e.lngLat.lng, e.lngLat.lat];
     popup.setLngLat(coordinates);
+    const chartStore = useChartStore()
+    e.features[0].properties = {
+        indikator: chartStore?.selectedFeature?.indikator,
+        ...(chartStore?.selectedFeature?.year != null ? { year: chartStore.selectedFeature.year } : {}),
+        value: chartStore?.selectedFeature?.value,
+        ...e.features[0].properties,
+    }
     popup.setDOMContent(
     createHTMLAttributeTable(
         e.lngLat.lng,
@@ -18,6 +28,7 @@ export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId
     )
     );
     popup.addTo(map);
+    
     if (e.features.length > 0) {
         if (selectedFeatureId) {
             map.removeFeatureState({

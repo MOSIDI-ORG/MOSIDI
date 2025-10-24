@@ -55,6 +55,9 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 		DPI
 	} from '@watergis/maplibre-gl-export';
 	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
+import { useIndicatorStore } from '@/stores/indicator'
+let {indicatorArray} = storeToRefs(useIndicatorStore())
+
 const { center, zoom, style, pitch } = storeToRefs(useMapStore())
 let { selectedFeature } = storeToRefs(useChartStore())
 //let { catographyUIVisibility } = storeToRefs(useCartographyStore())
@@ -174,11 +177,37 @@ const addLayerToMap = (layerSpecification)=>{
   }
   map.on('click', layerSpecification.id, function(e) {
     if (layerSpecification.id.includes('kommunales_gebiet_dashboard') || layerSpecification.id == 'kommunales_gebiet_centroid'){
+      
+      let selectedIndicatorName = layerSpecification.id.replace('kommunales_gebiet_dashboard', '');
+      let iteValue
+      let itemYear
+      if(indicatorArray.value[selectedIndicatorName].type=='indikator'){
+        iteValue=
+          indicatorArray.value[selectedIndicatorName][0][0]
+          .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
+            && item.zeitbezug == indicatorArray.value[selectedIndicatorName].selectedYear
+          )[0]?.wert
+
+          itemYear= indicatorArray.value[selectedIndicatorName].selectedYear
+      }
+      else if(indicatorArray.value[selectedIndicatorName].type=='custom indikator'){
+        iteValue=
+          indicatorArray.value[selectedIndicatorName][0][0]
+          .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
+            
+          )[0]?.calculatedWert
+
+          itemYear= null
+      }
       selectedFeature.value = {
         layerId:  layerSpecification.id,
         featureId: e.features[0].properties.nationalco,
-        featureName: e.features[0].properties.name
+        featureName: e.features[0].properties.name,
+        indikator: selectedIndicatorName,
+        year: itemYear,
+        value: iteValue
       }
+      
       removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
       map.addSource( "highlight",{"type": "geojson", data: e.features[0]} )
       map.addLayer({
@@ -205,6 +234,7 @@ const addLayerToMap = (layerSpecification)=>{
 
         },
       });
+      addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
       
     }
     
