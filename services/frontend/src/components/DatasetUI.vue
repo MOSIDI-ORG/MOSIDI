@@ -81,7 +81,10 @@
                     <div class="v-label" >{{$t('dataset.color')}}</div>
                 </v-col>
                 <v-col cols="12" sm="9" class="d-flex justify-end align-center">
-                    <v-menu :close-on-content-click="true"  location="start">
+                    <v-menu :close-on-content-click="true"  location="start"
+                        :disabled="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]?.bivariate === true"
+
+                    >
                         <template v-slot:activator="{ props }">
                             <span
                                 v-for="(colorItem, j) in indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]?.colorPalette"
@@ -93,7 +96,9 @@
                                     height: '12px',
                                     display: 'inline-block',
                                     margin: '0px',
-                                    cursor: 'pointer'
+                                    cursor: indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]?.bivariate ? 'not-allowed' : 'pointer',
+                                    opacity: indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]?.bivariate ? 0.5 : 1,
+                                    pointerEvents: indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]?.bivariate ? 'none' : 'auto',
                                 }"
                             ></span>
                         </template>
@@ -109,7 +114,7 @@
                                                 height: '20px',
                                                 display: 'inline-block',
                                                 margin: '0px',
-                                                cursor: 'pointer'
+                                                cursor: 'pointer',
                                             }"
                                         ></span>
                                     </div>
