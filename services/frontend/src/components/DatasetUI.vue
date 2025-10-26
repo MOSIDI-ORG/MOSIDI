@@ -200,7 +200,7 @@
                
                     
             </v-card>
-            <BivariateUI @addStyleExpressionByYear="addStyleExpressionByYear" class="mb-2"></BivariateUI>
+            <BivariateUI @addStyleExpressionByYear="addStyleExpressionByYear" @backtoUnivariateMap="backtoUnivariateMap" class="mb-2"></BivariateUI>
             
         </v-card>
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='table' || addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='raster'" class="added-table-ui mx-auto animated-transform"  width="371">
@@ -242,7 +242,9 @@ const filterByYear = (indicatorName)=>{
     emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
 
 }
-
+const backtoUnivariateMap = (indicatorName)=>{
+    emit('mapStylization', indicatorName)
+}
 const assignColorPalette =  (colorPalette, datatype)=> {
     indicatorStore.setIndicatorColorPalette(
       {

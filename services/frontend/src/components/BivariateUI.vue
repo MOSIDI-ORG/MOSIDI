@@ -138,7 +138,7 @@ import { storeToRefs } from 'pinia'
 import {getIndicatorData, classification} from "@/services/backend.calls";
 import { useIndicatorStore } from '@/stores/indicator'
 import { useBivariateStore } from '../stores/bivariate'
-const emit = defineEmits(["addStyleExpressionByYear"]);
+const emit = defineEmits(["addStyleExpressionByYear", "backtoUnivariateMap"]);
 
 
 const indicatorStore = useIndicatorStore()
@@ -227,29 +227,49 @@ const filteredItems = computed(() => {
     });
 });
 const getIcon = (layerName, index, geomType)=> {
-    if (selectedSecondIndicator.value === layerName) {
+    if(selectedSecondIndicator.value === layerName && hoveredItem.value === index){
+        return 'icons/minus.svg'; 
+    }
+    else if (selectedSecondIndicator.value === layerName) {
         return 'icons/check.svg'; 
-      } else if (hoveredItem.value === index) {
+    }
+    else if (hoveredItem.value === index) {
         return 'icons/plus.svg'; 
-      } else {
+    }
+    else {
         if (geomType=='Point'){
             return 'icons/point-blue.svg';
         }
         else if (geomType == "MultiLineString" || geomType == "LineString" || geomType == "Line"){
-            return 'icons/line-blue.svg';
+                return 'icons/line-blue.svg';
         }
         else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
-            return 'icons/polygon-blue.svg';
-      }
-      else {
-            return 'icons/raster.svg';
+                return 'icons/polygon-blue.svg';
         }
-      }
+        else {
+                return 'icons/raster.svg';
+            }
+    }
     
   }
 const addSecondIndicator =  async (indicator) => {
-    getSecondIndicator(indicator.dct_title)
-    selectedSecondIndicator.value = indicator.dct_title
+    if(indicator.dct_title ==selectedSecondIndicator.value){
+        selectedSecondIndicator.value = null
+        indicatorStore.setSecondIndicatordata({
+            parentIndicator:selectedDataset.value,
+            secondIndicator: null,
+            secondIndicatorName: null,
+            availailableYearsForSecondSelectedIndicator: null,
+            secondSelectedYear: null,
+            bivariate: false
+        })
+        emit("backtoUnivariateMap", selectedDataset.value)
+    }
+    else{
+        getSecondIndicator(indicator.dct_title)
+        selectedSecondIndicator.value = indicator.dct_title
+    }
+    
 }
 const getSecondIndicator = async (indicatorName) => {
     const indocatorData =  await getIndicatorData(indicatorName)
