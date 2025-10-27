@@ -227,10 +227,11 @@ const filteredItems = computed(() => {
     });
 });
 const getIcon = (layerName, index, geomType)=> {
-    if(selectedSecondIndicator.value === layerName && hoveredItem.value === index){
+    console.log(indicatorArray.value[selectedDataset.value]['secondIndicator'], "indicatorArray")
+    if(indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName && hoveredItem.value === index){
         return 'icons/minus.svg'; 
     }
-    else if (selectedSecondIndicator.value === layerName) {
+    else if (indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName === layerName) {
         return 'icons/check.svg'; 
     }
     else if (hoveredItem.value === index) {
@@ -253,17 +254,17 @@ const getIcon = (layerName, index, geomType)=> {
     
   }
 const addSecondIndicator =  async (indicator) => {
-    if(indicator.dct_title ==selectedSecondIndicator.value){
-        selectedSecondIndicator.value = null
+    if(indicator.dct_title ==indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName){
+        //selectedSecondIndicator.value = null
         indicatorStore.setSecondIndicatordata({
-            parentIndicator:selectedDataset.value,
+            parentIndicator:selectedDataset?.value,
             secondIndicator: null,
             secondIndicatorName: null,
             availailableYearsForSecondSelectedIndicator: null,
             secondSelectedYear: null,
             bivariate: false
         })
-        emit("backtoUnivariateMap", selectedDataset.value)
+        emit("backtoUnivariateMap", indicatorArray?.value[selectedDataset?.value]['secondIndicator'].parentIndicator)
     }
     else{
         getSecondIndicator(indicator.dct_title)
