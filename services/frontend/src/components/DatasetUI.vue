@@ -248,7 +248,9 @@ const filterByYear = (indicatorName)=>{
 
 }
 const backtoUnivariateMap = (indicatorName)=>{
-    emit('mapStylization', indicatorName)
+    //emit('mapStylization', indicatorName)
+    emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
+
 }
 const assignColorPalette =  (colorPalette, datatype)=> {
     indicatorStore.setIndicatorColorPalette(
@@ -259,7 +261,8 @@ const assignColorPalette =  (colorPalette, datatype)=> {
     )
     emit('mapLegend', datasetSearchStore.selectedDataset)
     if (datatype=='indikator'){
-        emit('mapStylization', datasetSearchStore.selectedDataset)
+        //emit('mapStylization', datasetSearchStore.selectedDataset)
+        emit('filterByYear', datasetSearchStore.selectedDataset, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
     }
     else if (datatype=='custom indikator'){
         console.log( indicatorStore.indicatorArray[datasetSearchStore.selectedDataset], "custom indikator")
