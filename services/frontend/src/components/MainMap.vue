@@ -39,11 +39,12 @@ import AppHeader from "@/components/AppHeader.vue";
 //import CartographyUI from "@/components/CartographyUI.vue";
 import DatasetSearchUI from "@/components/DatasetSearchUI.vue";
 
-import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider/*addWMSLayerToMap, toggleWMSLayerVisibility*/ } from '../utils/mapUtils';
+import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo/*addWMSLayerToMap, toggleWMSLayerVisibility*/ } from '../utils/mapUtils';
 import { useChartStore } from '../stores/chart'
 //import { useCartographyStore } from '../stores/cartography'
 
 import { setMapFilterForLegendInteraction } from '../utils/setMapFilterForLegendInteraction';
+
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { ColumnLayer } from '@deck.gl/layers'
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -56,6 +57,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 	} from '@watergis/maplibre-gl-export';
 	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
 import { useIndicatorStore } from '@/stores/indicator'
+
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
 const { center, zoom, style, pitch } = storeToRefs(useMapStore())
@@ -175,77 +177,10 @@ const addLayerToMap = (layerSpecification)=>{
       
    
   }
+
   map.on('click', layerSpecification.id, function(e) {
     if (layerSpecification.id.includes('kommunales_gebiet_dashboard') || layerSpecification.id == 'kommunales_gebiet_centroid'){
-      
-      let selectedIndicatorName = layerSpecification.id.replace('kommunales_gebiet_dashboard', '');
-      let iteValue
-      let itemYear
-      let secondIndicatorName
-      let secondItemValue
-      let secondItemYear
-      if (indicatorArray.value[selectedIndicatorName].secondIndicatorName!=null){
-        iteValue=
-            indicatorArray.value[selectedIndicatorName][0][0]
-            .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
-              && item.zeitbezug == indicatorArray.value[selectedIndicatorName].selectedYear
-            )[0]?.wert
-
-            itemYear= indicatorArray.value[selectedIndicatorName].selectedYear
-        secondItemValue=
-          indicatorArray.value[selectedIndicatorName].secondIndicator.secondIndicator[0][0]
-          .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
-            && item.zeitbezug == indicatorArray.value[selectedIndicatorName].secondIndicator.secondSelectedYear
-          )[0]?.wert
-
-
-          secondIndicatorName = indicatorArray.value[selectedIndicatorName].secondIndicatorName
-          secondItemYear= indicatorArray.value[selectedIndicatorName].secondIndicator.secondSelectedYear
-          console.log(iteValue, itemYear, secondIndicatorName, "second indicator result" )
-
-          selectedFeature.value = {
-            layerId:  layerSpecification.id,
-            featureId: e.features[0].properties.nationalco,
-            featureName: e.features[0].properties.name,
-            indikator: selectedIndicatorName,
-            year: itemYear,
-            value: iteValue,
-            indikator2: secondIndicatorName,
-            year2: secondItemYear,
-            value2: secondItemValue
-          }
-      }
-      else {
-        if(indicatorArray.value[selectedIndicatorName].type=='indikator'){
-          iteValue=
-            indicatorArray.value[selectedIndicatorName][0][0]
-            .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
-              && item.zeitbezug == indicatorArray.value[selectedIndicatorName].selectedYear
-            )[0]?.wert
-
-            itemYear= indicatorArray.value[selectedIndicatorName].selectedYear
-        }
-        else if(indicatorArray.value[selectedIndicatorName].type=='custom indikator'){
-          iteValue=
-            indicatorArray.value[selectedIndicatorName][0][0]
-            .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
-              
-            )[0]?.calculatedWert
-
-            itemYear= null
-        }
-         selectedFeature.value = {
-          layerId:  layerSpecification.id,
-          featureId: e.features[0].properties.nationalco,
-          featureName: e.features[0].properties.name,
-          indikator: selectedIndicatorName,
-          year: itemYear,
-          value: iteValue
-        }
-      }
-      
-     
-      
+      selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
       removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
       map.addSource( "highlight",{"type": "geojson", data: e.features[0]} )
       map.addLayer({

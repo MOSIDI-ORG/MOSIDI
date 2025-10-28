@@ -158,3 +158,68 @@ export function addWMSLayerFromExternalProvider (map, item) {
         map.moveLayer(item.dct_title, 'road_major');
     }
 }
+export function getSelectedFeatureInfo(e, layerSpecification, indicatorArray) {
+  const selectedIndicatorName = layerSpecification.id.replace('kommunales_gebiet_dashboard', '');
+  let iteValue, itemYear, secondIndicatorName, secondItemValue, secondItemYear;
+
+  const indicatorData = indicatorArray.value[selectedIndicatorName];
+
+  if (indicatorData.secondIndicatorName != null) {
+    // --- Main indicator ---
+    iteValue = indicatorData[0][0]
+      .filter(item =>
+        item.kennziffer === e.features[0].properties.nationalco &&
+        item.zeitbezug == indicatorData.selectedYear
+      )[0]?.wert;
+    itemYear = indicatorData.selectedYear;
+
+    // --- Second indicator ---
+    secondItemValue = indicatorData.secondIndicator.secondIndicator[0][0]
+      .filter(item =>
+        item.kennziffer === e.features[0].properties.nationalco &&
+        item.zeitbezug == indicatorData.secondIndicator.secondSelectedYear
+      )[0]?.wert;
+
+    secondIndicatorName = indicatorData.secondIndicatorName;
+    secondItemYear = indicatorData.secondIndicator.secondSelectedYear;
+
+
+    return {
+      layerId: layerSpecification.id,
+      featureId: e.features[0].properties.nationalco,
+      featureName: e.features[0].properties.name,
+      indikator: selectedIndicatorName,
+      year: itemYear,
+      value: iteValue,
+      indikator2: secondIndicatorName,
+      year2: secondItemYear,
+      value2: secondItemValue
+    };
+  }
+
+  // --- Single indicator ---
+  if (indicatorData.type === 'indikator') {
+    iteValue = indicatorData[0][0]
+      .filter(item =>
+        item.kennziffer === e.features[0].properties.nationalco &&
+        item.zeitbezug == indicatorData.selectedYear
+      )[0]?.wert;
+
+    itemYear = indicatorData.selectedYear;
+  } else if (indicatorData.type === 'custom indikator') {
+    iteValue = indicatorData[0][0]
+      .filter(item => item.kennziffer === e.features[0].properties.nationalco)[0]
+      ?.calculatedWert;
+
+    itemYear = null;
+  }
+
+  return {
+    layerId: layerSpecification.id,
+    featureId: e.features[0].properties.nationalco,
+    featureName: e.features[0].properties.name,
+    indikator: selectedIndicatorName,
+    year: itemYear,
+    value: iteValue
+  };
+}
