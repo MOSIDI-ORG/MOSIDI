@@ -181,32 +181,70 @@ const addLayerToMap = (layerSpecification)=>{
       let selectedIndicatorName = layerSpecification.id.replace('kommunales_gebiet_dashboard', '');
       let iteValue
       let itemYear
-      if(indicatorArray.value[selectedIndicatorName].type=='indikator'){
+      let secondIndicatorName
+      let secondItemValue
+      let secondItemYear
+      if (indicatorArray.value[selectedIndicatorName].secondIndicatorName!=null){
         iteValue=
-          indicatorArray.value[selectedIndicatorName][0][0]
+            indicatorArray.value[selectedIndicatorName][0][0]
+            .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
+              && item.zeitbezug == indicatorArray.value[selectedIndicatorName].selectedYear
+            )[0]?.wert
+
+            itemYear= indicatorArray.value[selectedIndicatorName].selectedYear
+        secondItemValue=
+          indicatorArray.value[selectedIndicatorName].secondIndicator.secondIndicator[0][0]
           .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
-            && item.zeitbezug == indicatorArray.value[selectedIndicatorName].selectedYear
+            && item.zeitbezug == indicatorArray.value[selectedIndicatorName].secondIndicator.secondSelectedYear
           )[0]?.wert
 
-          itemYear= indicatorArray.value[selectedIndicatorName].selectedYear
-      }
-      else if(indicatorArray.value[selectedIndicatorName].type=='custom indikator'){
-        iteValue=
-          indicatorArray.value[selectedIndicatorName][0][0]
-          .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
-            
-          )[0]?.calculatedWert
 
-          itemYear= null
+          secondIndicatorName = indicatorArray.value[selectedIndicatorName].secondIndicatorName
+          secondItemYear= indicatorArray.value[selectedIndicatorName].secondIndicator.secondSelectedYear
+          console.log(iteValue, itemYear, secondIndicatorName, "second indicator result" )
+
+          selectedFeature.value = {
+            layerId:  layerSpecification.id,
+            featureId: e.features[0].properties.nationalco,
+            featureName: e.features[0].properties.name,
+            indikator: selectedIndicatorName,
+            year: itemYear,
+            value: iteValue,
+            indikator2: secondIndicatorName,
+            year2: secondItemYear,
+            value2: secondItemValue
+          }
       }
-      selectedFeature.value = {
-        layerId:  layerSpecification.id,
-        featureId: e.features[0].properties.nationalco,
-        featureName: e.features[0].properties.name,
-        indikator: selectedIndicatorName,
-        year: itemYear,
-        value: iteValue
+      else {
+        if(indicatorArray.value[selectedIndicatorName].type=='indikator'){
+          iteValue=
+            indicatorArray.value[selectedIndicatorName][0][0]
+            .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
+              && item.zeitbezug == indicatorArray.value[selectedIndicatorName].selectedYear
+            )[0]?.wert
+
+            itemYear= indicatorArray.value[selectedIndicatorName].selectedYear
+        }
+        else if(indicatorArray.value[selectedIndicatorName].type=='custom indikator'){
+          iteValue=
+            indicatorArray.value[selectedIndicatorName][0][0]
+            .filter(item => item.kennziffer ===  e.features[0].properties.nationalco 
+              
+            )[0]?.calculatedWert
+
+            itemYear= null
+        }
+         selectedFeature.value = {
+          layerId:  layerSpecification.id,
+          featureId: e.features[0].properties.nationalco,
+          featureName: e.features[0].properties.name,
+          indikator: selectedIndicatorName,
+          year: itemYear,
+          value: iteValue
+        }
       }
+      
+     
       
       removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
       map.addSource( "highlight",{"type": "geojson", data: e.features[0]} )

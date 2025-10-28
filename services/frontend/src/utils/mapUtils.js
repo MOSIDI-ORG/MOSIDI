@@ -18,6 +18,9 @@ export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId
         indikator: chartStore?.selectedFeature?.indikator,
         ...(chartStore?.selectedFeature?.year != null ? { year: chartStore.selectedFeature.year } : {}),
         value: chartStore?.selectedFeature?.value,
+        ...(chartStore?.selectedFeature?.indikator2 != null ? { indikator2: chartStore.selectedFeature.indikator2 } : {}),
+        ...(chartStore?.selectedFeature?.value2 != null ? { value2: chartStore.selectedFeature.value2 } : {}),
+        ...(chartStore?.selectedFeature?.year2 != null ? { year2: chartStore.selectedFeature.year2 } : {}),
         ...e.features[0].properties,
     }
     popup.setDOMContent(
