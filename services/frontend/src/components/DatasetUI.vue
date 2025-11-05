@@ -76,11 +76,11 @@
                 </v-col>
             </v-row>
             <v-divider style="margin-left: 15px; margin-right: 15px;" class=" mt-6"></v-divider>
-            <v-row no-gutters style="" class="d-flex mt-4 mb-4">
-                <v-col cols="12" sm="2" class=" ">
+            <v-row no-gutters  style="text-align: left;" class="d-flex justify-center align-center mt-4">
+                <v-col cols="12" sm="4" >
                     <div class="v-label" >{{$t('dataset.color')}}</div>
                 </v-col>
-                <v-col cols="12" sm="9" class="d-flex justify-end align-center">
+                <v-col cols="12" sm="7" class="d-flex justify-end align-center">
                     <v-menu :close-on-content-click="true"  location="start"
                         :disabled="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]?.bivariate === true"
 
@@ -92,7 +92,7 @@
                                 v-bind="props"
                                 :style="{
                                     backgroundColor: colorItem,
-                                    width: '36px',
+                                    width: '41px',
                                     height: '12px',
                                     display: 'inline-block',
                                     margin: '0px',
@@ -126,6 +126,32 @@
                 </v-col>
 
             </v-row>
+            <v-row v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]"  no-gutters  style="text-align: left;" class="d-flex justify-center align-center mt-4" >
+                <v-col cols="12" sm="4">
+                    <div class="v-label" >{{ $t('cartography.raster.opacity') }}</div>
+                </v-col>
+                 
+                <v-col  cols="12" sm="7" style="float: left;" >
+                   
+                    <v-slider
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        hide-details
+                        tick-size="4"
+                        :thumb-size="12"
+                        color="#54B8C4"
+                        track-color="#000000"
+                        thumb-color="black"
+                        thumb-label
+                        v-model="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity']"
+                        @update:modelValue="changeLayerOpacity"
+                       
+                    >
+                    </v-slider>
+
+                </v-col>
+            </v-row>
             <v-divider style="margin-left: 15px; margin-right: 15px;" class="mt-2"></v-divider>
             <v-list-item
                 :subtitle="$t('bivariate.subtitle')"
@@ -141,11 +167,11 @@
             </v-list-item>
         </v-card>
         <v-card v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='custom indikator'" :style="{ left: isMinimized ? '90px' : '382px'}" class="added-custom-indikator-ui mx-auto animated-transform"  width="371">
-            <v-row no-gutters style="" class="d-flex mt-4 mb-4" >
-                <v-col cols="12" sm="2" class=" ">
+            <v-row no-gutters  style="text-align: left;" class="d-flex justify-center align-center mt-4" >
+                <v-col cols="12" sm="4" >
                     <div class="v-label" >{{$t('dataset.color')}}</div>
                 </v-col>
-                <v-col cols="12" sm="9" class="d-flex justify-end align-center">
+                <v-col cols="12" sm="7" class="d-flex justify-end align-center">
                     <v-menu :close-on-content-click="true"  location="start">
                         <template v-slot:activator="{ props }">
                             <span
@@ -154,7 +180,7 @@
                                 v-bind="props"
                                 :style="{
                                     backgroundColor: colorItem,
-                                    width: '36px',
+                                    width: '41px',
                                     height: '12px',
                                     display: 'inline-block',
                                     margin: '0px',
@@ -185,6 +211,31 @@
                 
                 </v-col>
 
+            </v-row>
+            <v-row v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]" no-gutters  style="text-align: left;" class="d-flex justify-center align-center mt-4 mb-2" >
+                
+                <v-col cols="12" sm="4">
+                    <div class="v-label" >{{ $t('cartography.raster.opacity') }}</div>
+                </v-col>
+                <v-col  cols="12" sm="7" >
+                    <v-slider
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        hide-details
+                        tick-size="4"
+                        :thumb-size="12"
+                        color="#54B8C4"
+                        track-color="#000000"
+                        thumb-color="black"
+                        thumb-label
+                        v-model="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity']"
+                        @update:modelValue="changeLayerOpacity"
+                       
+                    >
+                    </v-slider>
+
+                </v-col>
             </v-row>
         </v-card>
         <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="bivariateUI==true" class="dataset-bivariate-ui mx-auto text-left animated-transform"  width="371">
@@ -311,7 +362,20 @@ const addLayerToMap = (layerSpecifications)=>{
     emit("addStyleLayerToMap",layerSpecifications )
 }
 
-
+const changeLayerOpacity = (value)=>{
+   indicatorStore.setIndicatorOpacity(
+      {
+        opacity: indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity'],
+        indicatorName: datasetSearchStore.selectedDataset
+      }
+    )
+     emit(
+        "setLayerPintProperty",
+        "kommunales_gebiet_dashboard"+datasetSearchStore.selectedDataset,
+        'fill-opacity',
+        value
+    )
+}
 </script>
 
 <style scoped>
