@@ -138,6 +138,12 @@ import { storeToRefs } from 'pinia'
 import {getIndicatorData, classification} from "@/services/backend.calls";
 import { useIndicatorStore } from '@/stores/indicator'
 import { useBivariateStore } from '../stores/bivariate'
+import { useProgressStore } from '@/stores/progress'
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+const progressStore = useProgressStore()
+
 const emit = defineEmits(["addStyleExpressionByYear", "backtoUnivariateMap"]);
 
 
@@ -273,6 +279,10 @@ const addSecondIndicator =  async (indicator) => {
     
 }
 const getSecondIndicator = async (indicatorName) => {
+    progressStore.setProgressBar({
+        text: t("bivariate.progress-text"),
+        progress: true
+    })
     const indocatorData =  await getIndicatorData(indicatorName)
     indicatorStore.setSecondIndicatordata({
         parentIndicator:selectedDataset.value,
@@ -365,7 +375,9 @@ const bivariateStylization=()=>{
     }
     matchExpression.push('rgba(0, 0, 0, 0)');
     emit("addStyleExpressionByYear",'kommunales_gebiet_dashboard' + selectedDataset.value , 'fill-color', matchExpression)
-    
+     progressStore.setProgressBar({
+        progress: false
+    })
     
 }
 </script>
