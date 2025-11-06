@@ -139,7 +139,8 @@
         "title": "Daten kombinieren",
         "subtitle": "Gleichzeitige Visualisierung mehrer Daten",
         "select-indicator": "Indikator auswählen",
-        "select-year": "Jahr auswählen"
+        "select-year": "Jahr auswählen",
+        "progress-text": "Anwendung der bivariaten Stilisierung..."
     },
     "geocoding":{
         "search-placeholder": "Addresse or Ort suchen"

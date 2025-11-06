@@ -140,7 +140,8 @@
         "title": "Combine data",
         "subtitle":"Create Bivariate Map",
         "select-indicator": "Select Indicator",
-        "select-year": "Select Year"
+        "select-year": "Select Year",
+        "progress-text": "Applying Bivariate Stylization..."
     },
     "geocoding":{
         "search-placeholder": "Search address or place"
