@@ -189,7 +189,6 @@ import {getTableMetadata} from "../services/backend.calls";
 let tableMetadataForBivariate = ref(null)
 const tableMetadataRequest= async ()=>{
     const response =  await getTableMetadata()
-    console.log(response, "tableMetadataForBivariate")
     tableMetadataForBivariate.value= response
     dataSources.value = [ ...new Set(tableMetadataForBivariate?.value?.map(item => item.dct_catalog_publisher)), "All"];
     geometryTypes.value = [ ...new Set(tableMetadataForBivariate?.value?.map(item => item.geometry_type)), "All"];
