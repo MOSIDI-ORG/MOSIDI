@@ -5,7 +5,7 @@
       <AppLogo> </AppLogo>
       <LayerUI @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @addCoverageLayerToMap="addCoverageLayerToMap" @toggleCoverageLayerVisibility="toggleCoverageLayerVisibility" @fitBoundsToBBOX="fitBoundsToBBOX" > </LayerUI>
       <!--<IndicatorUI @addStyleExpressionByYear="addStyleExpressionByYear"  @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addDeckglLayer="addDeckglLayer" @updateDeckglLayer="updateDeckglLayer" > </IndicatorUI>-->
-      <LegendUI @setFilterForLegendInteraction="setFilterForLegendInteraction" @resetFilter="resetFilter" @zoomIn="zoomIn" @zoomOut="zoomOut" @addLayerToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></LegendUI>
+      <LegendUI @addSensorData="addSensorData" @setFilterForLegendInteraction="setFilterForLegendInteraction" @resetFilter="resetFilter" @zoomIn="zoomIn" @zoomOut="zoomOut" @addLayerToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></LegendUI>
       <!--<MenuUI @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></MenuUI>-->
       <!--<TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>-->
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
@@ -399,6 +399,37 @@ const moveLayerToTop = (layerId)=>{
     } else {
         console.error(`Layer with ID '${layerId}' does not exist.`);
     }
+}
+/* eslint-disable */
+/**
+ * TODO: Refactor/ Integrate into existing functions
+ * @param data 
+ */
+const addSensorData = (data) => {
+  console.log("Adding Sensor data to Map");
+
+  // Add as source to the map
+  map.addSource('FROST', {
+    'type': 'geojson',
+    'data': data
+  });
+
+  map.addLayer({
+    'id': 'uploaded-polygons',
+    'type': 'circle',//'fill',
+    'source': 'FROST',
+    'paint': {
+        //'fill-color': '#007cbf',
+        //'fill-outline-color': 'red',
+        //'fill-opacity': 1
+        'circle-color': 'blue'
+    },
+    // filter for (multi)polygons; for also displaying linestrings
+    // or points add more layers with different filters
+    // 'filter': ['==', '$type', 'Polygon']
+  });
+
+  console.log(JSON.stringify(data));
 }
 
 onUnmounted(() => {

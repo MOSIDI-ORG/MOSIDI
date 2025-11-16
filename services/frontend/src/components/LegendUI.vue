@@ -2,6 +2,7 @@
     <div class="legend-container">
         <div :class="['map-navigation-container', { 'mb-12': isMaximized==false }, { 'mb-2': isMaximized }]">
            
+            <button @click="test">FROST</button>
             <v-avatar  style="cursor: pointer;" @click="zoomIn"  class="mb-2">
                 <v-img src="icons/plus.svg" width="35" height="35"></v-img>
             </v-avatar>
@@ -222,11 +223,23 @@ import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useIndicatorStore } from '@/stores/indicator'
 import GeocodingUI from './GeocodingUI.vue'
 
+import { getThings } from "../services/frost.service"
+
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
 //const addedDatasetsStore = useaddedDatasetsStore()
 
-const emit = defineEmits(["setFilterForLegendInteraction", "resetFilter", "zoomIn" , "zoomOut", "addLayerToMap", "removeLayerFromMap", "fitBoundsToBBOX"]);
+
+/**
+ * TODO: Move this to correct component
+ */
+const test = async () => {
+   const result = await getThings(2);
+
+   emit("addSensorData", result);
+}
+
+const emit = defineEmits(["setFilterForLegendInteraction", "resetFilter", "zoomIn" , "zoomOut", "addLayerToMap", "removeLayerFromMap", "fitBoundsToBBOX", "addSensorData"]);
 
 
 let { classIntervalsAndColor, classIntervalsAndRadius, classIntervalsAndColorHexagon, clickedlegendItems, /*completeIndicatorName*/ completeSecondIndicatorName, addedLayersLegendSpec, isMaximized, geocodingToggle, activatedExternalWMSMapLegendURL, activatedExternalWMSMapLegendURLTitle} = storeToRefs(useMapLegendStore())
