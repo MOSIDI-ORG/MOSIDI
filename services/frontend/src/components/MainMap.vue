@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { Map, Popup, AttributionControl } from 'maplibre-gl';
+import { Map, AttributionControl } from 'maplibre-gl';
 import { ref, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from 'pinia'
 import { useMapStore } from '../stores/map'
@@ -39,7 +39,8 @@ import AppHeader from "@/components/AppHeader.vue";
 //import CartographyUI from "@/components/CartographyUI.vue";
 import DatasetSearchUI from "@/components/DatasetSearchUI.vue";
 
-import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo/*addWMSLayerToMap, toggleWMSLayerVisibility*/ } from '../utils/mapUtils';
+import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo,/*addWMSLayerToMap, toggleWMSLayerVisibility*/ 
+addSensorThingsPopupToMap} from '../utils/mapUtils';
 import { useChartStore } from '../stores/chart'
 //import { useCartographyStore } from '../stores/cartography'
 
@@ -81,7 +82,8 @@ onMounted(() => {
     zoom: zoom.value,
     pitch: pitch.value,
     preserveDrawingBuffer: true,
-    attributionControl: false
+    attributionControl: false,
+    fadeDuration: 0,
   });
   map.addControl(new AttributionControl({
     customAttribution: '<a href="https://www.fh-potsdam.de/impressum" target="_blank">© Legal Note</a> <a href="https://www.fh-potsdam.de/datenschutz" target="_blank">© Privacy statement</a>',
@@ -404,6 +406,7 @@ const moveLayerToTop = (layerId)=>{
 
 /**
  * TODO: Refactor/ Integrate into 'addLayerToMap' - build layerSpecification
+ * TODO: ADD mouse pointer (for multiple layers?)
  * @param data 
  */
 const addSensorData = (data) => {
@@ -412,31 +415,76 @@ const addSensorData = (data) => {
   // Add as source to the map
   map.addSource('SensorThingsAPI', {
     'type': 'geojson',
-    'data': data
+    'data': data,
+    cluster: true,
+    clusterRadius: 20, // cluster two trailheads if less than 20 pixels apart
+    clusterMaxZoom: 14 // display all trailheads individually from zoom 14 up
   });
 
   map.addLayer({
-    'id': 'SensorThings',
-    'type': 'circle',
-    'source': 'SensorThingsAPI',
-    'paint': {
+    id: 'SensorThings-clusters',
+    type: 'circle',
+    source: 'SensorThingsAPI',
+    filter: ['has', 'point_count'],
+    paint: {
         'circle-color': 'blue'
     },
-    //cluster: true,
-    //clusterRadius: 20, // cluster two trailheads if less than 20 pixels apart
-    //clusterMaxZoom: 14 // display all trailheads individually from zoom 14 up
   });
 
-  map.on('click', 'SensorThings', async (e) => {
+  map.addLayer({
+    id: 'cluster-count',
+    type: 'symbol',
+    source: 'SensorThingsAPI',
+    filter: ['has', 'point_count'],
+    layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['Noto Sans Regular'],
+        'text-size': 12
+    }
+  });
 
-    console.log(e.features);
-    
+  map.addLayer({
+    id: 'SensorThings-unclustered',
+    type: 'circle',
+    source: 'SensorThingsAPI',
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+        'circle-color': '#11b4da',
+        'circle-radius': 4,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
+    }
+  });
+
+  // zoom on a cluster on click
+  map.on('click', 'SensorThings-clusters', async (e) => {
+    const features = map.queryRenderedFeatures(e.point, {
+        layers: ['SensorThings-clusters']
+    });
+    const clusterId = features[0].properties.cluster_id;
+    const source = await map.getSource('SensorThingsAPI');
+    source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+      if (err || zoom === undefined) {
+        console.error('Zoom error', err, zoom);
+        return;
+      }
+
+      map.easeTo({
+        center: features[0].geometry.coordinates,
+        zoom: zoom
+      });
+    });
+  });
+
+  map.on('click', 'SensorThings-unclustered', async (e) => {
     const coordinates = e.features[0].geometry.coordinates.slice();
-    // const description = e.features[0].properties.description;
 
     // Use Bracket Notation to access the Id
     const datastreamId = e.features[0].properties['Datastreams/0/@iot.id'];
     const datastreamName = e.features[0].properties['Datastreams/0/name'];
+    const description = e.features[0].properties['description'];
+    const lastResult = e.features[0].properties['Datastreams/0/Observations/0/result'];
+    const lastResultTimestamp = e.features[0].properties['Datastreams/0/Observations/0/phenomenonTime'];
     const locationName = e.features[0].properties.name;
 
     const observations = await getObservations(datastreamId);
@@ -448,20 +496,15 @@ const addSensorData = (data) => {
       observations: observations
     }
 
-    console.log(JSON.stringify(selectedFeature));
-
-
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
-    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    }
+    const popupData = {
+      Ort: locationName, 
+      Datastream: datastreamName, 
+      Beschreibung: description,
+      'Letzte Messung': lastResult, 
+      'Gemessen am': lastResultTimestamp
+    };
     
-    new Popup()
-        .setLngLat(coordinates)
-        .setHTML(datastreamId)
-        .addTo(map);
+    addSensorThingsPopupToMap(map, coordinates, popupData);
   });
 }
 
