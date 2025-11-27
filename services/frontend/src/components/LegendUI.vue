@@ -234,9 +234,9 @@ let {indicatorArray} = storeToRefs(useIndicatorStore())
  * TODO: Move this to correct component
  */
 const test = async () => {
-   const result = await getThings(2);
+    const result = await getThings(2);
 
-   emit("addSensorData", result);
+    emit("addSensorData", result);
 }
 
 const emit = defineEmits(["setFilterForLegendInteraction", "resetFilter", "zoomIn" , "zoomOut", "addLayerToMap", "removeLayerFromMap", "fitBoundsToBBOX", "addSensorData"]);

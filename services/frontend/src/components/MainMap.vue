@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { Map,/*Popup*/ AttributionControl} from 'maplibre-gl';
+import { Map, Popup, AttributionControl } from 'maplibre-gl';
 import { ref, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from 'pinia'
 import { useMapStore } from '../stores/map'
@@ -57,6 +57,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 	} from '@watergis/maplibre-gl-export';
 	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
 import { useIndicatorStore } from '@/stores/indicator'
+import { getObservations } from '@/services/frost.service';
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
@@ -400,36 +401,68 @@ const moveLayerToTop = (layerId)=>{
         console.error(`Layer with ID '${layerId}' does not exist.`);
     }
 }
-/* eslint-disable */
+
 /**
- * TODO: Refactor/ Integrate into existing functions
+ * TODO: Refactor/ Integrate into 'addLayerToMap' - build layerSpecification
  * @param data 
  */
 const addSensorData = (data) => {
   console.log("Adding Sensor data to Map");
 
   // Add as source to the map
-  map.addSource('FROST', {
+  map.addSource('SensorThingsAPI', {
     'type': 'geojson',
     'data': data
   });
 
   map.addLayer({
-    'id': 'uploaded-polygons',
-    'type': 'circle',//'fill',
-    'source': 'FROST',
+    'id': 'SensorThings',
+    'type': 'circle',
+    'source': 'SensorThingsAPI',
     'paint': {
-        //'fill-color': '#007cbf',
-        //'fill-outline-color': 'red',
-        //'fill-opacity': 1
         'circle-color': 'blue'
     },
-    // filter for (multi)polygons; for also displaying linestrings
-    // or points add more layers with different filters
-    // 'filter': ['==', '$type', 'Polygon']
+    //cluster: true,
+    //clusterRadius: 20, // cluster two trailheads if less than 20 pixels apart
+    //clusterMaxZoom: 14 // display all trailheads individually from zoom 14 up
   });
 
-  console.log(JSON.stringify(data));
+  map.on('click', 'SensorThings', async (e) => {
+
+    console.log(e.features);
+    
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    // const description = e.features[0].properties.description;
+
+    // Use Bracket Notation to access the Id
+    const datastreamId = e.features[0].properties['Datastreams/0/@iot.id'];
+    const datastreamName = e.features[0].properties['Datastreams/0/name'];
+    const locationName = e.features[0].properties.name;
+
+    const observations = await getObservations(datastreamId);
+
+    selectedFeature.value = {
+      featureName: locationName,
+      indicator: datastreamName,
+      layerId: 'SensorThings',
+      observations: observations
+    }
+
+    console.log(JSON.stringify(selectedFeature));
+
+
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+    
+    new Popup()
+        .setLngLat(coordinates)
+        .setHTML(datastreamId)
+        .addTo(map);
+  });
 }
 
 onUnmounted(() => {
