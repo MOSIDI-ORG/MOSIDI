@@ -21,6 +21,92 @@ let indicator = ref(null);
 let indicatorName = ref(null);
 
 /**
+ * Render timescaled chart for SensorThings' Observations
+ * @param data array of objects containing phenomenonTime and result attributes
+ */
+const renderTimeScaleChart = (data) => {
+    const svg = d3.select('#indicatorChart');
+    svg.selectAll('*').remove();
+    const margin = { top: 30, right: 20, bottom: 40, left: 50 };
+    const width = +svg.attr('width') - margin.left - margin.right;
+    const height = +svg.attr('height') - margin.top - margin.bottom;
+
+    // Cast Date String from ISO 8601 to Date object
+    data.forEach(element => {
+        element.phenomenonTime = new Date(element.phenomenonTime);
+    });
+
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    const x = d3.scaleTime()
+                    .domain(d3.extent(data, d => d.phenomenonTime))
+                    .range([ 0, width ]);
+    const y = d3.scaleLinear().domain([0, d3.max(data, d => d.result) + 10]).range([height, 0]);
+
+    // Grid lines for X axis
+    g.append('g')
+        .attr('class', 'grid')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x).tickSize(-height).tickFormat(''))
+        .selectAll('line')
+        .attr('stroke', 'lightgray')
+        .attr('stroke-opacity', 0.5);
+
+    // Grid lines for Y axis
+    g.append('g')
+        .attr('class', 'grid')
+        .call(d3.axisLeft(y).tickSize(-width).tickFormat(''))
+        .selectAll('line')
+        .attr('stroke', 'lightgray')
+        .attr('stroke-opacity', 0.5);
+
+    // X Axis
+    g.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x));
+    g.append('text')
+        .attr('x', width / 2)
+        .attr('y', height + margin.bottom - 10)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '12px')
+        .attr('fill', 'black')
+        .text('Zeitraum');
+    g.append('text')
+        .attr('x', width / 2)
+        .attr('y', -margin.top / 2)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', '12px')
+        .attr('fill', 'black')
+        .text(indicatorName.value + ' (' + selectedFeature.value.featureName + ")");
+    // Y Axis
+    g.append('g')
+        .call(d3.axisLeft(y));
+
+    const line = d3.line()
+        .x(d => x(d.phenomenonTime)) // Parsing?
+        .y(d => y(d.result))
+        .curve(d3.curveMonotoneX); // Smooth line
+
+    // Draw line
+    g.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('stroke-width', 2)
+        .attr('d', line);
+
+    // Add circles at data points
+    g.selectAll('.circle')
+        .data(data)
+        .join('circle')
+        .attr('cx', d => x(d.phenomenonTime))
+        .attr('cy', d => y(d.result))
+        .attr('r', 4)
+        .attr('fill', 'steelblue')
+        .attr('stroke', 'white')
+        .attr('stroke-width', 1);
+}
+
+/**
  * Renders a chart
  * @param labels date labels for x-axis
  * @param timeUnitString e.g. 'Months', 'Years' or 'Days'
@@ -102,6 +188,7 @@ const renderChart = (labels, timeUnitString, dataValues, showPercentageChange=tr
         .attr('fill', 'steelblue')
         .attr('stroke', 'white')
         .attr('stroke-width', 1);
+
     // Append labels for each data point with percentage change
     if (showPercentageChange) {
         g.selectAll('.label')
@@ -138,15 +225,11 @@ watch(() => selectedFeature.value, () => {
         let selectedIndicatorName = layerId?.replace('kommunales_gebiet_dashboard', '');
         if (selectedFeature.value?.layerId?.includes('SensorThings')) {
 
-            // for each Observation get array of phenomenonTime and results
-            const labels = selectedFeature.value.observations.value.map(item => {
-                return new Date(item.phenomenonTime).toLocaleDateString();
-            });
-            const dataValues = selectedFeature.value.observations.value.map(item => item.result);
+            const data = selectedFeature.value.observations.value;
             indicatorName.value = selectedFeature.value.indicator;
 
-            if (labels[0] !== undefined || dataValues[0] !== undefined) {
-                renderChart(labels, 'Monate', dataValues, false);
+            if (data[0] !== undefined) {
+                renderTimeScaleChart(data);
             }
             else {
                 closeChart();
