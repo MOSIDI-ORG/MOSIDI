@@ -21,26 +21,42 @@ let indicator = ref(null);
 let indicatorName = ref(null);
 
 /**
- * Render timescaled chart for SensorThings' Observations
- * @param data array of objects containing phenomenonTime and result attributes
+ * Renders a chart 
+ * @param data array of objects containing properties for x and y axis (see parameters below)
+ * @param timeAttributeName name of the property that holds the date/ time to map to the x-axis
+ * @param valueAttributeName name of the property that holds the values to map to the y-axis
+ * @param isTimeScaled Boolean, if true x-axis is timescaled
+ * @param xAxisLowerLabel label that is displayed as a legend under the x-axis
  */
-const renderTimeScaleChart = (data) => {
+const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=false, xAxisLowerLabel='', showPercentageChange=true) => {
     const svg = d3.select('#indicatorChart');
     svg.selectAll('*').remove();
     const margin = { top: 30, right: 20, bottom: 40, left: 50 };
     const width = +svg.attr('width') - margin.left - margin.right;
     const height = +svg.attr('height') - margin.top - margin.bottom;
 
-    // Cast Date String from ISO 8601 to Date object
-    data.forEach(element => {
-        element.phenomenonTime = new Date(element.phenomenonTime);
-    });
-
     const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-    const x = d3.scaleTime()
-                    .domain(d3.extent(data, d => d.phenomenonTime))
+
+    // Either create a time or point scale
+    let x = null;
+    if (isTimeScaled) {
+        // Cast Date String from ISO 8601 to Date object
+        data.forEach(element => {
+            element[timeAttributeName] = new Date(element[timeAttributeName]);
+        });
+
+        x = d3.scaleTime()
+                    .domain(d3.extent(data, d => d[timeAttributeName]))
                     .range([ 0, width ]);
-    const y = d3.scaleLinear().domain([0, d3.max(data, d => d.result) + 10]).range([height, 0]);
+    } else {
+        let timeLabels = data.map(d => d[timeAttributeName])
+        x = d3.scalePoint().domain(timeLabels).range([0, width]);
+    }
+
+    const maxValue = d3.max(data, d => d[valueAttributeName]);
+    const y = d3.scaleLinear()
+            .domain([0, maxValue + (1/10) * maxValue]) // y-axis is 10% larger than max value
+            .range([height, 0]);
 
     // Grid lines for X axis
     g.append('g')
@@ -69,7 +85,7 @@ const renderTimeScaleChart = (data) => {
         .attr('text-anchor', 'middle')
         .attr('font-size', '12px')
         .attr('fill', 'black')
-        .text('Zeitraum');
+        .text(xAxisLowerLabel);
     g.append('text')
         .attr('x', width / 2)
         .attr('y', -margin.top / 2)
@@ -81,9 +97,10 @@ const renderTimeScaleChart = (data) => {
     g.append('g')
         .call(d3.axisLeft(y));
 
+    // Build Line from array values/ properties
     const line = d3.line()
-        .x(d => x(d.phenomenonTime)) // Parsing?
-        .y(d => y(d.result))
+        .x(d => x(d[timeAttributeName]))
+        .y(d => y(d[valueAttributeName]))
         .curve(d3.curveMonotoneX); // Smooth line
 
     // Draw line
@@ -98,92 +115,8 @@ const renderTimeScaleChart = (data) => {
     g.selectAll('.circle')
         .data(data)
         .join('circle')
-        .attr('cx', d => x(d.phenomenonTime))
-        .attr('cy', d => y(d.result))
-        .attr('r', 4)
-        .attr('fill', 'steelblue')
-        .attr('stroke', 'white')
-        .attr('stroke-width', 1);
-}
-
-/**
- * Renders a chart
- * @param labels date labels for x-axis
- * @param timeUnitString e.g. 'Months', 'Years' or 'Days'
- * @param dataValues values to plot on y-axis
- * @param showPercentageChange boolean for displaying the percentage change between two data values
- */
-const renderChart = (labels, timeUnitString, dataValues, showPercentageChange=true) => {
-    const svg = d3.select('#indicatorChart');
-    svg.selectAll('*').remove();
-    const margin = { top: 30, right: 20, bottom: 40, left: 50 };
-    const width = +svg.attr('width') - margin.left - margin.right;
-    const height = +svg.attr('height') - margin.top - margin.bottom;
-
-    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
-    const x = d3.scalePoint().domain(labels).range([0, width]);
-    const y = d3.scaleLinear().domain([0, d3.max(dataValues)]).range([height, 0]);
-
-    // Grid lines for X axis
-    g.append('g')
-        .attr('class', 'grid')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).tickSize(-height).tickFormat(''))
-        .selectAll('line')
-        .attr('stroke', 'lightgray')
-        .attr('stroke-opacity', 0.5);
-
-    // Grid lines for Y axis
-    g.append('g')
-        .attr('class', 'grid')
-        .call(d3.axisLeft(y).tickSize(-width).tickFormat(''))
-        .selectAll('line')
-        .attr('stroke', 'lightgray')
-        .attr('stroke-opacity', 0.5);
-
-    // X Axis
-    g.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x));
-    g.append('text')
-        .attr('x', width / 2)
-        .attr('y', height + margin.bottom - 10)
-        .attr('text-anchor', 'middle')
-        .attr('font-size', '12px')
-        .attr('fill', 'black')
-        .text(timeUnitString);
-    g.append('text')
-        .attr('x', width / 2)
-        .attr('y', -margin.top / 2)
-        .attr('text-anchor', 'middle')
-        .attr('font-size', '12px')
-        .attr('fill', 'black')
-        .text(indicatorName.value + ' (' + selectedFeature.value.featureName + ")");
-    // Y Axis
-    g.append('g')
-        .call(d3.axisLeft(y));
-
-    const line = d3.line()
-        .x((d, i) => x(labels[i]))
-        .y(d => y(d))
-        .curve(d3.curveMonotoneX); // Smooth line
-
-    // Draw line
-    g.append('path')
-        .datum(dataValues)
-        .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 2)
-        .attr('d', line);
-
-    // Add circles at data points
-    g.selectAll('.circle')
-        .data(dataValues)
-        .enter()
-        .append('circle')
-        .attr('cx', (d, i) => x(labels[i]))
-        .attr('cy', d => y(d))
+        .attr('cx', d => x(d[timeAttributeName]))
+        .attr('cy', d => y(d[valueAttributeName]))
         .attr('r', 4)
         .attr('fill', 'steelblue')
         .attr('stroke', 'white')
@@ -192,25 +125,25 @@ const renderChart = (labels, timeUnitString, dataValues, showPercentageChange=tr
     // Append labels for each data point with percentage change
     if (showPercentageChange) {
         g.selectAll('.label')
-            .data(dataValues)
+            .data(data)
             .enter().append('text')
-            .attr('x', (d, i) => x(labels[i]))
-            .attr('y', d => y(d) - 10)
+            .attr('x', d => x(d[timeAttributeName]))
+            .attr('y', d => y(d[valueAttributeName]) - 10)
             .attr('text-anchor', 'middle')
             .attr('font-size', '12px')
             .attr('fill', (d, i) => {
                 if (i === 0) return 'black'; // No change for the first point
-                const prev = dataValues[i - 1];
-                return d > prev ? 'green' : 'red';
+                const prev = data[i - 1][valueAttributeName];
+                return d[valueAttributeName] > prev ? 'green' : 'red';
             })
             .text((d, i) => {
                 if (i === 0) return ''; // No change for the first point
-                const prev = dataValues[i - 1];
-                const change = ((d - prev) / prev) * 100;
+                const prev = data[i - 1][valueAttributeName];
+                const change = ((d[valueAttributeName] - prev) / prev) * 100;
                 return `${change.toFixed(1)}%`;
             });
     }
-};
+}
 
 const closeChart = () => {
     selectedFeature.value = null;
@@ -229,7 +162,7 @@ watch(() => selectedFeature.value, () => {
             indicatorName.value = selectedFeature.value.indicator;
 
             if (data[0] !== undefined) {
-                renderTimeScaleChart(data);
+                renderChart(data, "phenomenonTime", "result", true, "Zeitraum", false);
             }
             else {
                 closeChart();
@@ -251,7 +184,7 @@ watch(() => selectedFeature.value, () => {
                 const labels = filteredArray?.map(item => item.zeitbezug);
                 const dataValues = filteredArray?.map(item => item.wert);
                 if (labels[0] !== undefined || dataValues[0] !== undefined) {
-                    renderChart(labels, 'Jahre', dataValues, selectedIndicatorName);
+                    renderChart(filteredArray, "zeitbezug", "wert", false, "Jahre");
                 }
                 else {
                     closeChart();
