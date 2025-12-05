@@ -79,6 +79,10 @@
         "geo":{
             "title":"Add geodata",
             "subtitle": "Start by searching and adding a geodata from the library."
+        },
+        "things":{
+            "title":"Add sensor data",
+            "subtitle": "Start by searching an adding an observed property of a sensor from the library"
         }
     },
     

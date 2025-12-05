@@ -5,12 +5,12 @@
       <AppLogo> </AppLogo>
       <LayerUI @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @addCoverageLayerToMap="addCoverageLayerToMap" @toggleCoverageLayerVisibility="toggleCoverageLayerVisibility" @fitBoundsToBBOX="fitBoundsToBBOX" > </LayerUI>
       <!--<IndicatorUI @addStyleExpressionByYear="addStyleExpressionByYear"  @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addDeckglLayer="addDeckglLayer" @updateDeckglLayer="updateDeckglLayer" > </IndicatorUI>-->
-      <LegendUI @addSensorData="addSensorData" @setFilterForLegendInteraction="setFilterForLegendInteraction" @resetFilter="resetFilter" @zoomIn="zoomIn" @zoomOut="zoomOut" @addLayerToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></LegendUI>
+      <LegendUI @setFilterForLegendInteraction="setFilterForLegendInteraction" @resetFilter="resetFilter" @zoomIn="zoomIn" @zoomOut="zoomOut" @addLayerToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></LegendUI>
       <!--<MenuUI @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></MenuUI>-->
       <!--<TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>-->
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
-      <DatasetSearchUI @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap"></DatasetSearchUI>
+      <DatasetSearchUI @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap"></DatasetSearchUI>
     </div>
   </v-app>
   <MetadataDialog> </MetadataDialog>
@@ -58,7 +58,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 	} from '@watergis/maplibre-gl-export';
 	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
 import { useIndicatorStore } from '@/stores/indicator'
-import { getObservations } from '@/services/frost.service';
+import { getThings, getObservations } from '@/services/frost.service';
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
@@ -405,17 +405,21 @@ const moveLayerToTop = (layerId)=>{
 }
 
 /**
- * TODO: Refactor/ Integrate into 'addLayerToMap' - build layerSpecification
  * TODO: ADD mouse pointer (for multiple layers?)
- * @param data 
+ * TODO: How to remove layer?
+ *    - better/ unique naming of layers
+ *        - Use ObservedProperty name
+ *    - split function in add layer and get things
+ * TODO: Reuse Popup logic?
+ * @param observedPropertyId 
  */
-const addSensorData = (data) => {
-  console.log("Adding Sensor data to Map");
-
+const addSensorThingsLayerToMap = async (observedPropertyId) => {
+  const things = await getThings(observedPropertyId);
+  
   // Add as source to the map
   map.addSource('SensorThingsAPI', {
     'type': 'geojson',
-    'data': data,
+    'data': things,
     cluster: true,
     clusterRadius: 20, // cluster two trailheads if less than 20 pixels apart
     clusterMaxZoom: 14 // display all trailheads individually from zoom 14 up

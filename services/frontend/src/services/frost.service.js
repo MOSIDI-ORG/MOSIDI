@@ -17,11 +17,10 @@ export async function getThings(observedPropertyId) {
                 "Datastreams(" +
                     "$select=id,name;" +
                     "$expand=Observations($select=phenomenonTime,result;$orderby=phenomenonTime desc;$top=1))" + 
-            //"&$filter=Datastreams/ObservedProperty/id eq " + observedPropertyId + 
+            "&$filter=Datastreams/ObservedProperty/id eq " + observedPropertyId + 
             "&$resultFormat=GeoJSON",
             getHeader()
         );
-        console.log(response.data + observedPropertyId);
         return response.data;
     } catch(error) {
         console.error("Error fetching Things from FROST");
@@ -58,7 +57,7 @@ export async function getObservedProperties() {
             FROST_BASE_URL + "/ObservedProperties",
             getHeader()
         );
-        return response;
+        return response.data.value;
     } catch(error) {
         console.error("Error fetching ObservedProperties from FROST");
         throw error;
