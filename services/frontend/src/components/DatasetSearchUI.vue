@@ -100,8 +100,8 @@ const addExternaWMSLayerToMap = (layerSpecification)=>{
     emit("addExternaWMSLayerToMap", layerSpecification);
 }
 
-const addSensorThingsLayerToMap = (observedPropertyId) => {
-    emit("addSensorThingsLayerToMap", observedPropertyId);
+const addSensorThingsLayerToMap = (observedProperty) => {
+    emit("addSensorThingsLayerToMap", observedProperty);
 }
 
 </script>

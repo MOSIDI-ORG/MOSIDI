@@ -54,7 +54,8 @@ export async function getObservations(datastreamId) {
 export async function getObservedProperties() {
     try {
         const response = await axios.get(
-            FROST_BASE_URL + "/ObservedProperties",
+            FROST_BASE_URL + "/ObservedProperties" +
+            "?$select=id,name,description",
             getHeader()
         );
         return response.data.value;

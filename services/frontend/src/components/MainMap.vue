@@ -413,11 +413,13 @@ const moveLayerToTop = (layerId)=>{
  * TODO: Reuse Popup logic?
  * @param observedPropertyId 
  */
-const addSensorThingsLayerToMap = async (observedPropertyId) => {
-  const things = await getThings(observedPropertyId);
+const addSensorThingsLayerToMap = async (observedProperty) => {
+  const things = await getThings(observedProperty['@iot.id']);
+  // Used as source name and prefix for layer names
+  const layerName = 'STA' + observedProperty.name;
   
   // Add as source to the map
-  map.addSource('SensorThingsAPI', {
+  map.addSource(layerName, {
     'type': 'geojson',
     'data': things,
     cluster: true,
@@ -426,9 +428,9 @@ const addSensorThingsLayerToMap = async (observedPropertyId) => {
   });
 
   map.addLayer({
-    id: 'SensorThings-clusters',
+    id: layerName + '-clusters',
     type: 'circle',
-    source: 'SensorThingsAPI',
+    source: layerName,
     filter: ['has', 'point_count'],
     paint: {
         'circle-color': 'blue'
@@ -436,9 +438,9 @@ const addSensorThingsLayerToMap = async (observedPropertyId) => {
   });
 
   map.addLayer({
-    id: 'cluster-count',
+    id: layerName + 'cluster-count',
     type: 'symbol',
-    source: 'SensorThingsAPI',
+    source: layerName,
     filter: ['has', 'point_count'],
     layout: {
         'text-field': '{point_count_abbreviated}',
@@ -448,9 +450,9 @@ const addSensorThingsLayerToMap = async (observedPropertyId) => {
   });
 
   map.addLayer({
-    id: 'SensorThings-unclustered',
+    id: layerName + '-unclustered',
     type: 'circle',
-    source: 'SensorThingsAPI',
+    source: layerName,
     filter: ['!', ['has', 'point_count']],
     paint: {
         'circle-color': '#11b4da',
@@ -461,12 +463,12 @@ const addSensorThingsLayerToMap = async (observedPropertyId) => {
   });
 
   // zoom on a cluster on click
-  map.on('click', 'SensorThings-clusters', async (e) => {
+  map.on('click', layerName + '-clusters', async (e) => {
     const features = map.queryRenderedFeatures(e.point, {
-        layers: ['SensorThings-clusters']
+        layers: [layerName + '-clusters']
     });
     const clusterId = features[0].properties.cluster_id;
-    const source = await map.getSource('SensorThingsAPI');
+    const source = await map.getSource(layerName);
     source.getClusterExpansionZoom(clusterId, (err, zoom) => {
       if (err || zoom === undefined) {
         console.error('Zoom error', err, zoom);
@@ -480,7 +482,7 @@ const addSensorThingsLayerToMap = async (observedPropertyId) => {
     });
   });
 
-  map.on('click', 'SensorThings-unclustered', async (e) => {
+  map.on('click', layerName + '-unclustered', async (e) => {
     const coordinates = e.features[0].geometry.coordinates.slice();
 
     // Use Bracket Notation to access the Id

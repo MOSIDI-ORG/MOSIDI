@@ -1,12 +1,12 @@
 <template>
     <!-- gte actual value to show/ hide this component-->
-    <div hidden class="container">
+    <div v-show="dataUiInitiated" class="container">
         <v-card>
             <v-list style="height: 81%;">
                 <v-list-item 
                     v-for="observedProperty in observedProperties" 
                     :key="observedProperty['@iot.id']"
-                    @click="addSensorThingsLayerToMap(observedProperty['@iot.id'])"
+                    @click="addSensorThingsLayerToMap(observedProperty)"
                     style="border-radius: 5px;" 
                     one-line
                 >
@@ -35,7 +35,9 @@ import { storeToRefs } from 'pinia'
 
 const emit = defineEmits(["addSensorThingsLayerToMap"]);
 
-let { activatedDatasetSearch } = storeToRefs(useSensorThingsSearchStore());
+let { activatedDatasetSearch, dataUiInitiated } = storeToRefs(useSensorThingsSearchStore());
+console.log(activatedDatasetSearch !== null)
+console.log(activatedDatasetSearch)
 
 const observedProperties = ref([]);
 let selectedObservedProperty = null;

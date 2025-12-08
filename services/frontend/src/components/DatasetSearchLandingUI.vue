@@ -112,7 +112,7 @@ const activatedDatasetSearchComponent=(value) => {
 
 const toggleUI = () => {
     sensorThingsSearchStore.toggleDataUI({
-        toggleDataUI : true
+        dataUiInitiated : true
     })
 }
 
