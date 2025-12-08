@@ -19,6 +19,7 @@ import TextGridItem from "../modules/TextGrid/TextGridItem.astro";
 import FooterFundingContainer from "../modules/Footer/FooterFundingContainer.astro";
 import FooterFundingLogoContainer from "../modules/Footer/FooterFundingLogoContainer.astro";
 import FooterNavigationRow from "../modules/Footer/FooterNavigationRow.astro";
+import Media from "../modules/Media.astro";
 // import FooterLink from "../modules/Footer/FooterLink.astro";
 
 // Component Imports
@@ -37,6 +38,8 @@ import teaser1 from "../assets/teaser-sources.jpg";
 import teaser2 from "../assets/teaser-federal.jpg";
 import teaser3 from "../assets/teaser-open.jpg";
 import teaser4 from "../assets/teaser-network.jpg";
+import trailerImage from "../assets/MOSIDI-Teaser-Thumbnail.jpg";
+import trailerSubs from "../assets/MOSIDI-Trailer.vtt";
 import teaserBStPub from "../assets/BStPub3.png";
 import teaserSCCON from "../assets/SCCON25.jpeg";
 import heroVideo from "../assets/hero_video_medium_wide.mp4";
@@ -88,6 +91,28 @@ import teaserGitHub from "../assets/github-mark-white.svg";
 			Open Source. Modular. Gemacht für Kommunen.
 		</Fragment>
 	</HeadlineHighlight>
+	<Media fullWidth={true} class="bg-set-1-500">
+		<div class="relative w-full aspect-[1920/1080] md:aspect-[1920/1080] overflow-hidden">
+			<video
+				class="absolute inset-0 w-full h-full 
+					object-cover sm:object-center
+					scale-[0.9] sm:scale-[0.9] md:scale-[0.9]"
+				playsinline
+				controls
+				poster={trailerImage.src}
+			>
+				<track
+					default
+					kind="captions"
+					srclang="de"
+					label="Deutsch"
+					src={trailerSubs} />
+				<source src="https://fhpcloud.fh-potsdam.de/s/ip3kqCpNHpM9Pa4/download/MOSIDI-Trailer-720-medium.mp4" type="video/mp4" media="all and (max-width: 720px)" /> 
+				<source src="https://fhpcloud.fh-potsdam.de/s/BJgzqizM8RZ5Mkr/download/MOSIDI-Trailer-1080-medium.mp4" type="video/mp4" /> 
+				Dein Browser unterstützt das Video-Tag nicht.
+			</video>
+		</div>
+	</Media>
 <TextGrid colour="coloured">
 	  <h2 class="col-span-full text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight mb-2">
     Aktuelles
