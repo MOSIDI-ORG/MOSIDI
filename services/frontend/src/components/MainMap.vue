@@ -488,6 +488,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     // Use Bracket Notation to access the Id
     const datastreamId = e.features[0].properties['Datastreams/0/@iot.id'];
     const datastreamName = e.features[0].properties['Datastreams/0/name'];
+    const unitOfMeasurement = e.features[0].properties['Datastreams/0/unitOfMeasurement/symbol'];
     const description = e.features[0].properties['description'];
     const lastResult = e.features[0].properties['Datastreams/0/Observations/0/result'];
     const lastResultTimestamp = e.features[0].properties['Datastreams/0/Observations/0/phenomenonTime'];
@@ -499,7 +500,8 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
       featureName: locationName,
       indicator: datastreamName,
       layerId: 'SensorThings',
-      observations: observations
+      observations: observations,
+      unitOfMeasurement: unitOfMeasurement
     }
 
     const popupData = {

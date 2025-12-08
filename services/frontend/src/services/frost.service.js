@@ -15,7 +15,7 @@ export async function getThings(observedPropertyId) {
                 "Locations(" +
                     "$select=location)," +
                 "Datastreams(" +
-                    "$select=id,name;" +
+                    "$select=id,name,unitOfMeasurement;" +
                     "$expand=Observations($select=phenomenonTime,result;$orderby=phenomenonTime desc;$top=1))" + 
             "&$filter=Datastreams/ObservedProperty/id eq " + observedPropertyId + 
             "&$resultFormat=GeoJSON",

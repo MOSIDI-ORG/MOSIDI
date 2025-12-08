@@ -27,8 +27,9 @@ let indicatorName = ref(null);
  * @param valueAttributeName name of the property that holds the values to map to the y-axis
  * @param isTimeScaled Boolean, if true x-axis is timescaled
  * @param xAxisLowerLabel label that is displayed as a legend under the x-axis
+ * @param unitOfMeasurement unit of measurement used for y-axis and tooltip
  */
-const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=false, xAxisLowerLabel='', showPercentageChange=true) => {
+const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=false, xAxisLowerLabel='', unitOfMeasurement='', showPercentageChange=true) => {
     const svg = d3.select('#indicatorChart');
     svg.selectAll('*').remove();
     const margin = { top: 30, right: 20, bottom: 40, left: 50 };
@@ -103,13 +104,51 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .y(d => y(d[valueAttributeName]))
         .curve(d3.curveMonotoneX); // Smooth line
 
+
+    var tooltip = d3.select('body').append('div')
+        .style('opacity', 0)
+        .style('position', 'absolute')
+        .style('text-align', 'center')
+        .style('padding', '.5rem')
+        .style('background', '#FFFFFF')
+        .style('border', '1px solid #313639')
+        .style('border-radius', '8px')
+
+   
+    var mouseover = function(event, d) {
+        // Highlight circle
+        d3.select(this).transition()
+            .duration('100')
+            .attr('r', 7);
+        // Show tooltip
+        tooltip.transition()
+            .duration(100)
+            .style('opacity', 1);
+        
+        tooltip.html(d[valueAttributeName] + unitOfMeasurement)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 15) + "px");
+    }
+
+    var mouseout = function() {
+        // Remove highlight circle
+        d3.select(this).transition()
+               .duration('200')
+               .attr('r', 4);
+        // Hide tooltip
+        tooltip.transition()
+             .duration('200')
+             .style("opacity", 0);
+    }
+
+
     // Draw line
     g.append('path')
         .datum(data)
         .attr('fill', 'none')
         .attr('stroke', 'steelblue')
         .attr('stroke-width', 2)
-        .attr('d', line);
+        .attr('d', line);       
 
     // Add circles at data points
     g.selectAll('.circle')
@@ -120,7 +159,9 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .attr('r', 4)
         .attr('fill', 'steelblue')
         .attr('stroke', 'white')
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1)
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout);
 
     // Append labels for each data point with percentage change
     if (showPercentageChange) {
@@ -159,10 +200,11 @@ watch(() => selectedFeature.value, () => {
         if (selectedFeature.value?.layerId?.includes('SensorThings')) {
 
             const data = selectedFeature.value.observations.value;
+            const unitOfMeasurement = selectedFeature.value.unitOfMeasurement;
             indicatorName.value = selectedFeature.value.indicator;
 
             if (data[0] !== undefined) {
-                renderChart(data, "phenomenonTime", "result", true, "Zeitraum", false);
+                renderChart(data, "phenomenonTime", "result", true, "Zeitraum", unitOfMeasurement, false);
             }
             else {
                 closeChart();
