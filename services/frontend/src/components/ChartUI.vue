@@ -105,6 +105,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .curve(d3.curveMonotoneX); // Smooth line
 
 
+    // Add container for displaying tooltip
     var tooltip = d3.select('body').append('div')
         .style('opacity', 0)
         .style('position', 'absolute')
@@ -120,10 +121,12 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         d3.select(this).transition()
             .duration('100')
             .attr('r', 7);
+
         // Show tooltip
         tooltip.transition()
             .duration(100)
-            .style('opacity', 1);
+            .style('opacity', 1)
+            .style('display', 'inline');
         
         tooltip.html(d[valueAttributeName] + unitOfMeasurement)
             .style("left", (event.pageX + 10) + "px")
@@ -133,12 +136,14 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
     var mouseout = function() {
         // Remove highlight circle
         d3.select(this).transition()
-               .duration('200')
-               .attr('r', 4);
+            .duration('200')
+            .attr('r', 4);
+
         // Hide tooltip
         tooltip.transition()
-             .duration('200')
-             .style("opacity", 0);
+            .duration('200')
+            .style('opacity', 0)
+            .style('display', 'none');
     }
 
 
