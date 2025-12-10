@@ -65,7 +65,7 @@
         </template>
         <template #prepend>
         <!-- override these functions to toggle a different component than DatasetFilterUI -->
-        <v-avatar @click="toggleUI(), activateObservedPropertiesSearch('things')" style="cursor: pointer;">
+        <v-avatar @click="addDatasets(), toggleFilterUI(), toggleDataUI(), activatedDatasetSearchComponent('SensorThings')" style="cursor: pointer;">
                 <v-img width="20" src="icons/plus.svg" ></v-img>
             </v-avatar>
         
@@ -80,11 +80,8 @@
 
 <script setup>
 import { useDatasetSearchStore } from '../stores/datasetSearch'
-import { useSensorThingsSearchStore } from '@/stores/observedPropertiesSearch'
 
 const datasetSearchStore = useDatasetSearchStore();
-const sensorThingsSearchStore = useSensorThingsSearchStore();
-
 
 const toggleDataUI = ()=>{
     datasetSearchStore.toggleDataUI({
@@ -106,18 +103,6 @@ const toggleFilterUI = ()=>{
 
 const activatedDatasetSearchComponent=(value) => {
      datasetSearchStore.setActivatedDatasetSearch({
-        activatedDatasetSearch : value
-    })
-}
-
-const toggleUI = () => {
-    sensorThingsSearchStore.toggleDataUI({
-        dataUiInitiated : true
-    })
-}
-
-const activateObservedPropertiesSearch = (value) => {
-    sensorThingsSearchStore.setActivatedDatasetSearch({
         activatedDatasetSearch : value
     })
 }

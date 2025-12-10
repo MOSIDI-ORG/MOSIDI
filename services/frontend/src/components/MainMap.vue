@@ -10,7 +10,7 @@
       <!--<TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>-->
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
-      <DatasetSearchUI @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap"></DatasetSearchUI>
+      <DatasetSearchUI @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap" @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap"></DatasetSearchUI>
     </div>
   </v-app>
   <MetadataDialog> </MetadataDialog>
@@ -406,9 +406,6 @@ const moveLayerToTop = (layerId)=>{
 
 /**
  * TODO: ADD mouse pointer (for multiple layers?)
- * TODO: How to remove layer?
- *    - better/ unique naming of layers
- *        - Use ObservedProperty name
  *    - split function in add layer and get things
  * TODO: Reuse Popup logic?
  * @param observedPropertyId 
@@ -427,6 +424,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     clusterMaxZoom: 14 // display all trailheads individually from zoom 14 up
   });
 
+  // Add Cluster layer
   map.addLayer({
     id: layerName + '-clusters',
     type: 'circle',
@@ -449,6 +447,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     }
   });
 
+  // Add unclustered/ single item layer
   map.addLayer({
     id: layerName + '-unclustered',
     type: 'circle',
@@ -456,10 +455,27 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     filter: ['!', ['has', 'point_count']],
     paint: {
         'circle-color': '#11b4da',
-        'circle-radius': 4,
+        'circle-radius': 5,
         'circle-stroke-width': 1,
         'circle-stroke-color': '#fff'
     }
+  });
+
+  // Mouse styling when hovering
+  map.on('mouseenter', layerName + '-unclustered', function() {
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', layerName + '-unclustered', function() {
+    map.getCanvas().style.cursor = '';
+  });
+
+  map.on('mouseenter', layerName + '-clusters', function() {
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', layerName + '-clusters', function() {
+    map.getCanvas().style.cursor = '';
   });
 
   // zoom on a cluster on click
@@ -482,6 +498,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     });
   });
 
+  // Display Popup and show Chart on click on unclustered layer
   map.on('click', layerName + '-unclustered', async (e) => {
     const coordinates = e.features[0].geometry.coordinates.slice();
 
@@ -514,6 +531,13 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     
     addSensorThingsPopupToMap(map, coordinates, popupData);
   });
+}
+
+const removeSensorThingsLayerFromMap = (layerName) => {
+  map.removeLayer(layerName + '-clusters');
+  map.removeLayer(layerName + 'cluster-count');
+  map.removeLayer(layerName + '-unclustered');
+  map.removeSource(layerName);
 }
 
 onUnmounted(() => {

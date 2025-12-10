@@ -1,6 +1,6 @@
 <template>
     <!-- gte actual value to show/ hide this component-->
-    <div v-show="dataUiInitiated" class="container">
+    <div v-show="filterInitiated==true && activatedDatasetSearch == 'SensorThings'" class="container">
         <v-card>
             <v-list style="height: 81%;">
                 <v-list-item 
@@ -11,6 +11,7 @@
                     one-line
                 >
                     <v-list-item-title class="text-wrap">{{ observedProperty.name }}</v-list-item-title>
+                    <v-list-item-subtitle class="text-wrap" v-text="observedProperty.description"></v-list-item-subtitle>
                 </v-list-item>
 
                 <v-list-item v-if="!observedProperties.length">
@@ -30,17 +31,17 @@
 
 import { onMounted, watch, ref, defineEmits/*, computed, , */ } from 'vue';
 import { getObservedProperties } from '@/services/frost.service';
-import { useSensorThingsSearchStore } from '@/stores/observedPropertiesSearch';
 import { storeToRefs } from 'pinia'
+import { useDatasetSearchStore } from '@/stores/datasetSearch';
+import { useaddedDatasetsStore } from '@/stores/addedDatasets';
 
 const emit = defineEmits(["addSensorThingsLayerToMap"]);
 
-let { activatedDatasetSearch, dataUiInitiated } = storeToRefs(useSensorThingsSearchStore());
-console.log(activatedDatasetSearch !== null)
-console.log(activatedDatasetSearch)
+let { filterInitiated , dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore());
+
+const addedDatasetsStore = useaddedDatasetsStore();
 
 const observedProperties = ref([]);
-let selectedObservedProperty = null;
 
 onMounted(() => {
     retrieveObservedProperties();
@@ -48,11 +49,12 @@ onMounted(() => {
 
 // Use to watch selected ObservedProperty?
 watch(activatedDatasetSearch, () => {
-
+    console.log(dataUiInitiated);
 })
 
-const addSensorThingsLayerToMap = (observedPropertyId) => {
-    emit("addSensorThingsLayerToMap", observedPropertyId);
+const addSensorThingsLayerToMap = (observedProperty) => {
+    emit("addSensorThingsLayerToMap", observedProperty);
+    addedDatasetsStore.addLayer({layerName: 'STA'+observedProperty.name, metadata: observedProperty}, true)       
 }
 
 /*
@@ -80,5 +82,29 @@ const retrieveObservedProperties = async () => {
     background-color: rgba(0, 0, 0, 1);
     color: white;
     border: 1px solid rgba(0, 0, 0, 0.2);
+    height: 200px;
+}
+
+.dataset-filter-ui{
+    overflow-y: scroll; 
+    background: transparent; 
+    border-radius: 8px;
+    position: absolute;
+    top: 272px;
+    bottom: 10px;
+    left: 381px;
+    z-index: 10;
+    background-color: rgba(255,255,255,0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    -moz-backdrop-filter: blur(5px);
+    -ms-backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.2); 
+    
+   
+}
+
+.animated-transform {
+  transition: width 0.3s ease, left 0.3s ease;
 }
 </style>

@@ -3,7 +3,7 @@ export const useDatasetSearchStore = defineStore ({
     id: 'datasetSearch',
     state: () => ({
         searchInitiated: false,
-        filterInitiated: false,
+        filterInitiated: false, // Boolean indicating if FilterUI is active or not
         dataUiInitiated: false,
         selectedDataset: null,
         tableMetadata: null,

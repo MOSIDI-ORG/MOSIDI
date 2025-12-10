@@ -30,6 +30,7 @@
             @fitBoundsToBBOX="fitBoundsToBBOX" 
             @toggleLayerVisibility="toggleLayerVisibility" 
             @removeLayerFromMap="removeLayerFromMap" 
+            @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap"
             v-if="searchInitiated==true"/>
       
     </v-card>
@@ -71,6 +72,10 @@ const toggleLayerVisibility = (layerName)=>{
 
 const removeLayerFromMap = (payload)=>{
     emit("removeLayerFromMap",  {layerId:  payload.layerId, sourceId: payload.sourceId})
+}
+
+const removeSensorThingsLayerFromMap = (layerName) => {
+    emit("removeSensorThingsLayerFromMap", layerName);
 }
 
 const addStyleExpressionByYear =(layerId, styleProperty, fillStyle)=>{

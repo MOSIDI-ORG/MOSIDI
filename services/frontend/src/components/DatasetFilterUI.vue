@@ -2,7 +2,7 @@
 
 <div v-if="activatedDatasetSearch?.value!==null">
     <DatasetUI @addStyleExpressionByYear="addStyleExpressionByYear" @filterByYear="filterByYear" @mapLegend="mapLegend" @mapStylization="mapStylization" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty" @addStyleLayerToMap="addStyleLayerToMap" @customMapStylization="customMapStylization" v-show="dataUiInitiated==true"></DatasetUI>
-    <div v-show="filterInitiated==true && dataUiInitiated==false">
+    <div v-show="filterInitiated==true && dataUiInitiated==false && activatedDatasetSearch != 'SensorThings'">
 
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
 
@@ -282,13 +282,13 @@ import { externalLayers } from '../assets/externalLayers';
 let { isMinimized } = storeToRefs(useMenuStore())
 const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressionByYear","addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleLayerToMap", "addExternaWMSLayerToMap"]);
 
-let {  filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
+let { filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
 
 
 let externalWMSLayers = ref([])
 let { circleStyleParams } = storeToRefs(usePointStyleStore())
 let { polygonStyleParams } = storeToRefs(usePolygonStyleStore())
-let {  lineStyleParams } = storeToRefs(useLineStyleStore())
+let { lineStyleParams } = storeToRefs(useLineStyleStore())
 //const { metadataa, tablename } = storeToRefs(useMetadataDialogStore())
 
 
@@ -333,6 +333,7 @@ let selectedLayerMetadata = ref(null)
 let selectedLayerName= ref(null)
 let selectedYearIndicatorFilter = ref(null)
 //let availableYearsForIndicatorFilter =ref(null)
+
 onMounted(()=>{
     tableMetadataRequest()
     getExternalWMSLayers()
@@ -392,9 +393,9 @@ const datasetTypes = computed(() => {
 const getIcon = (layerName, index, geomType)=> {
     if (addedDatasetsStore.addedLayers[layerName]) {
         return 'icons/check.svg'; 
-      } else if (hoveredItem.value === index) {
+    } else if (hoveredItem.value === index) {
         return 'icons/plus.svg'; 
-      } else {
+    } else {
         if (geomType=='Point'){
             return 'icons/point-blue.svg';
         }
@@ -403,13 +404,17 @@ const getIcon = (layerName, index, geomType)=> {
         }
         else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
             return 'icons/polygon-blue.svg';
-      }
-      else {
+        }
+        else {
             return 'icons/raster.svg';
         }
-      }
+    }
     
-  }
+}
+
+/**
+ * Hides this component on clicking close
+ */
 const toggleFilterUI = ()=>{
     datasetSearchStore.toggleFilter({
         filterInitiated : false
@@ -494,8 +499,6 @@ const availableYearsForIndicatorFilter = computed(() => {
     { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
   ]
 })
-
-
 
 
 const showLayerMetadata= (layerName)=>{
@@ -703,7 +706,7 @@ const mapStylization = (indicatorName) => {
     })
 }
 const addCustomLayer= (array,classes, formula)=>{
-let customMetadata = {
+    let customMetadata = {
         dct_title: formula.value,
         dct_type: "custom indikator",
         geometry_type: "Polygon",
