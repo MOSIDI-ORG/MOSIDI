@@ -413,6 +413,11 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
   // Used as source name and prefix for layer names
   const layerName = 'STA' + observedProperty.dct_title;
   
+  // Stop if Source already exists
+  if (map.getSource(layerName) != undefined) {
+    return;
+  }
+
   // Add as source to the map
   map.addSource(layerName, {
     'type': 'geojson',
