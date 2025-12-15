@@ -96,13 +96,21 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .text(indicatorName.value + ' (' + selectedFeature.value.featureName + ")");
     // Y Axis
     g.append('g')
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y).tickFormat(d => d + unitOfMeasurement));
 
     // Build Line from array values/ properties
     const line = d3.line()
         .x(d => x(d[timeAttributeName]))
         .y(d => y(d[valueAttributeName]))
         .curve(d3.curveMonotoneX); // Smooth line
+
+    // Draw line
+    g.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('stroke-width', 2)
+        .attr('d', line);     
 
 
     // Add container for displaying tooltip
@@ -115,7 +123,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .style('border', '1px solid #313639')
         .style('border-radius', '8px')
 
-   
+    // Hover over event
     var mouseover = function(event, d) {
         // Highlight circle
         d3.select(this).transition()
@@ -133,6 +141,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
             .style("top", (event.pageY - 15) + "px");
     }
 
+    // Leave hover over event
     var mouseout = function() {
         // Remove highlight circle
         d3.select(this).transition()
@@ -144,16 +153,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
             .duration('200')
             .style('opacity', 0)
             .style('display', 'none');
-    }
-
-
-    // Draw line
-    g.append('path')
-        .datum(data)
-        .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 2)
-        .attr('d', line);       
+    }  
 
     // Add circles at data points
     g.selectAll('.circle')
