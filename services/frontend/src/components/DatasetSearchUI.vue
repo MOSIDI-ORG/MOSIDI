@@ -5,16 +5,13 @@
             @addDeckglLayer="addDeckglLayer" 
             @toggleLayerVisibility="toggleLayerVisibility"
             @addLayerToMap="addLayerToMap" 
+            @addSensorThingsLayerToMap="addSensorThingsLayerToMap"
             @addStyleExpressionByYear="addStyleExpressionByYear"
             @removeLayerFromMap="removeLayerFromMap" 
             @setLayerPintProperty="setLayerPintProperty" 
             @setLayerLayoutProperty="setLayerLayoutProperty"
             @addExternaWMSLayerToMap="addExternaWMSLayerToMap">
-
         </DatasetFilterUI>
-        <ObservedPropertyFilter
-            @addSensorThingsLayerToMap="addSensorThingsLayerToMap">
-        </ObservedPropertyFilter>
     </div>
     <v-card
         class="mx-auto dataset-search-ui animated-width" :width="isMinimized?'80':'371'" height="50" 
@@ -49,13 +46,12 @@ import ChartUI from "@/components/ChartUI.vue";
 import { useIndicatorStore } from '@/stores/indicator'
 import { storeToRefs } from 'pinia'
 import { useMenuStore } from '../stores/menu'
-import ObservedPropertyFilter from './SensorThings/ObservedPropertyFilter.vue'
 
 let { isMinimized } = storeToRefs(useMenuStore())
 
 const indicatorStore = useIndicatorStore()
 
-const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleLayerToMap", "fitBoundsToBBOX", "toggleLayerVisibility", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "toggleLayerVisibilityWithValue", "moveLayerToTop", "addSensorThingsLayerToMap"]);
+const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleLayerToMap", "fitBoundsToBBOX", "toggleLayerVisibility", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "toggleLayerVisibilityWithValue", "moveLayerToTop", "addSensorThingsLayerToMap", "removeSensorThingsLayerFromMap"]);
 
 let { searchInitiated, filterInitiated, /*dataUiInitiated*/ } = storeToRefs(useDatasetSearchStore())
 

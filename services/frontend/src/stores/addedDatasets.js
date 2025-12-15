@@ -1,4 +1,3 @@
-import { convertToMetadata } from '@/utils/SensorThingsConverter';
 import { defineStore } from 'pinia'
 
 export const useaddedDatasetsStore = defineStore ({
@@ -7,19 +6,14 @@ export const useaddedDatasetsStore = defineStore ({
         addedLayers: {}
     }),
     actions: {
-        addLayer(payload, isSensorThings=false) {
+        addLayer(payload) {
             const { layerName, metadata } = payload;
             if (!layerName || !metadata) {
               console.error('Invalid payload: missing layerName or metadata');
               return;
             }
 
-            if (isSensorThings) {
-              this.addedLayers[layerName] = convertToMetadata(metadata);
-              console.log(convertToMetadata(metadata));
-            } else {
-              this.addedLayers[layerName] = metadata;
-            }
+            this.addedLayers[layerName] = metadata;
             this.addedLayers[layerName]['checked'] = true;
 
             for(let layername in this.addedLayers){

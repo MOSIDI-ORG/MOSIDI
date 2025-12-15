@@ -6,8 +6,8 @@ export const useDatasetSearchStore = defineStore ({
         filterInitiated: false, // Boolean indicating if FilterUI is active or not
         dataUiInitiated: false,
         selectedDataset: null,
-        tableMetadata: null,
-        activatedDatasetSearch: 'indicator'
+        tableMetadata: [],
+        activatedDatasetSearch: ''
     }),
     actions: {
         activateDatasetSearch(data) {
@@ -26,8 +26,10 @@ export const useDatasetSearchStore = defineStore ({
         setTableMetadata(payload){
             this.tableMetadata=payload
         },
+        addTableMetadata(payload) {
+            this.tableMetadata.push(payload.value);
+        },
         setActivatedDatasetSearch(payload) {
-            console.log(payload.activatedDatasetSearch, "store")
             this.activatedDatasetSearch = payload.activatedDatasetSearch
         }
         

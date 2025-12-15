@@ -385,7 +385,6 @@ const removeLayer = (layerName, layerType)=>{
         indicatorStore.removeIndicator(layerName)
     } 
     else if (layerType == DatasetTypes.SensorThings) {
-        layerName = 'STA' + layerName;
         emit("removeSensorThingsLayerFromMap", layerName);
     }
    

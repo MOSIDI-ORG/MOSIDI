@@ -405,15 +405,13 @@ const moveLayerToTop = (layerId)=>{
 }
 
 /**
- * TODO: ADD mouse pointer (for multiple layers?)
- *    - split function in add layer and get things
- * TODO: Reuse Popup logic?
- * @param observedPropertyId 
+ * Add Layers for SensorThings data (including clustered layers)
+ * @param observedProperty metadata object (including observedPropertyId field)
  */
 const addSensorThingsLayerToMap = async (observedProperty) => {
-  const things = await getThings(observedProperty['@iot.id']);
+  const things = await getThings(observedProperty.observedPropertyId);
   // Used as source name and prefix for layer names
-  const layerName = 'STA' + observedProperty.name;
+  const layerName = 'STA' + observedProperty.dct_title;
   
   // Add as source to the map
   map.addSource(layerName, {
@@ -525,7 +523,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
       Ort: locationName, 
       Datastream: datastreamName, 
       Beschreibung: description,
-      'Letzte Messung': lastResult, 
+      'Letzte Messung': lastResult + unitOfMeasurement, 
       'Gemessen am': lastResultTimestamp
     };
     
@@ -534,6 +532,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
 }
 
 const removeSensorThingsLayerFromMap = (layerName) => {
+  layerName = 'STA' + layerName;
   map.removeLayer(layerName + '-clusters');
   map.removeLayer(layerName + 'cluster-count');
   map.removeLayer(layerName + '-unclustered');

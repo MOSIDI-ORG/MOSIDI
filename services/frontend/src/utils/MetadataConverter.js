@@ -10,7 +10,8 @@ export const convertToMetadata = (observedProperty) => {
         dct_title: observedProperty.name,
         dct_type: DatasetTypes.SensorThings,
         dct_description: observedProperty.description,
-        geometry_type: 'Point'
+        geometry_type: 'Point',
+        observedPropertyId: observedProperty['@iot.id']
     }
     return metadata;
 }
