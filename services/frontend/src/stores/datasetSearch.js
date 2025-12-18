@@ -27,7 +27,7 @@ export const useDatasetSearchStore = defineStore ({
             this.tableMetadata=payload
         },
         addTableMetadata(payload) {
-            this.tableMetadata.push(payload.value);
+            this.tableMetadata.push(payload);
         },
         setActivatedDatasetSearch(payload) {
             this.activatedDatasetSearch = payload.activatedDatasetSearch
