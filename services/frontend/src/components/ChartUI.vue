@@ -3,6 +3,12 @@
         <v-btn density="compact" icon="mdi-close"
             style="position: absolute; top: 10px; right: 10px; z-index: 1000; background-color: transparent;"
             @click="closeChart()"></v-btn>
+        <v-btn density="compact" icon="mdi-fullscreen" v-show="!isFullscreen"
+            style="position: absolute; top: 10px; right: 50px; z-index: 1000; background-color: transparent;"
+            @click="enterFullscreen()"></v-btn>
+        <v-btn density="compact" icon="mdi-fullscreen-exit" v-show="isFullscreen"
+            style="position: absolute; top: 10px; right: 50px; z-index: 1000; background-color: transparent;"
+            @click="exitFullscreen()"></v-btn>
         <svg class="chart-ui" id="indicatorChart" width="550" height="350"></svg>
     </div>
 </template>
@@ -16,9 +22,12 @@ import { useAlertStore } from '@/stores/alert';
 
 const alertStore = useAlertStore();
 const props = defineProps(['indicatorArray', 'secondIndicatorArray', 'selectedIndicator', 'selectedSecondIndicator']);
-let { selectedFeature } = storeToRefs(useChartStore());
-let indicator = ref(null);
-let indicatorName = ref(null);
+const { selectedFeature } = storeToRefs(useChartStore());
+const indicator = ref(null);
+const indicatorName = ref(null);
+const isFullscreen = ref(false);
+
+const margin = { top: 30, right: 20, bottom: 40, left: 50 };
 
 /**
  * Renders a chart 
@@ -32,7 +41,8 @@ let indicatorName = ref(null);
 const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=false, xAxisLowerLabel='', unitOfMeasurement='', showPercentageChange=true) => {
     const svg = d3.select('#indicatorChart');
     svg.selectAll('*').remove();
-    const margin = { top: 30, right: 20, bottom: 40, left: 50 };
+    // define viewbox for zooming in on chart
+    svg.attr('viewBox','0 0 ' + svg.attr('width') + ' ' + svg.attr('height'))
     const width = +svg.attr('width') - margin.left - margin.right;
     const height = +svg.attr('height') - margin.top - margin.bottom;
 
@@ -196,6 +206,29 @@ const closeChart = () => {
 
     d3.select('#indicatorChart').selectAll('*').remove();
 };
+
+/**
+ * enter fullscreen for chart by setting width and height to current window size
+ */
+const enterFullscreen = () => {
+    const svg = d3.select('#indicatorChart');
+    svg.style("width", window.innerWidth - margin.left);
+    svg.style("height", window.innerHeight - margin.top);
+
+    isFullscreen.value = true;
+}
+
+/**
+ * exit fullscreen by resetting width and height to their default values
+ */
+const exitFullscreen = () => {
+    const svg = d3.select('#indicatorChart');
+    // remove width and heigth attribute; returns to default
+    svg.style("width", null);
+    svg.style("height", null);
+
+    isFullscreen.value = false;
+}
 
 
 watch(() => selectedFeature.value, () => {
