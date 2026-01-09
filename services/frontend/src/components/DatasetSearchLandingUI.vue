@@ -64,7 +64,6 @@
             
         </template>
         <template #prepend>
-        <!-- override these functions to toggle a different component than DatasetFilterUI -->
         <v-avatar @click="addDatasets(), toggleFilterUI(), toggleDataUI(), activatedDatasetSearchComponent('SensorThings')" style="cursor: pointer;">
                 <v-img width="20" src="icons/plus.svg" ></v-img>
             </v-avatar>

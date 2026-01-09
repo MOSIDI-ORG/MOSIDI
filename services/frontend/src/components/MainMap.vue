@@ -434,7 +434,8 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     source: layerName,
     filter: ['has', 'point_count'],
     paint: {
-        'circle-color': 'blue'
+        'circle-color': '#11b4da',
+        'circle-radius': 10
     },
   });
 
@@ -520,6 +521,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
       featureName: locationName,
       indicator: datastreamName,
       layerId: 'SensorThings',
+      datastreamId: datastreamId,
       observations: observations,
       unitOfMeasurement: unitOfMeasurement
     }

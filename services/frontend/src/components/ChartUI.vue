@@ -1,15 +1,35 @@
 <template>
     <div v-show="selectedFeature"> <!-- // && Object.keys(props.indicatorArray).length" -->
         <v-btn density="compact" icon="mdi-close"
-            style="position: absolute; top: 10px; right: 10px; z-index: 1000; background-color: transparent;"
+            class="chart-button"
+            style="right: 15px;"
             @click="closeChart()"></v-btn>
         <v-btn density="compact" icon="mdi-fullscreen" v-show="!isFullscreen"
-            style="position: absolute; top: 10px; right: 50px; z-index: 1000; background-color: transparent;"
+            class="chart-button"
+            style="right: 55px;"
             @click="enterFullscreen()"></v-btn>
         <v-btn density="compact" icon="mdi-fullscreen-exit" v-show="isFullscreen"
-            style="position: absolute; top: 10px; right: 50px; z-index: 1000; background-color: transparent;"
+            class="chart-button"
+            style="right: 55px;"
             @click="exitFullscreen()"></v-btn>
-        <svg class="chart-ui" id="indicatorChart" width="550" height="350"></svg>
+        <v-select 
+            v-show="selectedFeature?.layerId == DatasetTypes.SensorThings"
+            :items="TIME_PRESETS"
+            item-title="label"
+            item-value="label"
+            :label="$t('chart.interval')"
+            return-object
+            dense
+            density="compact"
+            single-line
+            hide-details
+            rounded
+            solo
+            v-model="selectedTimeInterval" 
+            class="timeSelector"
+        >
+        </v-select>
+        <svg class="chart-ui" id="indicatorChart" width="550" height="370"></svg>
     </div>
 </template>
 
@@ -19,7 +39,11 @@ import { storeToRefs } from 'pinia';
 import * as d3 from 'd3';
 import { useChartStore } from '../stores/chart';
 import { useAlertStore } from '@/stores/alert';
+import { getObservations } from "@/services/frost.service";
+import { DatasetTypes } from "@/utils/datasetTypes";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const alertStore = useAlertStore();
 const props = defineProps(['indicatorArray', 'secondIndicatorArray', 'selectedIndicator', 'selectedSecondIndicator']);
 const { selectedFeature } = storeToRefs(useChartStore());
@@ -27,7 +51,17 @@ const indicator = ref(null);
 const indicatorName = ref(null);
 const isFullscreen = ref(false);
 
-const margin = { top: 30, right: 20, bottom: 40, left: 50 };
+const TIME_PRESETS = [
+  { label: t('chart.6h'), minutes: 360 },
+  { label: t('chart.24h'), minutes: 1440 },
+  { label: t('chart.3d'), minutes: 4320 },
+  { label: t('chart.7d'), minutes: 10080},
+  { label: t('chart.30d'), minutes: 43200},
+  { label: t('chart.90d'), minutes: 129600},
+]
+const selectedTimeInterval = ref(TIME_PRESETS[3]);
+
+const margin = { top: 50, right: 20, bottom: 40, left: 50 };
 
 /**
  * Renders a chart 
@@ -107,6 +141,16 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
     // Y Axis
     g.append('g')
         .call(d3.axisLeft(y).tickFormat(d => d + unitOfMeasurement));
+
+    if (data.length === 0) {
+        g.append("text")
+            .attr("x", width / 2)
+            .attr("y", height / 2)
+            .attr("text-anchor", "middle")
+            .text(t('chart.nodata'));
+
+        return;
+    }
 
     // Build Line from array values/ properties
     const line = d3.line()
@@ -230,23 +274,16 @@ const exitFullscreen = () => {
     isFullscreen.value = false;
 }
 
-
 watch(() => selectedFeature.value, () => {
     let layerId = selectedFeature.value?.layerId;
     if (layerId) {
         let selectedIndicatorName = layerId?.replace('kommunales_gebiet_dashboard', '');
-        if (selectedFeature.value?.layerId?.includes('SensorThings')) {
+        if (layerId.includes(DatasetTypes.SensorThings)) {
 
             const data = selectedFeature.value.observations.value;
-            const unitOfMeasurement = selectedFeature.value.unitOfMeasurement;
             indicatorName.value = selectedFeature.value.indicator;
 
-            if (data[0] !== undefined) {
-                renderChart(data, "phenomenonTime", "result", true, "Zeitraum", unitOfMeasurement, false);
-            }
-            else {
-                closeChart();
-            }
+            renderSensorThingsChart(data);
         } else {
             if (selectedFeature.value?.layerId?.includes('kommunales_gebiet_dashboard')) {
                 indicator.value = props.indicatorArray[selectedIndicatorName];
@@ -285,9 +322,42 @@ watch(() => selectedFeature.value, () => {
 onUnmounted(() => {
     d3.select('#indicatorChart').selectAll('*').remove();
 });
+
+watch(() => selectedTimeInterval.value, async () => {
+    if (selectedFeature.value.layerId == DatasetTypes.SensorThings) {
+        const minutes = selectedTimeInterval.value.minutes;
+        const date = new Date(Date.now() - minutes * 1000 * 60);
+        const datastreamId = selectedFeature.value.datastreamId;
+        const observations = await getObservations(datastreamId, date.toISOString(), "now()");
+   
+        renderSensorThingsChart(observations.value);
+    }
+})
+
+const renderSensorThingsChart = (data) => {
+    const unitOfMeasurement = selectedFeature.value.unitOfMeasurement;
+
+    renderChart(data, "phenomenonTime", "result", true, "Zeitraum", unitOfMeasurement, false);
+}
 </script>
 
 <style scoped>
+.timeSelector {
+    position: absolute;
+    top: 15px; 
+    right: 370px; 
+    z-index: 1000; 
+    background-color: transparent;
+    width: 180px;
+}
+
+.chart-button {
+    position: absolute; 
+    top: 15px; 
+    z-index: 1000; 
+    background-color: transparent;
+}
+
 .chart-ui {
     position: absolute;
     top: 10px;
