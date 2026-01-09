@@ -79,6 +79,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
     svg.attr('viewBox','0 0 ' + svg.attr('width') + ' ' + svg.attr('height'))
     const width = +svg.attr('width') - margin.left - margin.right;
     const height = +svg.attr('height') - margin.top - margin.bottom;
+    let circle_radius = 4;
 
     const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -200,7 +201,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         // Remove highlight circle
         d3.select(this).transition()
             .duration('200')
-            .attr('r', 4);
+            .attr('r', circle_radius);
 
         // Hide tooltip
         tooltip.transition()
@@ -215,10 +216,11 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .join('circle')
         .attr('cx', d => x(d[timeAttributeName]))
         .attr('cy', d => y(d[valueAttributeName]))
-        .attr('r', 4)
+        .attr('r', circle_radius)
         .attr('fill', 'steelblue')
         .attr('stroke', 'white')
         .attr('stroke-width', 1)
+        .style("opacity", data.length > 120 ? 0 : 1) // hide circles if more than 120 data points
         .on('mouseover', mouseover)
         .on('mouseout', mouseout);
 
