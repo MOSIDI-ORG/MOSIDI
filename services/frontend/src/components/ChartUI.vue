@@ -191,7 +191,15 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
             .style('opacity', 1)
             .style('display', 'inline');
         
-        tooltip.html(d[valueAttributeName] + unitOfMeasurement)
+        let text = '';
+        if (isTimeScaled) {
+            text = d[timeAttributeName].toUTCString() +
+                    ':<br />' + d[valueAttributeName] + unitOfMeasurement
+        } else {
+            text = d[valueAttributeName] + unitOfMeasurement
+        }
+
+        tooltip.html(text)
             .style("left", (event.pageX + 10) + "px")
             .style("top", (event.pageY - 15) + "px");
     }
