@@ -150,7 +150,7 @@
                             density="compact" 
                             variant="text" 
                             icon 
-                            @click.stop="showLayerMetadata(metadata.dct_title)"
+                            @click.stop="showLayerMetadata(metadata.dct_title), customIndicatorUI=false"
                         >
                             <img src="icons/information.svg" alt="Information Icon" width="18" height="18" />
                         </v-btn> 
@@ -169,7 +169,7 @@
             >
                 <template v-slot:prepend>
                     <v-avatar style="cursor: pointer;">
-                                <v-img src="icons/calculate.svg" @click="customIndicatorUI=true"  />
+                                <v-img src="icons/calculate.svg" @click="customIndicatorUI=true, metadataUI=false"  />
                             
                     </v-avatar>
                 </template>
