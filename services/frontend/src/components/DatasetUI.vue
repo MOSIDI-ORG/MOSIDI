@@ -29,19 +29,32 @@
                 </div>
                    
                 <div  v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset] && addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='indikator'">
-                    <v-col >
-                        <v-select
-                            :items="indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator"
-                            density="compact"
-                            :label="$t('dataset.year-filter-title')"
-                            v-model="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].selectedYear"
-                            @update:modelValue="filterByYear(datasetSearchStore?.selectedDataset);"
-                            variant="solo"
-                            :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                            hide-details
-                        >
-                        </v-select>
+                    <v-row >
+                        <v-col cols="12" sm="7" class="ml-3 mt-3">
+                            <v-select
+                                :items="indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator"
+                                density="compact"
+                                :label="$t('dataset.year-filter-title')"
+                                v-model="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].selectedYear"
+                                @update:modelValue="filterByYear(datasetSearchStore?.selectedDataset);"
+                                variant="solo"
+                                :menu-props="{ 'max-height': '200', 'max-width': '300'}"
+                                hide-details
+                            >
+                            </v-select>
                     </v-col>
+                    <v-col cols="12" sm="4" class="ml-2 mt-3 mb-5" >
+                        <v-btn
+                                color="#54B8C4"
+                                variant="outlined"
+                                @click="timeSliderStore.visible === true ? deActivateTimeSlider() : activateTimeSlider()"
+                                :disabled="indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator?.length<=1"
+                            >
+                           {{ timeSliderStore.visible === true ? 'Hide' : 'Animate' }}
+                        </v-btn>
+                    </v-col>
+                    </v-row>
+                    
                 </div>
             </v-card>
         </v-card>
@@ -275,6 +288,8 @@ import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import CartographyUI from "@/components/CartographyUI.vue";
 import BivariateUI from "@/components/BivariateUI.vue";
 import { useMenuStore } from '../stores/menu'
+import { useTimeSliderStore } from '@/stores/timeSlider'
+
 let { isMinimized } = storeToRefs(useMenuStore())
 let classificationMethods = ref([ "NaturalBreaks", "Quantiles", "EqualInterval"])
 //let selectedClassificationMethod = ref("NaturalBreaks")
@@ -285,6 +300,8 @@ const emit = defineEmits(["filterByYear", "mapLegend", "mapStylization", "custom
 const datasetSearchStore = useDatasetSearchStore()
 const indicatorStore = useIndicatorStore()
 const addedDatasetsStore = useaddedDatasetsStore()
+const timeSliderStore = useTimeSliderStore()
+
 
 let userSelectedYear = ref(null)
 const toggleDataUI = ()=>{
@@ -376,6 +393,19 @@ const changeLayerOpacity = (value)=>{
         value
     )
 }
+const activateTimeSlider = ()=>{
+    timeSliderStore.setSlider({
+        vis: true,
+        time: indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator
+    });
+   
+}
+const deActivateTimeSlider = ()=>{
+    timeSliderStore.deactivateSlider({
+        vis: false
+    });
+    
+}
 </script>
 
 <style scoped>
@@ -397,7 +427,7 @@ const changeLayerOpacity = (value)=>{
     background: transparent; 
     border-radius: 8px;
     position: absolute;
-    top: 190px;
+    top: 192px;
     bottom: 10px;
     left: 381px;
     z-index: 10;
