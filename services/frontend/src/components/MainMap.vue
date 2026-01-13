@@ -7,7 +7,7 @@
       <!--<IndicatorUI @addStyleExpressionByYear="addStyleExpressionByYear"  @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addDeckglLayer="addDeckglLayer" @updateDeckglLayer="updateDeckglLayer" > </IndicatorUI>-->
       <LegendUI @setFilterForLegendInteraction="setFilterForLegendInteraction" @resetFilter="resetFilter" @zoomIn="zoomIn" @zoomOut="zoomOut" @addLayerToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></LegendUI>
       <!--<MenuUI @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></MenuUI>-->
-      <!--<TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>-->
+      <TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
       <DatasetSearchUI @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap"></DatasetSearchUI>
@@ -34,7 +34,7 @@ import MetadataDialog from "@/components/MetadataDialog.vue";
 import AlertUI from "@/components/AlertUI.vue";
 import MapExport from "@/components/MapExport.vue";
 import ProgressUI from "@/components/ProgressUI.vue";
-//import TimeSliderUI from "@/components/TimeSliderUI.vue";
+import TimeSliderUI from "@/components/TimeSliderUI.vue";
 import AppHeader from "@/components/AppHeader.vue";
 //import CartographyUI from "@/components/CartographyUI.vue";
 import DatasetSearchUI from "@/components/DatasetSearchUI.vue";
@@ -388,9 +388,9 @@ const updateDeckglLayer = (data, style) =>{
   }
 
 }
-/*const performTimeSlider = (data)=>{
+const performTimeSlider = (data)=>{
   addStyleExpressionByYear(data.layer, data.paint_property, data.expression)
-}*/
+}
 
 const moveLayerToTop = (layerId)=>{
   if (map.getLayer(layerId)) {
