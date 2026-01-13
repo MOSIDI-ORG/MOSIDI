@@ -50,7 +50,7 @@
                                 @click="timeSliderStore.visible === true ? deActivateTimeSlider() : activateTimeSlider()"
                                 :disabled="indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator?.length<=1"
                             >
-                           {{ timeSliderStore.visible === true ? 'Hide' : 'Animate' }}
+                           {{ timeSliderStore.visible === true ? $t('time-slider.hide') : $t('time-slider.animate') }}
                         </v-btn>
                     </v-col>
                     </v-row>

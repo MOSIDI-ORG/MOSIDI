@@ -144,5 +144,9 @@
     },
     "geocoding":{
         "search-placeholder": "Addresse or Ort suchen"
+    },
+    "time-slider":{
+        "animate":"Animieren",
+        "hide": "Verbergen"
     }
   }
