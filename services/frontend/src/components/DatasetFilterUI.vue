@@ -277,6 +277,7 @@ import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
 import { isValidURL } from '../utils/isValidURL';
 import { externalLayers } from '../assets/externalLayers'; 
+import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
 
 
 let { isMinimized } = storeToRefs(useMenuStore())
@@ -333,9 +334,19 @@ let selectedLayerMetadata = ref(null)
 let selectedLayerName= ref(null)
 let selectedYearIndicatorFilter = ref(null)
 //let availableYearsForIndicatorFilter =ref(null)
+
 onMounted(()=>{
     tableMetadataRequest()
     getExternalWMSLayers()
+    const deepLink = useIndicatorDeepLink(addLayerToMap)
+
+    // Wait until tableMetadata is loaded
+    const stop = watch(tableMetadata, (val) => {
+        if (val && val.length > 0) {
+        deepLink.attach()
+        stop()
+        }
+    })
 })
 
 // reset the selected filter when toggling the activatedDatasetSearch (geodata and indicator)
@@ -559,6 +570,8 @@ const addExternaWMSLayerToMap=(item)=>{
     
 
 }
+
+
 const addCommuneTileLayer = async (layerName) => {
     style.value= {
         'fill-color': '#0080ff',
@@ -592,8 +605,10 @@ const getIndicator = async (indicatorName) => {
         colorPalette: colorbrewer.default.RdPu[5],
         type: "indikator"
     })
+    datasetSearchStore.setSelecteddatasetName({
+            selectedDataset: indicatorName
+    })
     
-    //indicatorArray.value[indicatorName] = (indocatorData.indicator)
 
     
     if (indocatorData.metadata){
@@ -770,7 +785,6 @@ const customMapStylization = (array,classes, formula)=>{
     mapLegend(formula.value)
 }
 const mapLegend = (indicatorName) => {
-
     classification_result.value = indicatorStore.indicatorArray[indicatorName]['classification_result']
     const classIntervalsAndColor = [];
     for (let i = 0; i < classification_result.value.intervals.length; i++) {
