@@ -10,7 +10,7 @@
       <TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
-      <DatasetSearchUI @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap"></DatasetSearchUI>
+      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap"></DatasetSearchUI>
     </div>
   </v-app>
   <MetadataDialog> </MetadataDialog>
@@ -57,6 +57,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 	} from '@watergis/maplibre-gl-export';
 	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
 import { useIndicatorStore } from '@/stores/indicator'
+import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
+
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
@@ -70,7 +72,8 @@ let map = null;
 let selectedFeatureId = null;
 let mapboxOverlayLayer = ref(null)
 let exportControl = null
-
+let cameraLink = null
+let mapIsLoaded = ref(false)
 onMounted(() => {
 
   map = new Map({
@@ -82,6 +85,9 @@ onMounted(() => {
     preserveDrawingBuffer: true,
     attributionControl: false
   });
+  
+  cameraLink = useMapCameraDeepLink(map)
+  cameraLink.attach()
   map.addControl(new AttributionControl({
     customAttribution: '<a href="https://www.fh-potsdam.de/impressum" target="_blank">© Legal Note</a> <a href="https://www.fh-potsdam.de/datenschutz" target="_blank">© Privacy statement</a>',
     compact: true,
@@ -98,6 +104,9 @@ onMounted(() => {
 		
 	});
   map.addControl(exportControl, "bottom-left");
+  map.on('load', () => {
+    mapIsLoaded.value = true
+  });
 
 })
 
@@ -405,7 +414,10 @@ onUnmounted(() => {
   if (map) {
     map.remove();
   }
+  if (cameraLink) cameraLink.detach()
+  if (map) map.remove()
 });
+
 const zoomIn = ()=>{
   const currentZoom = map.getZoom();
   map.zoomTo(currentZoom + 0.5);
