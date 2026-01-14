@@ -200,7 +200,7 @@ const tableMetadataRequest= async ()=>{
 
 
 const filteredItems = computed(() => {
-    return tableMetadata.value.filter(item => {
+    return tableMetadata?.value?.filter(item => {
         const matchesSearchText = layerSearchText.value
             ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
             : true;
