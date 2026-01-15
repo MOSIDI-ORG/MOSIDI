@@ -7,7 +7,8 @@ export const useDatasetSearchStore = defineStore ({
         dataUiInitiated: false,
         selectedDataset: null,
         tableMetadata: null,
-        activatedDatasetSearch: 'indicator'
+        activatedDatasetSearch: 'indicator',
+        selectedDatasetType: null
     }),
     actions: {
         activateDatasetSearch(data) {
@@ -22,6 +23,9 @@ export const useDatasetSearchStore = defineStore ({
         },
         setSelecteddatasetName(data){
             this.selectedDataset=data.selectedDataset
+        },
+        setSelecteddatasetType(data){
+            this.selectedDatasetType=data.selectedDatasetType
         },
         setTableMetadata(payload){
             this.tableMetadata=payload

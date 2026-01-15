@@ -12,14 +12,14 @@ export function useIndicatorDeepLink(addLayerToMap) {
      URL → App
   ------------------------------ */
   async function applyUrlToStore() {
-    const indicatorName = route.query.indicator
-    if (!indicatorName) return
+    const name = route.query.dataset
+    const type = route.query.type // "indikator" or "raster"
 
-    if (datasetSearchStore.selectedDataset !== indicatorName) {
-      datasetSearchStore.setSelecteddatasetName(indicatorName)
+    if (!name || !type) return
 
-      // THIS is the important part
-      await addLayerToMap(indicatorName, "indikator")
+    if (datasetSearchStore.selectedDataset !== name) {
+      datasetSearchStore.setSelecteddatasetName(name)
+      await addLayerToMap(name, type)
     }
   }
 
@@ -29,10 +29,17 @@ export function useIndicatorDeepLink(addLayerToMap) {
   function syncDatasetToUrl() {
     if (!datasetSearchStore.selectedDataset) return
 
+    let type = null
+    if (datasetSearchStore.selectedDatasetType === "indikator") type = "indikator"
+    if (datasetSearchStore.selectedDatasetType === "raster") type = "raster"
+
+    if (!type) return
+
     router.replace({
       query: {
         ...route.query,
-        indicator: datasetSearchStore.selectedDataset
+        dataset: datasetSearchStore.selectedDataset,
+        type
       }
     })
   }
@@ -40,6 +47,7 @@ export function useIndicatorDeepLink(addLayerToMap) {
   function attach() {
     applyUrlToStore()
     watch(() => datasetSearchStore.selectedDataset, syncDatasetToUrl)
+    watch(() => datasetSearchStore.selectedDatasetType, syncDatasetToUrl)
   }
 
   return { attach }

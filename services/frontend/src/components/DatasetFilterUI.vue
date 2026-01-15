@@ -562,8 +562,13 @@ const addExternaWMSLayerToMap=(item)=>{
             legend_url: item.legend_url,
             legend_title: item.dct_title
         })
+        datasetSearchStore.setSelecteddatasetName({
+            selectedDataset: item.dct_title
+        })
         
-       
+        datasetSearchStore.setSelecteddatasetType({
+            selectedDatasetType: item.dct_type
+        })
     }
     
     
@@ -607,6 +612,9 @@ const getIndicator = async (indicatorName) => {
     })
     datasetSearchStore.setSelecteddatasetName({
             selectedDataset: indicatorName
+    })
+    datasetSearchStore.setSelecteddatasetType({
+            selectedDatasetType: "indikator"
     })
     
 
