@@ -283,7 +283,9 @@ const addDataUI = (datasetName, datasetType, geomType)=>{
                 }
                 
             }
-
+            datasetSearchStore.setSelecteddatasetType({
+                selectedDatasetType: "indikator"
+            })
 
         }
         else if (datasetType=='table'){
@@ -292,6 +294,9 @@ const addDataUI = (datasetName, datasetType, geomType)=>{
         }
         else if(datasetType=='raster'){
             activateStylePanel(datasetName,geomType)
+            datasetSearchStore.setSelecteddatasetType({
+            selectedDatasetType: "raster"
+    })
         }
         else if(datasetType=='custom indikator'){
             for(let layer in addedDatasetsStore.addedLayers){
