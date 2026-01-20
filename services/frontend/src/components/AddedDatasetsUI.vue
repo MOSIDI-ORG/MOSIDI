@@ -29,8 +29,22 @@
                 @mouseover="hoveredItem = index"
                 @mouseleave="hoveredItem = null"
             >
-                <v-list-item-title v-show="isMinimized==false" class="text-wrap" v-text="addedLayer.dct_title"></v-list-item-title>
-                <v-list-item-subtitle v-show="isMinimized==false" class="text-wrap" v-text="addedLayer.dct_catalog_publisher"></v-list-item-subtitle>
+            <v-list-item-subtitle class="text-wrap text-caption">
+                Gemeindeebene
+                </v-list-item-subtitle>
+                <v-list-item-title
+                v-show="!isMinimized"
+                class="text-wrap"
+                >
+                {{ addedLayer.dct_title }}
+                <span >
+                    ({{ formatAvailableYears(
+                    indicatorStore?.indicatorArray?.[addedLayer?.dct_title]
+                        ?.availailableYearsForSelectedIndicator
+                    ) }})
+                </span>
+                </v-list-item-title>
+                <v-list-item-subtitle v-show="isMinimized==false" class="text-wrap text-caption" v-text="addedLayer.dct_catalog_publisher"></v-list-item-subtitle>
                 <template v-slot:prepend>
                     <v-avatar>
                         <v-img 
@@ -250,6 +264,15 @@ let { filterInitiated} = storeToRefs(useDatasetSearchStore())
 
 let hoveredItem = ref(null)
 
+const formatAvailableYears = (years) => {
+  if (!Array.isArray(years) || years.length === 0) return ''
+
+  if (years.length === 1) return years[0]
+
+  if (years.length === 2) return `${years[0]}, ${years[1]}`
+
+  return `${years[0]}–${years[years.length - 1]}`
+}
 const addDataUI = (datasetName, datasetType, geomType)=>{
     if (datasetSearchStore.selectedDataset==datasetName && filterInitiated==false){
         removeLayer(datasetName, datasetType)
