@@ -62,7 +62,7 @@ import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
-const { center, zoom, style, pitch } = storeToRefs(useMapStore())
+const { style, pitch, extent } = storeToRefs(useMapStore())
 let { selectedFeature } = storeToRefs(useChartStore())
 //let { catographyUIVisibility } = storeToRefs(useCartographyStore())
 const mapContainer = ref(null);
@@ -79,11 +79,12 @@ onMounted(() => {
   map = new Map({
     container: mapContainer.value,
     style: style.value,
-    center: center.value,
-    zoom: zoom.value,
+    //center: center.value,
+    //zoom: zoom.value,
     pitch: pitch.value,
     preserveDrawingBuffer: true,
-    attributionControl: false
+    attributionControl: false,
+    bounds: extent.value,
   });
   
   cameraLink = useMapCameraDeepLink(map)
