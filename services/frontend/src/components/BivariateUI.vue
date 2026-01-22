@@ -232,7 +232,6 @@ const filteredItems = computed(() => {
     });
 });
 const getIcon = (layerName, index, geomType)=> {
-    console.log(indicatorArray.value[selectedDataset.value]['secondIndicator'], "indicatorArray")
     if(indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName && hoveredItem.value === index){
         return 'icons/minus.svg'; 
     }
