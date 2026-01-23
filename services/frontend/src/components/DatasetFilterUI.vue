@@ -533,7 +533,7 @@ const addLayerToMap = async (layerName,geomType)=>{
         
         await addCommuneTileLayer(layerName);
         emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
-        getIndicator(selectedIndicator.value);
+        await getIndicator(selectedIndicator.value);
         for(let layer in  addedDatasetsStore.addedLayers){
             
             if (layer!=layerName){
