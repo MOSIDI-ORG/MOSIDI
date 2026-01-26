@@ -117,7 +117,7 @@
                         </template>
                         <v-list style="max-height:300px" >
                             <v-list-item  v-for="([, item], i) in Object.entries(colorbrewer.default).filter(([key]) => key !== 'schemeGroups')"  :key="i" >
-                                    <div @click="assignColorPalette(item[5], addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type)" >
+                                    <div @click="assignColorPalette(item[5], addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type, datasetSearchStore?.selectedDataset)" >
                                         <span
                                             v-for="(colorItem, j) in (item[5])"
                                             :key="j"
@@ -158,7 +158,7 @@
                         thumb-color="black"
                         thumb-label
                         v-model="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity']"
-                        @update:modelValue="changeLayerOpacity"
+                        @update:modelValue="changeLayerOpacity(indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity'], datasetSearchStore?.selectedDataset)"
                        
                     >
                     </v-slider>
@@ -203,7 +203,7 @@
                         </template>
                         <v-list style="max-height:300px" >
                             <v-list-item  v-for="([, item], i) in Object.entries(colorbrewer.default).filter(([key]) => key !== 'schemeGroups')"  :key="i" >
-                                    <div @click="assignColorPalette(item[5], addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type)" >
+                                    <div @click="assignColorPalette(item[5], addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type, datasetSearchStore?.selectedDataset)" >
                                         <span
                                             v-for="(colorItem, j) in (item[5])"
                                             :key="j"
@@ -243,7 +243,7 @@
                         thumb-color="black"
                         thumb-label
                         v-model="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity']"
-                        @update:modelValue="changeLayerOpacity"
+                        @update:modelValue="changeLayerOpacity(indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity'], datasetSearchStore.selectedDataset)"
                        
                     >
                     </v-slider>
@@ -320,24 +320,24 @@ const backtoUnivariateMap = (indicatorName)=>{
     emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
 
 }
-const assignColorPalette =  (colorPalette, datatype)=> {
+const assignColorPalette =  (colorPalette, datatype, indicatorName) => {
     indicatorStore.setIndicatorColorPalette(
       {
         colorPalette: colorPalette,
-        indicatorName: datasetSearchStore.selectedDataset
+        indicatorName: indicatorName
       }
     )
-    emit('mapLegend', datasetSearchStore.selectedDataset)
+    emit('mapLegend', indicatorName)
     if (datatype=='indikator'){
         //emit('mapStylization', datasetSearchStore.selectedDataset)
-        emit('filterByYear', datasetSearchStore.selectedDataset, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
+        emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[indicatorName].classificationMethod)
     }
     else if (datatype=='custom indikator'){
-        console.log( indicatorStore.indicatorArray[datasetSearchStore.selectedDataset], "custom indikator")
+        console.log( indicatorStore.indicatorArray[indicatorName], "custom indikator")
         emit('customMapStylization',
-        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset][0][0],
-        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['classification_result'],
-        ref(datasetSearchStore.selectedDataset)
+        indicatorStore.indicatorArray[indicatorName][0][0],
+        indicatorStore.indicatorArray[indicatorName]['classification_result'],
+        ref(indicatorName)
     )
     }
     
@@ -379,16 +379,16 @@ const addLayerToMap = (layerSpecifications)=>{
     emit("addStyleLayerToMap",layerSpecifications )
 }
 
-const changeLayerOpacity = (value)=>{
+const changeLayerOpacity = (value, dsname)=>{
    indicatorStore.setIndicatorOpacity(
       {
-        opacity: indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['fill-opacity'],
-        indicatorName: datasetSearchStore.selectedDataset
+        opacity: value,
+        indicatorName: dsname
       }
     )
      emit(
         "setLayerPintProperty",
-        "kommunales_gebiet_dashboard"+datasetSearchStore.selectedDataset,
+        "kommunales_gebiet_dashboard"+dsname,
         'fill-opacity',
         value
     )
