@@ -52,12 +52,12 @@ const indicatorName = ref(null);
 const isFullscreen = ref(false);
 
 const TIME_PRESETS = [
-  { label: t('chart.6h'), minutes: 360 },
-  { label: t('chart.24h'), minutes: 1440 },
-  { label: t('chart.3d'), minutes: 4320 },
-  { label: t('chart.7d'), minutes: 10080},
-  { label: t('chart.30d'), minutes: 43200},
-  { label: t('chart.90d'), minutes: 129600},
+  { label: t('chart.6h'), minutes: 360, format: "%H:%M" },
+  { label: t('chart.24h'), minutes: 1440, format: "%H:%M" },
+  { label: t('chart.3d'), minutes: 4320, format: "%H:%M" },
+  { label: t('chart.7d'), minutes: 10080, format: "%d.%m" },
+  { label: t('chart.30d'), minutes: 43200, format: "%d.%m" },
+  { label: t('chart.90d'), minutes: 129600, format: "%d.%m" },
 ]
 const selectedTimeInterval = ref(TIME_PRESETS[3]);
 
@@ -75,6 +75,10 @@ const margin = { top: 50, right: 20, bottom: 40, left: 50 };
 const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=false, xAxisLowerLabel='', unitOfMeasurement='', showPercentageChange=true) => {
     const svg = d3.select('#indicatorChart');
     svg.selectAll('*').remove();
+    
+    // Reset tooltip
+    d3.selectAll('.chart-ui-tooltip').remove();
+    
     // define viewbox for zooming in on chart
     svg.attr('viewBox','0 0 ' + svg.attr('width') + ' ' + svg.attr('height'))
     const width = +svg.attr('width') - margin.left - margin.right;
@@ -124,7 +128,8 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
     // X Axis
     g.append('g')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x)
+            .tickFormat(d3.timeFormat(selectedTimeInterval.value.format)));
     g.append('text')
         .attr('x', width / 2)
         .attr('y', height + margin.bottom - 10)
@@ -170,6 +175,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
 
     // Add container for displaying tooltip
     var tooltip = d3.select('body').append('div')
+        .attr('class', 'chart-ui-tooltip')
         .style('opacity', 0)
         .style('position', 'absolute')
         .style('text-align', 'center')
