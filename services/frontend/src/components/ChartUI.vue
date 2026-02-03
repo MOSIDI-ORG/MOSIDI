@@ -1,5 +1,5 @@
 <template>
-    <div v-show="selectedFeature"> <!-- // && Object.keys(props.indicatorArray).length" -->
+    <div v-show="selectedFeature" id="chart-ui-container"> <!-- // && Object.keys(props.indicatorArray).length" -->
         <v-btn density="compact" icon="mdi-close"
             class="chart-button"
             style="right: 15px;"
@@ -279,6 +279,10 @@ const enterFullscreen = () => {
     svg.style("width", window.innerWidth - margin.left);
     svg.style("height", window.innerHeight - margin.top);
 
+    const container = d3.select('#chart-ui-container');
+    container.style("width", window.innerWidth - margin.left + "px");
+    container.style("height", window.innerHeight - margin.top + "px");
+
     isFullscreen.value = true;
 }
 
@@ -290,6 +294,10 @@ const exitFullscreen = () => {
     // remove width and heigth attribute; returns to default
     svg.style("width", null);
     svg.style("height", null);
+
+    const container = d3.select('#chart-ui-container');
+    container.style("width", null);
+    container.style("height", null);
 
     isFullscreen.value = false;
 }
@@ -395,11 +403,10 @@ const renderSensorThingsChart = (data) => {
 <style scoped>
 .timeSelector {
     position: absolute;
-    top: 15px; 
-    right: 370px; 
+    top: 15px;
+    left: 5px;
     z-index: 1000; 
     background-color: transparent;
-    width: 180px;
 }
 
 .chart-button {
@@ -420,6 +427,15 @@ const renderSensorThingsChart = (data) => {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#chart-ui-container {
+    position: absolute;
+    top: 15px;
+    right: 50px;
+    width: 550px;
+    height: 370px;
+    z-index: 1000;
 }
 
 .grid line {
