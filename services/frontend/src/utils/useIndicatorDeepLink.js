@@ -2,16 +2,20 @@ import { useRoute, useRouter } from "vue-router"
 import { watch } from "vue"
 import { useDatasetSearchStore } from "@/stores/datasetSearch"
 import { useaddedDatasetsStore } from "@/stores/addedDatasets"
+import { useIndicatorStore } from "@/stores/indicator"
 
 export function useIndicatorDeepLink(addLayerToMap) {
   const route = useRoute()
   const router = useRouter()
   const datasetSearchStore = useDatasetSearchStore()
   const addedDatasetsStore = useaddedDatasetsStore()
+  const indicatorStore = useIndicatorStore()
 
   /* -----------------------------
      URL → App
   ------------------------------ */
+  let isInitializing = true;
+
   async function applyUrlToStore() {
   /* -----------------------------
     restore added datasets
@@ -33,7 +37,8 @@ export function useIndicatorDeepLink(addLayerToMap) {
      
     }
   }
-
+  addedDatasetsStore.declareReadyToCartographyDeepLink()
+  isInitializing = false;
  
 }
 
@@ -41,7 +46,8 @@ export function useIndicatorDeepLink(addLayerToMap) {
      App → URL
   ------------------------------ */
   function syncDatasetToUrl() {
-  if (!datasetSearchStore.selectedDataset) return
+    if (isInitializing) return;
+    if (!datasetSearchStore.selectedDataset) return
 
   let type = null
   if (datasetSearchStore.selectedDatasetType === "indikator") type = "indikator"
@@ -54,7 +60,17 @@ export function useIndicatorDeepLink(addLayerToMap) {
   const layersObj = addedDatasetsStore?.addedLayers
   if (layersObj) {
     addedDatasets = Object.entries(layersObj).map(
-      ([name, meta]) => `${name}:${meta.geometry_type}`
+      ([name, meta]) => {
+        // 2. Extract opacity (using your 'fill-opacity' key)
+        const opacity = indicatorStore.indicatorArray[name]?.['fill-opacity'] ?? 1
+
+        // 3. Extract palette (using your 'colorPalette' key)
+        // Strip '#' to keep URL cleaner
+        const palette = indicatorStore.indicatorArray[name]?.colorPalette
+          ? indicatorStore.indicatorArray[name].colorPalette.map(c => c.replace('#', '')).join('|')
+          : ''
+        return `${name}:${meta.geometry_type}:${opacity}:${palette}`
+      }
     )
   }
 
@@ -78,6 +94,17 @@ export function useIndicatorDeepLink(addLayerToMap) {
     applyUrlToStore()
     watch(() => datasetSearchStore.selectedDataset, syncDatasetToUrl)
     watch(() => datasetSearchStore.selectedDatasetType, syncDatasetToUrl)
+    watch(
+      () =>
+        Object.entries(addedDatasetsStore.addedLayers ?? {}).map(([name]) => ({
+          name,
+          opacity: indicatorStore.indicatorArray[name]?.['fill-opacity'],
+          palette: indicatorStore.indicatorArray[name]?.colorPalette
+        })),
+      syncDatasetToUrl,
+      { deep: true }
+    )
+    
   }
 
   return { attach }
