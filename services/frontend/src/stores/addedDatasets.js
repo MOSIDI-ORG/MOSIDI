@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useaddedDatasetsStore = defineStore ({
     id: 'addedDatasets',
     state: () => ({
-        addedLayers: {}
+        addedLayers: {},
+        readyForCartography: false
     }),
     actions: {
         addLayer(payload) {
@@ -26,6 +27,9 @@ export const useaddedDatasetsStore = defineStore ({
               
             }
             
+          },
+          declareReadyToCartographyDeepLink() {
+            this.readyForCartography = true;
           }
     }
 })
