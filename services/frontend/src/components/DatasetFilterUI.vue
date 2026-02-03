@@ -1,9 +1,9 @@
 <template>
 
 <div v-if="activatedDatasetSearch?.value!==null">
-    <DatasetUI @addStyleExpressionByYear="addStyleExpressionByYear" @filterByYear="filterByYear" @mapLegend="mapLegend" @mapStylization="mapStylization" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty" @addStyleLayerToMap="addStyleLayerToMap" @customMapStylization="customMapStylization" v-show="dataUiInitiated==true"></DatasetUI>
+    
+    <DatasetUI  v-if="addedDatasetsStore.readyForCartography===true" @addStyleExpressionByYear="addStyleExpressionByYear" @filterByYear="filterByYear" @mapLegend="mapLegend" @mapStylization="mapStylization" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty" @addStyleLayerToMap="addStyleLayerToMap" @customMapStylization="customMapStylization" v-show="dataUiInitiated==true"></DatasetUI>
     <div v-show="filterInitiated==true && dataUiInitiated==false">
-
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
 
             <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
@@ -335,18 +335,17 @@ let selectedLayerName= ref(null)
 let selectedYearIndicatorFilter = ref(null)
 //let availableYearsForIndicatorFilter =ref(null)
 
-onMounted(()=>{
+onMounted(async()=>{
     tableMetadataRequest()
     getExternalWMSLayers()
     const deepLink = useIndicatorDeepLink(addLayerToMap)
 
-    // Wait until tableMetadata is loaded
-    const stop = watch(tableMetadata, (val) => {
-        if (val && val.length > 0) {
-        deepLink.attach()
-        stop()
-        }
-    })
+    await Promise.all([
+    tableMetadataRequest(),
+    getExternalWMSLayers()
+  ])
+
+  deepLink.attach()
 })
 
 // reset the selected filter when toggling the activatedDatasetSearch (geodata and indicator)
@@ -633,6 +632,7 @@ const getIndicator = async (indicatorName) => {
         
 }
 const filterByYear = (indicatorName,userSelectedYear, classificationMethod) => {
+    console.log("filter by year called")
     if(classificationMethod){
         selectedClassificationMethod.value = classificationMethod
     }
@@ -674,7 +674,7 @@ const classify = async(indicatorName) => {
             });
         }
     
-    mapLegend(indicatorName)
+    
    
     mapStylization(indicatorName)
     
@@ -684,11 +684,16 @@ const classify = async(indicatorName) => {
 
 }
 const mapStylization = (indicatorName) => {
+    selectedYear.value = []
+    indicatorStore.indicatorArray[indicatorName].forEach(innerArray => {
+        innerArray.forEach(subArray => {
+        selectedYear.value.push(...subArray.filter(item => item.zeitbezug === indicatorStore.indicatorArray[indicatorName].selectedYear));
+        });
+    });
     ////////////////////// ** stylization ** /////////////////
-
     // Build a GL expression that defines the color for every pg_tileserve (vector tile) feature
     matchExpression = ['match', ['get', 'nationalco']];
-    classification_result.value = indicatorStore.indicatorArray[indicatorName]['classification_result']
+    classification_result.value = indicatorStore.indicatorArray[indicatorName].classification_result
     selectedColorPalette.value = indicatorStore.indicatorArray[indicatorName]['colorPalette']
 
 
@@ -698,17 +703,17 @@ const mapStylization = (indicatorName) => {
        
         let color;
 
-        if (value <= classification_result.value.intervals[0]) {
+        if (value <= classification_result.value?.intervals[0]) {
             //color = '#feebe2'; // Class 1
             color = selectedColorPalette.value[0]
             //color = colorbrewer.default.selectedColorPalette.value.title
-        } else if (value <= classification_result.value.intervals[1]) {
+        } else if (value <= classification_result.value?.intervals[1]) {
             //color = '#fbb4b9'; // Class 2
             color = selectedColorPalette.value[1]
-        } else if (value <= classification_result.value.intervals[2]) {
+        } else if (value <= classification_result.value?.intervals[2]) {
             //color = '#f768a1'; // Class 3
             color = selectedColorPalette.value[2]
-        } else if (value <= classification_result.value.intervals[3]) {
+        } else if (value <= classification_result.value?.intervals[3]) {
             //color = '#c51b8a'; // Class 4
             color = selectedColorPalette.value[3]
         } else {
@@ -724,9 +729,10 @@ const mapStylization = (indicatorName) => {
     indicatorStore.setColorPalette({
             selectedColorPalette: selectedColorPalette.value
     })
+    mapLegend(indicatorName)
 }
 const addCustomLayer= (array,classes, formula)=>{
-let customMetadata = {
+    let customMetadata = {
         dct_title: formula.value,
         dct_type: "custom indikator",
         geometry_type: "Polygon",
@@ -795,7 +801,7 @@ const customMapStylization = (array,classes, formula)=>{
 const mapLegend = (indicatorName) => {
     classification_result.value = indicatorStore.indicatorArray[indicatorName]['classification_result']
     const classIntervalsAndColor = [];
-    for (let i = 0; i < classification_result.value.intervals.length; i++) {
+    for (let i = 0; i < classification_result?.value?.intervals?.length; i++) {
         const intervalName = `interval${i + 1}`;
         const colorName = `color${i + 1}`;
         const intervalValue = classification_result.value.intervals[i].toFixed(2);
@@ -809,7 +815,7 @@ const mapLegend = (indicatorName) => {
     }
     mapLegendStore.assignClassificationValues({
         indicatorName: indicatorName,
-        minMax: classification_result.value.minMax,
+        minMax: classification_result?.value?.minMax,
         classIntervalsAndColor,
         selectedIndicator: indicatorName,
         completeIndicatorName: indicatorName

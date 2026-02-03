@@ -279,7 +279,7 @@
 </template>
 
 <script setup>
-import { defineEmits, ref } from "vue"
+import { defineEmits, ref, onMounted } from "vue"
 import { storeToRefs } from "pinia";
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { useIndicatorStore } from '@/stores/indicator'
@@ -289,6 +289,7 @@ import CartographyUI from "@/components/CartographyUI.vue";
 import BivariateUI from "@/components/BivariateUI.vue";
 import { useMenuStore } from '../stores/menu'
 import { useTimeSliderStore } from '@/stores/timeSlider'
+import { useCartographyDeepLink } from "@/utils/useCartographyDeepLink"
 
 let { isMinimized } = storeToRefs(useMenuStore())
 let classificationMethods = ref([ "NaturalBreaks", "Quantiles", "EqualInterval"])
@@ -301,6 +302,18 @@ const datasetSearchStore = useDatasetSearchStore()
 const indicatorStore = useIndicatorStore()
 const addedDatasetsStore = useaddedDatasetsStore()
 const timeSliderStore = useTimeSliderStore()
+
+
+onMounted(async () => {
+  const { attach } = useCartographyDeepLink({
+    mapStylizationFromDeepLink,
+    changeLayerOpacity,
+    setLayerPintProperty
+  })
+
+  attach() 
+})
+
 
 
 let userSelectedYear = ref(null)
@@ -320,6 +333,15 @@ const backtoUnivariateMap = (indicatorName)=>{
     emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
 
 }
+const mapStylizationFromDeepLink = (colorPalette, datatype, indicatorName)=>{
+    indicatorStore.setIndicatorColorPalette(
+      {
+        colorPalette: colorPalette,
+        indicatorName: indicatorName
+      }
+    )
+    emit('mapStylization', indicatorName)
+}   
 const assignColorPalette =  (colorPalette, datatype, indicatorName) => {
     indicatorStore.setIndicatorColorPalette(
       {
@@ -328,9 +350,13 @@ const assignColorPalette =  (colorPalette, datatype, indicatorName) => {
       }
     )
     emit('mapLegend', indicatorName)
-    if (datatype=='indikator'){
-        //emit('mapStylization', datasetSearchStore.selectedDataset)
-        emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[indicatorName].classificationMethod)
+    if (datatype === 'indikator') {
+             emit(
+            'filterByYear',
+            indicatorName,
+            userSelectedYear.value,
+            indicatorStore.indicatorArray[indicatorName].classificationMethod
+            )
     }
     else if (datatype=='custom indikator'){
         console.log( indicatorStore.indicatorArray[indicatorName], "custom indikator")
