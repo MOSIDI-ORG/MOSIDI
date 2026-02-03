@@ -62,6 +62,8 @@ const TIME_PRESETS = [
 const selectedTimeInterval = ref(TIME_PRESETS[3]);
 
 const margin = { top: 50, right: 20, bottom: 40, left: 50 };
+var chart_timeAttributeName = null;
+var chart_valueAttributeName = null;
 
 /**
  * Renders a chart 
@@ -73,6 +75,8 @@ const margin = { top: 50, right: 20, bottom: 40, left: 50 };
  * @param unitOfMeasurement unit of measurement used for y-axis and tooltip
  */
 const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=false, xAxisLowerLabel='', unitOfMeasurement='', showPercentageChange=true) => {
+    chart_timeAttributeName = timeAttributeName;
+    chart_valueAttributeName = valueAttributeName;
     const svg = d3.select('#indicatorChart');
     svg.selectAll('*').remove();
     
@@ -200,9 +204,9 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         let text = '';
         if (isTimeScaled) {
             text = d[timeAttributeName].toUTCString() +
-                    ':<br />' + d[valueAttributeName] + unitOfMeasurement
+                    ':<br />' + Number(d[valueAttributeName]).toFixed(2) + unitOfMeasurement
         } else {
-            text = d[valueAttributeName] + unitOfMeasurement
+            text = Number(d[valueAttributeName]).toFixed(2) + unitOfMeasurement
         }
 
         tooltip.html(text)
@@ -343,12 +347,43 @@ watch(() => selectedTimeInterval.value, async () => {
     if (selectedFeature.value.layerId == DatasetTypes.SensorThings) {
         const minutes = selectedTimeInterval.value.minutes;
         const date = new Date(Date.now() - minutes * 1000 * 60);
+
         const datastreamId = selectedFeature.value.datastreamId;
         const observations = await getObservations(datastreamId, date.toISOString(), "now()");
-   
-        renderSensorThingsChart(observations.value);
+
+        if (minutes > 10000) {
+            const hourlyAverage = compressData(observations.value)
+            renderSensorThingsChart(hourlyAverage);
+            
+        } else {
+            renderSensorThingsChart(observations.value);
+        }
     }
 })
+
+/**
+ * Compress data to get hourly average
+ * @param data array of objects containing properties for x and y axis
+ */
+const compressData = (data) => {
+    const map = new Map();
+
+    for (const observation of data) {
+        const time = new Date(observation[chart_timeAttributeName])
+        time.setMinutes(0) // clear minutes to group dates by their exact hour
+
+        const hourlyResults = map.get(time.getTime()) || { sum: 0, size: 0};
+        hourlyResults.sum += observation[chart_valueAttributeName];
+        hourlyResults.size += 1;
+        map.set(time.getTime(), hourlyResults)
+    }
+            
+    const hourlyAverage = [...map.entries()].map(([time, value]) => ({
+        [chart_timeAttributeName]: time,
+        [chart_valueAttributeName]: value.sum / value.size
+    }));
+    return hourlyAverage;
+}
 
 const renderSensorThingsChart = (data) => {
     const unitOfMeasurement = selectedFeature.value.unitOfMeasurement;
