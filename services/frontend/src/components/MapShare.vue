@@ -71,7 +71,6 @@ const shareUrl = computed(() => {
 const copyToClipboard = async () => {
   try {
     await navigator.clipboard.writeText(shareUrl.value)
-    console.log('Copied to clipboard:', shareUrl.value)
     copied.value = true
 
   } catch (err) {

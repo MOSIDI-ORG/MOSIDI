@@ -16,6 +16,7 @@
   <MetadataDialog> </MetadataDialog>
   <AlertUI> </AlertUI>
   <MapExport @export-map="onExportMap"> </MapExport>
+  <MapShare > </MapShare>
   <ProgressUI> </ProgressUI>
   
 </template>
@@ -33,6 +34,7 @@ import LegendUI from "@/components/LegendUI.vue";
 import MetadataDialog from "@/components/MetadataDialog.vue";
 import AlertUI from "@/components/AlertUI.vue";
 import MapExport from "@/components/MapExport.vue";
+import MapShare from "@/components/MapShare.vue";
 import ProgressUI from "@/components/ProgressUI.vue";
 import TimeSliderUI from "@/components/TimeSliderUI.vue";
 import AppHeader from "@/components/AppHeader.vue";

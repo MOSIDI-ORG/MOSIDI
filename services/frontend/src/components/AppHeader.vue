@@ -75,6 +75,23 @@
                 <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
                            
                             <v-list-item
+                            @click="shareDialog=true"
+                            
+                            >
+                                <template  v-slot:prepend>
+                                    <v-btn 
+                                        density="compact" 
+                                        variant="text" 
+                                        icon 
+                                        
+                                    >
+                                        <img src="icons/external-source.svg"  width="18" height="18" />
+                                    </v-btn> 
+                                    <v-list-item-title class="ml-3">{{ $t('app-header.share') }}</v-list-item-title>
+                                </template>
+                               
+                            </v-list-item>
+                            <v-list-item
                             @click="exportDialog=true"
                             
                             >
@@ -140,16 +157,19 @@
 <script setup>
 import { storeToRefs } from "pinia"
 import { useI18n } from 'vue-i18n';
+import { useMapExportStore } from '../stores/mapExport'
+import { useMapShareStore } from '../stores/mapShare'
+import { useMenuStore } from '../stores/menu'
+
 const { locale } = useI18n();
 const toggleMinimize = ()=>{
     isMinimized.value=! isMinimized.value
 }
-import { useMenuStore } from '../stores/menu'
-
 
 let { isMinimized } = storeToRefs(useMenuStore())
-import { useMapExportStore } from '../stores/mapExport'
+
 let { exportDialog } = storeToRefs(useMapExportStore())
+let { shareDialog } = storeToRefs(useMapShareStore())
 
 const toggleLanguage =(lang) => {
     locale.value = lang;
