@@ -69,7 +69,8 @@
     },
     "app-header":{
         "export": "Export",
-        "about": "Über MOSIDI"
+        "about": "Über MOSIDI",
+        "share": "Teilen"
     },
     "dataset-search-landing":{
         "indicator":{
@@ -148,5 +149,9 @@
     "time-slider":{
         "animate":"Animieren",
         "hide": "Verbergen"
+    },
+    "share-map":{
+        "title": "Karte teilen",
+        "close": "schließen"
     }
   }
