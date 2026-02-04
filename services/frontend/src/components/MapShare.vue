@@ -16,7 +16,7 @@
                 <div class="ml-2 mr-2">
                     <v-text-field
                         v-model="shareUrl"
-                        label="Link zur Karte"
+                        :label="$t('share-map.label')"
                         readonly
                         variant="outlined"
                         density="compact"

@@ -153,6 +153,7 @@
     },
     "share-map":{
         "title": "Share Map",
-        "close": "Close"
+        "close": "Close",
+        "label": "Link to the map"
     }
   }

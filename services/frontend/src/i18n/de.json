@@ -152,6 +152,7 @@
     },
     "share-map":{
         "title": "Karte teilen",
-        "close": "schließen"
+        "close": "schließen",
+        "label": "Link zur Karte"
     }
   }
