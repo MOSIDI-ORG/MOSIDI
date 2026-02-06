@@ -232,10 +232,11 @@
                 <div v-for="(item,index) in selectedLayerMetadata" :key="index">
                     <v-card-text v-if="item">
                         <span  v-if="isValidURL(item)">
-                            {{index}}: <a :href="selectedLayerMetadata.source" target="_blank">{{ item }}</a> 
+                            {{ $t(`metadata-labels.${index}`, index) }}: <a :href="selectedLayerMetadata.source" target="_blank">{{ item }}</a> 
                         </span>
                         <span v-else>
-                            <b>{{index}}</b>: {{ item }}
+                            <b>{{ $t(`metadata-labels.${index}`, index) }}</b>:
+                            {{ item }}
                         </span>
                     
                     </v-card-text>
