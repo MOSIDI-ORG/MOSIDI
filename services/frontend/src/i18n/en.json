@@ -155,5 +155,31 @@
         "title": "Share Map",
         "close": "Close",
         "label": "Link to the map"
+    },
+    "metadata-labels":{
+        "dct_title": "Dataset title",
+        "dct_description": "Dataset description",
+        "dct_catalog_title": "Catalog title",
+        "dct_catalog_description": "Catalog description",
+        "dct_catalog_publisher": "Catalog publisher",
+        "dct_accessurl": "Access URL",
+        "dct_license": "License",
+        "dct_identifier": "Identifier (ID)",
+        "dcatde_contributorid": "Data provider ID",
+        "dct_distribution": "Distributions/formats",
+        "dct_language": "Language",
+        "geometry_type": "Geometry type",
+        "dct_modified": "Last modified",
+        "dct_issued": "Date issued",
+        "dct_accrualperiodicity": "Update frequency",
+        "dct_temporal_startdata": "Temporal start date",
+        "dct_temporal_enddate": "Temporal end date",
+        "table_name": "Table name",
+        "details": "details",
+        "dct_type": "Dataset Type",
+        "imported": "Import data"
+
+
+
     }
   }

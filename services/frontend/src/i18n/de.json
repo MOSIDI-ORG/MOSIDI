@@ -154,5 +154,29 @@
         "title": "Karte teilen",
         "close": "schließen",
         "label": "Link zur Karte"
+    },
+    "metadata-labels":{
+        "dct_title": "Datensatztitel",
+        "dct_description": "Datensatzbeschreibung",
+        "dct_catalog_title": "Katalogtitel",
+        "dct_catalog_description": "Katalogbeschreibung",
+        "dct_catalog_publisher": "Katalogherausgeber",
+        "dct_accessurl": "Zugriffs-URL",
+        "dct_license": "Lizenz",
+        "dct_identifier": "Kennung (ID)",
+        "dcatde_contributorid": "Datenbereitsteller-ID",
+        "dct_distribution": "Distributionen/Formate",
+        "dct_language": "Sprache",
+        "geometry_type": "Geometrie-Typ",
+        "dct_modified": "Zuletzt geändert",
+        "dct_issued": "Veröffentlicht am",
+        "dct_accrualperiodicity": "Aktualisierungsfrequenz",
+        "dct_temporal_startdata": "Zeitliches Startdatum",
+        "dct_temporal_enddate": "Zeitliches Enddatum",
+        "table_name": "Tabellenname",
+        "details": "Details/Zusatzinfos",
+        "dct_type": "Datensatztyp",
+        "imported": "Daten importieren"
+
     }
   }
