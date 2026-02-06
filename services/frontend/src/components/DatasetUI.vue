@@ -457,7 +457,6 @@ const deActivateTimeSlider = ()=>{
     bottom: 10px;
     left: 381px;
     z-index: 10;
-    height: fit-content;
     background-color: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
