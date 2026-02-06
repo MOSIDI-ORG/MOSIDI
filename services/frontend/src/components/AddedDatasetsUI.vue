@@ -30,10 +30,10 @@
                 @mouseleave="hoveredItem = null"
             >
             <v-list-item-subtitle v-if="addedLayer.dct_type==='indikator'"  class="text-wrap text-caption">
-                Gemeindeebene ({{ formatAvailableYears(
+                Gemeindeebene, {{ formatAvailableYears(
                     indicatorStore?.indicatorArray?.[addedLayer?.dct_title]
                         ?.availailableYearsForSelectedIndicator
-                    ) }})
+                    ) }}
             </v-list-item-subtitle>
             <v-list-item-title
                 v-show="!isMinimized"
