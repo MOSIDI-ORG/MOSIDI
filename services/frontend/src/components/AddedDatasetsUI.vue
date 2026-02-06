@@ -29,32 +29,34 @@
                 @mouseover="hoveredItem = index"
                 @mouseleave="hoveredItem = null"
             >
-            <v-list-item-subtitle class="text-wrap text-caption">
-                Gemeindeebene
-                </v-list-item-subtitle>
-                <v-list-item-title
-                v-show="!isMinimized"
-                class="text-wrap"
-                >
-                {{ addedLayer.dct_title }}
-                <span >
-                    ({{ formatAvailableYears(
+            <v-list-item-subtitle v-if="addedLayer.dct_type==='indikator'"  class="text-wrap text-caption">
+                Gemeindeebene ({{ formatAvailableYears(
                     indicatorStore?.indicatorArray?.[addedLayer?.dct_title]
                         ?.availailableYearsForSelectedIndicator
                     ) }})
-                </span>
-                </v-list-item-title>
+            </v-list-item-subtitle>
+            <v-list-item-title
+                v-show="!isMinimized"
+                class="text-wrap"
+            >
+            {{ addedLayer.dct_title }}
+            <span >
+                ({{ 
+                indicatorStore?.indicatorArray?.[addedLayer?.dct_title]?.selectedYear
+                }})
+            </span>
+            </v-list-item-title>
                 <v-list-item-subtitle v-show="isMinimized==false" class="text-wrap text-caption" v-text="addedLayer.dct_catalog_publisher"></v-list-item-subtitle>
-                <template v-slot:prepend>
-                    <v-avatar>
-                        <v-img 
-                            :src="getIcon(addedLayer.checked, addedLayer.geometry_type)"
-                            max-height="40"
-                            max-width="40"
-                            style="cursor: pointer;"
-                        ></v-img>
-                    </v-avatar>
-                </template>
+                    <template v-slot:prepend>
+                        <v-avatar>
+                            <v-img 
+                                :src="getIcon(addedLayer.checked, addedLayer.geometry_type)"
+                                max-height="40"
+                                max-width="40"
+                                style="cursor: pointer;"
+                            ></v-img>
+                        </v-avatar>
+                    </template>
                 <template v-slot:append>
                     <v-menu
                      
