@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 from os import getenv
 from dataclasses import dataclass
-from .models import IndicatorRequest, ClassificationRequest, TableRequest, categorizationRequest, dataClassificationRequest
+from .models import IndicatorRequest, ClassificationRequest, TableRequest, categorizationRequest, dataClassificationRequest, geojsonInstanceRequest
 from .database import (
     get_home_data,
     get_indicator_list,
@@ -16,7 +16,8 @@ from .database import (
     fetch_column_values_from_db,
     get_numerical_column_names_for_classification,
     get_table_metadata_from_db,
-    get_external_wms_layers_from_db
+    get_external_wms_layers_from_db,
+    get_geojson_instance
 )
 import mapclassify
 import warnings
@@ -245,3 +246,16 @@ async def get_table_metadata():
 async def get_external_wms_layers():
     table_metadata = get_external_wms_layers_from_db()
     return table_metadata
+
+@app.post("/api/get_feature_instance")
+async def get_geojson_instance_from_db(
+        request: Request, 
+        instance_request: geojsonInstanceRequest,
+):
+    tablename=instance_request.tablename
+    featureId=instance_request.featureId
+    print(tablename, featureId)
+    data = get_geojson_instance(tablename, featureId)
+    return data
+
+

@@ -309,3 +309,25 @@ def get_external_wms_layers_from_db():
     cur.close()
     conn.close()
     return data
+
+def get_geojson_instance(tablename, featureId):
+    conn = connect()
+    cur = conn.cursor()
+  
+    cur.execute("""
+            SELECT json_build_object(
+                'type', 'FeatureCollection',
+                'features', json_agg(
+                json_build_object(
+                        'type', 'Feature',
+                        'geometry', ST_AsGeoJSON(t.geom)::json,
+                        'properties', to_jsonb(t) - 'geom'
+                    )
+                )
+            )
+    from "%s" as t where t.nationalco= '%s'
+        ;""" %(tablename, featureId))
+    user = cur.fetchall()[0][0]
+    cur.close()
+    conn.close()
+    return user
