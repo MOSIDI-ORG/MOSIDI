@@ -22,3 +22,9 @@ class dataClassificationRequest:
     columnName: str
     tableName: str
     selectedClassificationMethod: str
+
+@dataclass
+class geojsonInstanceRequest:
+    
+    tablename: str
+    featureId: str
