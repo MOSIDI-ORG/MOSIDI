@@ -150,6 +150,16 @@ export async function externalLayerFromDB () {
     return response.data;
 }
 
+export async function getFeatureInstanceFromDB (payload) {
+    const response = await HTTP.post("/api/get_feature_instance", 
+        {
+            "tablename": payload.tablename,
+            "featureId": payload.featureId
+        });
+    return response.data;
+}
+
+
 
 
 

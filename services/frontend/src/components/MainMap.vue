@@ -60,6 +60,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
 import { useIndicatorStore } from '@/stores/indicator'
 import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
+import {getFeatureInstanceFromDB} from "../services/backend.calls";
 
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
@@ -190,11 +191,14 @@ const addLayerToMap = (layerSpecification)=>{
    
   }
 
-  map.on('click', layerSpecification.id, function(e) {
+  map.on('click', layerSpecification.id, async function(e) {
     if (layerSpecification.id.includes('kommunales_gebiet_dashboard') || layerSpecification.id == 'kommunales_gebiet_centroid'){
       selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
       removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
-      map.addSource( "highlight",{"type": "geojson", data: e.features[0]} )
+      addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
+
+      const featureInstance = await getFeatureInstanceFromDB({tablename: "Kommunale Gebiete Deutschland", featureId:e.features[0].properties.nationalco})
+      map.addSource( "highlight",{"type": "geojson", data: featureInstance.features[0]})
       map.addLayer({
         'id': 'highlight',
         'type': layerSpecification.id.includes('kommunales_gebiet_dashboard') ? 'line': 'circle',
@@ -208,7 +212,7 @@ const addLayerToMap = (layerSpecification)=>{
           'circle-stroke-color':  '#888',
           'circle-stroke-width': 3,
           'circle-opacity': 1,
-          'circle-radius':e.features[0].layer.paint['circle-radius']
+          'circle-radius':featureInstance.features[0].layer.paint['circle-radius']
 
         },
         'layout': layerSpecification.id.includes('kommunales_gebiet_dashboard')? {
@@ -219,7 +223,6 @@ const addLayerToMap = (layerSpecification)=>{
 
         },
       });
-      addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
       
     }
     
