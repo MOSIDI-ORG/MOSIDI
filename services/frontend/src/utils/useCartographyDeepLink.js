@@ -1,5 +1,4 @@
 import { useRoute } from "vue-router"
-import { useIndicatorStore } from "@/stores/indicator"
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 
 
@@ -12,7 +11,6 @@ export function useCartographyDeepLink({
   const route = useRoute()
   const datasetSearchStore  = useDatasetSearchStore()
 
-  const indicatorStore = useIndicatorStore()
 
   /* -----------------------------
      Helpers
