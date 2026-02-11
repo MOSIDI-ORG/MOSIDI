@@ -153,7 +153,12 @@
     "share-map":{
         "title": "Karte teilen",
         "close": "schließen",
-        "label": "Link zur Karte"
+        "label": "Link zur Karte",
+        "view-only": "Nur anzeigen",
+        "can-edit": "kann bearbeiten",
+        "access-level": "Zugriffsmodus",
+        "view-only-hint": "Jeder, der über diesen Link verfügt, kann die Daten einsehen, aber keine Änderungen vornehmen",
+        "can-edit-hint": "Jeder, der über diesen Link verfügt, kann Änderungen anzeigen und vornehmen"
     },
     "metadata-labels":{
         "dct_title": "Datensatztitel",

@@ -154,7 +154,12 @@
     "share-map":{
         "title": "Share Map",
         "close": "Close",
-        "label": "Link to the map"
+        "label": "Link to the map",
+        "view-only": "View Only",
+        "can-edit": "Can Edit",
+        "access-level": "Access Mode",
+        "view-only-hint": "Anyone with this link can view but not make changes",
+        "can-edit-hint": "Anyone with this link can view and make changes"
     },
     "metadata-labels":{
         "dct_title": "Dataset title",
