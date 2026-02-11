@@ -18,10 +18,9 @@
         :style="{
             'bottom': searchInitiated ||isMinimized ? '10px' : '',
             'height':isMinimized? 'fit-content':'',
-            'visibility': route?.query?.mode === 'view' ? 'hidden' : 'visible'
         }"
     >
-        <DatasetSearchLandingUI v-if="searchInitiated==false || filterInitiated==false"/>
+        <DatasetSearchLandingUI v-if="(searchInitiated==false || filterInitiated==false) && route?.query?.mode === 'edit'" />
         <AddedDatasetsUI 
             @moveLayerToTop="moveLayerToTop" 
             @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" 

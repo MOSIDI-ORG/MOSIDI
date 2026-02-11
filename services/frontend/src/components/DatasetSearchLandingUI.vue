@@ -5,7 +5,6 @@
         density="compact"
         :title="$t('dataset-search-landing.indicator.title')"
         variant="text"
-        
     >
         
         <template #subtitle >
