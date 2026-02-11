@@ -31,9 +31,9 @@ export function useMapCameraDeepLink(map) {
 
     // Apply mode (view/edit)
     const mode = route.query.mode || 'edit' // default to 'edit' if not specified
+
     applyMapMode(mode)
     
-    console.log(route.query.mode, "mode")
   }
 
   // ---- Apply read-only or edit mode to map ----

@@ -18,6 +18,7 @@
         :style="{
             'bottom': searchInitiated ||isMinimized ? '10px' : '',
             'height':isMinimized? 'fit-content':'',
+            'visibility': route?.query?.mode === 'view' ? 'hidden' : 'visible'
         }"
     >
         <DatasetSearchLandingUI v-if="searchInitiated==false || filterInitiated==false"/>
@@ -45,6 +46,9 @@ import ChartUI from "@/components/ChartUI.vue";
 import { useIndicatorStore } from '@/stores/indicator'
 import { storeToRefs } from 'pinia'
 import { useMenuStore } from '../stores/menu'
+import { useRoute } from "vue-router"
+
+const route = useRoute()
 
 let { isMinimized } = storeToRefs(useMenuStore())
 
