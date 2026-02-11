@@ -69,7 +69,10 @@ export function useIndicatorDeepLink(addLayerToMap) {
         const palette = indicatorStore.indicatorArray[name]?.colorPalette
           ? indicatorStore.indicatorArray[name].colorPalette.map(c => c.replace('#', '')).join('|')
           : ''
-        return `${name}:${meta.geometry_type}:${opacity}:${palette}`
+        
+        const secondIndicator = indicatorStore.indicatorArray[name]?.secondIndicatorName
+        ? indicatorStore.indicatorArray[name]?.secondIndicatorName : null
+        return `${name}:${meta.geometry_type}:${opacity}:${palette}:${secondIndicator}`
       }
     )
   }
@@ -99,7 +102,8 @@ export function useIndicatorDeepLink(addLayerToMap) {
         Object.entries(addedDatasetsStore.addedLayers ?? {}).map(([name]) => ({
           name,
           opacity: indicatorStore.indicatorArray[name]?.['fill-opacity'],
-          palette: indicatorStore.indicatorArray[name]?.colorPalette
+          palette: indicatorStore.indicatorArray[name]?.colorPalette,
+          secondIndicator: indicatorStore.indicatorArray[name]?.secondIndicatorName
         })),
       syncDatasetToUrl,
       { deep: true }
