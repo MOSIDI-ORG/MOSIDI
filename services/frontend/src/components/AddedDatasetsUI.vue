@@ -127,6 +127,7 @@
                                 </template>
                             </v-list-item>
                             <v-list-item
+                                v-show="route?.query?.mode === 'edit'"
                                 @click="removeLayer(addedLayer.dct_title, addedLayer.dct_type)"
                             >
                                 <template v-slot:prepend>
@@ -225,6 +226,9 @@ import { useRasterStyleStore } from '../stores/rasterStyle'
 import { useAlertStore } from '@/stores/alert'
 import { useMenuStore } from '../stores/menu'
 import { useProgressStore } from '@/stores/progress'
+import { useRoute } from "vue-router"
+
+const route = useRoute()
 
 const progressStore = useProgressStore()
 const alertStore = useAlertStore()
