@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useMapShareStore } from '../stores/mapShare'
 import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from "vue-router"
@@ -97,8 +97,15 @@ const route = useRoute()
 
 let { shareDialog } = storeToRefs(useMapShareStore())
 let copied = ref(false)
-let accessMode = ref('edit') // 'view' or 'edit'
-
+let accessMode = ref(route.query.mode || 'edit')
+watch(accessMode, (newMode) => {
+       router.replace({
+           query: {
+               ...route.query,
+               mode: newMode
+           }
+       })
+   })
 const shareUrl = computed(() => {
     const baseUrl = `${window.location.origin}${router.options.history.base}${route.path}`
     
