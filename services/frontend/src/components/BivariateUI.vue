@@ -140,6 +140,8 @@ import { useIndicatorStore } from '@/stores/indicator'
 import { useBivariateStore } from '../stores/bivariate'
 import { useProgressStore } from '@/stores/progress'
 import { useI18n } from 'vue-i18n';
+import { useCartographyDeepLink } from "@/utils/useCartographyDeepLink"
+
 
 const { t } = useI18n();
 const progressStore = useProgressStore()
@@ -182,9 +184,15 @@ const datasetTypes = computed(() => {
     ];
   }
 });
-onMounted(()=>{
+onMounted( ()=>{
     tableMetadataRequest()
+    const { attach } = useCartographyDeepLink({
+        addSecondIndicator
+    })
+
+    attach() 
 })
+
 import {getTableMetadata} from "../services/backend.calls";
 let tableMetadataForBivariate = ref(null)
 const tableMetadataRequest= async ()=>{

@@ -1,12 +1,17 @@
 import { useRoute } from "vue-router"
 import { useIndicatorStore } from "@/stores/indicator"
+import { useDatasetSearchStore } from '../stores/datasetSearch'
+
 
 export function useCartographyDeepLink({
   mapStylizationFromDeepLink,
   changeLayerOpacity,
-  setLayerPintProperty
+  setLayerPintProperty,
+  addSecondIndicator
 }) {
   const route = useRoute()
+  const datasetSearchStore  = useDatasetSearchStore()
+
   const indicatorStore = useIndicatorStore()
 
   /* -----------------------------
@@ -35,12 +40,17 @@ export function useCartographyDeepLink({
       .filter(Boolean)
       .map(c => c.startsWith('#') ? c : `#${c}`); // Ensure # is only added if missing
   }
+  let secondIndicator
+  if(parts[4]){
+    secondIndicator= parts[4]?.trim()
+  }   
 
   return {
     name,
     datatype,
     opacity,
     palette,
+    secondIndicator
   };
 }
 
@@ -54,42 +64,39 @@ async function applyUrlToStore() {
   if (!added) return
 
   const entries = Array.isArray(added) ? added : added.split(",")
-  // Helper to wait for store initialization
-  /*const waitForStore = (name) => {
-    return new Promise((resolve) => {
-      const check = () => {
-        if (indicatorStore.indicatorArray[name]) {
-          resolve();
-        } else {
-          setTimeout(check, 100);
-        }
-      };
-      check();
-    });
-  };*/
 
   for (const entry of entries) {
     const parsed = parseDatasetEntry(entry)
     if (!parsed) continue
 
-    const { name, datatype, opacity, palette } = parsed
-    console.log(`Applying dataset from URL: ${name}, type: ${datatype}, opacity: ${opacity}, palette: ${palette}`)
+    const { name, datatype, opacity, palette, secondIndicator } = parsed
+    console.log(`Applying dataset from URL: ${name}, type: ${datatype}, opacity: ${opacity}, palette: ${palette}, secondIndicator: ${secondIndicator}`)
 
     // WAIT HERE: Don't proceed until the store actually has this indicator
     //await waitForStore(name);
-    console.log(indicatorStore.indicatorArray, "indicator array in deeplink")
-    if (palette.length) {
+    if (palette.length && mapStylizationFromDeepLink) {
       mapStylizationFromDeepLink(palette,datatype, name)
     }
 
-    if (datatype=="Polygon" || datatype=="polygon" || datatype=="MultiPolygon" || datatype=="multipolygon"){
+    if ((datatype=="Polygon" || datatype=="polygon" || datatype=="MultiPolygon" || datatype=="multipolygon") && changeLayerOpacity){
       console.log("polygon opacity set from deeplink")
       changeLayerOpacity(opacity, name)
     }
-    else if (datatype=="raster"){
+    else if (datatype=="raster" && setLayerPintProperty){
       console.log("raster opacity set from deeplink")
       setLayerPintProperty(name, 'raster-opacity', opacity)
     }
+
+    if (secondIndicator!==null && addSecondIndicator){
+      let metadata = datasetSearchStore.tableMetadata.find(item => item['dct_title'] === secondIndicator)
+      if (metadata){
+          datasetSearchStore.selectedDataset = name
+
+          addSecondIndicator(metadata)
+
+      }
+    }
+
     
   }
 }
