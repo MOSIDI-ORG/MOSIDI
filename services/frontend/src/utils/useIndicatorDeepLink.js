@@ -3,6 +3,8 @@ import { watch } from "vue"
 import { useDatasetSearchStore } from "@/stores/datasetSearch"
 import { useaddedDatasetsStore } from "@/stores/addedDatasets"
 import { useIndicatorStore } from "@/stores/indicator"
+import { useChartStore } from '../stores/chart'
+
 
 export function useIndicatorDeepLink(addLayerToMap) {
   const route = useRoute()
@@ -10,6 +12,7 @@ export function useIndicatorDeepLink(addLayerToMap) {
   const datasetSearchStore = useDatasetSearchStore()
   const addedDatasetsStore = useaddedDatasetsStore()
   const indicatorStore = useIndicatorStore()
+  const chartStore = useChartStore()
 
   /* -----------------------------
      URL → App
@@ -35,6 +38,14 @@ export function useIndicatorDeepLink(addLayerToMap) {
       if (!name || !type) continue
         await addLayerToMap(name, type)
      
+    }
+  }
+  const selectedFeatureStr = route.query.selected_feature
+  if (selectedFeatureStr) {
+    try {
+      chartStore.selectedFeature = JSON.parse(selectedFeatureStr)
+    } catch (e) {
+      console.warn('Failed to parse selected_feature from URL:', e)
     }
   }
   addedDatasetsStore.declareReadyToCartographyDeepLink()
@@ -72,17 +83,27 @@ export function useIndicatorDeepLink(addLayerToMap) {
         
         const secondIndicator = indicatorStore.indicatorArray[name]?.secondIndicatorName
         ? indicatorStore.indicatorArray[name]?.secondIndicatorName : null
+
+       
+
         return `${name}:${meta.geometry_type}:${opacity}:${palette}:${secondIndicator}`
+
+        
       }
     )
   }
-
+  let selectedFeature = chartStore.selectedFeature 
+  ? JSON.stringify(chartStore.selectedFeature)
+  : null
+  
   router.replace({
     query: {
       ...route.query,
 
       dataset: datasetSearchStore.selectedDataset,
       type,
+      ...(selectedFeature && { selected_feature: selectedFeature }),
+
 
       ...(addedDatasets.length && {
         added_datasets: addedDatasets.join(",")
@@ -97,6 +118,7 @@ export function useIndicatorDeepLink(addLayerToMap) {
     applyUrlToStore()
     watch(() => datasetSearchStore.selectedDataset, syncDatasetToUrl)
     watch(() => datasetSearchStore.selectedDatasetType, syncDatasetToUrl)
+    watch(() => chartStore.selectedFeature, syncDatasetToUrl)
     watch(
       () =>
         Object.entries(addedDatasetsStore.addedLayers ?? {}).map(([name]) => ({
@@ -104,6 +126,7 @@ export function useIndicatorDeepLink(addLayerToMap) {
           opacity: indicatorStore.indicatorArray[name]?.['fill-opacity'],
           palette: indicatorStore.indicatorArray[name]?.colorPalette,
           secondIndicator: indicatorStore.indicatorArray[name]?.secondIndicatorName
+          
         })),
       syncDatasetToUrl,
       { deep: true }
