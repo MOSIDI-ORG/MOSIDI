@@ -14,7 +14,7 @@
 
                 <div v-if="metadata">
                     <div v-for="(item,index) in metadata" :key="index">
-                        <v-card-text v-if="item">
+                        <v-card-text v-if="index">
                              <span  v-if="isValidURL(item)">
                             {{ $t(`metadata-labels.${index}`, index) }}: <a :href="selectedLayerMetadata.source" target="_blank">{{ item }}</a> 
                         </span>
