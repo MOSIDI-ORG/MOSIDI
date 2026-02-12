@@ -196,35 +196,9 @@ const addLayerToMap = (layerSpecification)=>{
       selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
       removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
       addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
-
-      const featureInstance = await getFeatureInstanceFromDB({tablename: "Kommunale Gebiete Deutschland", featureId:e.features[0].properties.nationalco})
-      map.addSource( "highlight",{"type": "geojson", data: featureInstance.features[0]})
-      map.addLayer({
-        'id': 'highlight',
-        'type': layerSpecification.id.includes('kommunales_gebiet_dashboard') ? 'line': 'circle',
-        'source': 'highlight',
-        'paint': layerSpecification.id.includes('kommunales_gebiet_dashboard')? {
-          'line-color': '#888',
-          'line-width': 3,
-          "line-dasharray": [0.5, 2],
-        }: {
-          'circle-color': '#00FF00',
-          'circle-stroke-color':  '#888',
-          'circle-stroke-width': 3,
-          'circle-opacity': 1,
-          'circle-radius':featureInstance.features[0].layer.paint['circle-radius']
-
-        },
-        'layout': layerSpecification.id.includes('kommunales_gebiet_dashboard')? {
-          'line-cap': 'round',
-         
-        }: {
-          
-
-        },
-      });
-      
+      addHighlightLayer("Kommunale Gebiete Deutschland", e.features[0].properties.nationalco, layerSpecification.id)
     }
+      
     
     else {
       addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
@@ -247,7 +221,38 @@ const addLayerToMap = (layerSpecification)=>{
   });
  
 }
+const addHighlightLayer = async (tablename, featureId, layerId)=>{
+  const featureInstance = await getFeatureInstanceFromDB({tablename: tablename, featureId:featureId})
+      if(map.getSource("highlight")==undefined){
+        map.addSource( "highlight",{"type": "geojson", data: featureInstance.features[0]})
+        map.addLayer({
+          'id': 'highlight',
+          'type': layerId.includes('kommunales_gebiet_dashboard') ? 'line': 'circle',
+          'source': 'highlight',
+          'paint': layerId.includes('kommunales_gebiet_dashboard')? {
+            'line-color': '#888',
+            'line-width': 3,
+            "line-dasharray": [0.5, 2],
+          }: {
+            'circle-color': '#00FF00',
+            'circle-stroke-color':  '#888',
+            'circle-stroke-width': 3,
+            'circle-opacity': 1,
+            'circle-radius':featureInstance.features[0].layer.paint['circle-radius']
 
+          },
+          'layout': layerId.includes('kommunales_gebiet_dashboard')? {
+            'line-cap': 'round',
+          
+          }: {
+            
+
+          },
+        });
+      
+      }
+  
+}
 const addStyleExpressionByYear = (layerId, styleProperty, fillStyle)=>{   
   map.setPaintProperty(
     layerId,
