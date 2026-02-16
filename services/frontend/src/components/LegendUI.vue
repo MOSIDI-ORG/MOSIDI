@@ -499,6 +499,7 @@ const removeLayerFromMap = (layerSpecification)=>{
     gap: 30px; /* Optional: space between items */
     align-items: center; /* Align items vertically in the center */
     font-size: 0.7rem;
+    margin-left: 55px;
 }
 .map-navigation-container {
   position: absolute;
