@@ -350,7 +350,7 @@ const handleItemClick = async (item) => {
     else {
         addIndicatorRow()
         item.selectedIndicator = item.dct_title
-        const indocatorData =  await getIndicatorData(item.dct_title)
+        const indocatorData =  await getIndicatorData(item.dct_title, item.dcatde_politicalgeocodingleveluri)
         item.indicatorArray = indocatorData.indicator
         item.availailableYears = indocatorData.availabeYears[0][0]
         item.selectedYear = item.availailableYears[item.availailableYears.length - 1];
