@@ -196,7 +196,7 @@ const addLayerToMap = (layerSpecification)=>{
       selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
       removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
       addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
-      addHighlightLayer("Kommunale Gebiete Deutschland", e.features[0].properties.nationalco, layerSpecification.id)
+      addHighlightLayer(layerSpecification.layerNameInDatabase, e.features[0].properties.nationalco, layerSpecification.id)
     }
       
     

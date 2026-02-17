@@ -373,7 +373,7 @@ const addCommuneTileLayer = async () => {
     layout.value = {}
     layerType.value="fill"
     let layerSpecification = {
-        layerNameInDatabase: 'Kommunale Gebiete Deutschland',
+        layerNameInDatabase: 'Gemeindeebene',
         id: 'kommunales_gebiet_dashboard',
         style: style,
         layout: layout,
