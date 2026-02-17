@@ -23,11 +23,12 @@ export async function getIndicatorNames() {
   return response.data;
 }
 
-export async function getIndicatorData(indicator) {
+export async function getIndicatorData(indicator, granularity) {
     const response = await HTTP.post(
         "/api/get_indicator_data",
         {
-            "indicator": indicator
+            "indicator": indicator,
+            "granularity": granularity
         }
     );
     return response.data;
