@@ -251,9 +251,9 @@ BEGIN
 
     
     FOR indikator_rec IN 
-        SELECT DISTINCT indikator, source FROM public.dashboard_data_de
+        SELECT DISTINCT indikator, source, granularity FROM public.dashboard_data_de_test
     LOOP
-        INSERT INTO public.table_metadata (
+        INSERT INTO public.table_metadata(
             geometry_type, 
             dct_title, 
             dct_description, 
@@ -296,17 +296,17 @@ BEGIN
             'de', 
             NULL,
             NULL, 
-            NULL, 
+            indikator_rec.granularity, 
             NULL, 
             NULL,
             CURRENT_TIMESTAMP, 
             CURRENT_TIMESTAMP, 
-            'Monthly',
+            'Yearly',
             (SELECT TO_TIMESTAMP(MIN(zeitbezug)::text, 'YYYY') 
-             FROM public.dashboard_data_de 
+             FROM public.dashboard_data_de_test 
              WHERE indikator = indikator_rec.indikator) AS dct_temporal_startdata,
             (SELECT TO_TIMESTAMP(MAX(zeitbezug)::text, 'YYYY') 
-             FROM public.dashboard_data_de 
+             FROM public.dashboard_data_de_test 
              WHERE indikator = indikator_rec.indikator) AS dct_temporal_enddate,
             indikator_rec.indikator,
             (SELECT jsonb_agg(
@@ -317,7 +317,7 @@ BEGIN
                 )
             ) FROM pg_attribute a
             JOIN pg_type t ON t.oid = a.atttypid
-            WHERE a.attrelid = 'public.dashboard_data_de'::regclass
+            WHERE a.attrelid = 'public.dashboard_data_de_test'::regclass
             AND a.attnum > 0) AS details,
             CURRENT_TIMESTAMP,
             'indikator'
