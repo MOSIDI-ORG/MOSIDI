@@ -1,6 +1,6 @@
 <template>
     
-    <div v-if="indicatorArray[selectedDataset] && tableMetadataForBivariate!==null" class="bivariate-ui">
+    <div v-if="indicatorArray[selectedDataset] && tableMetadataForBivariate!==null && tableMetadata" class="bivariate-ui">
         <div class="header">
             <div width="371" class="mb-2 ml-1 mr-1">
                 <v-text-field
@@ -132,7 +132,7 @@
 </template>
 
 <script setup>
-import {ref, defineEmits, computed, onMounted} from "vue"
+import {ref, defineEmits, computed, onMounted, nextTick, watch} from "vue"
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { storeToRefs } from 'pinia'
 import {getIndicatorData, classification} from "@/services/backend.calls";
@@ -171,6 +171,7 @@ let dataSources = ref(null)
 let geometryTypes = ref(null)
 let availableYearsForIndicatorFilter =ref(null)
 let selectedSecondIndicator = ref(null)
+let tableMetadataForBivariate = ref(null)
 const datasetTypes = computed(() => {
   if (activatedDatasetSearch.value === 'indicator') {
     return [{ alias: 'Indicator', name: 'indikator' }];
@@ -184,28 +185,61 @@ const datasetTypes = computed(() => {
     ];
   }
 });
-onMounted( ()=>{
-    tableMetadataRequest()
-    const { attach } = useCartographyDeepLink({
-        addSecondIndicator
-    })
-
-    attach() 
+onMounted(async () => {
+  const { attach } = useCartographyDeepLink({
+    addSecondIndicator
+  })
+  await nextTick()
+  attach()
 })
+watch(
+  () => tableMetadata.value,
+  (newVal) => {
+    if (!newVal?.length) return
 
-import {getTableMetadata} from "../services/backend.calls";
-let tableMetadataForBivariate = ref(null)
-const tableMetadataRequest= async ()=>{
-    const response =  await getTableMetadata()
-    tableMetadataForBivariate.value= response
-    dataSources.value = [ ...new Set(tableMetadataForBivariate?.value?.map(item => item.dct_catalog_publisher)), "All"];
-    geometryTypes.value = [ ...new Set(tableMetadataForBivariate?.value?.map(item => item.geometry_type)), "All"];
+    tableMetadataForBivariate.value = newVal
+
+    dataSources.value = [
+      ...new Set(newVal.map(item => item.dct_catalog_publisher)),
+      "All"
+    ]
+    geometryTypes.value = [
+      ...new Set(newVal.map(item => item.dcatde_politicalgeocodingleveluri)),
+      "All"
+    ]
     availableYearsForIndicatorFilter.value = [
-    ...new Set(tableMetadataForBivariate?.value?.map(item => new Date(item.dct_temporal_enddate).getFullYear()).sort()),
-    "All"
-    ];
-}
+      ...new Set(
+        newVal
+          .map(item => new Date(item.dct_temporal_enddate).getFullYear())
+          .sort()
+      ),
+      "All"
+    ]
+  },
+  { immediate: true } // ✅ handles case where tableMetadata is already loaded
+)
 
+//import {getTableMetadata} from "../services/backend.calls";
+
+/*const tableMetadataRequest= async ()=>{
+    console.log(tableMetadata.value, "tableMetadata.value")
+    if (tableMetadata.value ==null){
+        console.log("call", )
+        const response =  await getTableMetadata()
+        tableMetadataForBivariate.value= response
+        dataSources.value = [ ...new Set(tableMetadataForBivariate?.value?.map(item => item.dct_catalog_publisher)), "All"];
+        geometryTypes.value = [ ...new Set(tableMetadataForBivariate?.value?.map(item => item.dcatde_politicalgeocodingleveluri)), "All"];
+        availableYearsForIndicatorFilter.value = [
+        ...new Set(tableMetadataForBivariate?.value?.map(item => new Date(item.dct_temporal_enddate).getFullYear()).sort()),
+        "All"
+        ];
+    }
+    else {
+        tableMetadataForBivariate.value = tableMetadata.value
+    }
+    
+}
+*/
 
 const filteredItems = computed(() => {
     return tableMetadata?.value?.filter(item => {
@@ -230,7 +264,7 @@ const filteredItems = computed(() => {
             : true;
         
         const matchesGeometryType = selectedGeometryTypee.value && selectedGeometryTypee.value !== 'All'
-            ? item.geometry_type === selectedGeometryTypee.value
+            ? item.dcatde_politicalgeocodingleveluri === selectedGeometryTypee.value
             : true;
 
         const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
@@ -279,17 +313,17 @@ const addSecondIndicator =  async (indicator) => {
         emit("backtoUnivariateMap", indicatorArray?.value[selectedDataset?.value]['secondIndicator'].parentIndicator)
     }
     else{
-        getSecondIndicator(indicator.dct_title)
+        getSecondIndicator(indicator.dct_title, indicator.dcatde_politicalgeocodingleveluri)
         selectedSecondIndicator.value = indicator.dct_title
     }
     
 }
-const getSecondIndicator = async (indicatorName) => {
+const getSecondIndicator = async (indicatorName, granularity) => {
     progressStore.setProgressBar({
         text: t("bivariate.progress-text"),
         progress: true
     })
-    const indocatorData =  await getIndicatorData(indicatorName)
+    const indocatorData =  await getIndicatorData(indicatorName, granularity)
     indicatorStore.setSecondIndicatordata({
         parentIndicator:selectedDataset.value,
         secondIndicator: indocatorData.indicator,
