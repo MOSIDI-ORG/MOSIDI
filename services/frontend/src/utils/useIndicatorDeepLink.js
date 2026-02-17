@@ -34,9 +34,9 @@ export function useIndicatorDeepLink(addLayerToMap) {
       datasetSearchStore.searchInitiated=true
     }
     for (const entry of entries) {
-      const [name, type] = entry.split(":")
+      const [name, type, granularity] = entry.split(":")
       if (!name || !type) continue
-        await addLayerToMap(name, type)
+        await addLayerToMap(name, type, granularity)
      
     }
   }
@@ -85,8 +85,8 @@ export function useIndicatorDeepLink(addLayerToMap) {
         ? indicatorStore.indicatorArray[name]?.secondIndicatorName : null
 
        
-
-        return `${name}:${meta.geometry_type}:${opacity}:${palette}:${secondIndicator}`
+        const displayName = name.replace(`_${meta.dcatde_politicalgeocodingleveluri}`, '')
+        return `${displayName}:${meta.geometry_type}:${meta.dcatde_politicalgeocodingleveluri}:${opacity}:${palette}:${secondIndicator}`
 
         
       }

@@ -1,6 +1,7 @@
 import { useRoute } from "vue-router"
 import { useDatasetSearchStore } from '../stores/datasetSearch'
-
+import { watch } from "vue"
+import { useaddedDatasetsStore } from "@/stores/addedDatasets"
 
 export function useCartographyDeepLink({
   mapStylizationFromDeepLink,
@@ -11,6 +12,7 @@ export function useCartographyDeepLink({
   const route = useRoute()
   const datasetSearchStore  = useDatasetSearchStore()
 
+  const addedDatasetsStore = useaddedDatasetsStore()
 
   /* -----------------------------
      Helpers
@@ -23,29 +25,30 @@ export function useCartographyDeepLink({
   if (!name) return null;
 
   const datatype = parts[1] || "indikator";
-  
+  const granularity = parts[2]?.trim();
   // 2. Opacity check
-  const opacity = parts[2] !== undefined && !isNaN(Number(parts[2]))
-    ? Number(parts[2])
+  const opacity = parts[3] !== undefined && !isNaN(Number(parts[3]))
+    ? Number(parts[3])
     : 1;
 
   // 3. Palette logic: specifically look at index 3
   let palette = [];
-  if (parts[3]) {
-    palette = parts[3]
+  if (parts[4]) {
+    palette = parts[4]
       .split("|")
       .map(c => c.trim())
       .filter(Boolean)
       .map(c => c.startsWith('#') ? c : `#${c}`); // Ensure # is only added if missing
   }
   let secondIndicator
-  if(parts[4]){
-    secondIndicator= parts[4]?.trim()
+  if(parts[5]){
+    secondIndicator= parts[5]?.trim()
   }   
 
   return {
     name,
     datatype,
+    granularity,
     opacity,
     palette,
     secondIndicator
@@ -67,26 +70,26 @@ async function applyUrlToStore() {
     const parsed = parseDatasetEntry(entry)
     if (!parsed) continue
 
-    const { name, datatype, opacity, palette, secondIndicator } = parsed
-    console.log(`Applying dataset from URL: ${name}, type: ${datatype}, opacity: ${opacity}, palette: ${palette}, secondIndicator: ${secondIndicator}`)
+    const { name, datatype, granularity, opacity, palette, secondIndicator } = parsed
 
     // WAIT HERE: Don't proceed until the store actually has this indicator
     //await waitForStore(name);
     if (palette.length && mapStylizationFromDeepLink) {
-      mapStylizationFromDeepLink(palette,datatype, name)
+      mapStylizationFromDeepLink(palette,datatype, name+'_'+granularity)
     }
 
     if ((datatype=="Polygon" || datatype=="polygon" || datatype=="MultiPolygon" || datatype=="multipolygon") && changeLayerOpacity){
       console.log("polygon opacity set from deeplink")
-      changeLayerOpacity(opacity, name)
+      changeLayerOpacity(opacity, name+'_'+granularity)
     }
     else if (datatype=="raster" && setLayerPintProperty){
       console.log("raster opacity set from deeplink")
-      setLayerPintProperty(name, 'raster-opacity', opacity)
+      setLayerPintProperty(name+'_'+granularity, 'raster-opacity', opacity)
     }
 
     if (secondIndicator!==null && addSecondIndicator){
-      let metadata = datasetSearchStore.tableMetadata.find(item => item['dct_title'] === secondIndicator)
+      console.log(datasetSearchStore?.tableMetadata, "datasetSearchStore?.tableMetadata")
+      let metadata = datasetSearchStore?.tableMetadata?.find(item => item['dct_title'] === secondIndicator)
       if (metadata){
           datasetSearchStore.selectedDataset = name
 
@@ -116,8 +119,18 @@ async function applyUrlToStore() {
       .filter(Boolean)
   })()
 
-  function attach() {
-    applyUrlToStore()
+function attach() {
+    // ✅ Watch readyForCartography, only apply once it's true
+    const stopWatch = watch(
+      () => addedDatasetsStore.readyForCartography,
+      (isReady) => {
+        if (isReady) {
+          applyUrlToStore()
+          stopWatch() // ✅ stop watching after first trigger — only need it once
+        }
+      },
+      { immediate: true } // ✅ in case it's already true when attach() is called
+    )
   }
 
   return {
