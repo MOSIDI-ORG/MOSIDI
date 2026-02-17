@@ -312,6 +312,9 @@ const getIcon = (layerName, index, geomType)=> {
     
   }
 const addSecondIndicator =  async (indicator) => {
+    console.log(indicator, "indicator")
+     console.log(indicatorArray?.value[selectedDataset?.value], "array")
+     console.log(selectedDataset?.value, "selectedDataset?.value")
     if(indicator.dct_title ==indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName){
         //selectedSecondIndicator.value = null
         indicatorStore.setSecondIndicatordata({

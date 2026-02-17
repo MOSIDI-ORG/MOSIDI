@@ -91,7 +91,7 @@ async function applyUrlToStore() {
       console.log(datasetSearchStore?.tableMetadata, "datasetSearchStore?.tableMetadata")
       let metadata = datasetSearchStore?.tableMetadata?.find(item => item['dct_title'] === secondIndicator)
       if (metadata){
-          datasetSearchStore.selectedDataset = name
+          datasetSearchStore.selectedDataset = name+'_'+granularity
 
           addSecondIndicator(metadata)
 
