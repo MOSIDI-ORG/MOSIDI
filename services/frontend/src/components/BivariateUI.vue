@@ -90,8 +90,20 @@
                         @mouseleave="hoveredItem = null"
                         style="border-radius: 5px;"
                     >
-                        <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
-                        <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
+                    
+
+                    <v-list-item-subtitle 
+                        v-if="metadata.dct_type === 'indikator'" 
+                        class="text-wrap text-caption"
+                    >
+                        {{ metadata.dcatde_politicalgeocodingleveluri }}
+                    </v-list-item-subtitle>
+
+                    <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
+                    
+                    <v-list-item-subtitle class="text-wrap text-caption" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
+
+
                         <template v-slot:prepend>
                             <v-avatar>
                                 <v-img 
