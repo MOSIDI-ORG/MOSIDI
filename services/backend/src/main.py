@@ -74,7 +74,8 @@ async def indicator_data(
     indicator_request: IndicatorRequest,
 ):
     indicator = indicator_request.indicator
-    data = get_indicator_data(indicator)
+    granularity = indicator_request.granularity
+    data = get_indicator_data(indicator, granularity)
     data = json.dumps(data)
     gzipped_data = gzip.compress(data.encode('utf-8'))
     return Response(content=gzipped_data, headers={"Content-Encoding": "gzip", "Content-Type": "application/json"})
@@ -240,7 +241,9 @@ async def get_class_intervals(
 @app.get("/api/get_table_metadata")
 async def get_table_metadata():
     table_metadata = get_table_metadata_from_db()
-    return table_metadata
+    data = json.dumps(table_metadata)
+    gzipped_data = gzip.compress(data.encode('utf-8'))
+    return Response(content=gzipped_data, headers={"Content-Encoding": "gzip", "Content-Type": "application/json"})
 
 @app.get("/api/get_external_wms_layers")
 async def get_external_wms_layers():

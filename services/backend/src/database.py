@@ -85,7 +85,7 @@ def get_indicator_list():
     conn.close()
     return indicators
 
-def get_indicator_data(indicator):
+def get_indicator_data(indicator, granularity):
     conn = connect()
     cur = conn.cursor()
     
@@ -97,7 +97,7 @@ def get_indicator_data(indicator):
         )
     ) 
     FROM dashboard_data_de
-    WHERE indikator = '%s'; """ % (indicator,))
+    WHERE indikator = '%s' and granularity = '%s' ; """ % (indicator,granularity,))
     
     #cur.execute(""" select zeit_wert_array from dashboard_data_de where indikator = '%s'; """ % (indicator,))
 
@@ -110,7 +110,7 @@ def get_indicator_data(indicator):
         ) d; """ % (indicator,))
     metadata = cur.fetchall()[0][0]
 
-    cur.execute("""SELECT json_agg(distinct zeitbezug) from dashboard_data_de where indikator = '%s'; """ % (indicator,))
+    cur.execute("""SELECT json_agg(distinct zeitbezug) from dashboard_data_de where indikator = '%s' and granularity = '%s'; """ % (indicator,granularity))
     availabeYears = cur.fetchall()
     
     cur.close()
@@ -285,12 +285,60 @@ def fetch_column_values_from_db(columnName, tableName):
 def get_table_metadata_from_db():
     conn = connect()
     cur = conn.cursor()
-    cur.execute("""SELECT json_agg(row_to_json(d)) 
+    
+    cur.execute("""
+        SELECT json_agg(row_to_json(d)) 
         FROM (
+            -- Non-INKAR indicators: return as-is
             SELECT *
-            FROM table_metadata 
-            WHERE geometry_type is not null
-    ) d; """ )
+            FROM table_metadata
+            WHERE geometry_type IS NOT NULL
+              AND (dct_catalog_publisher != 'INKAR' OR dct_catalog_publisher IS NULL)
+            
+            UNION ALL
+            
+            -- INKAR indicators: one row per available granularity
+            SELECT 
+                m.dct_title,
+                m.dct_description,
+                m.dct_catalog_title,
+                m.dct_catalog_description,
+                m.dct_catalog_publisher,
+                m.dct_accessurl,
+                m.dct_license,
+                m.dct_identifier,
+                m.dcatde_contributorid,
+                m.dct_distribution,
+                m.dct_language,
+                m.dct_bbox,
+                m.dct_centroid,
+                m.geometry_type,
+                d.granularity as dcatde_politicalgeocodingleveluri,
+                m.dcatde_politicalgeocodinguri,
+                m.dcatde_geocodingtext,
+                m.dct_modified,
+                m.dct_issued,
+                m.dct_accrualperiodicity,
+                m.dct_temporal_startdata,
+                m.dct_temporal_enddate,
+                m.table_name,
+                m.details,
+                m.imported,
+                m.dct_type,
+                m.legend_url
+            FROM table_metadata m
+            INNER JOIN (
+                SELECT DISTINCT 
+                    indikator,
+                    granularity
+                FROM dashboard_data_de
+                WHERE source = 'INKAR'
+            ) d ON m.dct_title = d.indikator
+            WHERE m.dct_catalog_publisher = 'INKAR'
+              AND m.geometry_type IS NOT NULL
+        ) d
+    """)
+    
     data = cur.fetchall()[0][0]
     cur.close()
     conn.close()
