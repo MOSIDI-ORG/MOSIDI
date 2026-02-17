@@ -279,7 +279,7 @@
 </template>
 
 <script setup>
-import { defineEmits, ref, onMounted } from "vue"
+import { defineEmits, ref, onMounted, nextTick } from "vue"
 import { storeToRefs } from "pinia";
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { useIndicatorStore } from '@/stores/indicator'
@@ -310,7 +310,7 @@ onMounted(async () => {
     changeLayerOpacity,
     setLayerPintProperty
   })
-
+   await nextTick()
   attach() 
 })
 
