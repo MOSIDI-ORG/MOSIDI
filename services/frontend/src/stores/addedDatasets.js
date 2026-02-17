@@ -13,20 +13,16 @@ export const useaddedDatasetsStore = defineStore ({
               console.error('Invalid payload: missing layerName or metadata');
               return;
             }
-            this.addedLayers[layerName] = metadata;
-            this.addedLayers[layerName]['checked'] = true;
+            const granularity = metadata.dcatde_politicalgeocodingleveluri ?? 'unknown';
+            const compositeKey = `${layerName}_${granularity}`;
+            this.addedLayers[compositeKey] = { ...metadata, checked: true };
 
-            for(let layername in this.addedLayers){
-              if (layername!=layerName){
-                
-                if(this.addedLayers[layername].dct_type=='indikator'){
-                  this.addedLayers[layername]['checked'] = false;
-                }
-                
+            for (const key in this.addedLayers) {
+              if (key !== compositeKey && this.addedLayers[key].dct_type === 'indikator') {
+                this.addedLayers[key].checked = false;
               }
-              
             }
-            
+            console.log(this.addedLayers, "addedLayers")
           },
           declareReadyToCartographyDeepLink() {
             this.readyForCartography = true;

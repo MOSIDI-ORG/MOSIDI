@@ -25,13 +25,14 @@
                v-for="(addedLayer, index) in Object.keys(addedLayers).reverse().map(key => addedLayers[key])"
                 :key="addedLayer.dct_title"
                 style="border-radius: 5px;"
-                @click="addDataUI(addedLayer.dct_title, addedLayer.dct_type,addedLayer.geometry_type )"
+                @click="addDataUI(addedLayer.dct_title, addedLayer.dct_type,addedLayer.geometry_type, addedLayer.dcatde_politicalgeocodingleveluri )"
                 @mouseover="hoveredItem = index"
                 @mouseleave="hoveredItem = null"
             >
+           
             <v-list-item-subtitle v-if="addedLayer.dct_type==='indikator'"  class="text-wrap text-caption">
-                Gemeindeebene, {{ formatAvailableYears(
-                    indicatorStore?.indicatorArray?.[addedLayer?.dct_title]
+                {{ addedLayer.dcatde_politicalgeocodingleveluri }}, {{ formatAvailableYears(
+                    indicatorStore?.indicatorArray?.[addedLayer?.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]
                         ?.availailableYearsForSelectedIndicator
                     ) }}
             </v-list-item-subtitle>
@@ -42,7 +43,7 @@
             {{ addedLayer.dct_title }}
             <span >
                 ({{ 
-                indicatorStore?.indicatorArray?.[addedLayer?.dct_title]?.selectedYear
+                indicatorStore?.indicatorArray?.[addedLayer?.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.selectedYear
                 }})
             </span>
             </v-list-item-title>
@@ -81,7 +82,7 @@
                         <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
                             <v-list-item
                                     @click="toggleLayerVisibility(addedLayer)"
-                                    v-if="addedLayers[addedLayer.dct_title]['dct_type']=='table'"
+                                    v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type']=='table'"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -89,9 +90,9 @@
                                         variant="text" 
                                         icon 
                                     >
-                                        <img :src="addedLayers[addedLayer.dct_title]['checked']? 'icons/eye-close.svg':'icons/eye-open.svg'" alt="Information Icon" width="18" height="18" />
+                                        <img :src="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['checked']? 'icons/eye-close.svg':'icons/eye-open.svg'" alt="Information Icon" width="18" height="18" />
                                     </v-btn> 
-                                    <v-list-item-title class="ml-3"> {{addedLayers[addedLayer.dct_title]['checked']?$t('added-datasets.hide'):$t('added-datasets.show')}}</v-list-item-title>
+                                    <v-list-item-title class="ml-3"> {{addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['checked']?$t('added-datasets.hide'):$t('added-datasets.show')}}</v-list-item-title>
                                 </template>
                                
                             </v-list-item>
@@ -113,7 +114,7 @@
                             <v-list-item
                                    
                                 @click="getLayerExtentFromDB(addedLayer.dct_title)"
-                                v-if="addedLayers[addedLayer.dct_title]['dct_type']=='table'"
+                                v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type']=='table'"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -128,7 +129,7 @@
                             </v-list-item>
                             <v-list-item
                                 v-show="route?.query?.mode === 'edit'"
-                                @click="removeLayer(addedLayer.dct_title, addedLayer.dct_type)"
+                                @click="removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -148,7 +149,7 @@
                             >
                                 <template v-slot:activator="{ props }">
                                     <v-list-item
-                                        v-if="addedLayers[addedLayer.dct_title]['dct_type'] == 'indikator' || addedLayers[addedLayer.dct_title]['dct_type'] == 'custom indikator'"
+                                        v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type'] == 'indikator' || addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type'] == 'custom indikator'"
                                         v-bind="props" 
                                         class="v-list-item-export"
                                     >
@@ -279,7 +280,8 @@ const formatAvailableYears = (years) => {
 
   return `${years[0]}–${years[years.length - 1]}`
 }
-const addDataUI = (datasetName, datasetType, geomType)=>{
+const addDataUI = (datasettitle, datasetType, geomType, granularity)=>{
+    let datasetName = datasettitle+'_'+granularity
     if (datasetSearchStore.selectedDataset==datasetName && filterInitiated==false){
         removeLayer(datasetName, datasetType)
     }
@@ -386,6 +388,7 @@ const toggleLayerVisibility = (layerName)=>{
 }
 
 const removeLayer = (layerName, layerType)=>{
+    console.log(datasetSearchStore.selectedDataset, "datasetSearchStore.selectedDataset")
     if (layerName===datasetSearchStore.selectedDataset){
         datasetSearchStore.toggleDataUI({
             dataUiInitiated : false
@@ -517,7 +520,7 @@ const exportData = async(layerName, type, exportType)=>{
         filteredArray = indicatorArray
     }
 
-    const data =  await getGeojsonDataFromDB("Kommunale Gebiete Deutschland")
+    const data =  await getGeojsonDataFromDB("Gemeindeebene")
     const valueMap = new Map(
     filteredArray.map(item => [String(item.kennziffer), item])
     );
