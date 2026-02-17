@@ -3,6 +3,7 @@ from dataclasses import dataclass
 @dataclass
 class IndicatorRequest:
     indicator: str
+    granularity: str
 @dataclass
 class ClassificationRequest:
     dataArray: list
