@@ -179,7 +179,7 @@
 
                                 <v-list>
                                     <v-list-item 
-                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type, {mode: 'geojson'})"
+                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type, {mode: 'geojson'}, addedLayer.dcatde_politicalgeocodingleveluri)"
                                     >
                                         <v-list-item-title>GeoJSON</v-list-item-title>
                                     </v-list-item>
@@ -504,14 +504,14 @@ const getIcon = (checked, geomType)=> {
         return 'icons/raster.svg';
     }
   }
-const exportData = async(layerName, type, exportType)=>{
+const exportData = async(layerName, type, exportType, granularity)=>{
     progressStore.setProgressBar({
         text: `Exporting ${layerName} to ${exportType.mode}...`,
         progress: true
     })
-    let indicatorArray = indicatorStore.indicatorArray[layerName][0][0]
+    let indicatorArray = indicatorStore.indicatorArray[layerName+'_'+granularity][0][0]
     
-    let selectedYear = indicatorStore.indicatorArray[layerName].selectedYear
+    let selectedYear = indicatorStore.indicatorArray[layerName+'_'+granularity].selectedYear
     let filteredArray
     if (type =="indikator"){
         filteredArray = indicatorArray.filter(item => item.zeitbezug === selectedYear);
@@ -520,7 +520,7 @@ const exportData = async(layerName, type, exportType)=>{
         filteredArray = indicatorArray
     }
 
-    const data =  await getGeojsonDataFromDB("Gemeindeebene")
+    const data =  await getGeojsonDataFromDB(granularity)
     const valueMap = new Map(
     filteredArray.map(item => [String(item.kennziffer), item])
     );
