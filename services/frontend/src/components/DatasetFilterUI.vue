@@ -14,6 +14,7 @@
         @customMapStylization="customMapStylization" 
     ></DatasetUI>
     <div v-show="filterInitiated==true && dataUiInitiated==false">
+        
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
 
             <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
@@ -128,12 +129,23 @@
         
 
         </v-card>
+        <v-card
+            v-if="isLoading"
+            :style="{ left: isMinimized ? '90px' : '382px' }"
+            class="header mx-auto d-flex align-center justify-center animated-transform"
+            width="371"
+            style="background-color: black; color: white; padding: 16px;"
+        >
+            <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
+            <span>Loading datasets...</span>
+        </v-card>
         <v-card 
             :style="{ left: isMinimized ? '90px' : '382px' }" 
             v-show="filterInitiated==true" 
             class="dataset-filter-ui mx-auto text-left animated-transform"  
             width="371"
             >
+
             <div style="height: 81%;" class="ml-1 mr-1">
                 <span style="font-size: 1rem; font-weight: 500;" class="ml-2">
                 {{ filteredItems?.length + ' ' + $t('dataset-filter.results') }}
@@ -365,6 +377,7 @@ let selectedDatasetSource = ref(null)
 let selectedLayerMetadata = ref(null)
 let selectedLayerName= ref(null)
 let selectedYearIndicatorFilter = ref(null)
+let isLoading = ref(true)
 //let availableYearsForIndicatorFilter =ref(null)
 
 onMounted(async()=>{
@@ -378,6 +391,8 @@ onMounted(async()=>{
   ])
     await nextTick()
     deepLink.attach()
+    isLoading.value = false 
+
 })
 
 // reset the selected filter when toggling the activatedDatasetSearch (geodata and indicator)
