@@ -85,7 +85,9 @@ export function useIndicatorDeepLink(addLayerToMap) {
         ? indicatorStore.indicatorArray[name]?.secondIndicatorName : null
 
        
-        const displayName = name.replace(`_${meta.dcatde_politicalgeocodingleveluri}`, '')
+        const displayName = meta.dcatde_politicalgeocodingleveluri
+        ? name.replace(`_${meta.dcatde_politicalgeocodingleveluri}`, '')
+        : name.replace('_unknown', '');
         return `${displayName}:${meta.geometry_type}:${meta.dcatde_politicalgeocodingleveluri}:${opacity}:${palette}:${secondIndicator}`
 
         

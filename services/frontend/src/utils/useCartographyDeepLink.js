@@ -79,16 +79,13 @@ async function applyUrlToStore() {
     }
 
     if ((datatype=="Polygon" || datatype=="polygon" || datatype=="MultiPolygon" || datatype=="multipolygon") && changeLayerOpacity){
-      console.log("polygon opacity set from deeplink")
       changeLayerOpacity(opacity, name+'_'+granularity)
     }
     else if (datatype=="raster" && setLayerPintProperty){
-      console.log("raster opacity set from deeplink")
       setLayerPintProperty(name+'_'+granularity, 'raster-opacity', opacity)
     }
 
     if (secondIndicator!==null && addSecondIndicator){
-      console.log(datasetSearchStore?.tableMetadata, "datasetSearchStore?.tableMetadata")
       let metadata = datasetSearchStore?.tableMetadata?.find(item => item['dct_title'] === secondIndicator)
       if (metadata){
           datasetSearchStore.selectedDataset = name+'_'+granularity

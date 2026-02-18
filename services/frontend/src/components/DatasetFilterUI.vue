@@ -551,7 +551,9 @@ const addLayerToMap = async (layerName,geomType, granularity)=>{
     
     
     if (geomType=='raster'){
+        console.log(externalWMSLayers.value, "externalWMSLayers")
         let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
+        console.log(item, "item")
         addExternaWMSLayerToMap(item)
         return
     }
