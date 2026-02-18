@@ -235,6 +235,7 @@
                 @updateDeckglLayer="updateDeckglLayer"
                 @customMapStylization="customMapStylization"
                 @addCustomLayer="addCustomLayer"
+                v-if="customIndicatorUI==true"
         ></CustomIndicatorUI>
     </v-card>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
