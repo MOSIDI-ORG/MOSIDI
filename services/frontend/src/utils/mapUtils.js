@@ -187,7 +187,7 @@ export function getSelectedFeatureInfo(e, layerSpecification, indicatorArray) {
     return {
       layerId: layerSpecification.id,
       featureId: e.features[0].properties.nationalco,
-      featureName: e.features[0].properties.name,
+      featureName: e.features[0].properties.gen,
       indikator: selectedIndicatorName,
       year: itemYear,
       value: iteValue,
@@ -217,7 +217,7 @@ export function getSelectedFeatureInfo(e, layerSpecification, indicatorArray) {
   return {
     layerId: layerSpecification.id,
     featureId: e.features[0].properties.nationalco,
-    featureName: e.features[0].properties.name,
+    featureName: e.features[0].properties.gen,
     indikator: selectedIndicatorName,
     year: itemYear,
     value: iteValue
