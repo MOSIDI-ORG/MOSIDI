@@ -13,8 +13,14 @@ export const useaddedDatasetsStore = defineStore ({
               console.error('Invalid payload: missing layerName or metadata');
               return;
             }
-            const granularity = metadata.dcatde_politicalgeocodingleveluri ?? 'unknown';
-            const compositeKey = `${layerName}_${granularity}`;
+            const granularity = metadata.dcatde_politicalgeocodingleveluri ?? '';
+            let compositeKey
+            if (metadata.dct_type=='raster'){
+              compositeKey = `${layerName}`;
+            }
+            else {
+              compositeKey = `${layerName}_${granularity}`;
+            }
             this.addedLayers[compositeKey] = { ...metadata, checked: true };
 
             for (const key in this.addedLayers) {

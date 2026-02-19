@@ -82,7 +82,7 @@
                         <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
                             <v-list-item
                                     @click="toggleLayerVisibility(addedLayer)"
-                                    v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type']=='table'"
+                                    v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table'"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -114,7 +114,7 @@
                             <v-list-item
                                    
                                 @click="getLayerExtentFromDB(addedLayer.dct_title)"
-                                v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type']=='table'"
+                                v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table'"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -149,7 +149,7 @@
                             >
                                 <template v-slot:activator="{ props }">
                                     <v-list-item
-                                        v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type'] == 'indikator' || addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['dct_type'] == 'custom indikator'"
+                                        v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type == 'indikator' || addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type == 'custom indikator'"
                                         v-bind="props" 
                                         class="v-list-item-export"
                                     >
@@ -294,7 +294,7 @@ const addDataUI = (datasettitle, datasetType, geomType, granularity)=>{
             filterInitiated : false
         })
         datasetSearchStore.setSelecteddatasetName({
-            selectedDataset: datasetName
+            selectedDataset: datasetType=='indikator'? datasetName: datasettitle
         })
         if(datasetType=='indikator'){
             createHistogramForSelectedLayer(datasetName)
@@ -324,7 +324,7 @@ const addDataUI = (datasettitle, datasetType, geomType, granularity)=>{
             emit("moveLayerToTop", datasetName)
         }
         else if(datasetType=='raster'){
-            activateStylePanel(datasetName,geomType)
+            activateStylePanel(datasettitle,geomType)
             datasetSearchStore.setSelecteddatasetType({
             selectedDatasetType: "raster"
     })
@@ -455,6 +455,8 @@ const activateStylePanel = (datasetName,geomType)=>{
        lineStyleStore.addLayerStyle(datasetName)
    }
    else if (geomType == "raster"){
+   console.log(addedDatasetsStore.addedLayers, "addedDatasetsStore.addedLayers")
+   console.log(datasetName, "datasetName")
         rasterLayerSpecification.value=layerSpec
         rasterStyleStore.addLayerStyle(datasetName)
         mapLegendStore.setActivatedWMSLegendItem({

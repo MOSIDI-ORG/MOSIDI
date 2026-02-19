@@ -571,14 +571,14 @@ const addLayerToMap = async (layerName,geomType, granularity)=>{
         let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
         console.log(item, "item")
         addExternaWMSLayerToMap(item)
-        return
+        
     }
     let selectedLayerMetadata = tableMetadata.value.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})
-    if (selectedLayerMetadata.dct_type==='table'){
+    if (selectedLayerMetadata?.dct_type==='table'){
         toggleClickedLayer (layerName, geomType)
     }
-    else if(selectedLayerMetadata.dct_type==='indikator'){
+    else if(selectedLayerMetadata?.dct_type==='indikator'){
         selectedIndicator.value = layerName
         
         await addCommuneTileLayer(layerName+'_'+granularity, selectedLayerMetadata.dcatde_politicalgeocodingleveluri);
