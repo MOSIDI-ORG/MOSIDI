@@ -9,14 +9,16 @@
             <v-card class="dialog-ui">
                 <v-card-title>
                     <span class="text-h6">{{ tablename }} meta data</span>
+                    
                 </v-card-title>
                 <v-divider></v-divider>
 
                 <div v-if="metadata">
                     <div v-for="(item,index) in metadata" :key="index">
+                        
                         <v-card-text v-if="index">
-                             <span  v-if="isValidURL(item)">
-                            {{ $t(`metadata-labels.${index}`, index) }}: <a :href="selectedLayerMetadata.source" target="_blank">{{ item }}</a> 
+                            <span  v-if="isValidURL(item)">
+                             <b>{{ $t(`metadata-labels.${index}`, index) }}</b>: <a :href="item" target="_blank">{{ item }}</a> 
                         </span>
                         <span v-else>
                             <b>{{ $t(`metadata-labels.${index}`, index) }}</b>:
