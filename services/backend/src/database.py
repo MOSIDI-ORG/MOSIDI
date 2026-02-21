@@ -289,15 +289,15 @@ def get_table_metadata_from_db():
     cur.execute("""
         SELECT json_agg(row_to_json(d)) 
         FROM (
-            -- Non-INKAR indicators: return as-is
+            -- Non-dashboard indicators: return as-is
             SELECT *
             FROM table_metadata
             WHERE geometry_type IS NOT NULL
-              AND (dct_catalog_publisher != 'INKAR' OR dct_catalog_publisher IS NULL)
+              AND dct_catalog_publisher NOT IN (SELECT DISTINCT source FROM source_granularities)
             
             UNION ALL
             
-            -- INKAR indicators: one row per available granularity
+            -- Dashboard indicators: one row per source/granularity
             SELECT 
                 m.dct_title,
                 m.dct_description,
@@ -327,15 +327,9 @@ def get_table_metadata_from_db():
                 m.dct_type,
                 m.legend_url
             FROM table_metadata m
-            INNER JOIN (
-                SELECT DISTINCT 
-                    indikator,
-                    granularity
-                FROM dashboard_data_de
-                WHERE source = 'INKAR'
-            ) d ON m.dct_title = d.indikator
-            WHERE m.dct_catalog_publisher = 'INKAR'
-              AND m.geometry_type IS NOT NULL
+            INNER JOIN source_granularities d ON m.dct_title = d.indikator
+                                             AND m.dct_catalog_publisher = d.source
+            WHERE m.geometry_type IS NOT NULL
         ) d
     """)
     
