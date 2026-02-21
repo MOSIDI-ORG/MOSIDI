@@ -248,7 +248,9 @@ async def get_table_metadata():
 @app.get("/api/get_external_wms_layers")
 async def get_external_wms_layers():
     table_metadata = get_external_wms_layers_from_db()
-    return table_metadata
+    data = json.dumps(table_metadata)
+    gzipped_data = gzip.compress(data.encode('utf-8'))
+    return Response(content=gzipped_data, headers={"Content-Encoding": "gzip", "Content-Type": "application/json"})
 
 @app.post("/api/get_feature_instance")
 async def get_geojson_instance_from_db(
