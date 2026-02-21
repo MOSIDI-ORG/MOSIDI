@@ -333,15 +333,17 @@ $$;
 
 -- Run the function
 SELECT insert_table_metadata();
--- Create materialized view if it doesn't exist
-CREATE MATERIALIZED VIEW IF NOT EXISTS source_granularities AS
+-- Recreate materialized view fresh every time
+DROP MATERIALIZED VIEW IF EXISTS source_granularities;
+
+CREATE MATERIALIZED VIEW source_granularities AS
     SELECT DISTINCT source, indikator, granularity
     FROM dashboard_data_de;
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_source_granularities_unique 
+CREATE UNIQUE INDEX idx_source_granularities_unique 
     ON source_granularities(source, indikator, granularity);
 
-CREATE INDEX IF NOT EXISTS idx_source_granularities_indikator 
+CREATE INDEX idx_source_granularities_indikator 
     ON source_granularities(indikator);
 
 
