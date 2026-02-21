@@ -333,10 +333,26 @@ $$;
 
 -- Run the function
 SELECT insert_table_metadata();
+-- Create materialized view if it doesn't exist
+CREATE MATERIALIZED VIEW IF NOT EXISTS source_granularities AS
+    SELECT DISTINCT source, indikator, granularity
+    FROM dashboard_data_de;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_source_granularities_unique 
+    ON source_granularities(source, indikator, granularity);
+
+CREATE INDEX IF NOT EXISTS idx_source_granularities_indikator 
+    ON source_granularities(indikator);
 
 
 
 """
+def refresh_source_granularities():
+    engine = create_engine(DATABASE_URL)
+    with engine.connect() as connection:
+        connection.execute(text("REFRESH MATERIALIZED VIEW CONCURRENTLY source_granularities"))
+        connection.commit()
+    print("Materialized view refreshed successfully.")
 
 def create_and_populate_metadata():
     """Create and populate the table_metadata table."""
@@ -350,6 +366,7 @@ def create_and_populate_metadata():
         # Commit the changes to the database
         connection.commit()  # Explicit commit to ensure changes are saved
     print("Metadata summary table created and populated successfully.")
+    refresh_source_granularities()
 
 if __name__ == "__main__":
     create_and_populate_metadata()
