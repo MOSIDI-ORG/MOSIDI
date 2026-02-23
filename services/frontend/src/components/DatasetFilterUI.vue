@@ -562,9 +562,7 @@ const showLayerMetadata= (layerName, granularity)=>{
     //metadataDialogStore.assignMetadata(selectedLayerMetadata.value,layerName)
     metadataUI.value= true
 }
-const addLayerToMap = async (layerName,geomType, granularity)=>{
-    console.log("called", layerName,geomType, granularity)
-    
+const addLayerToMap = async (layerName,geomType, granularity)=>{    
     
     if (geomType=='raster'){
         console.log(externalWMSLayers.value, "externalWMSLayers")
@@ -658,6 +656,7 @@ const getIndicator = async (indicatorName, granularity) => {
         availailableYearsForSelectedIndicator: indocatorData.availabeYears[0][0],
         selectedYear: indocatorData.availabeYears[0][0].at(-1),
         colorPalette: colorbrewer.default.RdPu[5],
+        granularity: granularity,
         type: "indikator"
     })
     datasetSearchStore.setSelecteddatasetName({
