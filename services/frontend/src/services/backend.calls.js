@@ -160,6 +160,21 @@ export async function getFeatureInstanceFromDB (payload) {
     return response.data;
 }
 
+export async function getternaryDataFromDB (payload) {
+    const response = await HTTP.post("/api/get_ternary_data", 
+       {
+        ind1: payload[0].indicatorname,
+        zeit1: payload[0].selectedYear,
+        ind2: payload[1].indicatorname,
+        zeit2: payload[1].selectedYear,
+        ind3: payload[2].indicatorname,
+        zeit3: payload[2].selectedYear,
+        gran: payload[0].granularity
+    });
+    return response.data;
+}
+
+
 
 
 
