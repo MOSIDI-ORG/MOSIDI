@@ -41,6 +41,7 @@ services:
       python -m src.dwd_sources.get_available_data && 
       python -m src.geobasis_sources.get_available_data && 
       python -m src.db_table_metadata.script && 
+      python -m src.ternary_function.script && 
       uvicorn src.main:app --reload --host 0.0.0.0 --port 5000"
     depends_on:
       - brandenburg_db
