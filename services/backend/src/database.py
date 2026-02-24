@@ -373,3 +373,17 @@ def get_geojson_instance(tablename, featureId):
     cur.close()
     conn.close()
     return user
+
+def get_ternary_data_from_db(ind1, zeit1, ind2, zeit2, ind3, zeit3, gran):
+    conn = connect()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT * FROM get_ternary_data(%s, %s, %s, %s, %s, %s, %s)
+    """, (ind1, zeit1, ind2, zeit2, ind3, zeit3, gran))
+
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return rows
+

@@ -29,3 +29,14 @@ class geojsonInstanceRequest:
     
     tablename: str
     featureId: str
+
+
+@dataclass
+class ternaryInstanceRequest:
+    ind1: str
+    zeit1: int
+    ind2: str
+    zeit2: int
+    ind3: str
+    zeit3: int
+    gran: str

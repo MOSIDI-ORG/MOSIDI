@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 from os import getenv
 from dataclasses import dataclass
-from .models import IndicatorRequest, ClassificationRequest, TableRequest, categorizationRequest, dataClassificationRequest, geojsonInstanceRequest
+from .models import IndicatorRequest, ClassificationRequest, TableRequest, categorizationRequest, dataClassificationRequest, geojsonInstanceRequest, ternaryInstanceRequest
 from .database import (
     get_home_data,
     get_indicator_list,
@@ -17,7 +17,8 @@ from .database import (
     get_numerical_column_names_for_classification,
     get_table_metadata_from_db,
     get_external_wms_layers_from_db,
-    get_geojson_instance
+    get_geojson_instance,
+    get_ternary_data_from_db
 )
 import mapclassify
 import warnings
@@ -263,4 +264,24 @@ async def get_geojson_instance_from_db(
     data = get_geojson_instance(tablename, featureId)
     return data
 
+@app.post("/api/get_ternary_data")
+async def get_ternary_data_request(
+        request: Request, 
+        instance_request: ternaryInstanceRequest,
+):
+    data =get_ternary_data_from_db(
+        instance_request.ind1,
+        instance_request.zeit1,
+        instance_request.ind2,
+        instance_request.zeit2,
+        instance_request.ind3,
+        instance_request.zeit3,
+        instance_request.gran
+    )
+        
+
+    return [
+        {"kennziffer": row[0], "share1": row[1], "share2": row[2], "share3": row[3]}
+        for row in data
+    ]
 
