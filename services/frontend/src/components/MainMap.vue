@@ -10,7 +10,7 @@
       <TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
-      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap"></DatasetSearchUI>
+      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap"></DatasetSearchUI>
     </div>
   </v-app>
   <MetadataDialog> </MetadataDialog>
@@ -156,7 +156,7 @@ const addLayerToMap = (layerSpecification)=>{
           "type": "vector",
           "scheme": 'tms',
           "tiles": [vectorUrl],
-          "promoteId":'id',
+          "promoteId":'nationalco',
           "minzoom": 0,
           "maxzoom": 22
       });
@@ -436,6 +436,51 @@ const zoomIn = ()=>{
 const zoomOut = ()=>{
   const currentZoom = map.getZoom();
   map.zoomTo(currentZoom - 0.5);
+}
+
+const addTernaryLayerToMap = (data)=>{
+
+    const layerId = 'kommunales_gebiet_dashboard'+data.existingSourceId
+    const vectorSourceLayer = data.granularity
+
+  if (!map.getLayer(layerId)) {
+    console.warn("Layer does not exist.")
+    return
+  }
+
+  // Update paint property directly
+  map.setPaintProperty(layerId, "fill-color", [
+    "case",
+    ["!=", ["feature-state", "share1"], null],
+    [
+      "rgb",
+      ["*", 255, ["feature-state", "share1"]],
+      ["*", 255, ["feature-state", "share2"]],
+      ["*", 255, ["feature-state", "share3"]]
+    ],
+    "#cccccc"
+  ])
+
+  map.setPaintProperty(layerId, "fill-opacity", 1)
+  map.setPaintProperty(layerId, "fill-outline-color", "grey")
+
+  // Now set feature-state
+  data.ternaryData.forEach(row => {
+    map.setFeatureState(
+      {
+        source: layerId,
+        sourceLayer: vectorSourceLayer,
+        id: row.kennziffer
+      },
+      {
+        share1: row.share1,
+        share2: row.share2,
+        share3: row.share3
+      }
+    )
+  })
+    
+
 }
 
 </script>
