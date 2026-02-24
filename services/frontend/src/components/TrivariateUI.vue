@@ -216,7 +216,7 @@ watch(
     () => indicatorArray.value[selectedDataset.value] ,
     (newVal ) => {
         if (newVal) {
-            console.log(indicatorArray.value[selectedDataset.value]?.ternaryData, "ternary data in watch")
+            selectedGeometryTypee.value = newVal.granularity
             if(indicatorArray.value[selectedDataset.value]?.ternaryData==undefined){
                 const granularity = newVal.granularity
                 const indicatorname = selectedDataset.value.replace(`_${granularity}`, '').replace(granularity, '')
