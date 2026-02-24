@@ -427,6 +427,7 @@ const setLayerLayoutProperty = (layerId, layoutProperty, layoutValue)=>{
 }
 const addStyleExpressionByYear =(layerId, styleProperty, fillStyle)=>{
     emit("addStyleExpressionByYear",layerId, styleProperty, fillStyle)
+    updateIndicatoreStore({mode:"bivariate"})
 }
 const addLayerToMap = (layerSpecifications)=>{
     const layerName = layerSpecifications.layerNameInDatabase;
@@ -473,6 +474,20 @@ const deActivateTimeSlider = ()=>{
 
 const addTernaryLayerToMap = (data)=>{
     emit("addTernaryLayerToMap", data)
+    updateIndicatoreStore({mode:"ternary"})
+}
+
+const updateIndicatoreStore = (data)=>{
+    if (data.mode=="bivariate"){
+        console.log("remove trivariate")
+        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].ternaryData = null
+
+    }
+    else if (data.mode=="ternary"){
+        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].secondIndicator = null
+        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].secondIndicatorName = null
+        indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].bivariate = false
+    }
 }
 </script>
 

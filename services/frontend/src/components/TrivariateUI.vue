@@ -366,7 +366,6 @@ const addIndicator = async (metadata) => {
 const applyIndicators =async ()=>{
     // Here you would typically emit an event or call a method to apply the selected indicators to the map
     const data  = await getternaryDataFromDB(selectedIndicators.value)
-    console.log(data, "ternary data in trivariateUI")
     const gran = selectedIndicators.value[0].granularity
     const ind1 = selectedIndicators.value[0].indicatorname
     const year1 = selectedIndicators.value[0].selectedYear
@@ -403,6 +402,7 @@ const clearIndicators = () => {
     }
     indicatorArray.value[selectedDataset.value].ternaryData = null
     emit("backtoUnivariateMap", selectedDataset.value)
+    console.log(indicatorArray.value[selectedDataset.value], "after clearing ternary data")
 
 }
 
