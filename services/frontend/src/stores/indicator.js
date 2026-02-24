@@ -47,6 +47,10 @@ export const useIndicatorStore = defineStore ({
        },
         setIndicatorOpacity(payload){
         this.indicatorArray[payload.indicatorName]['fill-opacity']=payload.opacity
+        },
+        setTernaryData(payload){
+            this.indicatorArray[payload.existingSourceId]['ternaryData']= payload
+            console.log(this.indicatorArray, "indicator array in store")
         }
        
     }
