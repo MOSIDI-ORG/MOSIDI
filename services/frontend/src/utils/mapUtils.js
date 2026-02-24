@@ -32,25 +32,6 @@ export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId
     );
     popup.addTo(map);
     
-    if (e.features.length > 0) {
-        if (selectedFeatureId) {
-            map.removeFeatureState({
-            source: layerId,
-            sourceLayer: vectorSourceLayer,
-            id: selectedFeatureId
-            });
-        }
-
-        selectedFeatureId = e.features[0].id;
-
-        map.setFeatureState({
-            source: layerId,
-            sourceLayer: vectorSourceLayer,
-            id: selectedFeatureId,
-        }, {
-            clicked: true
-        });
-    }
 
     popup.on("close", () => {
         if (selectedFeatureId) {
