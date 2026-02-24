@@ -12,6 +12,7 @@
         @setLayerLayoutProperty="setLayerLayoutProperty" 
         @addStyleLayerToMap="addStyleLayerToMap" 
         @customMapStylization="customMapStylization" 
+        @addTernaryLayerToMap="addTernaryLayerToMap"
     ></DatasetUI>
     <div v-show="filterInitiated==true && dataUiInitiated==false">
         
@@ -325,7 +326,7 @@ import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
 
 
 let { isMinimized } = storeToRefs(useMenuStore())
-const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressionByYear","addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleLayerToMap", "addExternaWMSLayerToMap"]);
+const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressionByYear","addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleLayerToMap", "addExternaWMSLayerToMap","addTernaryLayerToMap"]);
 
 let {  filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
 
@@ -987,7 +988,9 @@ const getExternalWMSLayers = async ()=>{
         externalWMSLayers.value.push(newLayer);
     });
 }
-
+const addTernaryLayerToMap = (data)=>{
+    emit("addTernaryLayerToMap", data)
+}
 </script>
 
 <style scoped>

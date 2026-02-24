@@ -9,7 +9,9 @@
             @removeLayerFromMap="removeLayerFromMap" 
             @setLayerPintProperty="setLayerPintProperty" 
             @setLayerLayoutProperty="setLayerLayoutProperty"
-            @addExternaWMSLayerToMap="addExternaWMSLayerToMap">
+            @addExternaWMSLayerToMap="addExternaWMSLayerToMap"
+            @addTernaryLayerToMap = "addTernaryLayerToMap"
+            >
 
         </DatasetFilterUI>
     </div>
@@ -53,7 +55,7 @@ let { isMinimized } = storeToRefs(useMenuStore())
 
 const indicatorStore = useIndicatorStore()
 
-const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleLayerToMap", "fitBoundsToBBOX", "toggleLayerVisibility", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "toggleLayerVisibilityWithValue", "moveLayerToTop"]);
+const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleLayerToMap", "fitBoundsToBBOX", "toggleLayerVisibility", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "toggleLayerVisibilityWithValue", "moveLayerToTop", "addTernaryLayerToMap"]);
 
 let { searchInitiated, filterInitiated, /*dataUiInitiated*/ } = storeToRefs(useDatasetSearchStore())
 
@@ -98,6 +100,10 @@ const updateDeckglLayer = (geojson, style)=>{
 const addExternaWMSLayerToMap = (layerSpecification)=>{
     emit("addExternaWMSLayerToMap", layerSpecification);
 }
+
+const addTernaryLayerToMap = (data)=>{
+    emit("addTernaryLayerToMap", data)
+}   
 
 </script>
 

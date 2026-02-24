@@ -172,10 +172,26 @@
                 class="text-left mb-2"
             >
                 <template v-slot:prepend>
-                    <v-avatar style="cursor: pointer;">
-                                <v-img src="icons/combine.svg" @click="bivariateUI=true"  />
-                            
-                    </v-avatar>
+                    <v-menu>
+                        <template v-slot:activator="{ props }">
+                            <v-avatar style="cursor: pointer;" v-bind="props">
+                                <v-img src="icons/combine.svg" />
+                            </v-avatar>
+                        </template>
+
+                        <v-list>
+                            <v-list-item
+                                @click="bivariateUI = true, trivariateUI = false"
+                                prepend-icon="mdi-chart-scatter-plot"
+                                title="Bivariate"
+                            />
+                            <v-list-item
+                                @click="trivariateUI = true, bivariateUI = false"
+                                prepend-icon="mdi-chart-bubble"
+                                title="Trivariate"
+                            />
+                        </v-list>
+                    </v-menu>
                 </template>
             </v-list-item>
         </v-card>
@@ -272,6 +288,27 @@
             <BivariateUI @addStyleExpressionByYear="addStyleExpressionByYear" @backtoUnivariateMap="backtoUnivariateMap" class="mb-2"></BivariateUI>
             
         </v-card>
+        <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="trivariateUI==true" class="dataset-trivariate-ui mx-auto text-left animated-transform"  width="371">
+            <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+                <div class="d-flex align-center" style="padding: 8px;">
+                    <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
+                        {{ $t('bivariate.title') }}
+                    </span>
+                    <v-spacer></v-spacer>
+                    <v-img 
+                        src="icons/close.svg"
+                        max-height="40"
+                        max-width="40"
+                        style="cursor: pointer;"
+                        @click="trivariateUI=false"
+                    ></v-img>
+                </div>
+               
+                    
+            </v-card>
+            <TrivariateUI @addTernaryLayerToMap="addTernaryLayerToMap" @backtoUnivariateMap="backtoUnivariateMap" style="flex: 1; min-height: 0; overflow: hidden;"></TrivariateUI>
+
+        </v-card>
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='table' || addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='raster'" class="added-table-ui mx-auto animated-transform"  width="371">
             <CartographyUI  @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>
         </v-card>
@@ -290,12 +327,14 @@ import BivariateUI from "@/components/BivariateUI.vue";
 import { useMenuStore } from '../stores/menu'
 import { useTimeSliderStore } from '@/stores/timeSlider'
 import { useCartographyDeepLink } from "@/utils/useCartographyDeepLink"
+import TrivariateUI from "@/components/TrivariateUI.vue";
 
 let { isMinimized } = storeToRefs(useMenuStore())
 let classificationMethods = ref([ "NaturalBreaks", "Quantiles", "EqualInterval"])
 //let selectedClassificationMethod = ref("NaturalBreaks")
 let bivariateUI = ref(false)
-const emit = defineEmits(["filterByYear", "mapLegend", "mapStylization", "customMapStylization", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleExpressionByYear", "addLayerToMap"]);
+let trivariateUI = ref(false)
+const emit = defineEmits(["filterByYear", "mapLegend", "mapStylization", "customMapStylization", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleExpressionByYear", "addLayerToMap", "addTernaryLayerToMap"]);
 
 
 const datasetSearchStore = useDatasetSearchStore()
@@ -329,7 +368,6 @@ const filterByYear = (indicatorName)=>{
 
 }
 const backtoUnivariateMap = (indicatorName)=>{
-    //emit('mapStylization', indicatorName)
     emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
 
 }
@@ -432,6 +470,10 @@ const deActivateTimeSlider = ()=>{
     });
     
 }
+
+const addTernaryLayerToMap = (data)=>{
+    emit("addTernaryLayerToMap", data)
+}
 </script>
 
 <style scoped>
@@ -513,7 +555,7 @@ const deActivateTimeSlider = ()=>{
     border-radius: 8px;
     position: absolute;
     top: 190px;
-    bottom: 60px;
+    bottom: 10px;
     left: 1000px;
     z-index: 100;
     background-color: rgba(255,255,255,0.6);
@@ -524,5 +566,24 @@ const deActivateTimeSlider = ()=>{
     border: 1px solid rgba(0, 0, 0, 0.2); 
     
    
+}
+.dataset-trivariate-ui {
+    background: transparent; 
+    border-radius: 8px;
+    position: absolute;
+    top: 62px;
+    bottom: 10px;
+    left: 1000px;
+    z-index: 100;
+    background-color: rgba(255,255,255,0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    -moz-backdrop-filter: blur(5px);
+    -ms-backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;   /* ← remove overflow-y: scroll from here */
 }
 </style>
