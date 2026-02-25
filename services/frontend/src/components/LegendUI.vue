@@ -417,14 +417,18 @@ function drawTernaryBase(size = 260) {
   const container = d3.select(ternaryContainer.value);
   container.selectAll("*").remove();
 
-  const svg = container
-    .append("svg")
-    .attr("width", size + 60)
-    .attr("height", size + 60)
-    .append("g")
-    .attr("transform", "translate(25,25)");
+  const margin = { top: 30, right: 30, bottom: 40, left: 30 }
+    const height = Math.sqrt(3) / 2 * size;
+    const totalWidth = size + margin.left + margin.right
+    const totalHeight = height + margin.top + margin.bottom
 
-  const height = Math.sqrt(3) / 2 * size;
+    const svg = container
+    .append("svg")
+    .attr("width", totalWidth)
+    .attr("height", totalHeight)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`)
+    
 
   // === Outer triangle
   svg.append("polygon")
