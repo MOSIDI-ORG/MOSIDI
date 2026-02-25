@@ -321,32 +321,44 @@ const filteredItems = computed(() => {
         return matchesSearchText && matchesDatasetType &&  preFilterDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
     });
 });
-const getIcon = (layerName, index, geomType)=> {
-    if(indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName && hoveredItem.value === index){
-        return 'icons/minus.svg'; 
+const getIcon = (layerName, index, geomType) => {
+
+    const isSelected = selectedIndicators.value?.some(
+        item => item.indicatorname === layerName
+    );
+
+    if (isSelected && hoveredItem.value === index) {
+        return 'icons/minus.svg';
     }
-    else if (indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName === layerName) {
-        return 'icons/check.svg'; 
+    else if (isSelected) {
+        return 'icons/check.svg';
     }
     else if (hoveredItem.value === index) {
-        return 'icons/plus.svg'; 
+        return 'icons/plus.svg';
     }
     else {
-        if (geomType=='Point'){
+        if (geomType === 'Point') {
             return 'icons/point-blue.svg';
         }
-        else if (geomType == "MultiLineString" || geomType == "LineString" || geomType == "Line"){
-                return 'icons/line-blue.svg';
+        else if (
+            geomType === "MultiLineString" ||
+            geomType === "LineString" ||
+            geomType === "Line"
+        ) {
+            return 'icons/line-blue.svg';
         }
-        else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
-                return 'icons/polygon-blue.svg';
+        else if (
+            geomType === "MultiPolygon" ||
+            geomType === "Polygon" ||
+            geomType === "Geometry"
+        ) {
+            return 'icons/polygon-blue.svg';
         }
         else {
-                return 'icons/raster.svg';
-            }
+            return 'icons/raster.svg';
+        }
     }
-    
-  }
+};
 
 const addIndicator = async (metadata) => {
     const exists = selectedIndicators.value.findIndex(i => i.indicatorname === metadata.dct_title)
