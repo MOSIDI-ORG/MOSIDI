@@ -238,7 +238,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .attr('fill', 'steelblue')
         .attr('stroke', 'white')
         .attr('stroke-width', 1)
-        .style("opacity", data.length > 120 ? 0 : 1) // hide circles if more than 120 data points
+        .style("opacity", data.length > 50 ? 0 : 1) // hide circles if more than 50 data points
         .on('mouseover', mouseover)
         .on('mouseout', mouseout);
 

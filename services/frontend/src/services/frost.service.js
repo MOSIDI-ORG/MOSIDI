@@ -18,7 +18,8 @@ export async function getThings(observedPropertyId) {
                     "$select=id,name,unitOfMeasurement;" +
                     "$expand=Observations($select=phenomenonTime,result;$orderby=phenomenonTime desc;$top=1))" + 
             "&$filter=Datastreams/ObservedProperty/id eq " + observedPropertyId + 
-            "&$resultFormat=GeoJSON",
+            "&$resultFormat=GeoJSON" + 
+            "&$top=1000",
             getHeader()
         );
         return response.data;
@@ -68,7 +69,8 @@ export async function getObservedProperties() {
     try {
         const response = await axios.get(
             FROST_BASE_URL + "/ObservedProperties" +
-            "?$select=id,name,description",
+            "?$select=id,name,description" +
+            "&$top=1000",
             getHeader()
         );
         return response.data.value;
