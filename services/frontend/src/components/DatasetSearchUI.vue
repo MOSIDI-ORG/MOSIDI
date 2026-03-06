@@ -5,6 +5,7 @@
             @addDeckglLayer="addDeckglLayer" 
             @toggleLayerVisibility="toggleLayerVisibility"
             @addLayerToMap="addLayerToMap" 
+            @addSensorThingsLayerToMap="addSensorThingsLayerToMap"
             @addStyleExpressionByYear="addStyleExpressionByYear"
             @removeLayerFromMap="removeLayerFromMap" 
             @setLayerPintProperty="setLayerPintProperty" 
@@ -12,7 +13,6 @@
             @addExternaWMSLayerToMap="addExternaWMSLayerToMap"
             @addTernaryLayerToMap = "addTernaryLayerToMap"
             >
-
         </DatasetFilterUI>
     </div>
     <v-card
@@ -29,6 +29,7 @@
             @fitBoundsToBBOX="fitBoundsToBBOX" 
             @toggleLayerVisibility="toggleLayerVisibility" 
             @removeLayerFromMap="removeLayerFromMap" 
+            @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap"
             v-if="searchInitiated==true"/>
       
     </v-card>
@@ -55,7 +56,8 @@ let { isMinimized } = storeToRefs(useMenuStore())
 
 const indicatorStore = useIndicatorStore()
 
-const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleLayerToMap", "fitBoundsToBBOX", "toggleLayerVisibility", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "toggleLayerVisibilityWithValue", "moveLayerToTop", "addTernaryLayerToMap"]);
+const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleLayerToMap", "fitBoundsToBBOX", "toggleLayerVisibility", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "toggleLayerVisibilityWithValue", "moveLayerToTop", "addTernaryLayerToMap", "addSensorThingsLayerToMap", "removeSensorThingsLayerFromMap"]);
+
 
 let { searchInitiated, filterInitiated, /*dataUiInitiated*/ } = storeToRefs(useDatasetSearchStore())
 
@@ -72,6 +74,10 @@ const toggleLayerVisibility = (layerName)=>{
 
 const removeLayerFromMap = (payload)=>{
     emit("removeLayerFromMap",  {layerId:  payload.layerId, sourceId: payload.sourceId})
+}
+
+const removeSensorThingsLayerFromMap = (layerName) => {
+    emit("removeSensorThingsLayerFromMap", layerName);
 }
 
 const addStyleExpressionByYear =(layerId, styleProperty, fillStyle)=>{
@@ -104,6 +110,10 @@ const addExternaWMSLayerToMap = (layerSpecification)=>{
 const addTernaryLayerToMap = (data)=>{
     emit("addTernaryLayerToMap", data)
 }   
+
+const addSensorThingsLayerToMap = (observedProperty) => {
+    emit("addSensorThingsLayerToMap", observedProperty);
+}
 
 </script>
 

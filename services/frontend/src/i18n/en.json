@@ -80,6 +80,10 @@
         "geo":{
             "title":"Add geodata",
             "subtitle": "Start by searching and adding a geodata from the library."
+        },
+        "things":{
+            "title":"Add sensor data",
+            "subtitle": "Start by searching an adding an observed property of a sensor from the library"
         }
     },
     
@@ -189,8 +193,15 @@
         "details": "details",
         "dct_type": "Dataset Type",
         "imported": "Import date"
-
-
-
+    },
+    "chart": {
+        "interval": "time interval",
+        "nodata": "No data available for the selected period.",
+        "6h": "Last 6 hours",
+        "24h": "Last 24 hours",
+        "3d": "Last 3 days",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "90d": "Last 90 days"
     }
   }

@@ -6,6 +6,25 @@ import { createHTMLAttributeTable } from './createHTMLAttributeTable';
 let popup = null
 let hoverpopup = null
 
+/**
+ * Add Popup on Map for SensorThings Objects
+ * @param {*} map maplibre instance to add Popup to
+ * @param {*} coordinates coordinates of the clicked object on the map
+ * @param {*} popupData data to display in popup (object with key-value-pairs)
+ */
+export function addSensorThingsPopupToMap(map, coordinates, popupData) {
+  popup?.remove();
+  popup = new Popup({ closeOnClick: true });
+
+  popup.setLngLat(coordinates);
+  popup.setDOMContent(createHTMLAttributeTable(
+    coordinates[0],
+    coordinates[1],
+    popupData
+  ));
+  popup.addTo(map);
+}
+
 export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId, e) {
 
     popup?.remove();
