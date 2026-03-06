@@ -195,7 +195,7 @@
     },
     "chart": {
         "interval": "Zeitraum",
-        "nodata": "Keine Daten für den asugewählten Zeitraum",
+        "nodata": "Keine Daten für den ausgewählten Zeitraum",
         "6h": "Letzten 6 Stunden",
         "24h": "Letzten 24 Stunden",
         "3d": "Letzten 3 Tage",

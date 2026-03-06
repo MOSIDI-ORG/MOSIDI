@@ -34,10 +34,10 @@ export async function getThings(observedPropertyId) {
  * @param {*} datastreamId Id of a Datastream to retrieve Observations from
  * @param {*} from starting date interval to filter for; default last 10 days
  * @param {*} to ending date interval to filter for; default today/ now
- * @param {number} [top=1000] max number of observations to retrieve
+ * @param {number} [top=10000] max number of observations to retrieve
  * @returns list of Observations with result (value) and phenomenonTime orderby phenomenonTime
  */
-export async function getObservations(datastreamId, from = null, to = "now()", top = 1000) {
+export async function getObservations(datastreamId, from = null, to = "now()", top = 10000) {
     // If not specified use last 7 days
     if (from == null) {
         let date = new Date();

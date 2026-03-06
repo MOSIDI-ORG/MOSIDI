@@ -29,7 +29,7 @@
             class="timeSelector"
         >
         </v-select>
-        <svg class="chart-ui" id="indicatorChart" width="550" height="370"></svg>
+        <svg class="chart-ui" id="indicatorChart" width="600" height="370"></svg>
     </div>
 </template>
 
@@ -61,6 +61,7 @@ const TIME_PRESETS = [
 ]
 const selectedTimeInterval = ref(TIME_PRESETS[3]);
 
+// innerMargins used for chart in svg
 const margin = { top: 50, right: 20, bottom: 40, left: 50 };
 var chart_timeAttributeName = null;
 var chart_valueAttributeName = null;
@@ -276,12 +277,12 @@ const closeChart = () => {
  */
 const enterFullscreen = () => {
     const svg = d3.select('#indicatorChart');
-    svg.style("width", window.innerWidth - margin.left);
-    svg.style("height", window.innerHeight - margin.top);
+    svg.style("width", window.innerWidth - margin.left - margin.right);
+    svg.style("height", window.innerHeight - margin.top - margin.bottom);
 
     const container = d3.select('#chart-ui-container');
-    container.style("width", window.innerWidth - margin.left + "px");
-    container.style("height", window.innerHeight - margin.top + "px");
+    container.style("width", window.innerWidth - margin.left - margin.right + "px");
+    container.style("height", window.innerHeight - margin.top - margin.bottom + "px");
 
     isFullscreen.value = true;
 }
@@ -403,7 +404,7 @@ const renderSensorThingsChart = (data) => {
 <style scoped>
 .timeSelector {
     position: absolute;
-    top: 15px;
+    top: 7px;
     left: 5px;
     z-index: 1000; 
     background-color: transparent;
@@ -417,10 +418,7 @@ const renderSensorThingsChart = (data) => {
 }
 
 .chart-ui {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    bottom: 100px;
+    position: relative;
     z-index: 10;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 8px;
@@ -431,9 +429,9 @@ const renderSensorThingsChart = (data) => {
 
 #chart-ui-container {
     position: absolute;
-    top: 15px;
-    right: 50px;
-    width: 550px;
+    top: 60px;
+    right: 65px;
+    width: 600px;
     height: 370px;
     z-index: 1000;
 }
