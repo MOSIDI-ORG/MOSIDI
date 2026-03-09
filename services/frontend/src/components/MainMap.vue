@@ -42,7 +42,9 @@ import AppHeader from "@/components/AppHeader.vue";
 import DatasetSearchUI from "@/components/DatasetSearchUI.vue";
 
 import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo,/*addWMSLayerToMap, toggleWMSLayerVisibility*/ 
-addSensorThingsPopupToMap} from '../utils/mapUtils';
+addZoomOnClusterLayer,
+addOnClickSensorThingsLayer,
+addCursorStyleHovering} from '../utils/mapUtils';
 import { useChartStore } from '../stores/chart'
 //import { useCartographyStore } from '../stores/cartography'
 
@@ -62,7 +64,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useIndicatorStore } from '@/stores/indicator'
 import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
 import {getFeatureInstanceFromDB} from "../services/backend.calls";
-import { getThings, getObservations } from '@/services/frost.service';
+import { getThings } from '@/services/frost.service';
 
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
@@ -209,12 +211,7 @@ const addLayerToMap = (layerSpecification)=>{
     
   });
 
-  map.on('mouseenter', layerSpecification.id, function() {
-    map.getCanvas().style.cursor = 'pointer';
-  });
-  map.on('mouseleave', layerSpecification.id, function() {
-    map.getCanvas().style.cursor = '';
-  });
+  addCursorStyleHovering(map, layerSpecification.id);
 
   map.on('mousemove', 'kommunales_gebiet_dashboard', (e) =>{
     addHoverPopup(map, e)
@@ -485,77 +482,12 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
     }
   });
 
-  // Mouse styling when hovering
-  map.on('mouseenter', layerName + '-unclustered', function() {
-    map.getCanvas().style.cursor = 'pointer';
-  });
+  addCursorStyleHovering(map, layerName + '-unclustered');
+  addCursorStyleHovering(map, layerName + '-clusters');
 
-  map.on('mouseleave', layerName + '-unclustered', function() {
-    map.getCanvas().style.cursor = '';
-  });
+  addZoomOnClusterLayer(map, layerName + "-clusters", layerName);
 
-  map.on('mouseenter', layerName + '-clusters', function() {
-    map.getCanvas().style.cursor = 'pointer';
-  });
-
-  map.on('mouseleave', layerName + '-clusters', function() {
-    map.getCanvas().style.cursor = '';
-  });
-
-  // zoom on a cluster on click
-  map.on('click', layerName + '-clusters', async (e) => {
-    const features = map.queryRenderedFeatures(e.point, {
-        layers: [layerName + '-clusters']
-    });
-    const clusterId = features[0].properties.cluster_id;
-    const source = await map.getSource(layerName);
-    source.getClusterExpansionZoom(clusterId, (err, zoom) => {
-      if (err || zoom === undefined) {
-        console.error('Zoom error', err, zoom);
-        return;
-      }
-
-      map.easeTo({
-        center: features[0].geometry.coordinates,
-        zoom: zoom
-      });
-    });
-  });
-
-  // Display Popup and show Chart on click on unclustered layer
-  map.on('click', layerName + '-unclustered', async (e) => {
-    const coordinates = e.features[0].geometry.coordinates.slice();
-
-    // Use Bracket Notation to access the Id
-    const datastreamId = e.features[0].properties['Datastreams/0/@iot.id'];
-    const datastreamName = e.features[0].properties['Datastreams/0/name'];
-    const unitOfMeasurement = e.features[0].properties['Datastreams/0/unitOfMeasurement/symbol'];
-    const description = e.features[0].properties['description'];
-    const lastResult = e.features[0].properties['Datastreams/0/Observations/0/result'];
-    const lastResultTimestamp = e.features[0].properties['Datastreams/0/Observations/0/phenomenonTime'];
-    const locationName = e.features[0].properties.name;
-
-    const observations = await getObservations(datastreamId);
-
-    selectedFeature.value = {
-      featureName: locationName,
-      indicator: datastreamName,
-      layerId: 'SensorThings',
-      datastreamId: datastreamId,
-      observations: observations,
-      unitOfMeasurement: unitOfMeasurement
-    }
-
-    const popupData = {
-      Ort: locationName, 
-      Datastream: datastreamName, 
-      Beschreibung: description,
-      'Letzte Messung': lastResult + unitOfMeasurement, 
-      'Gemessen am': lastResultTimestamp
-    };
-    
-    addSensorThingsPopupToMap(map, coordinates, popupData);
-  });
+  addOnClickSensorThingsLayer(map, layerName + '-unclustered', selectedFeature);
 }
 
 const removeSensorThingsLayerFromMap = (layerName) => {

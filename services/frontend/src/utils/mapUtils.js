@@ -1,6 +1,6 @@
 import { Popup } from 'maplibre-gl';
 import { useChartStore } from '../stores/chart'
-
+import { getObservations } from '@/services/frost.service';
 
 import { createHTMLAttributeTable } from './createHTMLAttributeTable';
 let popup = null
@@ -222,4 +222,88 @@ export function getSelectedFeatureInfo(e, layerSpecification, indicatorArray) {
     year: itemYear,
     value: iteValue
   };
+}
+
+/**
+ * Adds zoom event to a clustering layer
+ * @param {*} map mapLibre instance
+ * @param {*} layerName name of the (clustering) layer to zoom in on
+ * @param {*} sourceName name of the source the layer is assigned to
+ */
+export function addZoomOnClusterLayer(map, layerName, sourceName) {
+  map.on('click', layerName, async (e) => {
+    const features = map.queryRenderedFeatures(e.point, {
+        layers: [layerName]
+    });
+    const clusterId = features[0].properties.cluster_id;
+    const source = await map.getSource(sourceName);
+    source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+      if (err || zoom === undefined) {
+        console.error('Zoom error', err, zoom);
+        return;
+      }
+
+      map.easeTo({
+        center: features[0].geometry.coordinates,
+        zoom: zoom
+      });
+    });
+  });
+}
+
+/**
+ * Adds on click event to layer to show popup info and trigger display of chart
+ * @param {*} map mapLibre instance
+ * @param {*} layerName name of the layer to add onClick event to
+ * @param {*} selectedFeature reference to selectedFeature from chartStore (to trigger display of chart)
+ */
+export function addOnClickSensorThingsLayer(map, layerName, selectedFeature) {
+  map.on('click', layerName, async (e) => {
+    const coordinates = e.features[0].geometry.coordinates.slice();
+
+    // Use Bracket Notation to access the Id
+    const datastreamId = e.features[0].properties['Datastreams/0/@iot.id'];
+    const datastreamName = e.features[0].properties['Datastreams/0/name'];
+    const unitOfMeasurement = e.features[0].properties['Datastreams/0/unitOfMeasurement/symbol'];
+    const description = e.features[0].properties['description'];
+    const lastResult = e.features[0].properties['Datastreams/0/Observations/0/result'];
+    const lastResultTimestamp = e.features[0].properties['Datastreams/0/Observations/0/phenomenonTime'];
+    const locationName = e.features[0].properties.name;
+
+    const observations = await getObservations(datastreamId);
+
+    selectedFeature.value = {
+      featureName: locationName,
+      indicator: datastreamName,
+      layerId: 'SensorThings',
+      datastreamId: datastreamId,
+      observations: observations,
+      unitOfMeasurement: unitOfMeasurement
+    }
+
+    const popupData = {
+      Ort: locationName, 
+      Datastream: datastreamName, 
+      Beschreibung: description,
+      'Letzte Messung': lastResult + unitOfMeasurement, 
+      'Gemessen am': lastResultTimestamp
+    };
+    
+    addSensorThingsPopupToMap(map, coordinates, popupData);
+  });
+}
+
+/**
+ * Adds cursor style for mouse enter and leave event when hovering over a layer on a map
+ * @param {*} map mapLibre instance
+ * @param {*} layerName name of the layer to add the events to
+ */
+export function addCursorStyleHovering(map, layerName) {
+  map.on('mouseenter', layerName, function() {
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', layerName, function() {
+    map.getCanvas().style.cursor = '';
+  });
 }
