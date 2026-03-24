@@ -129,7 +129,7 @@
                             </v-list-item>
                             <v-list-item
                                 v-show="route?.query?.mode === 'edit'"
-                                @click="removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
+                                @click="addedLayer.dct_type==='raster'? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -414,6 +414,7 @@ const removeLayer = (layerName, layerType)=>{
         indicatorStore.removeIndicator(layerName)
     }
     else if(layerType=='raster'){
+        
         emit("removeLayerFromMap",  {layerId:  layerName, sourceId: layerName})
         mapLegendStore.removeWMSLegendItem({
             legend_url: addedDatasetsStore.addedLayers[layerName].legend_url,
