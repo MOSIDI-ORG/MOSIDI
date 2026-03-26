@@ -130,11 +130,11 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .attr('stroke', 'lightgray')
         .attr('stroke-opacity', 0.5);
 
-    // X Axis
+    // X Axis (use TickFormat is Chart is time scaled)
     g.append('g')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x)
-            .tickFormat(d3.timeFormat(selectedTimeInterval.value.format)));
+        .call(isTimeScaled? d3.axisBottom(x).tickFormat(d3.timeFormat(selectedTimeInterval.value.format)) : d3.axisBottom(x));
+    
     g.append('text')
         .attr('x', width / 2)
         .attr('y', height + margin.bottom - 10)
