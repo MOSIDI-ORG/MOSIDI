@@ -130,7 +130,7 @@
                             <!-- TODO: Fix Granularity for SensorThings-->
                             <v-list-item
                                 v-show="route?.query?.mode === 'edit'"
-                                @click="removeLayer(addedLayer.dcatde_politicalgeocodingleveluri != undefined ? addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri : addedLayer.dct_title, addedLayer.dct_type)"
+                                @click="(addedLayer.dct_type==='raster' || addedLayer.dct_type === DatasetTypes.SensorThings) ? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 

@@ -1,4 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
+const config = require('./src/config.json')
+const path = require('path')
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: "/app/",
@@ -28,7 +30,8 @@ module.exports = defineConfig({
       filename: 'index.html',
       // when using title option,
       // template title tag needs to be <title><%= htmlWebpackPlugin.options.title %></title>
-      title: 'Innowest',
+      title: config.title,
+      favicon: path.resolve(__dirname, 'public', config.favicon),
       // chunks to include on this page, by default includes
       // extracted common chunks and vendor chunks.
       chunks: ['chunk-vendors', 'chunk-common', 'index']
