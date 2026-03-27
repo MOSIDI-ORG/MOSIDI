@@ -6,7 +6,7 @@ export const useDatasetSearchStore = defineStore ({
         filterInitiated: false, // Boolean indicating if FilterUI is active or not
         dataUiInitiated: false,
         selectedDataset: null,
-        tableMetadata: [],
+        tableMetadata: new Array({}), // Init array with one empty object
         activatedDatasetSearch: 'indicator',
         selectedDatasetType: null
     }),
@@ -26,9 +26,6 @@ export const useDatasetSearchStore = defineStore ({
         },
         setSelecteddatasetType(data){
             this.selectedDatasetType=data.selectedDatasetType
-        },
-        setTableMetadata(payload){
-            this.tableMetadata=payload
         },
         addTableMetadata(payload) {
             this.tableMetadata.push(payload);
