@@ -48,7 +48,7 @@
                     </v-text-field>
                             
                 </div>
-                <div class="mb-4 ml-2 mr-2"  >
+                <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
                     <v-row no-gutters>
                         <v-col >
                             <v-select
@@ -147,7 +147,7 @@
             width="371"
             >
 
-            <div style="height: 81%;" class="ml-1 mr-1">
+            <div :style="{ height: showFormula() ? '81%' : '100%'}" class="ml-1 mr-1">
                 <span style="font-size: 1rem; font-weight: 500;" class="ml-2">
                 {{ filteredItems?.length + ' ' + $t('dataset-filter.results') }}
                 </span>
@@ -204,9 +204,10 @@
                 </v-virtual-scroll>
             </div>
 
-            <v-divider></v-divider>
+            <div v-show="showFormula()">
+                <v-divider></v-divider>
 
-            <v-list-item
+                <v-list-item
                 :subtitle="$t('dataset-filter.custom.subtitle')"
                 :title="$t('dataset-filter.custom.title')"
             >
@@ -219,6 +220,8 @@
                 </v-avatar>
                 </template>
             </v-list-item>
+            </div>
+            
             </v-card>
         
     </div>
@@ -383,18 +386,21 @@ let isLoading = ref(true)
 //let availableYearsForIndicatorFilter =ref(null)
 
 
-onMounted(async()=>{
-    //tableMetadataRequest()
-    //getExternalWMSLayers()
+onMounted(async() => {
     const deepLink = useIndicatorDeepLink(addLayerToMap)
 
     await Promise.all([
         tableMetadataRequest(),
         getExternalWMSLayers(),
         observedPropertiesRequest()
-    ])
-    await nextTick()
-    deepLink.attach()
+    ]);
+    
+    tableMetadata.value.sort((a, b) => {
+        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+    });
+
+    await nextTick();
+    deepLink.attach();
     isLoading.value = false 
 })
 
@@ -485,14 +491,10 @@ const toggleFilterUI = ()=>{
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
   
-  tableMetadata.value = response
-  tableMetadata.value = [...tableMetadata.value, ...externalLayers]
+  tableMetadata.value.push(...response);
+  tableMetadata.value.push(...externalLayers);
 
-  tableMetadata.value.sort((a, b) =>
-        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-    );
-  datasetSearchStore.addTableMetadata(response)
-  // --- filter based on activatedDatasetSearch ---
+  datasetSearchStore.addTableMetadata(response);
 }
 
 const observedPropertiesRequest = async () => {
@@ -501,7 +503,7 @@ const observedPropertiesRequest = async () => {
     response.forEach(item => {
         observedProperties.push(convertToMetadata(item))
     })
-    tableMetadata.value = [...tableMetadata.value, ...observedProperties]
+    tableMetadata.value.push(...observedProperties);
     datasetSearchStore.addTableMetadata(response);
 }
 
@@ -1014,6 +1016,10 @@ const getExternalWMSLayers = async ()=>{
 const addTernaryLayerToMap = (data)=>{
     emit("addTernaryLayerToMap", data)
 }
+
+const showFormula = () => {
+    return activatedDatasetSearch != DatasetTypes.SensorThings;
+}
 </script>
 
 <style scoped>
@@ -1073,6 +1079,7 @@ const addTernaryLayerToMap = (data)=>{
     background: black; 
     border-radius: 8px;
     position: absolute;
+    min-height: 21%;
     top: 62px;
     left: 381px;
     z-index: 10;
