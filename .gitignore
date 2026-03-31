@@ -4,3 +4,7 @@ pg_tileserv.env
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store.DS_Store.DS_Store
+services/frontend/.DS_Store
+services/frontend/dist
+services/frontend/.DS_Store
+services/.DS_Store

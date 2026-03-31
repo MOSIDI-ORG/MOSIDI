@@ -1,106 +1,192 @@
 <template>
     <div style="overflow-x: hidden;" >
-        <v-row dense  v-for="(item, i) in addedIndicator" :key="i">
-            <v-col
-                cols="12"
-                sm="6"
-               
-            >
-                <v-autocomplete
-                    :items="indicatorNames"
-                    v-model="item.selectedIndicator"
-                    item-value="indikator"
-                    item-title="indikator"
+        <v-card density="compact" width="371" style="background-color: black; color: white;">
+            <div style="padding: 8px;">
+                <v-text-field
+                    :label="$t('dataset-filter.search')"
+                    prepend-inner-icon="mdi-magnify"
+                    class="expanding-search"
+                    filled
+                    outlined
                     density="compact"
-                    label="Indikator auswählen"
-                    variant="solo"
-                    :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                    style="margin-left: 15px; margin-top:15px"
+                    clearable
+                    dense
+                    single-line
+                    hide-details
+                    v-model="layerSearchText"
                 >
-                <template v-slot:item="{ props, item }">
+                </v-text-field>
+                            
+            </div>
+            <div class="mb-4 ml-2 mr-2"  >
+                <v-row no-gutters>
+                    <v-col >
+                        <v-select
+                            :items="datasetTypes"
+                            :item-title="'alias'"
+                            :item-value="'name'"
+                            :label="$t('dataset-filter.filter-label.type')"
+                            dense
+                            outlined
+                            density="compact"
+                            single-line
+                            hide-details
+                            rounded
+                            solo                
+                            v-model="selectedDatasetType"
+                        ></v-select>
+                    </v-col>
+                    <v-col>
+                        <v-select
+                            :items=dataSources
+                            item-value="value"
+                            item-title="label"
+                            :label="$t('dataset-filter.filter-label.source')"
+                            dense
+                            outlined
+                            single-line
+                            density="compact"
+                            hide-details
+                            rounded
+                            solo 
+                            v-model="selectedDatasetSource"
+                        >
+                            
+                        </v-select>
+                    </v-col>
+                    
+                    
+                </v-row>
+                <v-row no-gutters>
+                    <v-col>
+                        <v-select
+                            :items=geometryTypes
+                            item-value="value"
+                            item-title="label"
+                            :label="$t('dataset-filter.filter-label.geometry')"
+                            dense
+                            outlined
+                            single-line
+                            hide-details
+                            rounded
+                                density="compact"
+                            solo 
+                            v-model="selectedGeometryTypee"
+                        >
+                        
+                    </v-select>
+                    </v-col>
+                    <v-col>
+                        <v-select
+                            :items=availableYearsForIndicatorFilter
+                            item-value="value"
+                            item-title="label"
+                            :label="$t('dataset-filter.filter-label.time')"
+                            dense
+                            outlined
+                            single-line
+                            hide-details
+                            rounded
+                                density="compact"
+                            solo 
+                            v-model="selectedYearIndicatorFilter"
+                        >
+                            
+                        </v-select>
+                    </v-col>
+                </v-row>
+            </div>
 
+        </v-card>
+       
+
+        <div style="background-color:transparent; overflow-y: scroll; max-height: 310px;">
+            <v-list lines="two" style="background-color:transparent; height: 81%;" class="ml-1 mr-1">   
+                <span style="font-size: 1rem; font-weight: 500;" class="ml-2">{{filteredItems?.length + ' '+  $t('dataset-filter.results')}}</span>        
                 <v-list-item
-                    @click=handleItemClick(item)
-                    v-bind="props"
-                    :title= "item.raw.indikator"
-                    prepend-avatar= 'polygon.png'
+                    v-for="(metadata, index) in filteredItems"
+                    :key="index"
+                    style="border-radius: 5px;"
+                    @click=handleItemClick(metadata)
+                    @mouseover="hoveredItem = index"
+                    @mouseleave="hoveredItem = null"
                 >
-                    <v-list-item-subtitle >
-                        {{ item.raw.source }} -  {{ item.raw.granularity }}
-                    </v-list-item-subtitle>
+                    <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
+                    <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
+                   <template v-slot:prepend>
+                        <v-avatar>
+                            <v-img 
+                                :src="getIcon(metadata.dct_title, index, metadata.geometry_type)"
+                                max-height="40"
+                                max-width="40"
+                                style="cursor: pointer;"
+                                
+                            ></v-img>
+                        </v-avatar>
+                    </template>
+                    <template v-slot:append>
+                        <v-col
+                        style="float: right;"
+                        >
+                    
+                        <div 
+                            @click.stop 
+                            @mousedown.stop 
+                            @mouseup.stop
+                            v-if="addedIndicator!==null"
+                            >
+                           
+                           
+                        <v-select
+                            v-show="Object.values(addedIndicator).some(innerItem => innerItem.selectedIndicator === metadata.dct_title)"
+                            :items="metadata.availailableYears"
+                            v-model="metadata.selectedYear"
+                            density="compact"
+                            :label="$t('custom-indicator.select-labels.year')"
+                            variant="outlined"
+                            hide-details
+                            :menu-props="{ 'max-height': '200', 'max-width': '300'}"
+                           
+                            
+                        >
+                        </v-select>
+                        </div>
+                        </v-col>
+                    </template>
+                    
                 </v-list-item>
-                </template>
                 
-                </v-autocomplete>
-            </v-col>
-            <v-col
-                cols="12"
-                sm="3"
-            >
-                <v-select
-                    v-show="item.indicatorArray"
-                    :items="item.availailableYears"
-                    v-model="item.selectedYear"
-                    density="compact"
-                    label="Jahr auswählen"
-                    variant="solo"
-                    :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                    style=" margin-left: 0px; margin-top:15px; "
-                >
-                </v-select>
-            </v-col>
-            <v-col
-                cols="12"
-                sm="3"
-            >
-                <v-select
-                    v-show="item.indicatorArray"
-                    :items="['+', '-', '/', '*']"
-                    v-model="item.selectedOperator"
-                    density="compact"
-                    label="operation"
-                    variant="solo"
-                    :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                    style=" margin-left: 0px; margin-top:15px;margin-right: 15px;"
-                >
-                </v-select>
-            </v-col>
-        </v-row>
         
-        <div 
-            style="float:left; margin-left: 15px; margin-bottom:15px" 
-            v-if="addedIndicator[`indicator${Object.keys(addedIndicator)?.length-1}`]?.selectedIndicator!==null"
-        >
+            </v-list>
+            
            
-
-            <v-icon
-                @click="addIndicatorRow()"
-                color="green"
-            >
-                mdi-plus-circle-outline
-            </v-icon>
-            <span class="ml-2">Indikator entfernen</span>
-
+           
+            
+                
 
         </div>
+       <v-divider class=" mt-1 mb-0"></v-divider>
         <v-container fluid >
             <v-textarea
-            style="width: 100%;"
-            label="Formula"
-            :model-value="formula? formula: ''"
-            rows="2"
-            id="formulatext"
-            ></v-textarea>
-            
+                style="width: 100%; margin-top: 0;"
+                :label="$t('custom-indicator.formula')"
+                :model-value="formula? formula: ''"
+                rows="2"
+                id="formulatext"
+                hide-details
+            >
+           
+        </v-textarea>
         </v-container>
-        <div style="float:left; margin-left: 15px; margin-bottom:15px">
+        <div style="float:left; margin-left: 15px; margin-bottom:10px; margin-top:10px">
             <v-btn 
-                :disabled= "addedIndicator.indicator0.indicatorArray!== null ? false: true" 
+                :disabled= "addedIndicator?.['indicator0'] ? false: true" 
                 size="small" 
                 color="green" 
                 @click="calculate()"
+                prepend-icon="mdi-calculator-variant"
             >
-                calculate
+            {{$t('custom-indicator.calculate')}}
             </v-btn>
         </div>
         
@@ -111,18 +197,22 @@
 import { defineProps, ref, computed, onMounted, defineEmits } from 'vue'
 import {getIndicatorData, getGeojsonDataFromDB, classification} from "../services/backend.calls";
 import { useAlertStore } from '@/stores/alert'
-import { hexToRgb } from '@/utils/generateColors';
-import { useMapLegendStore } from '@/stores/mapLegend'
+import { useDatasetSearchStore } from '../stores/datasetSearch'
+import { storeToRefs } from 'pinia'
 
 const alertStore = useAlertStore()
-const mapLegendStore = useMapLegendStore();
-const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer"]);
+let {  activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
+
+const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer", "customMapStylization", "addCustomLayer"]);
 
 let kommunales_gebiet_geojson = ref(null)
-let hexagonLayerAdded = ref(false)
 let classification_result = ref(null)
-
-
+let hoveredItem = ref(null)
+let layerSearchText= ref("")
+let selectedGeometryTypee = ref(null)
+let selectedDatasetSource = ref(null)
+let selectedYearIndicatorFilter = ref(null)
+let selectedDatasetType = ref(null)
 
 onMounted(()=>{
    
@@ -130,7 +220,107 @@ onMounted(()=>{
 
 })
     
+const filteredItems = computed(() => {
+    return props.indicatorNames?.filter(item => {
+        const matchesSearchText = layerSearchText.value
+            ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
+            : true;
+        const matchesDatasetType = selectedDatasetType.value && selectedDatasetType.value !== 'all'
+            ? item.dct_type === selectedDatasetType.value
+            : true;
+        const matchesDatasetSource = selectedDatasetSource.value && selectedDatasetSource.value !== 'All'
+            ? item.dct_catalog_publisher === selectedDatasetSource.value
+            : true;
+        const matchesGeometryType = selectedGeometryTypee.value && selectedGeometryTypee.value !== 'All'
+            ? item.geometry_type === selectedGeometryTypee.value
+            : true;
 
+        const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
+            ? new Date(item.dct_temporal_enddate).getFullYear() >= parseInt(selectedYearIndicatorFilter.value)
+            : true;
+       
+        
+        return matchesSearchText && matchesDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
+    });
+});
+const datasetTypes = computed(() => {
+  if (activatedDatasetSearch.value === 'indicator') {
+    return [{ alias: 'Indicator', name: 'indikator' }];
+  } else if (activatedDatasetSearch.value === 'geodata') {
+    return [{ alias: 'WMS', name: 'raster' }];
+  } else {
+    return [
+      { alias: 'Indicator', name: 'indikator' },
+      { alias: 'WMS', name: 'raster' },
+      { alias: 'All', name: 'all' },
+    ];
+  }
+});
+const filteredMeta = computed(() => {
+  if (!props.indicatorNames) return []
+
+  const typeFilter = activatedDatasetSearch.value?.toLowerCase()
+
+  return props.indicatorNames?.filter(item => {
+    if (!item.dct_type) return false
+    const itemType = item.dct_type.trim().toLowerCase()
+
+    if (typeFilter === 'indicator') return itemType === 'indikator'
+    if (typeFilter === 'geodata') return itemType === 'raster'
+    return true
+  })
+})
+// reactive dataSources with counts
+const dataSources = computed(() => {
+  const counts = filteredMeta.value.reduce((acc, item) => {
+    const key = item.dct_catalog_publisher
+    acc[key] = (acc[key] || 0) + 1
+    return acc
+  }, {})
+
+  return [
+    ...Object.entries(counts).map(([value, count]) => ({
+      value,
+      count,
+      label: `${value} (${count})`
+    }))
+    .sort((a, b) =>
+      a.value.localeCompare(b.value, 'de', { sensitivity: 'base' }) // handles German chars
+    ),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
+// reactive geometryTypes with counts
+const geometryTypes = computed(() => {
+  const counts = filteredMeta.value.reduce((acc, item) => {
+    const key = item.geometry_type
+    acc[key] = (acc[key] || 0) + 1
+    return acc
+  }, {})
+
+  return [
+    ...Object.entries(counts).map(([value, count]) => ({
+      value,
+      count,
+      label: `${value} (${count})`
+    })),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
+
+// reactive availableYears with counts
+const availableYearsForIndicatorFilter = computed(() => {
+  const years = filteredMeta.value.map(item => new Date(item.dct_temporal_enddate).getFullYear())
+  const uniqueYears = Array.from(new Set(years)).sort((a,b)=>a-b)
+
+  return [
+    ...uniqueYears.map(year => {
+      const count = years.filter(y => y >= year).length
+      return { value: year, count, label: `${year} (${count})` }
+    }),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
 
 const getKommunalesGebietCentroidGeojson = async () => {
     if(kommunales_gebiet_geojson.value == null ){
@@ -139,36 +329,41 @@ const getKommunalesGebietCentroidGeojson = async () => {
     }
     
 }
-const props = defineProps(['indicatorNames', 'selectedColorPalette'])
+const props = defineProps(['indicatorNames', 'selectedColorPalette', "isMinimized"])
 
 
-let addedIndicator = ref({
-    indicator0: {
-        selectedIndicator: null,
-        indicatorArray: null,
-        availailableYears: null,
-        selectedYear: null,
-        selectedOperator: null
-    }
-})
+let addedIndicator = ref({})
 
 
 const handleItemClick = async (item) => {
-    item.selectedIndicator = item.raw.indikator
-    const indocatorData =  await getIndicatorData(item.raw.indikator)
-    item.indicatorArray = indocatorData.indicator
-    item.availailableYears = indocatorData.availabeYears[0][0]
-    //[...new Set(item.indicatorArray[0][0].map(item => item["zeitbezug"]))].sort();
-    item.selectedYear = item.availailableYears[item.availailableYears.length - 1];
-    //item.selectedOperator = '+' //default operator
-    const Index = Object.keys(addedIndicator.value).length;
-    addedIndicator.value[`indicator${Index-1}`] = {
-        selectedIndicator: item.selectedIndicator,
-        indicatorArray: item.indicatorArray,
-        availailableYears: item.availailableYears,
-        selectedYear: item.selectedYear,
-        selectedOperator: null
-    };
+    const existingKey = Object.keys(addedIndicator.value).find(
+        key => addedIndicator.value[key].selectedIndicator === item.dct_title
+    );
+     const alreadyAdded = Object.values(addedIndicator.value).some(
+        innerItem => innerItem.selectedIndicator === item.dct_title
+    );
+    
+    if (alreadyAdded==true ) {
+      delete addedIndicator.value[existingKey];
+    }
+    
+    else {
+        addIndicatorRow()
+        item.selectedIndicator = item.dct_title
+        const indocatorData =  await getIndicatorData(item.dct_title, item.dcatde_politicalgeocodingleveluri)
+        item.indicatorArray = indocatorData.indicator
+        item.availailableYears = indocatorData.availabeYears[0][0]
+        item.selectedYear = item.availailableYears[item.availailableYears.length - 1];
+        const Index = Object.keys(addedIndicator.value).length;
+        addedIndicator.value[`indicator${Index-1}`] = {
+            selectedIndicator: item.selectedIndicator,
+            indicatorArray: item.indicatorArray,
+            availailableYears: item.availailableYears,
+            selectedYear: item.selectedYear,
+            selectedOperator: null
+        };
+    }
+    
 }
 
 const addIndicatorRow = () => {
@@ -187,7 +382,6 @@ const addIndicatorRow = () => {
 
 const calculate = () => {
     
-   
     let filteredarrayByYear = []
     for (let i = 0; i < Object.keys(addedIndicator.value).length; i++){
         let obj = {};
@@ -196,7 +390,7 @@ const calculate = () => {
     }
 
     for (let i=0; i<Object.keys(addedIndicator.value).length; i++){
-        addedIndicator.value[`indicator${i}`].indicatorArray.forEach(element => {
+        addedIndicator.value[`indicator${i}`]?.indicatorArray?.forEach(element => {
             element.forEach(array => {
                 filteredarrayByYear[i][`indicator${i}`].push(
                     ...array.filter(
@@ -213,7 +407,6 @@ const calculate = () => {
         return kennziffer.trim(); // Ensure consistent formatting
     }
 
-    // Create a map to store aggregated data
     const aggregatedMap = new Map();
 
     // Process each indicator array
@@ -310,6 +503,7 @@ const formula = computed(() => {
     const indicator = addedIndicator.value[key];
     if (indicator.selectedIndicator) {
       text += '( '+indicator.selectedIndicator+' )' + ( ` ${indicator.selectedOperator?indicator.selectedOperator:''} `) ;
+      console.log(text, "text")
     }
   }
   return text;
@@ -328,8 +522,9 @@ const classifyAndStylize = async (filteredArray) => {
     const AttributeArray = filteredArray.map(item => item.calculatedWert);
 
     const response =  await classification(AttributeArray, 'NaturalBreaks')
-    classification_result.value = response
-    const stylization = (x) => {
+    classification_result.value = response.intervals_5_classes
+    console.log(props)
+    /*const stylization = (x) => {
         if (x <= classification_result.value.intervals[0]) {
             return hexToRgb(props.selectedColorPalette[0])
         } else if (x <= classification_result.value.intervals[1]) {
@@ -344,7 +539,7 @@ const classifyAndStylize = async (filteredArray) => {
         else {
             console.log(x)
         }
-    }
+    }*/
     
     if(classification_result.value.warnings){
         alertStore.setAlert({
@@ -352,18 +547,46 @@ const classifyAndStylize = async (filteredArray) => {
             timeout: 2000
         })
     }
-    if (hexagonLayerAdded.value==false){
-        emit("addDeckglLayer", kommunales_gebiet_geojson.value,  stylization);
-        hexagonLayerAdded.value =true
-    }
-    else {
-        emit("updateDeckglLayer", kommunales_gebiet_geojson.value, stylization)
-    }
-    mapLegend()
+    
+    //mapLegend()
+    emit("addCustomLayer", filteredArray, classification_result.value, ref(document.getElementById("formulatext").value))
     
 }
+const getIcon = (layerName, index, geomType)=> {
+    const alreadyAdded = Object.values(addedIndicator.value).some(
+    item => item.selectedIndicator === layerName
+  );
 
-const mapLegend = () => {
+    if (alreadyAdded && hoveredItem.value === index) {
+        return 'icons/minus.svg';
+    }
+
+    if (alreadyAdded) {
+        return 'icons/check.svg';
+    }
+
+    if (hoveredItem.value === index) {
+        return 'icons/plus.svg';
+    }
+   
+    else {
+        if (geomType=='Point'){
+            return 'icons/point-blue.svg';
+        }
+        else if (geomType == "MultiLineString" || geomType == "LineString" || geomType == "Line"){
+            return 'icons/line-blue.svg';
+        }
+        else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
+            return 'icons/polygon-blue.svg';
+        }
+      else {
+            return 'icons/raster.svg';
+        }
+    }
+    
+  }
+
+/*const mapLegend = () => {
     const classIntervalsAndColorHexagon = []
     for (let i = 0; i < classification_result.value.intervals.length; i++) {
         const intervalName = `interval${i + 1}`;
@@ -387,7 +610,7 @@ const mapLegend = () => {
        const colors = props.selectedColorPalette
        return colors[index % colors.length];
     }
-}
+}*/
 
 </script>
 

@@ -1,0 +1,28 @@
+---
+import Logo from "../../components/Shapes/Logo.astro";
+---
+
+<div class="flex flex-col">
+	<slot name="funding" />
+	<div
+		class="flex h-[600px] flex-col justify-between bg-black p-12 text-white"
+	>
+		<slot name="navigationRow" />
+		<div class="default-grid">
+			<div
+				class="col-span-full flex flex-col justify-between gap-6 lg:col-start-9 lg:col-end-13 lg:items-end"
+			>
+				<a class="copy-800 inline-flex underline" href="#top"
+					>Zurück nach oben</a
+				>
+				<div
+					class="flex h-full flex-col gap-4 lg:items-end lg:justify-end"
+				>
+					<a href="https://www.fh-potsdam.de/impressum" class="button-default">Impressum</a>
+					<a href="https://www.fh-potsdam.de/datenschutz" class="button-default">Datenschutz</a>
+				</div>
+			</div>
+			<Logo class="col-span-full h-fit w-full lg:col-span-8 lg:row-[1]" />
+		</div>
+	</div>
+</div>

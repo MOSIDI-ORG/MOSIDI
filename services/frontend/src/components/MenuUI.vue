@@ -23,14 +23,14 @@
         </template>
     </v-tooltip>
 
-    <v-tooltip text="INKAR" location="top">
+    <v-tooltip text="Indikator" location="top">
         <template v-slot:activator="{ props }">
             <v-btn 
                 v-bind="props"
                 class="ml-2"
                 v-ripple="{ class: 'primary--text' }"
-                @click="setActiveButton('INKAR')"
-                :style="{ color: activeMenu === 'INKAR' ? 'blue' : '' }"
+                @click="setActiveButton('Indikator')"
+                :style="{ color: activeMenu === 'Indikator' ? 'blue' : '' }"
             >
                 <v-icon size="small">
                     <font-awesome-icon :icon="['fas', 'chart-column']" />

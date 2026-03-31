@@ -10,7 +10,6 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/work
       - brandenburg_db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
@@ -18,7 +17,6 @@ services:
 
   backend:
     build: ./services/backend
-    container_name: backend
     networks: 
       default:
         aliases:
@@ -35,8 +33,15 @@ services:
       - ./services/backend:/app
       - forest_fire_data:/app/data/forest_fire_predictor
       - demographic_data:/app/data/demographic_data
+      - ./services/backend/src/db_table_schema:/app/src/db_table_schema
+      - ./services/backend/src/geobasis_sources:/app/src/geobasis_sources
     command: >
       /bin/sh -c "
+      python -m src.db_table_schema.reflect_schema && 
+      python -m src.dwd_sources.get_available_data && 
+      python -m src.geobasis_sources.get_available_data && 
+      python -m src.db_table_metadata.script && 
+      python -m src.ternary_function.script && 
       uvicorn src.main:app --reload --host 0.0.0.0 --port 5000"
     depends_on:
       - brandenburg_db
@@ -45,7 +50,6 @@ services:
     build: 
       context: ./services/frontend
       dockerfile: Dockerfile
-    container_name: app
     networks: 
       default:
         aliases:
@@ -56,7 +60,6 @@ services:
     restart: unless-stopped
   
   tileserv:
-    container_name: tileserv
     image: pramsey/pg_tileserv:20231005
     #image: pramsey/pg_tileserv:latest
     env_file:
@@ -77,7 +80,6 @@ services:
       default:
         aliases:
           - geoserver
-    container_name: geoserver
     restart: unless-stopped
     volumes:
       - geoserver_data:/opt/geoserver/data_dir
@@ -85,6 +87,8 @@ services:
       GEOSERVER_DATA_DIR: /opt/geoserver/data_dir
       GEOSERVER_ADMIN_USER: ${GEOSERVER_ADMIN}
       GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_PASSWORD}
+      GEOSERVER_CSRF_DISABLE: "false"
+      GEOSERVER_CSRF_WHITELIST: "tv4-geo.innowest-brandenburg.de,tv4-geo.innowest-brandenburg.de:8080"
     env_file:
       - .env
     depends_on:
@@ -92,7 +96,6 @@ services:
     
   masterportal:
     image: nginx
-    container_name: masterportal
     volumes:
       - ./services/masterportal:/usr/share/nginx/html/masterportal
     networks: 
@@ -100,13 +103,15 @@ services:
         aliases:
           - masterportal
     restart: unless-stopped
+  
+
 
   nginx:
     image: nginx:alpine
-    container_name: nginx
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /etc/nginx/.htpasswd:/etc/nginx/.htpasswd:ro
     ports:
       - "80:80"
       - "443:443"
@@ -116,6 +121,23 @@ services:
       - masterportal
       - tileserv
       - geoserver
+    restart: unless-stopped
+  
+  FROST-Server:
+    image: fraunhoferiosb/frost-server:latest
+    environment:
+      - serviceRootUrl=http:/${BASE_URL}/FROST-Server
+      - plugins_multiDatastream.enable=false
+      - http_cors_enable=true
+      - http_cors_allowed_origins=*
+      - persistence_db_driver=org.postgresql.Driver
+      - persistence_db_url=jdbc:postgresql://brandenburg_db:5432/${POSTGRES_DB}
+      - persistence_db_username=${POSTGRES_USER}
+      - persistence_db_password=${POSTGRES_PASSWORD}
+      - persistence_autoUpdateDatabase=true
+   
+    depends_on:
+      - brandenburg_db
     restart: unless-stopped
 
 volumes:

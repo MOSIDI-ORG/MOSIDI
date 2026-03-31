@@ -23,11 +23,12 @@ export async function getIndicatorNames() {
   return response.data;
 }
 
-export async function getIndicatorData(indicator) {
+export async function getIndicatorData(indicator, granularity) {
     const response = await HTTP.post(
         "/api/get_indicator_data",
         {
-            "indicator": indicator
+            "indicator": indicator,
+            "granularity": granularity
         }
     );
     return response.data;
@@ -88,6 +89,99 @@ export async function getLayerExtent (tablename) {
     );
     return response.data;
 }
+
+export async function getLayerColumnNames (tablename) {
+    const response = await HTTP.post(
+        "/api/get_layer_column_names",
+        {
+            "tablename": tablename,
+        }
+    );
+    return response.data;
+}
+
+export async function createhexagonFunction (tablename) {
+    const response = await HTTP.post(
+        "/api/create_hexagon_function",
+        {
+            "tablename": tablename,
+        }
+    );
+    return response;
+}
+
+export async function getDistinctValuesPerColumnNameFromDB (payload) {
+    const response = await HTTP.post(
+        "/api/get_distinct_values_per_column_name",
+        {
+            "columnName": payload.columnName,
+            "tableName": payload.tableName,
+        }
+    );
+    return response.data;
+}
+export async function classifyData(columnName, tableName, selectedClassificationMethod) {
+    const response = await HTTP.post(
+        "/api/classify_data",
+        {
+            "columnName": columnName,
+            "tableName": tableName,
+            "selectedClassificationMethod": selectedClassificationMethod
+        }
+    );
+    return response.data;
+}
+
+export async function getNumericalColumnNamesForClassification (payload) {
+    const response = await HTTP.post(
+        "/api/get_numerical_column_names_for_classification",
+        {
+            "tablename": payload
+        }
+    );
+    return response.data;
+}
+
+export async function getTableMetadata () {
+    const response = await HTTP.get("/api/get_table_metadata");
+    return response.data;
+}
+export async function externalLayerFromDB () {
+    const response = await HTTP.get("/api/get_external_wms_layers");
+    return response.data;
+}
+
+export async function getFeatureInstanceFromDB (payload) {
+    const response = await HTTP.post("/api/get_feature_instance", 
+        {
+            "tablename": payload.tablename,
+            "featureId": payload.featureId
+        });
+    return response.data;
+}
+
+export async function getternaryDataFromDB (payload) {
+    const response = await HTTP.post("/api/get_ternary_data", 
+       {
+        ind1: payload[0].indicatorname,
+        zeit1: payload[0].selectedYear,
+        ind2: payload[1].indicatorname,
+        zeit2: payload[1].selectedYear,
+        ind3: payload[2].indicatorname,
+        zeit3: payload[2].selectedYear,
+        gran: payload[0].granularity
+    });
+    return response.data;
+}
+
+
+
+
+
+
+
+
+
 
 
 

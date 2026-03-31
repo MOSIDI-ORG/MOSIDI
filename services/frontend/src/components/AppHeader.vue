@@ -1,128 +1,180 @@
 <template>
-     <GeocodingUI @addAddressToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap"></GeocodingUI>
-    <v-card class="mx-auto app-header" width="400" height="50">
-        <v-row class="d-flex align-center justify-between" >
-        <v-img
-            src="icons/mosidi-logo.svg"
-            contain
-            max-height="80"
-            max-width="80"
-            class="ml-7"
-        >
-        </v-img>
+     <!--<GeocodingUI @addAddressToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap"></GeocodingUI>-->
+    <v-card class="mx-auto app-header animated-width" :width="isMinimized?'80':'371'" height="50">
+ 
+        <v-row class="d-flex align-center justify-between mt-2" >
+            <v-img
+                :src="isMinimized?'icons/mosidi-logo-minimized.svg':'icons/mosidi-logo.svg'"
+                :height="isMinimized?'20':'15'"
+                :width="isMinimized?'20':'15'"
+                :style="isMinimized?'margin-left:25px; margin-top: 9px':'margin-left:-10px;margin-top: 5px'"
+            >
+            </v-img>
        
-        <v-spacer></v-spacer>
-
-
-        <div class="mr-2">
-            <v-tooltip text="geocoding" location="top">
-        
+           
+            <v-spacer></v-spacer>
+            <v-menu offset-y
+                       >
                 <template v-slot:activator="{ props }">
-                
                     <v-btn
-                        class="mr-2" 
                         v-bind="props"
                         density="compact"
                         variant="text"
-                        icon="mdi-magnify"
-                        @click="setActiveButton('geocoding')"
-                        :style="{ color: activeMenu === 'geocoding' ? 'blue' : '' }"
-                    ></v-btn>
+                        icon
+                        class="mr-2 "
+                        v-if="isMinimized==false"
+                    >
+                    {{ locale=='de'?'de':'en'}}
+                       
+                    </v-btn>
                 </template>
-            </v-tooltip>
 
-            <v-tooltip text="geodata" location="top">
+                <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
+                           
+                           <v-list-item
+                           @click="toggleLanguage('en')"
+                           
+                           >
+                               <template  v-slot:prepend>
+                                  
+                                   <v-list-item-title class="ml-3">English</v-list-item-title>
+                               </template>
+                              
+                           </v-list-item>
+                           <v-list-item
+                                @click="toggleLanguage('de')"
+                           >
+                               <template v-slot:prepend>
+                                  
+                                   <v-list-item-title class="ml-3">Deutsch</v-list-item-title>
+                               </template>
+                           </v-list-item>
+                          
+                       </v-list>
+            </v-menu>
+            <v-menu offset-y
+                       >
                 <template v-slot:activator="{ props }">
-                    
-                    
                     <v-btn
-                        class="mr-2" 
                         v-bind="props"
                         density="compact"
                         variant="text"
-                        icon="mdi-layers-outline"
-                        @click="setActiveButton('geodata')"
-                        :style="{ color: activeMenu === 'geodata' ? 'blue' : '' }"
-                    ></v-btn>
+                        icon
+                        class="mr-2 "
+                        v-if="isMinimized==false"
+                    >
+                        <img
+                            src="icons/ellipsis-vertical.svg"
+                            width="30"
+                            height="30"
+                            style="pointer-events: none;"
+                        />
+                    </v-btn>
                 </template>
-            
-            </v-tooltip>
 
-            <v-tooltip text="INKAR" location="top">
-                <template v-slot:activator="{ props }">
-                    <v-btn 
-                        class="mr-2"
-                        v-bind="props"
-                        density="compact" 
-                        variant="text" 
-                        icon="mdi-chart-line" 
-                        @click="setActiveButton('INKAR')"
-                        :style="{ color: activeMenu === 'INKAR' ? 'blue' : '' }"
-                        ></v-btn>
-                </template>
-            </v-tooltip>
-            <v-tooltip text="Drucken" location="top">
-                <template v-slot:activator="{ props }">
-                    <v-btn
-                    class="mr-2" 
-                    v-bind="props" 
-                    density="compact" 
-                    variant="text" 
-                    icon="mdi-printer-outline"
-                    @click="setActiveButton('Drucken'), exportDialog=true"
-                   :style="{ color: exportDialog === true ? 'blue' : '' }"
-                    ></v-btn>
-                </template>
-            </v-tooltip>
-        </div>
-        
-        <v-divider vertical ></v-divider>
-        
-        <div class="mr-4">
-            <v-tooltip text="landing page" location="top">
-                <template v-slot:activator="{ props }">
-                    <v-btn  v-bind="props"  density="compact" variant="text" icon :to="{ path: '/landing-page' }" target="_blank">
-                <img src="icons/information.svg" alt="Information Icon" width="18" height="18" />
+                <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
+                           
+                            <v-list-item
+                            @click="shareDialog=true"
+                            
+                            >
+                                <template  v-slot:prepend>
+                                    <v-btn 
+                                        density="compact" 
+                                        variant="text" 
+                                        icon 
+                                        
+                                    >
+                                        <img src="icons/external-source.svg"  width="18" height="18" />
+                                    </v-btn> 
+                                    <v-list-item-title class="ml-3">{{ $t('app-header.share') }}</v-list-item-title>
+                                </template>
+                               
+                            </v-list-item>
+                            <v-list-item
+                            @click="exportDialog=true"
+                            
+                            >
+                                <template  v-slot:prepend>
+                                    <v-btn 
+                                        density="compact" 
+                                        variant="text" 
+                                        icon 
+                                        
+                                    >
+                                        <img src="icons/export.svg"  width="18" height="18" />
+                                    </v-btn> 
+                                    <v-list-item-title class="ml-3">{{ $t('app-header.export') }}</v-list-item-title>
+                                </template>
+                               
+                            </v-list-item>
+                            <v-divider style="margin-left: 15px; margin-right: 15px;"  class=" mt-1 mb-1"></v-divider>
+                            <v-list-item
+                            :to="{ path: '/landing-page' }" target="_blank"
+                            >
+                                <template v-slot:prepend>
+                                    <v-btn 
+                                        density="compact" 
+                                        variant="text" 
+                                        icon 
+                                        
+                                    >
+                                        <img src="icons/rectangle.svg" alt="Information Icon" width="16" height="16" />
+                                    </v-btn> 
+                                    <v-list-item-title class="ml-3">{{ $t('app-header.about') }}</v-list-item-title>
+                                </template>
+                            </v-list-item>
+                           
+                        </v-list>
+            </v-menu>
+
+            <v-btn  
+             v-if="isMinimized==false"
+                density="compact" 
+                variant="text" 
+                icon
+                class="mr-4"
+                @click="toggleMinimize"
+            >
+                <img  src="icons/minimize.svg" width="18" height="18" />
             </v-btn> 
-                </template>
-            </v-tooltip>
             
-      
-        </div>
-      
-    </v-row>
+        </v-row>
     </v-card>
+    <div style="position: absolute; top:10px; left: 90px; z-index: 10;" class="mt-3">
+        <v-btn  
+             v-if="isMinimized==true"
+                density="compact" 
+                variant="text" 
+                icon
+                class="mr-4"
+                @click="toggleMinimize"
+            >
+                <img  src="icons/expand.svg" width="18" height="18" />
+            </v-btn> 
+    </div>
 </template>
 <script setup>
-import { useMenuStore } from '../stores/menu'
-import { storeToRefs } from 'pinia'
-import GeocodingUI from './GeocodingUI.vue'
-import { defineEmits } from "vue"
-const emit = defineEmits(["addLayerToMap", "removeLayerFromMap", "fitBoundsToBBOX"]);
-
-
-let { activeMenu } = storeToRefs(useMenuStore())
+import { storeToRefs } from "pinia"
+import { useI18n } from 'vue-i18n';
 import { useMapExportStore } from '../stores/mapExport'
+import { useMapShareStore } from '../stores/mapShare'
+import { useMenuStore } from '../stores/menu'
+
+const { locale } = useI18n();
+const toggleMinimize = ()=>{
+    isMinimized.value=! isMinimized.value
+}
+
+let { isMinimized } = storeToRefs(useMenuStore())
+
 let { exportDialog } = storeToRefs(useMapExportStore())
+let { shareDialog } = storeToRefs(useMapShareStore())
 
-function setActiveButton(button) {
-    if(activeMenu.value==button){
-        activeMenu.value = null
-    }
-    else {
-        activeMenu.value = button;
-    }
-}
-const addLayerToMap = (layerSpecification)=>  {
-    emit("removeLayerFromMap",  {layerId:  layerSpecification.id, sourceId: layerSpecification.id})
-    emit("addLayerToMap", layerSpecification)
-    emit("fitBoundsToBBOX", layerSpecification.geoGjsonData.bbox)
+const toggleLanguage =(lang) => {
+    locale.value = lang;
 }
 
-const removeLayerFromMap = (layerSpecification)=>{
-    emit("removeLayerFromMap",  layerSpecification)
-
-}
 </script>
 <style scoped>
   .app-header{
@@ -139,7 +191,8 @@ const removeLayerFromMap = (layerSpecification)=>{
     border: 1px solid rgba(0, 0, 0, 0.2);   
    
 }
-.v-divider {
-  height: 40px; /* Adjust the height to match the icon size */
+
+.animated-width {
+  transition: width 0.3s ease;
 }
 </style>

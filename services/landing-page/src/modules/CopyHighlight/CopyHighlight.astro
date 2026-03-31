@@ -1,0 +1,31 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "cva";
+
+const copyHighlight = cva({
+	base: "default-grid py-12 px-12 min-h-[400px] grid-rows-[max-content]",
+	variants: {
+		colour: {
+			default: "bg-white text-black",
+			coloured: "bg-set-1-100 text-black",
+			black: "bg-black text-white",
+		},
+	},
+	defaultVariants: {
+		colour: "default",
+	},
+});
+
+export interface Props
+	extends HTMLAttributes<"button">,
+		VariantProps<typeof copyHighlight> {}
+
+const { colour = "default" } = Astro.props;
+---
+
+<div class={copyHighlight({ colour })}>
+	<p class="copy-800 col-span-full flex h-min lg:col-start-1 lg:col-end-11">
+		<slot name="copy" />
+	</p>
+	<slot name="itemWrapper" />
+</div>

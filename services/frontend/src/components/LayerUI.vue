@@ -1,6 +1,6 @@
 <template>
     <v-card
-        class="mx-auto layer-ui"  width="400" max-height="400" v-show="activeMenu=='geodata'"
+        class="mx-auto layer-ui"  width="371" max-height="400" v-show="activeMenu=='geodata'"
     >
         <v-toolbar class="sticky">
    
@@ -56,17 +56,33 @@
                                 </v-icon>
                             </template>
 
-                            <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2);">
+                            <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
                                 <v-list-item
                                     @click="showMetadata(item.metadata, item.name)"
                                 >
-                                    <v-list-item-title>Metadaten</v-list-item-title>
+                                    <template v-slot:prepend>
+                                        <v-icon size="small" icon="mdi-information-outline"></v-icon>
+                                        <v-list-item-title >Metadaten</v-list-item-title>
+                                    </template>
+                               
                                 </v-list-item>
                                 <v-list-item
                                     v-if="item.checked && item.type!=='Raster'"
                                     @click="getLayerExtentFromDB(item.name)"
                                 >
-                                    <v-list-item-title>Zoom to Extent</v-list-item-title>
+                                    <template v-slot:prepend>
+                                        <v-icon size="small" icon="mdi-magnify"></v-icon>
+                                        <v-list-item-title>Zoom to Extent</v-list-item-title>
+                                    </template>
+                                </v-list-item>
+                                <v-list-item
+                                    v-if="item.checked"
+                                    @click="activateStylePanel(item)"
+                                >
+                                    <template v-slot:prepend>
+                                        <v-icon size="small" icon="mdi-palette-outline"></v-icon>
+                                        <v-list-item-title>Style</v-list-item-title>
+                                    </template>
                                 </v-list-item>
                             </v-list>
                         </v-menu>
@@ -77,7 +93,7 @@
                     </template>
 
                 </v-list-item>
-                <v-divider style="margin-left: 15px; margin-right: 15px;" class="mt-2 mb-2"></v-divider>
+                <v-divider class="mt-2 mb-2"></v-divider>
                
             </div>
            
@@ -88,23 +104,40 @@
 <script setup>
 import { ref, onMounted, defineEmits, computed} from "vue"
 import {
-    getTableNames, getGeoserverCoverageSources, getLayerExtent
+    getTableNames, /*getGeoserverCoverageSources,*/ getLayerExtent, /*createhexagonFunction*/
 } from "../services/backend.calls";
 import { useMetadataDialogStore } from '../stores/metadataDialog'
 import { storeToRefs } from 'pinia'
 import { useMenuStore } from '../stores/menu'
 import { useLayerStyleStore } from '../stores/layerStyle'
+import { useCartographyStore } from '../stores/cartography'
+import { usePointStyleStore } from '../stores/pointStyle'
+import { usePolygonStyleStore } from '../stores/polygonStyle'
+import { useLineStyleStore } from '../stores/lineStyle'
+
 
 let { activeMenu } = storeToRefs(useMenuStore())
-let { styles } = storeToRefs(useLayerStyleStore())
+let { tableNames } = storeToRefs(useLayerStyleStore())
+let { circleStyleParams } = storeToRefs(usePointStyleStore())
+let { polygonStyleParams } = storeToRefs(usePolygonStyleStore())
+let { lineLayerSpecification, lineStyleParams } = storeToRefs(useLineStyleStore())
+
+const cartographyStore = useCartographyStore()
+const pointStyleStore = usePointStyleStore()
+const polygonStyleStore = usePolygonStyleStore()
+const lineStyleStore = useLineStyleStore()
+
+
+let { layerSpecification } = storeToRefs(usePointStyleStore())
+let { polygonLayerSpecification } = storeToRefs(usePolygonStyleStore())
 
 const metadataDialogStore = useMetadataDialogStore();
 
-let tableNames = ref([]);
 let selectedItems = ref([]);
 let layerType = ref(null)
 let layerSearchText= ref("")
 let style = ref(null)
+let layout = ref(null)
 
 const emit = defineEmits(["addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX"]);
 
@@ -118,18 +151,35 @@ const toggleClickedLayer = (layerName, geomType) => {
     if (!selectedItems.value.includes(layerName)) {
     
         if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
-            
-            style.value = styles.value.polygon
+            layout.value = {}
+            style.value = {
+               'fill-color': polygonStyleParams.value['fill-color'],
+                "fill-opacity": polygonStyleParams.value['fill-opacity'],
+                "fill-outline-color": polygonStyleParams.value['fill-outline-color'],
+            }
             layerType.value = "fill"
         }
         else if (geomType == "MultiLineString" || geomType == "LineString" || geomType == "Line"){
+            layout.value = {}
             
-            style.value = styles.value.line
+            style.value = {
+                'line-color':lineStyleParams.value['line-color'],
+                "line-opacity": lineStyleParams.value["line-opacity"],
+                "line-width": lineStyleParams.value["line-width"],
+            }
             layerType.value = "line"
         }
         else if (geomType == "Point") {
             
-            style.value = styles.value.point
+            style.value = {
+                'circle-color':circleStyleParams.value['circle-color'],
+                'circle-opacity': circleStyleParams.value['circle-opacity'],
+                'circle-radius': circleStyleParams.value['circle-radius'],
+                'circle-stroke-color': circleStyleParams.value['circle-stroke-color'],
+                'circle-stroke-width': circleStyleParams.value['circle-stroke-width'],
+                'circle-blur': circleStyleParams.value['circle-blur']
+            }
+            layout.value = {}
             layerType.value = "circle"
         }
         else if (geomType == "Raster"){
@@ -147,7 +197,8 @@ const toggleClickedLayer = (layerName, geomType) => {
                 id: layerName,
                 style: style,
                 layerType: layerType,
-                sourceType: "vector_tile"
+                sourceType: "vector_tile",
+                layout: layout
             }
             emit("addLayerToMap", layerSpecification);
         }
@@ -159,6 +210,12 @@ const toggleClickedLayer = (layerName, geomType) => {
         }
         else {
             emit("toggleLayerVisibility", layerName)
+            if(tableNames.value[index]['sublayers']){
+                for(let i in (tableNames.value[index]['sublayers'])){
+                    emit("toggleLayerVisibility", tableNames.value[index]['sublayers'][i])
+                }
+            }
+            
         }
     }
 
@@ -171,6 +228,7 @@ const sendQuestRequest = async () => {
 
         // add new key and value per table name to track the checked status of each layer
         tableNames.value[i]["checked"]=false
+        tableNames.value[i]["sublayers"]=[]
        
     }
 
@@ -212,7 +270,7 @@ const filteredItems = computed(() => {
   
 });
 
-const readGeoserverCoverageSources = async ()=> {
+/*const readGeoserverCoverageSources = async ()=> {
     const response =  await getGeoserverCoverageSources()
     for (let i in response.coverageStores.coverageStore) {
         tableNames.value.push({"name": response.coverageStores.coverageStore[i].name,
@@ -220,17 +278,35 @@ const readGeoserverCoverageSources = async ()=> {
         "checked": false
         });
     }
-}
+}*/
 
 const getLayerExtentFromDB = async(layerName) =>{
     const layerExtent =  await getLayerExtent(layerName)
-    console.log(layerExtent)
     emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
 }
 
+const activateStylePanel = async (item)=>{
+    cartographyStore.setVisibility({catographyUIVisibility:true, geomTtype: item.type})
+    if(item.type==='Point'){
+        layerSpecification.value=item
+        pointStyleStore.addLayerStyle(item.name)
+        
+    }
+    else if (item.type == "MultiPolygon" || item.type == "Polygon" || item.type == "Geometry"){
+        polygonLayerSpecification.value=item
+        polygonStyleStore.addLayerStyle(item.name)
+    }
+    else if(item.type == "MultiLineString" || item.type == "LineString" || item.type == "Line"){
+        lineLayerSpecification.value=item
+        lineStyleStore.addLayerStyle(item.name)
+    }
+   
+   
+
+}
 onMounted(() => {
   sendQuestRequest();
-  readGeoserverCoverageSources()
+  //readGeoserverCoverageSources()
 })
 
 </script>

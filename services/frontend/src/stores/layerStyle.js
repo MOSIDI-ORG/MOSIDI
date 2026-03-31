@@ -48,9 +48,11 @@ export const useLayerStyleStore = defineStore ({
                     4, // highlight stroke-width
                     1, // default stroke-width
                 ],
-                'circle-opacity': 1
+                'circle-opacity': 1,
+                'circle-radius':3
             }
             
-        }
+        },
+        tableNames: []
     })
 })

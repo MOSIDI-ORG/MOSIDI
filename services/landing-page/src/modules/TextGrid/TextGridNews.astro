@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cva, type VariantProps } from "class-variance-authority";
+
+// ✅ 2-Argument-Signatur von cva:
+const textGrid = cva(
+  "pt-12 px-12 pb-[120px] default-grid",
+  {
+    variants: {
+      colour: {
+        default: "bg-white text-black",
+        coloured: "bg-set-1-200 text-black", // oder dein gewünschtes Grün
+        black: "bg-black text-white",
+      },
+      variant: {
+        image: "",
+        textOnly: "",
+      },
+    },
+    defaultVariants: {
+      colour: "default",
+    },
+  }
+);
+
+export interface Props
+  extends HTMLAttributes<"section">,
+    VariantProps<typeof textGrid> {}
+
+const { colour = "default", variant, class: className, ...attrs } = Astro.props as Props;
+---
+
+<section class={`${textGrid({ colour, variant })} ${className ?? ""}`} {...attrs}>
+  <slot />
+</section>

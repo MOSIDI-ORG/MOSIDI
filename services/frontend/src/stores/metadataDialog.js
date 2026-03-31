@@ -9,7 +9,6 @@ export const useMetadataDialogStore = defineStore ({
     }),
     actions: {
         assignMetadata(metadata, tablename) {
-            console.log(metadata)
             this.metadata = metadata
             this.dialog = true,
             this.tablename = tablename

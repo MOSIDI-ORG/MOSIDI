@@ -1,13 +1,14 @@
 <template>
-    <div class="geocoding-ui" v-if= "activeMenu === 'geocoding'">
+    <div class="geocoding-ui" v-if= "geocodingToggle">
+        
         <v-card
                 class="mx-auto"
                 color="surface-light"
-                width="400"
+                width="371"
             >
 
                 <v-text-field
-                    placeholder= "Suche nach Orten"
+                    :placeholder= "$t('geocoding.search-placeholder')"
                     filled
                     density="compact"
                     variant="solo"
@@ -23,8 +24,14 @@
                 >
 
             </v-text-field>
+            
         </v-card>
-            <v-list v-if="geoJson && searchtext" style= "margin-top:5px; width: 400px; border-radius: 5px">
+        
+        
+       
+    </div>
+    <div class="list-ui" v-if= "geocodingToggle && geoJson && searchtext">
+        <v-list  v-if="geoJson && searchtext" style= "margin-top:-5px; width: 400px; border-radius: 5px" class="mb-20">
                 <div v-for="(item, i) in geoJson?.features" :key="i" >
 
                     <v-list-item
@@ -39,18 +46,15 @@
                     <v-divider style="margin-left: 15px; margin-right: 15px;" class="mt-0 mb-0"></v-divider>
                 </div>  
             </v-list>
-            
-        
-       
     </div>
     
   </template>
   
   <script setup>
-    import { useMenuStore } from '../stores/menu'
     import { storeToRefs } from 'pinia'
     import { ref,  defineEmits, watch } from "vue"
     import { useLayerStyleStore } from '../stores/layerStyle'
+    import { useMapLegendStore } from '@/stores/mapLegend'
 
     let { styles } = storeToRefs(useLayerStyleStore())
     let style = ref(null)
@@ -60,25 +64,26 @@
     let searchtext = ref(null)
     let geoJson = ref(null)
 
-    let { activeMenu } = storeToRefs(useMenuStore())
+    let { geocodingToggle } = storeToRefs(useMapLegendStore())
     
 
-    const geocode = async ()=>{
+let debounceTimeout;
+
+const geocode = async () => {
+    clearTimeout(debounceTimeout);
+
+    debounceTimeout = setTimeout(async () => {
         try {
-            const request =
-            `https://nominatim.openstreetmap.org/search?q=${
-                searchtext.value
-            }&format=geojson&polygon_geojson=1&addressdetails=1&limit=3`;
+            const request = `https://nominatim.openstreetmap.org/search?q=${searchtext.value}&format=geojson&polygon_geojson=1&addressdetails=1&limit=3`;
             const response = await fetch(request);
             const geojson = await response.json();
-           
-            geoJson.value= geojson
-        }
-        catch (e){
+            
+            geoJson.value = geojson;
+        } catch (e) {
             console.error(`Failed to forwardGeocode with error: ${e}`);
         }
-       
-    }
+    }, 500);
+}
 
     const addAddressToMap = (item) =>{
         let geomType = item.geometry.type
@@ -113,13 +118,13 @@
 
     const getIcon = (value)=> {
         if (value == "MultiPolygon" || value == "Polygon"){
-            return "polygon.png"
+            return "icons/polygon.svg"
         }
         else if (value == "MultiLineString" || value == "LineString" || value == "Line") {
-            return "line.png"
+            return "icons/line.svg"
         }
         else if (value == "Point"){
-            return "point.png"
+            return "icons/point.svg"
         }
         else if (value == "Raster") {
             return "raster.png" 
@@ -129,8 +134,8 @@
         }
     }
 
-    watch(() => activeMenu.value, () =>{
-        if (activeMenu!=="geocoding"){
+    watch(() => geocodingToggle.value, () =>{
+        if (geocodingToggle!==true){
             removeGeocodedLayer()
             searchtext.value = null
         }
@@ -165,8 +170,8 @@
     overflow-y: scroll; 
     background: transparent; 
     border-radius: 8px;  position: absolute;
-    top: 62px;
-    left: 10px;
+    top: 88px;
+    right: 40px;
     z-index: 10;
     background-color: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);
@@ -194,6 +199,23 @@
 }
 ::v-deep .v-field.v-field--prepended {
     height: 36px;
+}
+.list-ui{
+    overflow-y: scroll; 
+    background: transparent; 
+    border-radius: 8px;
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    z-index: 10;
+    width: 371px;
+    background-color: rgba(255,255,255,0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    -moz-backdrop-filter: blur(5px);
+    -ms-backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.2); 
+    
 }
 
 

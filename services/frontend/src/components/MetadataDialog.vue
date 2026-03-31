@@ -9,18 +9,21 @@
             <v-card class="dialog-ui">
                 <v-card-title>
                     <span class="text-h6">{{ tablename }} meta data</span>
+                    
                 </v-card-title>
                 <v-divider></v-divider>
 
                 <div v-if="metadata">
                     <div v-for="(item,index) in metadata" :key="index">
-                        <v-card-text v-if="item">
+                        
+                        <v-card-text v-if="index">
                             <span  v-if="isValidURL(item)">
-                                {{index}}: <a :href="metadata.source" target="_blank">{{ item }}</a> 
-                            </span>
-                            <span v-else>
-                                <b>{{index}}</b>: {{ item }}
-                            </span>
+                             <b>{{ $t(`metadata-labels.${index}`, index) }}</b>: <a :href="item" target="_blank">{{ item }}</a> 
+                        </span>
+                        <span v-else>
+                            <b>{{ $t(`metadata-labels.${index}`, index) }}</b>:
+                            {{ item }}
+                        </span>
                         
                         </v-card-text>
                     

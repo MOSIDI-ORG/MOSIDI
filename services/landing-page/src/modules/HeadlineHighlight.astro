@@ -1,0 +1,133 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { compose, cva, type VariantProps } from "cva";
+import { cn } from "../components/utils/cn";
+import Type2 from "../components/Shapes/Evolution/03/Type2.astro";
+import Type3 from "../components/Shapes/Evolution/03/Type3.astro";
+
+const headlineContainer = cva({
+	base: "flex pt-20 px-12 pb-[200px] justify-between flex-col relative gap-8",
+	// **or**
+	// base: ["font-semibold", "border", "rounded"],
+	variants: {
+		colour: {
+			default: "bg-white text-black",
+			coloured: "bg-set-1-500 text-white",
+			black: "bg-black text-white",
+		},
+		variant: {
+			image: "",
+			textOnly: "",
+		},
+	},
+	defaultVariants: {
+		colour: "default",
+	},
+});
+
+const headline = cva({
+	base: "default-grid",
+	variants: {
+		orientation: {
+			textLeft: "",
+			textRight: "",
+		},
+	},
+});
+
+const shape_1 = new Map([
+	[
+		"default",
+		{
+			innerShape: "text-set-1-100",
+			middleShape: "text-set-1-200",
+			outerShape: "text-set-1-300",
+		},
+	],
+	[
+		"coloured",
+		{
+			innerShape: "text-set-1-500",
+			middleShape: "text-set-1-200",
+			outerShape: "text-set-1-400",
+		},
+	],
+	[
+		"black",
+		{
+			innerShape: "text-set-1-300",
+			middleShape: "text-set-1-400",
+			outerShape: "text-set-1-500",
+		},
+	],
+]);
+
+const shape_2 = new Map([
+	[
+		"default",
+		{
+			innerShape: "text-set-1-300",
+			middleShape: "text-set-1-200",
+			outerShape: "text-set-1-100",
+		},
+	],
+	[
+		"coloured",
+		{
+			innerShape: "text-set-1-500",
+			middleShape: "text-set-1-500",
+			outerShape: "text-set-1-300",
+		},
+	],
+	[
+		"black",
+		{
+			innerShape: "text-set-1-500",
+			middleShape: "text-set-1-400",
+			outerShape: "text-set-1-300",
+		},
+	],
+]);
+
+const headlineHighlight = compose(headlineContainer, headline);
+
+export interface Props
+	extends HTMLAttributes<"button">,
+		VariantProps<typeof headlineHighlight> {}
+
+const { colour = "default", orientation } = Astro.props;
+---
+
+<div class={headlineHighlight({ colour })}>
+	<div class={headline({ orientation })}>
+		<div
+			class={cn(
+				"flex headline-h3 col-span-full row-[1] w-full justify-center -mb-12 md:-mb-16 lg:mb-0",
+				orientation === "textLeft"
+					? "lg:col-start-6 lg:col-end-13"
+					: "lg:col-start-1 lg:col-end-6",
+			)}
+		>
+			<Type2
+				innerShape={shape_1.get(colour)!.innerShape}
+				middleShape={shape_1.get(colour)!.middleShape}
+				outerShape={shape_1.get(colour)!.outerShape}
+			/>
+			<Type3
+				innerShape={shape_2.get(colour)!.innerShape}
+				middleShape={shape_2.get(colour)!.middleShape}
+				outerShape={shape_2.get(colour)!.outerShape}
+			/>
+		</div>
+		<h3
+			class={cn(
+				"headline-h3 col-span-full lg:row-[1]",
+				orientation === "textLeft"
+					? "lg:col-start-1 lg:col-end-7"
+					: "lg:col-start-6 lg:col-end-13",
+			)}
+		>
+			<slot name="headline" />
+		</h3>
+	</div>
+</div>

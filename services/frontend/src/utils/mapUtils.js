@@ -1,4 +1,7 @@
 import { Popup } from 'maplibre-gl';
+import { useChartStore } from '../stores/chart'
+
+
 import { createHTMLAttributeTable } from './createHTMLAttributeTable';
 let popup = null
 let hoverpopup = null
@@ -10,6 +13,16 @@ export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId
 
     const coordinates = [e.lngLat.lng, e.lngLat.lat];
     popup.setLngLat(coordinates);
+    const chartStore = useChartStore()
+    e.features[0].properties = {
+        indikator: chartStore?.selectedFeature?.indikator,
+        ...(chartStore?.selectedFeature?.year != null ? { year: chartStore.selectedFeature.year } : {}),
+        value: chartStore?.selectedFeature?.value,
+        ...(chartStore?.selectedFeature?.indikator2 != null ? { indikator2: chartStore.selectedFeature.indikator2 } : {}),
+        ...(chartStore?.selectedFeature?.value2 != null ? { value2: chartStore.selectedFeature.value2 } : {}),
+        ...(chartStore?.selectedFeature?.year2 != null ? { year2: chartStore.selectedFeature.year2 } : {}),
+        ...e.features[0].properties,
+    }
     popup.setDOMContent(
     createHTMLAttributeTable(
         e.lngLat.lng,
@@ -18,25 +31,7 @@ export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId
     )
     );
     popup.addTo(map);
-    if (e.features.length > 0) {
-        if (selectedFeatureId) {
-            map.removeFeatureState({
-            source: layerId,
-            sourceLayer: vectorSourceLayer,
-            id: selectedFeatureId
-            });
-        }
-
-        selectedFeatureId = e.features[0].id;
-
-        map.setFeatureState({
-            source: layerId,
-            sourceLayer: vectorSourceLayer,
-            id: selectedFeatureId,
-        }, {
-            clicked: true
-        });
-    }
+    
 
     popup.on("close", () => {
         if (selectedFeatureId) {
@@ -103,4 +98,109 @@ export function toggleWMSLayerVisibility (map, clickedLayerName) {
       else {
         map.setLayoutProperty(clickedLayerName,'visibility', 'visible')
       }
+}
+
+export function addWMSLayerFromExternalProvider (map, item) {
+    map.addSource(item.dct_title, {
+        'type':item.dct_type,
+        tiles: [item.url+
+            '?SERVICE=WMS' +
+            '&VERSION=1.1.1' +
+            '&REQUEST=GetMap' +
+            '&FORMAT=image/png' +
+            '&TRANSPARENT=true' +
+            '&STYLES=' +
+            `&LAYERS=${item.layer}` +
+            '&SRS=EPSG:3857' +
+            '&WIDTH=256' +
+            '&HEIGHT=256' +
+            '&BBOX={bbox-epsg-3857}'
+
+        ],
+        'tileSize': 256
+    });
+    map.addLayer({
+        'id': item.dct_title,
+        'type': item.dct_type,
+        'source': item.dct_title,
+        'paint':{
+            'raster-fade-duration': 1000,
+            'raster-opacity': 1,
+            'raster-saturation': 0,
+            'raster-contrast':0
+        }
+        }
+    );
+
+    let layer = map.getLayer('road_major');
+
+    if(typeof layer !== 'undefined') {
+
+        map.moveLayer(item.dct_title, 'road_major');
+    }
+}
+export function getSelectedFeatureInfo(e, layerSpecification, indicatorArray) {
+  const selectedIndicatorName = layerSpecification.id.replace('kommunales_gebiet_dashboard', '');
+  let iteValue, itemYear, secondIndicatorName, secondItemValue, secondItemYear;
+
+  const indicatorData = indicatorArray.value[selectedIndicatorName];
+
+  if (indicatorData.secondIndicatorName != null) {
+    // --- Main indicator ---
+    iteValue = indicatorData[0][0]
+      .filter(item =>
+        item.kennziffer === e.features[0].properties.nationalco &&
+        item.zeitbezug == indicatorData.selectedYear
+      )[0]?.wert;
+    itemYear = indicatorData.selectedYear;
+
+    // --- Second indicator ---
+    secondItemValue = indicatorData.secondIndicator.secondIndicator[0][0]
+      .filter(item =>
+        item.kennziffer === e.features[0].properties.nationalco &&
+        item.zeitbezug == indicatorData.secondIndicator.secondSelectedYear
+      )[0]?.wert;
+
+    secondIndicatorName = indicatorData.secondIndicatorName;
+    secondItemYear = indicatorData.secondIndicator.secondSelectedYear;
+
+
+    return {
+      layerId: layerSpecification.id,
+      featureId: e.features[0].properties.nationalco,
+      featureName: e.features[0].properties.gen,
+      indikator: selectedIndicatorName,
+      year: itemYear,
+      value: iteValue,
+      indikator2: secondIndicatorName,
+      year2: secondItemYear,
+      value2: secondItemValue
+    };
+  }
+
+  // --- Single indicator ---
+  if (indicatorData.type === 'indikator') {
+    iteValue = indicatorData[0][0]
+      .filter(item =>
+        item.kennziffer === e.features[0].properties.nationalco &&
+        item.zeitbezug == indicatorData.selectedYear
+      )[0]?.wert;
+
+    itemYear = indicatorData.selectedYear;
+  } else if (indicatorData.type === 'custom indikator') {
+    iteValue = indicatorData[0][0]
+      .filter(item => item.kennziffer === e.features[0].properties.nationalco)[0]
+      ?.calculatedWert;
+
+    itemYear = null;
+  }
+
+  return {
+    layerId: layerSpecification.id,
+    featureId: e.features[0].properties.nationalco,
+    featureName: e.features[0].properties.gen,
+    indikator: selectedIndicatorName,
+    year: itemYear,
+    value: iteValue
+  };
 }

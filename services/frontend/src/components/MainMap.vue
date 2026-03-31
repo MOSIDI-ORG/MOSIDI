@@ -4,17 +4,19 @@
     <div ref="mapContainer" style="height: 100dvh; z-index: 0;" id="mainmap">
       <AppLogo> </AppLogo>
       <LayerUI @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @addCoverageLayerToMap="addCoverageLayerToMap" @toggleCoverageLayerVisibility="toggleCoverageLayerVisibility" @fitBoundsToBBOX="fitBoundsToBBOX" > </LayerUI>
-      <IndicatorUI @addStyleExpressionByYear="addStyleExpressionByYear"  @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addDeckglLayer="addDeckglLayer" @updateDeckglLayer="updateDeckglLayer" > </IndicatorUI>
-      <LegendUI @setFilterForLegendInteraction="setFilterForLegendInteraction" @resetFilter="resetFilter" ></LegendUI>
+      <!--<IndicatorUI @addStyleExpressionByYear="addStyleExpressionByYear"  @addLayerToMap="addLayerToMap" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addDeckglLayer="addDeckglLayer" @updateDeckglLayer="updateDeckglLayer" > </IndicatorUI>-->
+      <LegendUI @setFilterForLegendInteraction="setFilterForLegendInteraction" @resetFilter="resetFilter" @zoomIn="zoomIn" @zoomOut="zoomOut" @addLayerToMap="addLayerToMap" @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></LegendUI>
       <!--<MenuUI @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></MenuUI>-->
       <TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
-
+       <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
+      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap"></DatasetSearchUI>
     </div>
   </v-app>
   <MetadataDialog> </MetadataDialog>
   <AlertUI> </AlertUI>
-  <MapExport> </MapExport>
+  <MapExport @export-map="onExportMap"> </MapExport>
+  <MapShare > </MapShare>
   <ProgressUI> </ProgressUI>
   
 </template>
@@ -26,63 +28,135 @@ import { storeToRefs } from 'pinia'
 import { useMapStore } from '../stores/map'
 import AppLogo from "@/components/AppLogo.vue";
 import LayerUI from "@/components/LayerUI.vue";
-import IndicatorUI from "@/components/IndicatorUI.vue";
+//import IndicatorUI from "@/components/IndicatorUI.vue";
 import LegendUI from "@/components/LegendUI.vue";
 //import MenuUI from "@/components/MenuUI.vue";
 import MetadataDialog from "@/components/MetadataDialog.vue";
 import AlertUI from "@/components/AlertUI.vue";
 import MapExport from "@/components/MapExport.vue";
+import MapShare from "@/components/MapShare.vue";
 import ProgressUI from "@/components/ProgressUI.vue";
 import TimeSliderUI from "@/components/TimeSliderUI.vue";
 import AppHeader from "@/components/AppHeader.vue";
+//import CartographyUI from "@/components/CartographyUI.vue";
+import DatasetSearchUI from "@/components/DatasetSearchUI.vue";
 
-import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerToMap, toggleWMSLayerVisibility } from '../utils/mapUtils';
+import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo/*addWMSLayerToMap, toggleWMSLayerVisibility*/ } from '../utils/mapUtils';
 import { useChartStore } from '../stores/chart'
+//import { useCartographyStore } from '../stores/cartography'
+
 import { setMapFilterForLegendInteraction } from '../utils/setMapFilterForLegendInteraction';
+
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { ColumnLayer } from '@deck.gl/layers'
+import 'maplibre-gl/dist/maplibre-gl.css';
+	import {
+		MaplibreExportControl,
+		Size,
+		PageOrientation,
+		Format,
+		DPI
+	} from '@watergis/maplibre-gl-export';
+	import '@watergis/maplibre-gl-export/dist/maplibre-gl-export.css';
+import { useIndicatorStore } from '@/stores/indicator'
+import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
+import {getFeatureInstanceFromDB} from "../services/backend.calls";
 
-const { center, zoom, style, pitch } = storeToRefs(useMapStore())
+
+let {indicatorArray} = storeToRefs(useIndicatorStore())
+
+const { style, pitch, extent } = storeToRefs(useMapStore())
 let { selectedFeature } = storeToRefs(useChartStore())
+//let { catographyUIVisibility } = storeToRefs(useCartographyStore())
 const mapContainer = ref(null);
 
-let vectorServer = process.env.VUE_APP_TILE_SERVER_URL+'/';
+let vectorServer = process.env.VUE_APP_GEOSERVER_URL+'/';
 let map = null;
 let selectedFeatureId = null;
 let mapboxOverlayLayer = ref(null)
-
-
+let exportControl = null
+let cameraLink = null
+let mapIsLoaded = ref(false)
 onMounted(() => {
 
   map = new Map({
     container: mapContainer.value,
     style: style.value,
-    center: center.value,
-    zoom: zoom.value,
+    //center: center.value,
+    //zoom: zoom.value,
     pitch: pitch.value,
     preserveDrawingBuffer: true,
-    attributionControl: false
+    attributionControl: false,
+    bounds: extent.value,
   });
+  
+  cameraLink = useMapCameraDeepLink(map)
+  cameraLink.attach()
   map.addControl(new AttributionControl({
     customAttribution: '<a href="https://www.fh-potsdam.de/impressum" target="_blank">© Legal Note</a> <a href="https://www.fh-potsdam.de/datenschutz" target="_blank">© Privacy statement</a>',
     compact: true,
 
   }), 'bottom-left');
-  console.log("Map initialized")
+  exportControl = new MaplibreExportControl({
+		PageSize: Size.A3,
+		PageOrientation: PageOrientation.Portrait,
+		Format: Format.PDF,
+		DPI: DPI[96],
+		Crosshair: true,
+		PrintableArea: true,
+		Local: 'de',
+		
+	});
+  map.addControl(exportControl, "bottom-left");
+  map.on('load', () => {
+    mapIsLoaded.value = true
+  });
 
-
-  
 })
 
+const onExportMap = (payload)=> {
+  if (exportControl) {
+    map.removeControl(exportControl);
+  }
+
+ 
+  const pageSize = Size[payload.selectedPageSize.toUpperCase()] || Size.A4;
+  const pageOrientation = PageOrientation[payload.selectedPageOrientation] || PageOrientation.Landscape; // or make dynamic if needed
+  const format = Format[payload.selectedFormat.toUpperCase()] || Format.PNG;
+  const dpi = DPI[payload.selectedDPI] || DPI[96];
+
+  exportControl = new MaplibreExportControl({
+    PageSize: pageSize,
+    PageOrientation: pageOrientation,
+    Format: format,
+    DPI: dpi,
+    Crosshair: true,
+    PrintableArea: true,
+    Local: "de",
+  });
+
+  // Add control to the map (needed to initialize button and internal map reference)
+  map.addControl(exportControl);
+  const btn = document.getElementsByClassName('generate-button')[0];
+
+  if (btn) {
+    btn.click(); // Programmatically click the button
+  } else {
+    console.error("Export button not found in DOM");
+  }
+  
+ 
+}
 const addLayerToMap = (layerSpecification)=>{
-  let vectorSourceLayer = "public"+"."+layerSpecification.layerNameInDatabase;
-  let vectorUrl = vectorServer + vectorSourceLayer + "/{z}/{x}/{y}.pbf";
+  let vectorSourceLayer = layerSpecification.layerNameInDatabase;
+  let vectorUrl = vectorServer + 'gwc/service/tms/1.0.0/brandenburg:' + vectorSourceLayer + '@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf';
   if(map.getSource(layerSpecification.id)==undefined){
     if(layerSpecification.sourceType== "vector_tile"){
       map.addSource(layerSpecification.id, {
           "type": "vector",
+          "scheme": 'tms',
           "tiles": [vectorUrl],
-          "promoteId":'id',
+          "promoteId":'nationalco',
           "minzoom": 0,
           "maxzoom": 22
       });
@@ -91,9 +165,10 @@ const addLayerToMap = (layerSpecification)=>{
           "source": layerSpecification.id,
           "source-layer": vectorSourceLayer,
           "type": layerSpecification.layerType.value,
-          "paint":  layerSpecification.style.value
+          "paint":  layerSpecification.style.value,
+          "layout":layerSpecification.layout.value
       };
-      map.addLayer(layer)  
+      map.addLayer(layer)
     }
     else if (layerSpecification.sourceType== "geojson") {
       map.addSource(layerSpecification.id, {
@@ -106,7 +181,8 @@ const addLayerToMap = (layerSpecification)=>{
           "source": layerSpecification.id,
          
           "type": layerSpecification.layerType.value,
-          "paint":  layerSpecification.style.value
+          "paint":  layerSpecification.style.value,
+          'layout': {}
       };
       map.addLayer(layer)  
     }
@@ -114,33 +190,15 @@ const addLayerToMap = (layerSpecification)=>{
       
    
   }
-  map.on('click', layerSpecification.id, function(e) {
-    if (layerSpecification.id == 'kommunales_gebiet_dashboard' || layerSpecification.id == 'kommunales_gebiet_centroid'){
-      selectedFeature.value = {
-        layerId:  layerSpecification.id,
-        featureId: e.features[0].properties.nationalco,
-        featureName: e.features[0].properties.name
-      }
-      removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
-      map.addSource( "highlight",{"type": "geojson", data: e.features[0]} )
-      map.addLayer({
-        'id': 'highlight',
-        'type': layerSpecification.id == 'kommunales_gebiet_dashboard'? 'line': 'circle',
-        'source': 'highlight',
-        'paint': layerSpecification.id == 'kommunales_gebiet_dashboard'? {
-          'line-color': '#888',
-          'line-width': 3
-        }: {
-          'circle-color': '#00FF00',
-          'circle-stroke-color':  '#888',
-          'circle-stroke-width': 3,
-          'circle-opacity': 1,
-          'circle-radius':e.features[0].layer.paint['circle-radius']
 
-        }
-      });
-      
+  map.on('click', layerSpecification.id, async function(e) {
+    if (layerSpecification.id.includes('kommunales_gebiet_dashboard') || layerSpecification.id == 'kommunales_gebiet_centroid'){
+      selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
+      removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
+      addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
+      addHighlightLayer(layerSpecification.layerNameInDatabase, e.features[0].properties.nationalco, layerSpecification.id)
     }
+      
     
     else {
       addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
@@ -163,7 +221,38 @@ const addLayerToMap = (layerSpecification)=>{
   });
  
 }
+const addHighlightLayer = async (tablename, featureId, layerId)=>{
+  const featureInstance = await getFeatureInstanceFromDB({tablename: tablename, featureId:featureId})
+      if(map.getSource("highlight")==undefined){
+        map.addSource( "highlight",{"type": "geojson", data: featureInstance.features[0]})
+        map.addLayer({
+          'id': 'highlight',
+          'type': layerId.includes('kommunales_gebiet_dashboard') ? 'line': 'circle',
+          'source': 'highlight',
+          'paint': layerId.includes('kommunales_gebiet_dashboard')? {
+            'line-color': '#888',
+            'line-width': 3,
+            "line-dasharray": [0.5, 2],
+          }: {
+            'circle-color': '#00FF00',
+            'circle-stroke-color':  '#888',
+            'circle-stroke-width': 3,
+            'circle-opacity': 1,
+            'circle-radius':featureInstance.features[0].layer.paint['circle-radius']
 
+          },
+          'layout': layerId.includes('kommunales_gebiet_dashboard')? {
+            'line-cap': 'round',
+          
+          }: {
+            
+
+          },
+        });
+      
+      }
+  
+}
 const addStyleExpressionByYear = (layerId, styleProperty, fillStyle)=>{   
   map.setPaintProperty(
     layerId,
@@ -172,6 +261,23 @@ const addStyleExpressionByYear = (layerId, styleProperty, fillStyle)=>{
   );
   
 }
+const setLayerPintProperty = (layerId, styleProperty, fillStyle)=>{
+  map.setPaintProperty(
+    layerId,
+    styleProperty,
+    fillStyle
+  );
+}
+const setLayerLayoutProperty = (layerId, layoutProperty, layoutValue)=>{
+  map.setLayoutProperty(
+    layerId,
+    layoutProperty,
+    layoutValue
+  );
+}
+/*const setLayerZoomrange = (layerId, minZoom, maxZoom)=>{
+  map.setLayerZoomRange(layerId, minZoom, maxZoom);
+}*/
 
 const toggleLayerVisibility = (clickedLayerName)=>{
   if(map.getSource(clickedLayerName)!=undefined){
@@ -193,14 +299,23 @@ const toggleLayerVisibility = (clickedLayerName)=>{
   }
    
 }
-
-const addCoverageLayerToMap = (clickedLayerName, layerType, style) =>{
+const toggleLayerVisibilityWithValue = (clickedLayerName, visValue)=>{
+  if(map.getSource(clickedLayerName)!=undefined){
+     
+        map.setLayoutProperty(clickedLayerName,'visibility', visValue)
+     
+  }
+}
+/*const addCoverageLayerToMap = (clickedLayerName, layerType, style) =>{
   addWMSLayerToMap(map, clickedLayerName, layerType, style)
-}
-const toggleCoverageLayerVisibility = (clickedLayerName)=>{
+}*/
+/*const toggleCoverageLayerVisibility = (clickedLayerName)=>{
   toggleWMSLayerVisibility(map, clickedLayerName)
-}
+}*/
 
+const addExternaWMSLayerToMap = (layerSpecification)=>{
+  addWMSLayerFromExternalProvider(map, layerSpecification)
+}
 const setFilterForLegendInteraction = (payload) => {
   setMapFilterForLegendInteraction(map, payload)
 }
@@ -220,6 +335,8 @@ const removeLayerFromMap = (payload) => {
     map.removeLayer(payload.layerId).removeSource(payload.sourceId);
   }
 }
+
+
 
 const fitBoundsToBBOX = (bbox)=>{
   map.fitBounds([
@@ -248,7 +365,7 @@ const addDeckglLayer = (data, style) => {
     interleaved: true,
     layers: [
       new ColumnLayer({
-        id: 'hexagon',
+        id: "custom-indicator-layer",
         data: data.features,
         getPosition: f => f.geometry.coordinates,
         pickable: false,
@@ -287,7 +404,7 @@ const addDeckglLayer = (data, style) => {
 const updateDeckglLayer = (data, style) =>{
   if (mapboxOverlayLayer.value ) {
     map.removeControl(mapboxOverlayLayer.value);
-    addDeckglLayer(data,style);
+    addDeckglLayer(data, style);
   }
 
 }
@@ -295,11 +412,76 @@ const performTimeSlider = (data)=>{
   addStyleExpressionByYear(data.layer, data.paint_property, data.expression)
 }
 
+const moveLayerToTop = (layerId)=>{
+  if (map.getLayer(layerId)) {
+        // Move the layer to the top
+        map.moveLayer(layerId);
+    } else {
+        console.error(`Layer with ID '${layerId}' does not exist.`);
+    }
+}
+
 onUnmounted(() => {
   if (map) {
     map.remove();
   }
+  if (cameraLink) cameraLink.detach()
+  if (map) map.remove()
 });
+
+const zoomIn = ()=>{
+  const currentZoom = map.getZoom();
+  map.zoomTo(currentZoom + 0.5);
+}
+const zoomOut = ()=>{
+  const currentZoom = map.getZoom();
+  map.zoomTo(currentZoom - 0.5);
+}
+
+const addTernaryLayerToMap = (data)=>{
+
+    const layerId = 'kommunales_gebiet_dashboard'+data.existingSourceId
+    const vectorSourceLayer = data.granularity
+
+  if (!map.getLayer(layerId)) {
+    console.warn("Layer does not exist.")
+    return
+  }
+
+  // Update paint property directly
+  map.setPaintProperty(layerId, "fill-color", [
+    "case",
+    ["!=", ["feature-state", "share1"], null],
+    [
+      "rgb",
+      ["*", 255, ["feature-state", "share1"]],
+      ["*", 255, ["feature-state", "share2"]],
+      ["*", 255, ["feature-state", "share3"]]
+    ],
+    "#cccccc"
+  ])
+
+  map.setPaintProperty(layerId, "fill-opacity", 1)
+  map.setPaintProperty(layerId, "fill-outline-color", "grey")
+
+  // Now set feature-state
+  data.ternaryData.forEach(row => {
+    map.setFeatureState(
+      {
+        source: layerId,
+        sourceLayer: vectorSourceLayer,
+        id: row.kennziffer
+      },
+      {
+        share1: row.share1,
+        share2: row.share2,
+        share3: row.share3
+      }
+    )
+  })
+    
+
+}
 
 </script>
 
@@ -331,7 +513,9 @@ onUnmounted(() => {
     transform: scale(1);
   }
 }
-
+::v-deep .maplibregl-ctrl-group{
+  display: none;
+}
 
 
 </style>

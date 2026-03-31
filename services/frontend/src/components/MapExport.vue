@@ -30,7 +30,46 @@
                                             variant="solo"
                                         ></v-select>
                                         
-                                </v-col>                            
+                                </v-col>
+                                <v-col
+                                    cols="12"
+                                    sm="4"
+                                    >
+                                        <v-select
+                                            :items=pageSize
+                                            v-model="selectedPageSize"
+                                            label="Page Size"
+                                            density="compact"
+                                            variant="solo"
+                                        ></v-select>
+                                        
+                                </v-col>     
+                                <v-col
+                                    cols="12"
+                                    sm="4"
+                                    >
+                                        <v-select
+                                            :items=DPI
+                                            v-model="selectedDPI"
+                                            label="DPI"
+                                            density="compact"
+                                            variant="solo"
+                                        ></v-select>
+                                        
+                                </v-col>     
+                                <v-col
+                                    cols="12"
+                                    sm="4"
+                                    >
+                                        <v-select
+                                            :items=pageOrientation
+                                            v-model="selectedPageOrientation"
+                                            label="page Orientation"
+                                            density="compact"
+                                            variant="solo"
+                                        ></v-select>
+                                        
+                                </v-col>                             
                                 
                             </v-row>
                             <v-row>
@@ -46,6 +85,7 @@
                                     >
                                 </v-textarea>
                             </v-row>
+                            
                         </v-card-text>
                     
                     </div>
@@ -78,17 +118,28 @@
 
 <script setup>
 
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, defineEmits } from 'vue'
 import { useMapExportStore } from '../stores/mapExport'
 import { storeToRefs } from 'pinia'
 import html2canvas from 'html2canvas';
 import { jsPDF } from "jspdf";
-let { exportDialog, formats, report } = storeToRefs(useMapExportStore())
-let selectedFormat = ref('png')
+const emit = defineEmits(['export-map'])
+
+let { exportDialog, formats, report, pageSize, DPI, pageOrientation } = storeToRefs(useMapExportStore())
+let selectedFormat = ref('PDF')
+let selectedPageSize = ref('A4')
+let selectedDPI = ref(96)
+let selectedPageOrientation = ref('Landscape')
 
 onMounted(()=>{
 })
 const exportMap = () => {
+    emit('export-map', {
+        selectedFormat: selectedFormat.value,
+        selectedPageSize: selectedPageSize.value,
+        selectedDPI: selectedDPI.value,
+        selectedPageOrientation: selectedPageOrientation.value,
+    })
     let config = {
         backgroundColor: null,
         logging: true,
@@ -106,7 +157,7 @@ const exportMap = () => {
             downloadLink.href = mapCanvasDataURL;
             downloadLink.download = 'map.'+selectedFormat.value; 
             document.body.appendChild(downloadLink);
-            downloadLink.click();
+            //downloadLink.click();
             document.body.removeChild(downloadLink);
         }
         
@@ -129,7 +180,7 @@ const exportMap = () => {
                 doc.text(20, 60, report.value);
             }
             
-            doc.save('map.pdf');
+            //doc.save('map.pdf');
         }
         
     });    

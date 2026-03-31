@@ -1,0 +1,53 @@
+---
+import "@fontsource-variable/manrope";
+
+interface Props {
+	title: string;
+	description: string;
+}
+const { title, description } = Astro.props;
+import "../styles/utils.css";
+---
+
+<html lang="de-DE">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{title}</title>
+
+		<title>Interaction Design Lab</title>
+
+		<link rel="canonical" href="/" />
+
+		<meta property="og:locale" content="de_DE" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content="/" />
+		<meta property="og:site_name" content={title} />
+		<meta property="og:image" content="/app/landing-page/social-media.jpg" />
+
+		<meta name="twitter:card" content="summary_large_image"/>
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:url" content="/">
+		<meta name="twitter:site" content="@idpotsdam"/>
+		<meta name="twitter:image" content="/app/landing-page/social-media.jpg"/>
+		<meta name="twitter:creator" content="@idpotsdam"/>
+
+		<meta name='robots' content='max-image-preview:large' />
+
+		<link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48" />
+		<link rel="icon" type="image/svg+xml" href="/app/landing-page/favicon.svg" />
+		<link rel="shortcut icon" href="/app/landing-page/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/app/landing-page/apple-touch-icon.png" />
+		<meta name="apple-mobile-web-app-title" content="MOSIDI" />
+		<link rel="manifest" href="/app/landing-page/site.webmanifest" />
+	</head>
+	<body>
+		<main class="font-manrope">
+			<slot />
+		</main>
+	</body>
+</html>

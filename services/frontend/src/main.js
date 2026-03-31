@@ -11,7 +11,8 @@ import { createPinia } from "pinia";
 import '../node_modules/maplibre-gl/dist/maplibre-gl.css';
 import App from './App.vue';
 import router from './router';
-
+import { createI18n } from 'vue-i18n';
+import messages from './i18n';
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
@@ -21,6 +22,20 @@ import * as directives from 'vuetify/directives'
 
 library.add(fas, far, fab);
 const app = createApp(App);
+
+// i18n part
+// Detect the user's browser language
+const userLocale = navigator.language || navigator.userLanguage;
+// If the detected locale is German, use it. Otherwise, fall back to English.
+const locale = userLocale.startsWith('de') ? 'de' : 'en';
+
+const i18n = createI18n({
+  legacy: false,
+  locale: locale,  // Automatically detected
+  fallbackLocale: 'en',
+  messages,
+});
+
 
 axios.defaults.withCredentials = true;
 
@@ -40,4 +55,5 @@ app.use(router);
 app.use(createPinia());
 app.use(vuetify);
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.use(i18n);
 app.mount("#app");

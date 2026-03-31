@@ -1,7 +1,8 @@
 <template>
     <v-card class="logo-ui">
-        <v-img class="logo-img" src="innowest-logo.png" width="80px"> 
+        <v-img class="logo-img" src="icons/innowest.svg" width="80px"> 
         </v-img>
+        
     </v-card>
 </template>
 <script setup>

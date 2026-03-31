@@ -1,9 +1,9 @@
 <template>
 <div>
-    <div v-show="activeMenu=='INKAR'">
+    <div v-show="activeMenu=='Indikator'">
        
         <v-card
-            class="mx-auto indicator-ui"  width="400" max-height="600" v-show="activeMenu=='INKAR'"
+            class="mx-auto indicator-ui"  width="371" max-height="600" v-show="activeMenu=='Indikator'"
         >
             <v-tabs
                 v-model="tab"
@@ -81,26 +81,28 @@
                 
                 </v-row>
             </div>
-                <div v-show="isCommuneLayerAdded==true" class="form-check form-switch mb-4" style="margin-left: 20px; cursor: pointer; width:fit-content;justify-content: center; align-items: center;display: flex;">
-                    <input
-                        @click="toggleClickedLayer('kommunales_gebiet_dashboard')" 
-                        class="form-check-input"
-                        style=" cursor: pointer;"
-                        type="checkbox" 
-                        role="switch" 
-                        :checked="true"
-                    >
-                    <label class="form-check-label ml-2" for="flexSwitchCheckDefault">Anzeigen</label>
+                <div v-show="isCommuneLayerAdded==true" class="form-check form-switch mb-4" style="margin-left: -13px; cursor: pointer; width:fit-content;justify-content: center; align-items: center;display: flex;">
+                    
+                    <v-icon
+                            variant="text"
+                            density="compact"
+                            @click="toggleClickedLayer('kommunales_gebiet_dashboard'); isCommuneLayerVisible=!isCommuneLayerVisible" 
+                            v-show="bivariateActivated==false"
+                         
+                        >
+                        {{isCommuneLayerVisible==true?"mdi-eye-off-outline":"mdi-eye-outline"}}
+                        </v-icon>
+                        <label v-show="bivariateActivated==false" class="ml-2">Anzeigen</label>
                     <v-icon  
                         @click="showMetadata(metadata, selectedIndicator)"
-                        class="ml-2"
+                        :class="bivariateActivated==false?'ml-2':'ml-0'"
                     >
                         mdi-information-outline
                     </v-icon>
                     
                     <label class="ml-2" >Metadaten</label>
-                    <v-menu>
-                        <template v-slot:activator="{ props }" >
+                    <v-menu v-if="bivariateActivated==false">
+                        <template v-slot:activator="{ props }">
                            
                             <v-icon  class = "ml-2" v-bind="props">mdi-palette-outline</v-icon>
                             <label class="ml-2" >Farbpalette</label>
@@ -129,7 +131,7 @@
                     </v-menu>
 
                     <v-icon  
-                        v-if="availailableYearsForSelectedIndicator.length>1"
+                        v-if="availailableYearsForSelectedIndicator.length>1 && bivariateActivated==false"
                         @click="activateTimeSlider()"
                         class="ml-2"
                         :color="visible== true ? 'blue' : ''"
@@ -144,7 +146,7 @@
             
                 <div v-show="isCommuneLayerAdded==true">
 
-                    <div style="margin-left: -230px;margin-bottom: 20px;">
+                    <div class="mb-4" style="margin-left: 16px; cursor: pointer; width:fit-content;justify-content: center; align-items: center;display: flex;">
                             <v-icon
                                 @click="bivariateActivated ? removeBivariateSection() : addBivariateSection()"
                                :color="bivariateActivated ? 'red' : 'green'"
@@ -205,16 +207,18 @@
                             
                         </v-row>
                        
-                        <div class="form-check form-switch mb-3" v-show="secondIndicatorArray"  style="margin-left: 20px;  text-align: left;">
-                            <input
-                                @click="toggleClickedLayer('kommunales_gebiet_centroid')" 
-                                class="form-check-input"
-                                style=" cursor: pointer;"
-                                type="checkbox" 
-                                role="switch" 
-                                :checked="isCentroidLayerAdded==true?true:false"
+                        <div class="form-check form-switch mb-3" v-show="secondIndicatorArray"  style="margin-left: -13px;  text-align: left;">
+                           
+                            <v-icon
+                                variant="text"
+                                density="compact"
+                                @click="toggleClickedLayer('kommunales_gebiet_dashboard'); isCommuneLayerVisible=!isCommuneLayerVisible" 
+                                v-show="bivariateActivated==true"
+                         
                             >
-                            <label class="form-check-label ml-2" for="flexSwitchCheckDefault">Anzeigen</label>
+                                {{isCommuneLayerVisible==true?"mdi-eye-off-outline":"mdi-eye-outline"}}
+                            </v-icon>
+                            <label v-show="bivariateActivated==true" class="ml-2">Anzeigen</label>
                             
                             
                             <v-icon  
@@ -229,7 +233,7 @@
 
                     </div>
                     
-                    <div style="margin-left: -227px;margin-bottom: 20px;">
+                    <div class="mb-4" style="margin-left: 16px; cursor: pointer; width:fit-content;justify-content: center; align-items: center;display: flex;">
                        
                         <v-icon
                                 @click="toggleAdvancedOptions()"
@@ -256,7 +260,7 @@
                 </div>
             </div>
 
-            <div v-show="tab=='customized'">
+            <div v-if="tab=='customized'">
                 <CustomIndicatorUI
                     :indicatorNames="indicatorNames"
                     :selectedColorPalette="selectedColorPalette"
@@ -295,6 +299,7 @@ const mapLegendStore = useMapLegendStore();
 const alertStore = useAlertStore()
 const timeSliderStore = useTimeSliderStore()
 const indicatorStore = useIndicatorStore()
+const bivariateStore = useBivariateStore()
 
 let tab = ref(null)
 let indicatorNames = ref([null])
@@ -305,9 +310,9 @@ let secondMetadata = ref(null)
 let selectedYear = [];
 let selectedSecondYear = []
 let matchExpression = [];
-let secondMatchExpression = []
 
 let style = ref(null)
+let layout = ref(null)
 let layerType=ref(null)
 let selectedIndicator = ref(null)
 let selectedSecondIndicator = ref(null)
@@ -316,7 +321,7 @@ let availailableYearsForSecondSelectedIndicator = ref([])
 let targetYear = ref(null)
 let secondTargetYear = ref(null)
 let isCommuneLayerAdded = ref(false)
-let isCentroidLayerAdded = ref(false)
+let isCommuneLayerVisible = ref(false)
 let selectedClassificationMethod = ref("NaturalBreaks")
 let classification_result = ref({})
 let secondClassification_result = ref({})
@@ -326,8 +331,9 @@ let selectedColorPalette = ref(colorbrewer.default.RdPu[5])
 
 let { activeMenu } = storeToRefs(useMenuStore())
 let { visible } = storeToRefs(useTimeSliderStore())
+import { useBivariateStore } from '../stores/bivariate'
+let { bivariateLegend, firstVariableClasses, secondVariableClasses, bivariateColorpalette, bivariateActivated } = storeToRefs(useBivariateStore())
 
-let bivariateActivated = ref(false)
 onMounted(() => {
     sendIndicarorRequest();
 })
@@ -337,16 +343,6 @@ const sendIndicarorRequest = async () => {
   indicatorNames.value = indicatornamesfromDB
 }
 
-/*const filteredItems = computed(() => {
-  if (!indicatorSearchText.value) {
-    return indicatorNames.value;
-  }
-
-  return indicatorNames.value.filter(item =>
-    item.toLowerCase().includes(indicatorSearchText.value.toLowerCase())
-  )
-  
-});*/
 
 const handleItemClick = async (indicator) => {
     selectedIndicator.value = indicator.raw?.indikator
@@ -362,10 +358,8 @@ const handleItemClick = async (indicator) => {
   deActivateTimeSlider()
 
 };
-const addSecondIndicator =  async () => {
-    if(isCentroidLayerAdded.value==false){
-        await addCentroidTileLayer();
-    }
+const addSecondIndicator =  async (indicator) => {
+    selectedSecondIndicator.value = indicator.raw?.indikator
     getSecondIndicator(selectedSecondIndicator.value)
     mapLegendStore.resetSecondClickedLegendItem();
 }
@@ -375,37 +369,18 @@ const addCommuneTileLayer = async () => {
         'fill-opacity': 1,
         'fill-outline-color': 'grey'
     }
+    layout.value = {}
     layerType.value="fill"
     let layerSpecification = {
-        layerNameInDatabase: 'Kommunale Gebiete Deutschland',
+        layerNameInDatabase: 'Gemeindeebene',
         id: 'kommunales_gebiet_dashboard',
         style: style,
+        layout: layout,
         layerType: layerType,
         sourceType: "vector_tile"
     }
     emit("addLayerToMap", layerSpecification);
     isCommuneLayerAdded.value=true
-};
-const addCentroidTileLayer = async () => {
-    style.value = {
-                'circle-color': '#00FF00', 
-                'circle-stroke-color':  "grey",
-                'circle-stroke-width': 1,
-                'circle-opacity': 1,
-                //'circle-blur':0.5'
-                'circle-pitch-alignment':'map'
-
-            } 
-    layerType.value="circle"
-    let layerSpecification = {
-        layerNameInDatabase: 'Kommunale Gebiete Deutschland Mittelpunkt',
-        id: 'kommunales_gebiet_centroid',
-        style: style,
-        layerType: layerType,
-        sourceType: "vector_tile"
-    }
-    emit("addLayerToMap", layerSpecification);
-    isCentroidLayerAdded.value=true
 };
 
 const getIndicator = async (indicatorName) => {
@@ -466,8 +441,6 @@ const filterByYear = () => {
 
 const filterBySecondYear = () => {
     selectedSecondYear.value = []
-
-    secondMatchExpression = null
     
     secondIndicatorArray.value.forEach(innerArray => {
         innerArray.forEach(subArray => {
@@ -476,9 +449,6 @@ const filterBySecondYear = () => {
     });
     secondClassify()
 }
-
-
-
 
 const toggleClickedLayer = (layerid) => {
     emit("toggleLayerVisibility", layerid)
@@ -495,10 +465,9 @@ const classify = async() => {
         classification_result.value.selectedIndicator = selectedIndicator.value;
 
         const response = await classification(allattributes, selectedClassificationMethod.value);
-
         classification_result.value = {
             ...classification_result.value,  
-            ...response                      
+            ...response.intervals_5_classes                      
         };
 
         if (classification_result.value.warnings) {
@@ -510,45 +479,21 @@ const classify = async() => {
         indicatorStore.setClassificationResult({
             classification_result: classification_result.value
         })
+
+        bivariateStore.setFirstVariableClasses({
+            classification_result: response
+        })
+
        
     }    
-    
     mapLegend()
-    mapStylization()
-    progressStore.setProgressBar({
-        progress: false
-    })
-
-}
-const secondClassify = async() => {
+    if (bivariateActivated.value==true){
+        bivariateStylization()
+    }
+    else {
+        mapStylization()
+    }
     
-    let allattributes = secondIndicatorArray.value[0][0].map(item => item.wert);
-
-    if( secondClassification_result?.value?.selectedSecondIndicator !== selectedSecondIndicator.value){
-        secondClassification_result.value.selectedSecondIndicator = selectedSecondIndicator.value;
-
-        const response = await classification(allattributes, selectedClassificationMethod.value);
-
-        secondClassification_result.value = {
-            ...secondClassification_result.value,  
-            ...response                      
-        };
-
-        if (secondClassification_result.value.warnings) {
-            alertStore.setAlert({
-                text: secondClassification_result.value.warnings,
-                timeout: 2000
-            });
-        }
-       
-    }    
-    
-
-
-
-    
-    secondMapLegend()
-    mapStylizationByCircleRadius()
     progressStore.setProgressBar({
         progress: false
     })
@@ -563,6 +508,7 @@ const mapStylization = () => {
     // conditions for each communale gebiete code
     for (const row of selectedYear.value) {
         const value = row['wert'];
+       
         let color;
 
         if (value <= classification_result.value.intervals[0]) {
@@ -592,37 +538,9 @@ const mapStylization = () => {
             selectedColorPalette: selectedColorPalette.value
     })
 }
-const mapStylizationByCircleRadius = () => {
-////////////////////// ** stylization ** /////////////////
 
-    // Build a GL expression that defines the color for every pg_tileserve (vector tile) feature
-    secondMatchExpression = ['match', ['get', 'nationalco']];
 
-    // conditions for each communale gebiete code
-    for (const row of selectedSecondYear.value) {
-        const value = row['wert'];
-        let radius;
 
-        if (value <= secondClassification_result.value.intervals[0]) {
-            // radius is compatible with radius in css legend with *10 proportion
-            radius = 10/2
-            //color = colorbrewer.default.selectedColorPalette.value.title
-        } else if (value <= secondClassification_result.value.intervals[1]) {
-            radius = 20/2
-        } else if (value <= secondClassification_result.value.intervals[2]) {
-            radius = 30/2
-        } else if (value <= secondClassification_result.value.intervals[3]) {
-            radius =40/2
-        } else {
-            radius = 50/2
-        }
-        secondMatchExpression.push(row['kennziffer'].toString(), radius);
-    }
-
-    // Last value is the default color, used where there is no data
-    secondMatchExpression.push(0);
-    emit("addStyleExpressionByYear",'kommunales_gebiet_centroid', 'circle-radius', secondMatchExpression)
-}
 const mapLegend = () => {
     const classIntervalsAndColor = [];
     for (let i = 0; i < classification_result.value.intervals.length; i++) {
@@ -637,7 +555,6 @@ const mapLegend = () => {
 
         classIntervalsAndColor.push(intervalAndColor);
     }
-
     mapLegendStore.assignClassificationValues({
         minMax: classification_result.value.minMax,
         classIntervalsAndColor,
@@ -650,28 +567,6 @@ const mapLegend = () => {
         return colors[index % colors.length];
     }
 }
-const secondMapLegend = () => {
-    const classIntervalsAndRadius = []; 
-    for (let i = 0; i < secondClassification_result.value.intervals.length; i++) {
-        const intervalName = `interval${i + 1}`;
-        const radiusName = `radius${i + 1}`;
-        const intervalValue = secondClassification_result.value.intervals[i].toFixed(2);
-        const radiusValue = (i+1)*10;
-        const intervalAndRadius = {
-            [intervalName]: intervalValue,
-            [radiusName]: radiusValue,
-        };
-
-        classIntervalsAndRadius.push(intervalAndRadius);
-    }
-    mapLegendStore.assignSecondClassificationValues({
-        minMax: secondClassification_result.value.minMax,
-        classIntervalsAndRadius,
-        selectedSecondIndicator: selectedSecondIndicator.value,
-        completeSecondIndicatorName: secondMetadata.value.name
-    });
-
-}
 const getColorPalette = (item) =>{
     selectedColorPalette.value = item
     mapLegend()
@@ -682,17 +577,103 @@ const showMetadata = (selectedMetadata, selectedIndicator) => {
     metadataDialogStore.assignMetadata(selectedMetadata, selectedIndicator)
 }
 
+const bivariateMapLegend = () => {
+    bivariateLegend.value=true
+
+}
 const addBivariateSection = ()=>{
     bivariateActivated.value= true
+}
+const secondClassify = async() => {
+    
+    let allattributes = secondIndicatorArray.value[0][0].map(item => item.wert);
+    if( secondClassification_result?.value?.selectedSecondIndicator !== selectedSecondIndicator.value){
+        secondClassification_result.value.selectedSecondIndicator = selectedSecondIndicator.value;
+
+        const response = await classification(allattributes, selectedClassificationMethod.value);
+       
+        secondClassification_result.value = {
+            ...secondClassification_result.value,  
+            ...response.intervals_5_classes                      
+        };
+
+        if (secondClassification_result.value.warnings) {
+            alertStore.setAlert({
+                text: secondClassification_result.value.warnings,
+                timeout: 2000
+            });
+        }
+        bivariateStore.setSecondvariableClasses({
+            classification_result: response  
+        })
+       
+    }    
+    
+
+    
+    bivariateMapLegend()
+    bivariateStylization()
+    progressStore.setProgressBar({
+        progress: false
+    })
+    mapLegendStore.assignSecondClassificationValues({
+        minMax: secondClassification_result.value.minMax,
+        classIntervals: secondClassification_result.value.intervals,
+        selectedSecondIndicator: selectedSecondIndicator.value,
+        completeSecondIndicatorName: secondMetadata.value.name
+    });
+
+}
+const bivariateStylization = ()=>{
+    const secondYearMap = new Map(
+        selectedSecondYear.value.map(row => [row['kennziffer'], row['wert']])
+);
+    matchExpression = ['match', ['get', 'nationalco']];
+    for (const row of selectedYear.value) {
+        const value1 = row['wert']; // First dataset
+        const value2  = secondYearMap.get(row['kennziffer']);
+        let color;
+        
+        // Determine class for the first dataset (X-axis)
+        let class1;
+        if (value1 <= firstVariableClasses.value.intervals_3_classes.intervals[0]) {
+            class1 = 'low';
+        } else if (value1 <= firstVariableClasses.value.intervals_3_classes.intervals[1]) {
+            class1 = 'medium';
+        } else {
+            class1 = 'high';
+        }
+
+        // Determine class for the second dataset (Y-axis)
+        let class2;
+
+        if (value2 <= secondVariableClasses.value.intervals_3_classes.intervals[0]) {
+            class2 = 'low';
+        } else if (value2 <= secondVariableClasses.value.intervals_3_classes.intervals[1]) {
+            class2 = 'medium';
+        } else {
+            class2 = 'high';
+        }
+
+        // Combine the two classes (e.g., 'low_low', 'high_medium')
+        const colorKey = `${class1}_${class2}`;
+        
+        // Assign the color based on the bivariate color palette
+        color = bivariateColorpalette.value[colorKey]; 
+
+        // Push the result to the match expression
+        matchExpression.push(row['kennziffer'].toString(), color);
+    }
+    matchExpression.push('rgba(0, 0, 0, 0)');
+    emit("addStyleExpressionByYear",'kommunales_gebiet_dashboard', 'fill-color', matchExpression)
 }
 
 const removeBivariateSection = () => {
     bivariateActivated.value= false
-    isCentroidLayerAdded.value=false
     secondIndicatorArray.value = null
-    emit("removeLayerFromMap",  {layerId: "kommunales_gebiet_centroid", sourceId: "kommunales_gebiet_centroid"})
-    mapLegendStore.resetClassIntervalsAndRadius();
     selectedSecondIndicator.value = null
+    bivariateLegend.value=false
+    classify()
 }
 
 const toggleAdvancedOptions = () => {
