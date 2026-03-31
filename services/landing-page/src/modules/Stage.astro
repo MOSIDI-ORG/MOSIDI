@@ -7,7 +7,7 @@ import Type3 from "../components/Shapes/Evolution/03/Type3.astro";
 import Media from "./Media.astro";
 
 const stage = cva({
-base: "flex px-12 justify-between flex-col relative gap-8 pt-12 pb-12",
+	base: "flex py-12 px-12 justify-between flex-col relative gap-8",
 	// **or**
 	// base: ["font-semibold", "border", "rounded"],
 	variants: {
@@ -89,10 +89,8 @@ const { colour = "default" } = Astro.props;
 
 <div class={stage({ colour })}>
 	<div
- class="absolute right-[8%] top-16 md:top-0 flex md:flex-row md:w-[331px] md:p-[inherit]
-         pointer-events-none opacity-30 md:opacity-100 
-         scale-[0.72] sm:scale-[0.85] md:scale-[1.7] origin-top-right"	>
-
+		class="right-0 top-0 flex md:absolute md:w-[331px] md:flex-col md:p-[inherit]"
+	>
 		<Type2
 			innerShape={shape_1.get(colour)!.innerShape}
 			middleShape={shape_1.get(colour)!.middleShape}

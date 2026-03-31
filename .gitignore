@@ -7,5 +7,3 @@ pg_tileserv.env
 services/frontend/.DS_Store
 services/frontend/dist
 services/frontend/.DS_Store
-services/.DS_Store
-.env*
