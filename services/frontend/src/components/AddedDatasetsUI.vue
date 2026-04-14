@@ -113,8 +113,8 @@
                             </v-list-item>
                             <v-list-item
                                    
-                                @click="getLayerExtentFromDB(addedLayer.dct_title)"
-                                v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table'"
+                                @click="getLayerExtentFromDB(addedLayer)"
+                                v-if="(addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table' || addedLayer.dct_type==='raster') && addedLayer.dct_bbox!=undefined"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -363,9 +363,40 @@ const showLayerMetadata = (addedLayer)=>{
 
     metadataDialogStore.assignMetadata( addedLayer,addedLayer.dct_title)
 }
-const getLayerExtentFromDB = async (layerName)=>{
-    const layerExtent =  await getLayerExtent(layerName)
-    emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
+const getLayerExtentFromDB = async (addedLayer)=>{
+
+    if (addedLayer.dct_type=='table'){
+        const layerExtent =  await getLayerExtent(addedLayer.dct_title)
+        emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
+    }
+    else if (addedLayer.dct_type=='raster'){ 
+        /* the bbox from WMS coming from metadate table in GeoJson format
+        so it needs to be transfromed to Maplibre fitBounds format
+        */
+        try {
+            const geojson = addedLayer.dct_bbox;
+        
+            const bbox = geojson?.coordinates?.[0]?.length 
+            ? [
+                Math.min(...geojson.coordinates[0].map(p => p[1])),   // minLng
+                Math.min(...geojson.coordinates[0].map(p => p[0])),   // minLat
+                Math.max(...geojson.coordinates[0].map(p => p[1])),   // maxLng
+                Math.max(...geojson.coordinates[0].map(p => p[0]))    // maxLat
+              ]
+            : null;
+
+
+
+            if (bbox) {
+                emit("fitBoundsToBBOX", [bbox[0], bbox[1], bbox[2], bbox[3]])
+            }
+
+        } catch (e) {
+            console.error("Failed to parse bbox:", e);
+        }
+            
+    }
+    
 }
 const toggleLayerVisibility = (layerName)=>{
     
