@@ -28,7 +28,7 @@ export const useaddedDatasetsStore = defineStore ({
                 this.addedLayers[key].checked = false;
               }
             }
-            console.log(this.addedLayers, "addedLayers")
+            
           },
           declareReadyToCartographyDeepLink() {
             this.readyForCartography = true;

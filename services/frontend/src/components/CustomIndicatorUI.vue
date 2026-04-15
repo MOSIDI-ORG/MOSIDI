@@ -111,6 +111,12 @@
                     @mouseover="hoveredItem = index"
                     @mouseleave="hoveredItem = null"
                 >
+                    <v-list-item-subtitle 
+                        v-if="metadata.dct_type === 'indikator'" 
+                        class="text-wrap text-caption"
+                    >
+                        {{ metadata.dcatde_politicalgeocodingleveluri }}, {{ getYear(metadata.dct_temporal_startdata) }}-{{ getYear(metadata.dct_temporal_enddate) }}
+                    </v-list-item-subtitle>
                     <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
                     <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
                    <template v-slot:prepend>
@@ -232,7 +238,7 @@ const filteredItems = computed(() => {
             ? item.dct_catalog_publisher === selectedDatasetSource.value
             : true;
         const matchesGeometryType = selectedGeometryTypee.value && selectedGeometryTypee.value !== 'All'
-            ? item.geometry_type === selectedGeometryTypee.value
+            ? item.dcatde_politicalgeocodingleveluri === selectedGeometryTypee.value
             : true;
 
         const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
@@ -293,7 +299,7 @@ const dataSources = computed(() => {
 // reactive geometryTypes with counts
 const geometryTypes = computed(() => {
   const counts = filteredMeta.value.reduce((acc, item) => {
-    const key = item.geometry_type
+    const key = item.dcatde_politicalgeocodingleveluri
     acc[key] = (acc[key] || 0) + 1
     return acc
   }, {})
@@ -321,6 +327,10 @@ const availableYearsForIndicatorFilter = computed(() => {
     { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
   ]
 })
+const getYear = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).getFullYear();
+};
 
 const getKommunalesGebietCentroidGeojson = async () => {
     if(kommunales_gebiet_geojson.value == null ){
