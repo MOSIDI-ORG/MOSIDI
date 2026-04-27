@@ -125,6 +125,7 @@ const addSensorThingsLayerToMap = (observedProperty) => {
     position: absolute;
     top: 62px;
     left: 10px;
+    margin-bottom: 20px;
     z-index: 10;
     background-color: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);

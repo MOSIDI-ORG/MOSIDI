@@ -170,7 +170,7 @@
                         v-if="item.dct_type === 'indikator'" 
                         class="text-wrap text-caption"
                     >
-                        {{ item.dcatde_politicalgeocodingleveluri }}
+                        {{ item.dcatde_politicalgeocodingleveluri }}, {{ getYear(item.dct_temporal_startdata) }}-{{ getYear(item.dct_temporal_enddate) }}
                     </v-list-item-subtitle>
 
                     <v-list-item-title class="text-wrap" v-text="item.dct_title"></v-list-item-title>
@@ -411,6 +411,10 @@ watch(activatedDatasetSearch, () => {
   selectedDatasetSource.value = null
   selectedLayerMetadata.value = null
 })
+const getYear = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).getFullYear();
+};
 const filteredItems = computed(() => {
     return tableMetadata.value.filter(item => {
         const matchesSearchText = layerSearchText.value
