@@ -5,6 +5,7 @@
         density="compact"
         :title="$t('dataset-search-landing.indicator.title')"
         variant="text"
+        @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('indicator')" style="cursor: pointer;"
     >
         
         <template #subtitle >
@@ -15,7 +16,7 @@
             
         </template>
         <template #prepend>
-        <v-avatar @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('indicator')" style="cursor: pointer;">
+        <v-avatar >
                 <v-img width="20" src="icons/plus.svg" ></v-img>
             </v-avatar>
         
@@ -28,6 +29,7 @@
         density="compact"
         :title="$t('dataset-search-landing.geo.title')"
         variant="text"
+        @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('geodata')" style="cursor: pointer;"
         
     >
         
@@ -39,7 +41,7 @@
             
         </template>
         <template #prepend>
-        <v-avatar @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('geodata')" style="cursor: pointer;">
+        <v-avatar>
                 <v-img width="20" src="icons/plus.svg" ></v-img>
             </v-avatar>
         
