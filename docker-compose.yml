@@ -137,6 +137,13 @@ services:
       - persistence_db_username=${POSTGRES_USER}
       - persistence_db_password=${POSTGRES_PASSWORD}
       - persistence_autoUpdateDatabase=true
+      - auth_provider=de.fraunhofer.iosb.ilt.frostserver.auth.basic.BasicAuthProvider
+      - auth_autoUpdateDatabase=true
+      - auth_plainTextPassword=false
+      - auth_db_driver=org.postgresql.Driver
+      - auth_db_url=jdbc:postgresql://brandenburg_db:5432/${POSTGRES_DB}
+      - auth_db_username=${POSTGRES_USER}
+      - auth_db_password=${POSTGRES_PASSWORD}
     depends_on:
       - brandenburg_db
     restart: unless-stopped
