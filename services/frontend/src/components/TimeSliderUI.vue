@@ -14,6 +14,15 @@
         track-color="grey"
         thumb-color="black"
       >
+      <template v-slot:tick-label="{ tick, index }">
+       <span 
+          v-if="index % (indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator?.length > 25 ? 5 : indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.availailableYearsForSelectedIndicator?.length > 15 ? 2 : 1) === 0" 
+          class="tick-text"
+        >
+       
+         {{ typeof tick === 'object' ? tick.label : tick }}
+        </span>
+      </template>
    
         <template v-slot:append>
           <v-btn
