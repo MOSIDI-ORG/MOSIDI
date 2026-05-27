@@ -147,7 +147,7 @@
             width="371"
             >
 
-            <div style="height: 81%;" class="ml-1 mr-1">
+            <div :style="{ height: activatedDatasetSearch === 'indicator' ? '81%' : '100%' }" class="ml-1 mr-1">
                 <span style="font-size: 1rem; font-weight: 500;" class="ml-2">
                 {{ filteredItems?.length + ' ' + $t('dataset-filter.results') }}
                 </span>
@@ -204,11 +204,12 @@
                 </v-virtual-scroll>
             </div>
 
-            <v-divider></v-divider>
+            <v-divider v-if="activatedDatasetSearch === 'indicator'"></v-divider>
 
             <v-list-item
                 :subtitle="$t('dataset-filter.custom.subtitle')"
                 :title="$t('dataset-filter.custom.title')"
+                v-if="activatedDatasetSearch === 'indicator'"
             >
                 <template v-slot:prepend>
                 <v-avatar style="cursor: pointer;">
