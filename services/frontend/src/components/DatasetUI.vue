@@ -166,34 +166,36 @@
                 </v-col>
             </v-row>
             <v-divider style="margin-left: 15px; margin-right: 15px;" class="mt-2"></v-divider>
-            <v-list-item
-                :subtitle="$t('bivariate.subtitle')"
-                :title="$t('bivariate.title')"
-                class="text-left mb-2"
-            >
-                <template v-slot:prepend>
-                    <v-menu>
-                        <template v-slot:activator="{ props }">
-                            <v-avatar style="cursor: pointer;" v-bind="props">
+            <v-menu>
+                <template v-slot:activator="{ props }">
+                    <v-list-item
+                        v-bind="props"
+                        :subtitle="$t('bivariate.subtitle')"
+                        :title="$t('bivariate.title')"
+                        class="text-left mb-2"
+                        link
+                    >
+                        <template v-slot:prepend>
+                            <v-avatar>
                                 <v-img src="icons/combine.svg" />
                             </v-avatar>
                         </template>
-
-                        <v-list>
-                            <v-list-item
-                                @click="bivariateUI = true, trivariateUI = false"
-                                prepend-icon="mdi-chart-scatter-plot"
-                                title="Bivariate"
-                            />
-                            <v-list-item
-                                @click="trivariateUI = true, bivariateUI = false"
-                                prepend-icon="mdi-chart-bubble"
-                                title="Trivariate"
-                            />
-                        </v-list>
-                    </v-menu>
+                    </v-list-item>
                 </template>
-            </v-list-item>
+
+                <v-list>
+                    <v-list-item
+                        @click="bivariateUI = true; trivariateUI = false"
+                        prepend-icon="mdi-chart-scatter-plot"
+                        title="Bivariate"
+                    />
+                    <v-list-item
+                        @click="trivariateUI = true; bivariateUI = false"
+                        prepend-icon="mdi-chart-bubble"
+                        title="Trivariate"
+                    />
+                </v-list>
+            </v-menu>
         </v-card>
         <v-card v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='custom indikator'" :style="{ left: isMinimized ? '90px' : '382px'}" class="added-custom-indikator-ui mx-auto animated-transform"  width="371">
             <v-row no-gutters  style="text-align: left;" class="d-flex justify-center align-center mt-4" >

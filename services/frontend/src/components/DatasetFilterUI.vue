@@ -210,12 +210,13 @@
                 :subtitle="$t('dataset-filter.custom.subtitle')"
                 :title="$t('dataset-filter.custom.title')"
                 v-if="activatedDatasetSearch === 'indicator'"
+                @click="customIndicatorUI = true, metadataUI = false"  
             >
                 <template v-slot:prepend>
                 <v-avatar style="cursor: pointer;">
                     <v-img 
                     src="icons/calculate.svg" 
-                    @click="customIndicatorUI = true, metadataUI = false"  
+                    
                     />
                 </v-avatar>
                 </template>
