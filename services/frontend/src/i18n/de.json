@@ -110,7 +110,8 @@
         },
         "metadata":{
             "title":"Metadaten",
-            "empty-msg": "Keine Metadaten verfügbar für"
+            "empty-msg": "Keine Metadaten verfügbar für",
+            "missing-info": "Fehlende Angaben"
         }
 
     },
