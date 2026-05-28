@@ -123,7 +123,8 @@
         },
         "add": "Indikator hinzufügen",
         "formula": "Formel",
-        "calculate": "Kalkulieren"
+        "calculate": "Kalkulieren",
+        "add-layer": "Layer hinzufügen"
     },
     "dataset":{
         "year-filter-title":"Jahr auswählen",
