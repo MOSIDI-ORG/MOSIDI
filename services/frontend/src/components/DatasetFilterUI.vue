@@ -221,9 +221,8 @@
                 </v-avatar>
                 </template>
             </v-list-item>
-            </div>
             
-            </v-card>
+        </v-card>
         
     </div>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
@@ -1022,9 +1021,9 @@ const addTernaryLayerToMap = (data)=>{
     emit("addTernaryLayerToMap", data)
 }
 
-const showFormula = () => {
+/*const showFormula = () => {
     return activatedDatasetSearch != DatasetTypes.SensorThings;
-}
+}*/
 </script>
 
 <style scoped>
