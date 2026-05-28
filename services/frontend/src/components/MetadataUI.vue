@@ -17,7 +17,7 @@
             <v-divider class="my-4"></v-divider>
             
             <div class="text-caption text-grey mb-1">
-                <b>Missing Information:</b>
+                <b>{{ $t('dataset-filter.metadata.missing-info') }}:</b>
             </div>
             
             <span v-for="key in missingMetadataKeys" :key="`missing-${key}`" class="text-caption text-grey mr-2">
