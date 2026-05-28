@@ -345,7 +345,6 @@ const lastLegendItem = computed(() => {
     console.warn("No layer with checked = true found."); // Optional debugging
     return null; // Handle the case where no matching key is found
   }
-  
   // Safely access the value associated with the key
   const legendSpecForCheckedKey = addedLayersLegendSpec.value[keyWithCheckedTrue];
 

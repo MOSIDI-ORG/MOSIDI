@@ -243,7 +243,6 @@
                 
         </v-card>
         <CustomIndicatorUI
-                :indicatorNames="tableMetadata.filter(item => item.dct_type === 'indikator')"
                 :selectedColorPalette="selectedColorPalette"
                 :isMinimized="isMinimized"
                 @addDeckglLayer="addDeckglLayer"
@@ -554,9 +553,7 @@ const showLayerMetadata= (layerName, granularity)=>{
 const addLayerToMap = async (layerName,geomType, granularity)=>{    
     
     if (geomType=='raster'){
-        console.log(externalWMSLayers.value, "externalWMSLayers")
         let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
-        console.log(item, "item")
         addExternaWMSLayerToMap(item)
         
     }
@@ -585,7 +582,6 @@ const addLayerToMap = async (layerName,geomType, granularity)=>{
 }
 
 const addExternaWMSLayerToMap=(item)=>{
-    //console.log(addedDatasetsStore.addedLayers, "added layers")
     if (item.legend_url== undefined){
         alertStore.setAlert({
                 text: `There is no legend for ${item.dct_title}`,
@@ -769,7 +765,7 @@ const mapStylization = (indicatorName) => {
     })
     mapLegend(indicatorName)
 }
-const addCustomLayer= (array,classes, formula)=>{
+const addCustomLayer= (array,classes, formula, granularity)=>{
     let customMetadata = {
         dct_title: formula.value,
         dct_type: "custom indikator",
@@ -777,8 +773,8 @@ const addCustomLayer= (array,classes, formula)=>{
         dct_language: "de",
         dct_catalog_description: "Custom Indicator",
         dct_catalog_publisher: "Custom",
+        dcatde_politicalgeocodingleveluri: granularity
     }
-    
     addedDatasetsStore.addLayer({layerName:formula.value, metadata:customMetadata})
     indicatorStore.setIndicatordata({
         indicator: [[array]],
@@ -794,7 +790,7 @@ const addCustomLayer= (array,classes, formula)=>{
             classification_result_3_intervals: classes,
             classificationMethod: selectedClassificationMethod.value
         })
-    addCommuneTileLayer(formula.value, 'Gemeindeebene')
+    addCommuneTileLayer(formula.value, granularity)
     customMapStylization(array,classes, formula)
 }
 const customMapStylization = (array,classes, formula)=>{

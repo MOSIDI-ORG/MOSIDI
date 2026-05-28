@@ -124,7 +124,8 @@
         },
         "add": "Add Indicator",
         "formula": "Formula",
-        "calculate": "Calculate"
+        "calculate": "Calculate",
+        "add-layer": "Add Layer"
     },
     "dataset":{
         "year-filter-title":"Select Year",
