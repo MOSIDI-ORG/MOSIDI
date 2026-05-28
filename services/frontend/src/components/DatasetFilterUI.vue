@@ -273,30 +273,11 @@
             
                 
         </v-card>
-        <v-card style="background-color: transparent;">
-            <div v-if="selectedLayerMetadata">
-                <div v-for="(item,index) in selectedLayerMetadata" :key="index">
-                    <v-card-text v-if="index">
-                        <span  v-if="isValidURL(item)">
-                            <b>{{ $t(`metadata-labels.${index}`, index) }}</b>: <a :href="item" target="_blank">{{ item }}</a> 
-                        </span>
-                        <span v-else>
-                            <b>{{ $t(`metadata-labels.${index}`, index) }}</b>:
-                            {{ item }}
-                        </span>
-                    
-                    </v-card-text>
-                
-                </div>
-            </div>
-            <template v-else>
-                <v-card-text>
-                    {{ $t('dataset-filter.metadata.empty-msg') }} {{ selectedLayerName }}
-                </v-card-text>
-            </template>
-        
-
-        </v-card>
+        <MetadataUI
+            :metadata="selectedLayerMetadata"
+            :layer-name="selectedLayerName"
+            v-if="metadataUI==true"
+        />
     </v-card>
 </div>
 
@@ -313,6 +294,7 @@ import { useAlertStore } from '@/stores/alert'
 import { useProgressStore } from '@/stores/progress'
 import { useMapLegendStore } from '@/stores/mapLegend'
 import DatasetUI from "@/components/DatasetUI.vue";
+import MetadataUI from "@/components/MetadataUI.vue";
 import * as colorbrewer from 'colorbrewer';
 import { storeToRefs } from 'pinia'
 
@@ -322,7 +304,7 @@ import { useIndicatorStore } from '@/stores/indicator'
 import { createHistogram } from '../utils/histogram';
 import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
-import { isValidURL } from '../utils/isValidURL';
+//import { isValidURL } from '../utils/isValidURL';
 import { externalLayers } from '../assets/externalLayers'; 
 import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
 
