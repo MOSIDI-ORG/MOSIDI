@@ -130,7 +130,7 @@ services:
       - serviceRootUrl=http://localhost:8080/FROST-Server
       - plugins_multiDatastream.enable=false
       - http.cors.enable=true
-      - http.cors.allowed.origins=http://localhost:8087
+      - http.cors.allowed.origins=https://localhost
       - http.cors.support.credentials=true
       - persistence_db_driver=org.postgresql.Driver
       - persistence_db_url=jdbc:postgresql://brandenburg_db:5432/${POSTGRES_DB}
@@ -146,6 +146,8 @@ services:
       - auth_db_password=${POSTGRES_PASSWORD}
     depends_on:
       - brandenburg_db
+    ports:
+      - "8080:8080"
     restart: unless-stopped
 
 volumes:
