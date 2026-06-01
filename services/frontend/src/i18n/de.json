@@ -100,7 +100,8 @@
             "type":"Typ",
             "source":"Quelle",
             "geometry":"Geometrie",
-            "time":"Zeit"
+            "time":"Zeit",
+            "category":"Kategorie"
         },
         "results": "Ergebnisse",
         "custom":{

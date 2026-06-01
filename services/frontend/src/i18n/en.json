@@ -101,7 +101,8 @@
             "type":"Type",
             "source":"Source",
             "geometry":"Geometry",
-            "time":"Time"
+            "time":"Time",
+            "category":"Category"
         },
         "results": "Results",
         "custom":{
