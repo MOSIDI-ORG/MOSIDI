@@ -324,7 +324,8 @@ const addDataUI = (datasettitle, datasetType, geomType, granularity)=> {
                 selectedDatasetType: "raster"
             })
         }
-        else if(datasetType==DatasetTypes.CustomIndicator){
+        else if(datasetType=='custom indikator'){
+            datasetName = datasettitle
             for(let layer in addedDatasetsStore.addedLayers){
                 if (layer!=datasetName){
                     emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'none')

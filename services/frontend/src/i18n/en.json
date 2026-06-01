@@ -105,7 +105,8 @@
             "type":"Type",
             "source":"Source",
             "geometry":"Geometry",
-            "time":"Time"
+            "time":"Time",
+            "category":"Category"
         },
         "results": "Results",
         "custom":{
@@ -115,7 +116,8 @@
         },
         "metadata":{
             "title":"Metadata",
-            "empty-msg": "No metaData available for"
+            "empty-msg": "No metaData available for",
+            "missing-info": "Missing Information"
         }
 
     },
@@ -127,7 +129,8 @@
         },
         "add": "Add Indicator",
         "formula": "Formula",
-        "calculate": "Calculate"
+        "calculate": "Calculate",
+        "add-layer": "Add Layer"
     },
     "dataset":{
         "year-filter-title":"Select Year",

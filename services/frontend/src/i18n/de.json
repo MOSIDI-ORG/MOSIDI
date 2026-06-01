@@ -104,7 +104,8 @@
             "type":"Typ",
             "source":"Quelle",
             "geometry":"Geometrie",
-            "time":"Zeit"
+            "time":"Zeit",
+            "category":"Kategorie"
         },
         "results": "Ergebnisse",
         "custom":{
@@ -114,7 +115,8 @@
         },
         "metadata":{
             "title":"Metadaten",
-            "empty-msg": "Keine Metadaten verfügbar für"
+            "empty-msg": "Keine Metadaten verfügbar für",
+            "missing-info": "Fehlende Angaben"
         }
 
     },
@@ -126,7 +128,8 @@
         },
         "add": "Indikator hinzufügen",
         "formula": "Formel",
-        "calculate": "Kalkulieren"
+        "calculate": "Kalkulieren",
+        "add-layer": "Layer hinzufügen"
     },
     "dataset":{
         "year-filter-title":"Jahr auswählen",

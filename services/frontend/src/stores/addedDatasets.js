@@ -18,6 +18,9 @@ export const useaddedDatasetsStore = defineStore ({
             if (metadata.dct_type=='raster'){
               compositeKey = `${layerName}`;
             }
+            else if(metadata.dct_type=='custom indikator'){
+              compositeKey = `${layerName}`;
+            }
             else {
               // TODO: improve handling of granularity in SensorThings
               if (granularity != undefined && granularity != "") {

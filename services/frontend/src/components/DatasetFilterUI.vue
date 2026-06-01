@@ -50,12 +50,13 @@
                 </div>
                 <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
                     <v-row no-gutters>
-                        <v-col >
+                       
+                        <v-col>
                             <v-select
-                                :items="datasetTypes"
-                                :item-title="'alias'"
-                                :item-value="'name'"
-                                :label="$t('dataset-filter.filter-label.type')"
+                                :items="datasetCategories"
+                                :item-title="'label'"
+                                :item-value="'value'"
+                                :label="$t('dataset-filter.filter-label.category')"
                                 dense
                                 outlined
                                 density="compact"
@@ -63,7 +64,7 @@
                                 hide-details
                                 rounded
                                 solo                
-                                v-model="selectedDatasetType"
+                                v-model="selectedDatasetCategory"
                             ></v-select>
                         </v-col>
                         <v-col>
@@ -244,7 +245,6 @@
                 
         </v-card>
         <CustomIndicatorUI
-                :indicatorNames="tableMetadata.filter(item => item.dct_type === 'indikator')"
                 :selectedColorPalette="selectedColorPalette"
                 :isMinimized="isMinimized"
                 @addDeckglLayer="addDeckglLayer"
@@ -274,30 +274,11 @@
             
                 
         </v-card>
-        <v-card style="background-color: transparent;">
-            <div v-if="selectedLayerMetadata">
-                <div v-for="(item,index) in selectedLayerMetadata" :key="index">
-                    <v-card-text v-if="index">
-                        <span  v-if="isValidURL(item)">
-                            <b>{{ $t(`metadata-labels.${index}`, index) }}</b>: <a :href="item" target="_blank">{{ item }}</a> 
-                        </span>
-                        <span v-else>
-                            <b>{{ $t(`metadata-labels.${index}`, index) }}</b>:
-                            {{ item }}
-                        </span>
-                    
-                    </v-card-text>
-                
-                </div>
-            </div>
-            <template v-else>
-                <v-card-text>
-                    {{ $t('dataset-filter.metadata.empty-msg') }} {{ selectedLayerName }}
-                </v-card-text>
-            </template>
-        
-
-        </v-card>
+        <MetadataUI
+            :metadata="selectedLayerMetadata"
+            :layer-name="selectedLayerName"
+            v-if="metadataUI==true"
+        />
     </v-card>
 </div>
 
@@ -315,6 +296,7 @@ import { useAlertStore } from '@/stores/alert'
 import { useProgressStore } from '@/stores/progress'
 import { useMapLegendStore } from '@/stores/mapLegend'
 import DatasetUI from "@/components/DatasetUI.vue";
+import MetadataUI from "@/components/MetadataUI.vue";
 import * as colorbrewer from 'colorbrewer';
 import { storeToRefs } from 'pinia'
 
@@ -325,7 +307,7 @@ import { createHistogram } from '../utils/histogram';
 import { DatasetTypes } from '@/utils/datasetTypes';
 import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
-import { isValidURL } from '../utils/isValidURL';
+//import { isValidURL } from '../utils/isValidURL';
 import { externalLayers } from '../assets/externalLayers'; 
 import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
 import { convertToMetadata } from '@/utils/MetadataConverter';
@@ -372,6 +354,7 @@ let hoveredItem = ref(null)
 let tableMetadata = ref([])
 let layerSearchText= ref("")
 let selectedDatasetType = ref(null)
+let selectedDatasetCategory = ref(null)
 
 
 
@@ -410,12 +393,14 @@ watch(activatedDatasetSearch, () => {
   selectedGeometryTypee.value = null
   selectedDatasetSource.value = null
   selectedLayerMetadata.value = null
+  selectedDatasetCategory.value = null
 })
 const getYear = (dateString) => {
   if (!dateString) return '';
   return new Date(dateString).getFullYear();
 };
 const filteredItems = computed(() => {
+    const typeFilter = activatedDatasetSearch.value?.toLowerCase()
     return tableMetadata.value.filter(item => {
         const matchesSearchText = layerSearchText.value
             ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
@@ -423,7 +408,7 @@ const filteredItems = computed(() => {
         const matchesDatasetType = selectedDatasetType.value && selectedDatasetType.value !== 'all'
             ? item.dct_type === selectedDatasetType.value
             : true;
-       const preFilterDatasetType = (() => {
+        const preFilterDatasetType = (() => {
             if (activatedDatasetSearch.value === 'indicator') {
                 return item.dct_type === DatasetTypes.Indicator;
             } else if (activatedDatasetSearch.value === 'geodata') {
@@ -434,6 +419,10 @@ const filteredItems = computed(() => {
                 return true; 
             }
         })();
+       // ONLY apply category filtering if we are dealing with indicators
+        const matchesDatasetCategory = (typeFilter === 'indicator' && selectedDatasetCategory.value && selectedDatasetCategory.value !== 'All')
+            ? item.dcat_ap_title === selectedDatasetCategory.value
+            : true;
         const matchesDatasetSource = selectedDatasetSource.value && selectedDatasetSource.value !== 'All'
             ? item.dct_catalog_publisher === selectedDatasetSource.value
             : true;
@@ -445,22 +434,11 @@ const filteredItems = computed(() => {
         const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
             ? new Date(item.dct_temporal_enddate).getFullYear() >= parseInt(selectedYearIndicatorFilter.value)
             : true;
-        return matchesSearchText && matchesDatasetType &&  preFilterDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
+        return matchesSearchText && matchesDatasetType && preFilterDatasetType && matchesDatasetCategory && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
     });
 });
-const datasetTypes = computed(() => {
-  if (activatedDatasetSearch.value === 'indicator') {
-    return [{ alias: 'Indicator', name: 'indikator' }];
-  } else if (activatedDatasetSearch.value === 'geodata') {
-    return [{ alias: 'WMS', name: 'raster' }];
-  } else {
-    return [
-      { alias: 'Indicator', name: 'indikator' },
-      { alias: 'WMS', name: 'raster' },
-      { alias: 'All', name: 'all' },
-    ];
-  }
-});
+
+
 const getIcon = (title, index, geomType, granularity)=> {
     let layerName = title+'_'+granularity
     if (addedDatasetsStore.addedLayers[layerName]) {
@@ -527,6 +505,41 @@ const filteredMeta = computed(() => {
   })
 })
 
+const datasetCategories = computed(() => {
+  // 1. Safely determine the active filter type (handling strings or wrapped store objects)
+  const rawFilter = typeof activatedDatasetSearch.value === 'object' 
+    ? activatedDatasetSearch.value?.value 
+    : activatedDatasetSearch.value;
+
+  const typeFilter = rawFilter?.toLowerCase()?.trim();
+
+  // 2. If it's NOT an indicator (e.g., geodata), ONLY show the "All" option
+  if (typeFilter !== 'indicator') {
+    return [
+      { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+    ]
+  }
+
+  // 3. If it IS an indicator, safely calculate category counts
+  const counts = filteredMeta.value.reduce((acc, item) => {
+    // Fallback if an indicator row accidentally missing a title string
+    const key = item.dcat_ap_title ? item.dcat_ap_title.trim() : 'Uncategorized'
+    acc[key] = (acc[key] || 0) + 1
+    return acc
+  }, {})
+
+  return [
+    ...Object.entries(counts).map(([value, count]) => ({
+      value,
+      count,
+      label: `${value} (${count})`
+    }))
+    .sort((a, b) =>
+      a.value.localeCompare(b.value, 'de', { sensitivity: 'base' })
+    ),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
 // reactive dataSources with counts
 const dataSources = computed(() => {
   const counts = filteredMeta.value.reduce((acc, item) => {
@@ -592,9 +605,7 @@ const showLayerMetadata= (layerName, granularity)=> {
 const addLayerToMap = async (layerName, geomType, granularity)=>{    
     
     if (geomType=='raster'){
-        console.log(externalWMSLayers.value, "externalWMSLayers")
         let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
-        console.log(item, "item")
         addExternaWMSLayerToMap(item)
         
     }
@@ -626,7 +637,6 @@ const addLayerToMap = async (layerName, geomType, granularity)=>{
 }
 
 const addExternaWMSLayerToMap=(item)=>{
-    //console.log(addedDatasetsStore.addedLayers, "added layers")
     if (item.legend_url== undefined){
         alertStore.setAlert({
                 text: `There is no legend for ${item.dct_title}`,
@@ -810,7 +820,7 @@ const mapStylization = (indicatorName) => {
     })
     mapLegend(indicatorName)
 }
-const addCustomLayer= (array,classes, formula)=>{
+const addCustomLayer= (array,classes, formula, granularity)=>{
     let customMetadata = {
         dct_title: formula.value,
         dct_type: "custom indikator",
@@ -818,8 +828,8 @@ const addCustomLayer= (array,classes, formula)=>{
         dct_language: "de",
         dct_catalog_description: "Custom Indicator",
         dct_catalog_publisher: "Custom",
+        dcatde_politicalgeocodingleveluri: granularity
     }
-    
     addedDatasetsStore.addLayer({layerName:formula.value, metadata:customMetadata})
     indicatorStore.setIndicatordata({
         indicator: [[array]],
@@ -835,7 +845,7 @@ const addCustomLayer= (array,classes, formula)=>{
             classification_result_3_intervals: classes,
             classificationMethod: selectedClassificationMethod.value
         })
-    addCommuneTileLayer(formula.value, 'Gemeindeebene')
+    addCommuneTileLayer(formula.value, granularity)
     customMapStylization(array,classes, formula)
 }
 const customMapStylization = (array,classes, formula)=>{

@@ -1,6 +1,8 @@
 # metadata.py
 from sqlalchemy import create_engine, text
 from os import getenv
+import os
+import pandas as pd
 
 dbConfig = {
     'host': getenv('POSTGRES_HOST', 'localhost'),
@@ -56,6 +58,8 @@ BEGIN
         legend_url TEXT,
         CONSTRAINT table_metadata_pkey PRIMARY KEY (table_name)
     );
+    ALTER TABLE public.table_metadata ADD COLUMN IF NOT EXISTS dcat_ap_id TEXT;
+    ALTER TABLE public.table_metadata ADD COLUMN IF NOT EXISTS dcat_ap_title TEXT;
 
     -- Loop through all tables in the public schema
     /*
@@ -356,6 +360,39 @@ def refresh_source_granularities():
         connection.commit()
     print("Materialized view refreshed successfully.")
 
+def apply_csv_classifications(engine):
+    """Reads the local CSV file and updates table_metadata fields."""
+    csv_path = os.path.join(os.path.dirname(__file__), 'table_metadata_classified_llm.csv')
+    
+    if not os.path.exists(csv_path):
+        print(f"⚠️ CSV mapping file not found at: {csv_path}. Skipping classification lookup.")
+        return
+
+    print("Mapping classifications from CSV file to table_metadata...")
+    df_csv = pd.read_csv(csv_path)
+    update_data = df_csv[['title', 'dcat_ap_id', 'dcat_ap_title']].dropna(subset=['title'])
+
+    update_query = """
+    UPDATE table_metadata
+    SET dcat_ap_id = :dcat_ap_id, dcat_ap_title = :dcat_ap_title
+    WHERE dct_title = :title;
+    """
+    
+    updated_count = 0
+    with engine.begin() as conn:
+        for _, row in update_data.iterrows():
+            title_val = str(row['title']).strip()
+            id_val = None if pd.isna(row['dcat_ap_id']) else str(row['dcat_ap_id']).strip()
+            title_ap_val = None if pd.isna(row['dcat_ap_title']) else str(row['dcat_ap_title']).strip()
+            
+            result = conn.execute(
+                text(update_query), 
+                {"dcat_ap_id": id_val, "dcat_ap_title": title_ap_val, "title": title_val}
+            )
+            updated_count += result.rowcount
+            
+    print(f"Successfully appended classification tokens to {updated_count} rows.")
+
 def create_and_populate_metadata():
     """Create and populate the table_metadata table."""
     print("Executing custom SQL to populate table_metadata...")
@@ -368,6 +405,8 @@ def create_and_populate_metadata():
         # Commit the changes to the database
         connection.commit()  # Explicit commit to ensure changes are saved
     print("Metadata summary table created and populated successfully.")
+
+    apply_csv_classifications(engine)
     refresh_source_granularities()
 
 if __name__ == "__main__":
