@@ -325,7 +325,9 @@ def get_table_metadata_from_db():
                 m.details,
                 m.imported,
                 m.dct_type,
-                m.legend_url
+                m.legend_url,
+                m.dcat_ap_id,
+                m.dcat_ap_title
             FROM table_metadata m
             INNER JOIN source_granularities d ON m.dct_title = d.indikator
                                              AND m.dct_catalog_publisher = d.source
