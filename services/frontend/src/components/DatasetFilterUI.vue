@@ -456,6 +456,7 @@ const toggleFilterUI = ()=>{
     datasetSearchStore.toggleFilter({
         filterInitiated : false
     })
+    metadataUI.value= false
 }
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
