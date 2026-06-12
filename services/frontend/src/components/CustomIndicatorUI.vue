@@ -100,70 +100,73 @@
         </v-card>
        
 
-        <div style="background-color:transparent; overflow-y: scroll; max-height: 310px;">
-            <v-list lines="two" style="background-color:transparent; height: 81%;" class="ml-1 mr-1">   
-                <span style="font-size: 1rem; font-weight: 500;" class="ml-2">{{filteredItems?.length + ' '+  $t('dataset-filter.results')}}</span>        
-                <v-list-item
-                    v-for="(metadata, index) in filteredItems"
-                    :key="index"
-                    style="border-radius: 5px;"
-                    @click=handleItemClick(metadata)
-                    @mouseover="hoveredItem = index"
-                    @mouseleave="hoveredItem = null"
-                >
-                    <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
-                    <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
-                   <template v-slot:prepend>
-                        <v-avatar>
-                            <v-img 
-                                :src="getIcon(metadata.dct_title, index, metadata.geometry_type)"
-                                max-height="40"
-                                max-width="40"
-                                style="cursor: pointer;"
-                                
-                            ></v-img>
-                        </v-avatar>
-                    </template>
-                    <template v-slot:append>
-                        <v-col
-                        style="float: right;"
-                        >
-                    
-                        <div 
-                            @click.stop 
-                            @mousedown.stop 
-                            @mouseup.stop
-                            v-if="addedIndicator!==null"
-                            >
-                           
-                           
-                        <v-select
-                            v-show="Object.values(addedIndicator).some(innerItem => innerItem.selectedIndicator === metadata.dct_title)"
-                            :items="metadata.availailableYears"
-                            v-model="metadata.selectedYear"
-                            density="compact"
-                            :label="$t('custom-indicator.select-labels.year')"
-                            variant="outlined"
-                            hide-details
-                            :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                           
-                            
-                        >
-                        </v-select>
-                        </div>
-                        </v-col>
-                    </template>
-                    
-                </v-list-item>
-                
+        <div style="background-color:transparent; height: 310px; max-height: 310px;">
         
-            </v-list>
-            
-           
-           
-            
-                
+            <span style="font-size: 1rem; font-weight: 500;" class="ml-3 d-block my-1">
+                {{ filteredItems?.length + ' ' + $t('dataset-filter.results') }}
+            </span>        
 
+            <v-virtual-scroll
+                :items="filteredItems"
+                :item-height="88"
+                height="calc(100% - 30px)"
+                style="background-color: transparent;"
+            >
+                <template v-slot:default="{ item: metadata }">
+                    <v-list-item
+                        style="border-radius: 5px;"
+                        class="mx-2 my-1"
+                        lines="two"
+                        @click="handleItemClick(metadata)"
+                        
+                        @mouseover="hoveredItem = metadata.dct_title"
+                        @mouseleave="hoveredItem = null"
+                    >
+                        <v-list-item-subtitle 
+                            v-if="metadata.dct_type === 'indikator'" 
+                            class="text-wrap text-caption"
+                        >
+                            {{ metadata.dcatde_politicalgeocodingleveluri }}, {{ getYear(metadata.dct_temporal_startdata) }}-{{ getYear(metadata.dct_temporal_enddate) }}
+                        </v-list-item-subtitle>
+                        
+                        <v-list-item-title class="text-wrap" v-text="metadata.dct_title"></v-list-item-title>
+                        <v-list-item-subtitle class="text-wrap" v-text="metadata.dct_catalog_publisher"></v-list-item-subtitle>
+                        
+                        <template v-slot:prepend>
+                            <v-avatar>
+                                <v-img 
+                                    :src="getIcon(metadata.dct_title, metadata.dct_title, metadata.geometry_type, metadata.dcatde_politicalgeocodingleveluri)"
+                                    max-height="40"
+                                    max-width="40"
+                                    style="cursor: pointer;"
+                                ></v-img>
+                            </v-avatar>
+                        </template>
+
+                        <template v-slot:append>
+                            <v-col style="float: right;">
+                                <div 
+                                    @click.stop 
+                                    @mousedown.stop 
+                                    @mouseup.stop
+                                    v-if="addedIndicator !== null"
+                                >
+                                    <v-select
+                                        v-show="addedIndicatorTitlesSet.has(`${metadata.dct_title}_${metadata.dcatde_politicalgeocodingleveluri}`)"
+                                        :items="metadata.availailableYears"
+                                        v-model="metadata.selectedYear"
+                                        density="compact"
+                                        :label="$t('custom-indicator.select-labels.year')"
+                                        variant="outlined"
+                                        hide-details
+                                        :menu-props="{ 'max-height': '200', 'max-width': '300'}"
+                                    ></v-select>
+                                </div>
+                            </v-col>
+                        </template>
+                    </v-list-item>
+                </template>
+            </v-virtual-scroll>
         </div>
        <v-divider class=" mt-1 mb-0"></v-divider>
         <v-container fluid >
@@ -186,7 +189,7 @@
                 @click="calculate()"
                 prepend-icon="mdi-calculator-variant"
             >
-            {{$t('custom-indicator.calculate')}}
+            {{$t('custom-indicator.add-layer')}}
             </v-btn>
         </div>
         
@@ -194,8 +197,8 @@
 </template>
 
 <script setup>
-import { defineProps, ref, computed, onMounted, defineEmits } from 'vue'
-import {getIndicatorData, getGeojsonDataFromDB, classification} from "../services/backend.calls";
+import { ref, computed, defineEmits, onMounted } from 'vue'
+import {getIndicatorData, classification, getTableMetadata} from "../services/backend.calls";
 import { useAlertStore } from '@/stores/alert'
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { storeToRefs } from 'pinia'
@@ -205,7 +208,6 @@ let {  activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
 
 const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer", "customMapStylization", "addCustomLayer"]);
 
-let kommunales_gebiet_geojson = ref(null)
 let classification_result = ref(null)
 let hoveredItem = ref(null)
 let layerSearchText= ref("")
@@ -213,34 +215,56 @@ let selectedGeometryTypee = ref(null)
 let selectedDatasetSource = ref(null)
 let selectedYearIndicatorFilter = ref(null)
 let selectedDatasetType = ref(null)
+let tableMetadata = ref([])
 
-onMounted(()=>{
+
+onMounted(async()=>{
    
-    getKommunalesGebietCentroidGeojson()
-
+    tableMetadataRequest()
 })
-    
+const tableMetadataRequest = async () => {
+  const response = await getTableMetadata()
+  
+  tableMetadata.value = response
+  tableMetadata.value.sort((a, b) =>
+        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+    );
+  // --- filter based on activatedDatasetSearch ---
+}
+
+const getYear = (dateString) => {
+  if (!dateString) return '';
+  return new Date(dateString).getFullYear();
+};
 const filteredItems = computed(() => {
-    return props.indicatorNames?.filter(item => {
+    return tableMetadata.value.filter(item => {
         const matchesSearchText = layerSearchText.value
             ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
             : true;
         const matchesDatasetType = selectedDatasetType.value && selectedDatasetType.value !== 'all'
             ? item.dct_type === selectedDatasetType.value
             : true;
+       const preFilterDatasetType = (() => {
+            if (activatedDatasetSearch.value === 'indicator') {
+                return item.dct_type === 'indikator';
+            } else if (activatedDatasetSearch.value === 'geodata') {
+                return item.dct_type === 'raster';
+            } else {
+                return true; 
+            }
+        })();
         const matchesDatasetSource = selectedDatasetSource.value && selectedDatasetSource.value !== 'All'
             ? item.dct_catalog_publisher === selectedDatasetSource.value
             : true;
+        
         const matchesGeometryType = selectedGeometryTypee.value && selectedGeometryTypee.value !== 'All'
-            ? item.geometry_type === selectedGeometryTypee.value
+            ? item.dcatde_politicalgeocodingleveluri === selectedGeometryTypee.value
             : true;
 
         const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
             ? new Date(item.dct_temporal_enddate).getFullYear() >= parseInt(selectedYearIndicatorFilter.value)
             : true;
-       
-        
-        return matchesSearchText && matchesDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
+        return matchesSearchText && matchesDatasetType &&  preFilterDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
     });
 });
 const datasetTypes = computed(() => {
@@ -257,11 +281,11 @@ const datasetTypes = computed(() => {
   }
 });
 const filteredMeta = computed(() => {
-  if (!props.indicatorNames) return []
+  if (!tableMetadata.value) return []
 
   const typeFilter = activatedDatasetSearch.value?.toLowerCase()
 
-  return props.indicatorNames?.filter(item => {
+  return tableMetadata.value.filter(item => {
     if (!item.dct_type) return false
     const itemType = item.dct_type.trim().toLowerCase()
 
@@ -290,10 +314,11 @@ const dataSources = computed(() => {
     { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
   ]
 })
+
 // reactive geometryTypes with counts
 const geometryTypes = computed(() => {
   const counts = filteredMeta.value.reduce((acc, item) => {
-    const key = item.geometry_type
+    const key = item.dcatde_politicalgeocodingleveluri
     acc[key] = (acc[key] || 0) + 1
     return acc
   }, {})
@@ -307,6 +332,7 @@ const geometryTypes = computed(() => {
     { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
   ]
 })
+
 
 // reactive availableYears with counts
 const availableYearsForIndicatorFilter = computed(() => {
@@ -322,14 +348,7 @@ const availableYearsForIndicatorFilter = computed(() => {
   ]
 })
 
-const getKommunalesGebietCentroidGeojson = async () => {
-    if(kommunales_gebiet_geojson.value == null ){
-        const data =  await getGeojsonDataFromDB("Kommunale Gebiete Deutschland Mittelpunkt")
-        kommunales_gebiet_geojson.value = data
-    }
-    
-}
-const props = defineProps(['indicatorNames', 'selectedColorPalette', "isMinimized"])
+
 
 
 let addedIndicator = ref({})
@@ -337,12 +356,13 @@ let addedIndicator = ref({})
 
 const handleItemClick = async (item) => {
     const existingKey = Object.keys(addedIndicator.value).find(
-        key => addedIndicator.value[key].selectedIndicator === item.dct_title
+        key => addedIndicator.value[key].selectedIndicator === item.dct_title &&
+               addedIndicator.value[key].granularity === item.dcatde_politicalgeocodingleveluri
     );
      const alreadyAdded = Object.values(addedIndicator.value).some(
-        innerItem => innerItem.selectedIndicator === item.dct_title
+        innerItem => innerItem.selectedIndicator === item.dct_title &&
+                    innerItem.granularity === item.dcatde_politicalgeocodingleveluri
     );
-    
     if (alreadyAdded==true ) {
       delete addedIndicator.value[existingKey];
     }
@@ -350,6 +370,7 @@ const handleItemClick = async (item) => {
     else {
         addIndicatorRow()
         item.selectedIndicator = item.dct_title
+        item.granularity = item.dcatde_politicalgeocodingleveluri
         const indocatorData =  await getIndicatorData(item.dct_title, item.dcatde_politicalgeocodingleveluri)
         item.indicatorArray = indocatorData.indicator
         item.availailableYears = indocatorData.availabeYears[0][0]
@@ -360,6 +381,7 @@ const handleItemClick = async (item) => {
             indicatorArray: item.indicatorArray,
             availailableYears: item.availailableYears,
             selectedYear: item.selectedYear,
+            granularity: item.granularity,
             selectedOperator: null
         };
     }
@@ -374,6 +396,7 @@ const addIndicatorRow = () => {
         indicatorArray: null,
         availailableYears: null,
         selectedYear: null,
+        granularity: null,
         selectedOperator: null
     };
     
@@ -381,8 +404,7 @@ const addIndicatorRow = () => {
 
 
 const calculate = () => {
-    
-    let filteredarrayByYear = []
+    let filteredarrayByYear = [];
     for (let i = 0; i < Object.keys(addedIndicator.value).length; i++){
         let obj = {};
         obj[`indicator${i}`] = [];
@@ -402,99 +424,67 @@ const calculate = () => {
     }
    
     let formula = document.getElementById("formulatext").value
-    // Function to normalize kennziffer
     function normalizeKennziffer(kennziffer) {
-        return kennziffer.trim(); // Ensure consistent formatting
+        return kennziffer.trim();
     }
 
     const aggregatedMap = new Map();
 
-    // Process each indicator array
     filteredarrayByYear.forEach((indicatorObj, index) => {
-        // Get the indicator array (e.g., indicator0, indicator1, etc.)
         const indicatorKey = Object.keys(indicatorObj)[0];
         const indicatorArray = indicatorObj[indicatorKey];
-        
-        // Determine the column name for this indicator's wert
         const wertColumn = `wert${index + 1}`;
 
-        // Add values to the map
         indicatorArray.forEach(item => {
             const normalizedKennziffer = normalizeKennziffer(item.kennziffer);
-            
             if (!aggregatedMap.has(normalizedKennziffer)) {
                 aggregatedMap.set(normalizedKennziffer, { kennziffer: normalizedKennziffer });
             }
-            
             const currentEntry = aggregatedMap.get(normalizedKennziffer);
             currentEntry[wertColumn] = item.wert;
         });
     });
 
-    // Convert the map to an array of objects
     const finalArray = Array.from(aggregatedMap.values());
-
 
     try {
         for (let i=0; i<Object.keys(addedIndicator.value).length; i++){
-            let name = addedIndicator.value[`indicator${i}`].selectedIndicator
-            formula = formula.replace(name, `filteredarrayByYear[${i}].indicator${i}[i].wert`)
+            let name = addedIndicator.value[`indicator${i}`].selectedIndicator;
+            formula = formula.replace(name, `filteredarrayByYear[${i}].indicator${i}[i].wert`);
         }
         const dynamicFormula = formula
             .replace(/filteredarrayByYear\[(\d+)\]\.indicator(\d+)\[i\]\.wert/g, (match, p1, p2) => `entry.wert${parseInt(p2) + 1} || 0`);
     
-        // Step 3: Evaluate the formula 
-        const calculationArray = finalArray.map(entry => {
-            try {
-                // Use Function constructor to evaluate dynamic formula
-                const calculate = new Function('entry', `return ${dynamicFormula};`);
-                const calculatedWert = calculate(entry);
+        // Create a lean key-value dictionary of calculations
+        const calculationArray = [];
 
-                return {
-                    calculatedWert,
-                    kennziffer: entry.kennziffer
-                };
+        finalArray.forEach(entry => {
+            try {
+                const calculateVal = new Function('entry', `return ${dynamicFormula};`);
+                const val = calculateVal(entry);
+
+                // Filter invalid calculations out immediately
+                if (val !== null && val !== undefined && val !== Infinity && !isNaN(val)) {
+                    calculationArray.push({
+                        kennziffer: entry.kennziffer,
+                        calculatedWert: val
+                    });
+                }
             } catch (error) {
-                console.error("Error evaluating formula:", error);
-                return {
-                    calculatedWert: NaN,
-                    kennziffer: entry.kennziffer
-                };
+                console.error("Error evaluating formula for key:", entry.kennziffer, error);
             }
         });
-
-
-        const geojsonLookup = new Map();
-            kommunales_gebiet_geojson.value.features.forEach(item2 => {
-                geojsonLookup.set(item2.properties.nationalco, item2);
-        });
-
-        calculationArray.forEach(item => {
-            // Find the corresponding object in the second array based on the condition
-            const correspondingObject = geojsonLookup.get(item.kennziffer);
-
-            if (correspondingObject) {
-                correspondingObject.properties.calculatedWert = item.calculatedWert;
-         }
-        });
-       
-        const filteredArray = calculationArray.filter(item => 
-            item.calculatedWert !== null && 
-            item.calculatedWert !== undefined && 
-            item.calculatedWert !== Infinity && 
-            !isNaN(item.calculatedWert)
-        );
+        // Pass the clean array to the classification function
+        classifyAndStylize(calculationArray);
         
-        classifyAndStylize (filteredArray)
+        return calculationArray;
         
-    }
-    catch(error){
+    } catch(error){
         alertStore.setAlert({
             text: 'Error while evaluating the formula: ' + error,
             timeout: 2000
-        })
+        });
     }
-
 }
 
 const formula = computed(() => {
@@ -503,7 +493,6 @@ const formula = computed(() => {
     const indicator = addedIndicator.value[key];
     if (indicator.selectedIndicator) {
       text += '( '+indicator.selectedIndicator+' )' + ( ` ${indicator.selectedOperator?indicator.selectedOperator:''} `) ;
-      console.log(text, "text")
     }
   }
   return text;
@@ -511,80 +500,91 @@ const formula = computed(() => {
 
 const classifyAndStylize = async (filteredArray) => {
     
-    /*let filteredArray = array.filter(item => 
-        item.calculatedWert !== null && 
-        item.calculatedWert !== undefined && 
-        item.calculatedWert !== Infinity && 
-        !isNaN(item.calculatedWert)
-    );*/
-    
-
+    // Extract just the numerical werts from the array structure for the breaks calculation
     const AttributeArray = filteredArray.map(item => item.calculatedWert);
 
-    const response =  await classification(AttributeArray, 'NaturalBreaks')
-    classification_result.value = response.intervals_5_classes
-    console.log(props)
-    /*const stylization = (x) => {
-        if (x <= classification_result.value.intervals[0]) {
-            return hexToRgb(props.selectedColorPalette[0])
-        } else if (x <= classification_result.value.intervals[1]) {
-            return hexToRgb(props.selectedColorPalette[1])
-        } else if (x <= classification_result.value.intervals[2]) {
-            return hexToRgb(props.selectedColorPalette[2])
-        } else if (x <= classification_result.value.intervals[3]) {
-            return hexToRgb(props.selectedColorPalette[3])
-        } else if (x>classification_result.value.intervals[3]){
-            return hexToRgb(props.selectedColorPalette[4])
-        }
-        else {
-            console.log(x)
-        }
-    }*/
+    if (AttributeArray.length === 0) {
+        console.warn("No valid calculation values found to classify.");
+        return;
+    }
+
+    // Fetch the classification intervals
+    const response = await classification(AttributeArray, 'NaturalBreaks');
+    classification_result.value = response.intervals_5_classes;
     
     if(classification_result.value.warnings){
         alertStore.setAlert({
             text: classification_result.value.warnings,
             timeout: 2000
-        })
+        });
     }
-    
-    //mapLegend()
-    emit("addCustomLayer", filteredArray, classification_result.value, ref(document.getElementById("formulatext").value))
-    
+    // 1. Convert the object values into a clean array
+    const indicatorsList = Object.values(addedIndicator.value);
+
+    // 2. Extract the granularity of the very first indicator as a baseline reference
+    const firstGranularity = indicatorsList[0]?.granularity;
+
+    // 3. Check if every single added indicator matches that baseline
+    const allHaveSameGranularity = indicatorsList.every(
+        item => item.granularity === firstGranularity
+    );
+
+    // 4. Assign the result: use the shared granularity if they match, otherwise handle the mismatch
+    const sharedGranularity = allHaveSameGranularity ? firstGranularity : 'Mixed / Mismatch';
+
+    // Optional: Warn your user via the alert store if they are trying to compute mismatched levels
+    if (!allHaveSameGranularity) {
+        alertStore.setAlert({
+            text: 'Warning: Selected indicators have different geographic granularities!',
+            timeout: 3000
+        });
+    }
+
+    // 5. Emit everything to your map layer, including the validated granularity string
+    emit(
+        "addCustomLayer", 
+        filteredArray, 
+        classification_result.value, 
+        ref(document.getElementById("formulatext").value),
+        sharedGranularity // Pass granularity as the 4th argument
+    );
+    addedIndicator.value = {}
+
 }
-const getIcon = (layerName, index, geomType)=> {
-    const alreadyAdded = Object.values(addedIndicator.value).some(
-    item => item.selectedIndicator === layerName
-  );
+// Add granularity as the 4th parameter
+const getIcon = (layerName, index, geomType, granularity) => {
+    // Generate the matching unique validation key
+    const compoundKey = `${layerName}_${granularity}`;
+    
+    const alreadyAdded = addedIndicatorTitlesSet.value 
+        ? addedIndicatorTitlesSet.value.has(compoundKey) 
+        : false;
 
     if (alreadyAdded && hoveredItem.value === index) {
         return 'icons/minus.svg';
     }
-
     if (alreadyAdded) {
         return 'icons/check.svg';
     }
-
     if (hoveredItem.value === index) {
         return 'icons/plus.svg';
     }
-   
-    else {
-        if (geomType=='Point'){
-            return 'icons/point-blue.svg';
-        }
-        else if (geomType == "MultiLineString" || geomType == "LineString" || geomType == "Line"){
-            return 'icons/line-blue.svg';
-        }
-        else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
-            return 'icons/polygon-blue.svg';
-        }
-      else {
-            return 'icons/raster.svg';
-        }
-    }
     
-  }
+    if (geomType === 'Point') return 'icons/point-blue.svg';
+    if (['MultiLineString', 'LineString', 'Line'].includes(geomType)) return 'icons/line-blue.svg';
+    if (['MultiPolygon', 'Polygon', 'Geometry'].includes(geomType)) return 'icons/polygon-blue.svg';
+    
+    return 'icons/raster.svg';
+};
+const addedIndicatorTitlesSet = computed(() => {
+  if (!addedIndicator.value) return new Set();
+  return new Set(
+    Object.values(addedIndicator.value)
+      .filter(item => item && item.selectedIndicator && item.granularity)
+      // Create a unique compound key: "Title_Granularity"
+      .map(item => `${item.selectedIndicator}_${item.granularity}`)
+  );
+});
 
 /*const mapLegend = () => {
     const classIntervalsAndColorHexagon = []

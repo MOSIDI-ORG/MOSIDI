@@ -18,14 +18,12 @@ export const useaddedDatasetsStore = defineStore ({
             if (metadata.dct_type=='raster'){
               compositeKey = `${layerName}`;
             }
+            else if(metadata.dct_type=='custom indikator'){
+              compositeKey = `${layerName}`;
+            }
             else {
-              // TODO: improve handling of granularity in SensorThings
-              if (granularity != undefined && granularity != "") {
-                compositeKey = `${layerName}_${granularity}`;
-              } else {
-                compositeKey = layerName;
-              }
-              
+
+              compositeKey = `${layerName}_${granularity}`;
             }
             this.addedLayers[compositeKey] = { ...metadata, checked: true };
 
@@ -34,7 +32,7 @@ export const useaddedDatasetsStore = defineStore ({
                 this.addedLayers[key].checked = false;
               }
             }
-            console.log(this.addedLayers, "addedLayers")
+            
           },
           declareReadyToCartographyDeepLink() {
             this.readyForCartography = true;

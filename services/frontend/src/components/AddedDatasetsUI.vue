@@ -113,8 +113,8 @@
                             </v-list-item>
                             <v-list-item
                                    
-                                @click="getLayerExtentFromDB(addedLayer.dct_title)"
-                                v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table'"
+                                @click="getLayerExtentFromDB(addedLayer)"
+                                v-if="(addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table' || addedLayer.dct_type==='raster') && addedLayer.dct_bbox!=undefined"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -130,7 +130,7 @@
                             <!-- TODO: Fix Granularity for SensorThings-->
                             <v-list-item
                                 v-show="route?.query?.mode === 'edit'"
-                                @click="removeLayer(addedLayer.dcatde_politicalgeocodingleveluri != undefined ? addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri : addedLayer.dct_title, addedLayer.dct_type)"
+                                @click="addedLayer.dct_type==='raster'? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -324,7 +324,8 @@ const addDataUI = (datasettitle, datasetType, geomType, granularity)=> {
                 selectedDatasetType: "raster"
             })
         }
-        else if(datasetType==DatasetTypes.CustomIndicator){
+        else if(datasetType=='custom indikator'){
+            datasetName = datasettitle
             for(let layer in addedDatasetsStore.addedLayers){
                 if (layer!=datasetName){
                     emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'none')
@@ -357,10 +358,40 @@ const createHistogramForSelectedLayer = (datasetName)=>{
 const showLayerMetadata = (addedLayer)=>{ 
     metadataDialogStore.assignMetadata( addedLayer,addedLayer.dct_title)
 }
+const getLayerExtentFromDB = async (addedLayer)=>{
 
-const getLayerExtentFromDB = async (layerName)=>{
-    const layerExtent =  await getLayerExtent(layerName)
-    emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
+    if (addedLayer.dct_type=='table'){
+        const layerExtent =  await getLayerExtent(addedLayer.dct_title)
+        emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
+    }
+    else if (addedLayer.dct_type=='raster'){ 
+        /* the bbox from WMS coming from metadate table in GeoJson format
+        so it needs to be transfromed to Maplibre fitBounds format
+        */
+        try {
+            const geojson = addedLayer.dct_bbox;
+        
+            const bbox = geojson?.coordinates?.[0]?.length 
+            ? [
+                Math.min(...geojson.coordinates[0].map(p => p[1])),   // minLng
+                Math.min(...geojson.coordinates[0].map(p => p[0])),   // minLat
+                Math.max(...geojson.coordinates[0].map(p => p[1])),   // maxLng
+                Math.max(...geojson.coordinates[0].map(p => p[0]))    // maxLat
+              ]
+            : null;
+
+
+
+            if (bbox) {
+                emit("fitBoundsToBBOX", [bbox[0], bbox[1], bbox[2], bbox[3]])
+            }
+
+        } catch (e) {
+            console.error("Failed to parse bbox:", e);
+        }
+            
+    }
+    
 }
 
 const toggleLayerVisibility = (layerName)=>{
@@ -409,7 +440,8 @@ const removeLayer = (layerName, layerType)=>{
         mapLegendStore.removeLegendItem(layerName);
         indicatorStore.removeIndicator(layerName)
     }
-    else if(layerType==DatasetTypes.Raster){
+    else if(layerType=='raster'){
+        
         emit("removeLayerFromMap",  {layerId:  layerName, sourceId: layerName})
         mapLegendStore.removeWMSLegendItem({
             legend_url: addedDatasetsStore.addedLayers[layerName].legend_url,
