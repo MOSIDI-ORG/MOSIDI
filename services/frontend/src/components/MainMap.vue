@@ -10,7 +10,7 @@
       <TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
-      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap"></DatasetSearchUI>
+      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap" @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap"></DatasetSearchUI>
     </div>
   </v-app>
   <MetadataDialog> </MetadataDialog>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { Map,/*Popup*/ AttributionControl} from 'maplibre-gl';
+import { Map, AttributionControl } from 'maplibre-gl';
 import { ref, onMounted, onUnmounted } from "vue";
 import { storeToRefs } from 'pinia'
 import { useMapStore } from '../stores/map'
@@ -41,7 +41,10 @@ import AppHeader from "@/components/AppHeader.vue";
 //import CartographyUI from "@/components/CartographyUI.vue";
 import DatasetSearchUI from "@/components/DatasetSearchUI.vue";
 
-import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo/*addWMSLayerToMap, toggleWMSLayerVisibility*/ } from '../utils/mapUtils';
+import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo,/*addWMSLayerToMap, toggleWMSLayerVisibility*/ 
+addZoomOnClusterLayer,
+addOnClickSensorThingsLayer,
+addCursorStyleHovering} from '../utils/mapUtils';
 import { useChartStore } from '../stores/chart'
 //import { useCartographyStore } from '../stores/cartography'
 
@@ -61,6 +64,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useIndicatorStore } from '@/stores/indicator'
 import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
 import {getFeatureInstanceFromDB} from "../services/backend.calls";
+import { getThings } from '@/services/frost.service';
 
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
@@ -88,6 +92,7 @@ onMounted(() => {
     preserveDrawingBuffer: true,
     attributionControl: false,
     bounds: extent.value,
+    fadeDuration: 0,
   });
   
   cameraLink = useMapCameraDeepLink(map)
@@ -206,12 +211,7 @@ const addLayerToMap = (layerSpecification)=>{
     
   });
 
-  map.on('mouseenter', layerSpecification.id, function() {
-    map.getCanvas().style.cursor = 'pointer';
-  });
-  map.on('mouseleave', layerSpecification.id, function() {
-    map.getCanvas().style.cursor = '';
-  });
+  addCursorStyleHovering(map, layerSpecification.id);
 
   map.on('mousemove', 'kommunales_gebiet_dashboard', (e) =>{
     addHoverPopup(map, e)
@@ -419,6 +419,83 @@ const moveLayerToTop = (layerId)=>{
     } else {
         console.error(`Layer with ID '${layerId}' does not exist.`);
     }
+}
+
+/**
+ * Add Layers for SensorThings data (including clustered layers)
+ * @param observedProperty metadata object (including observedPropertyId field)
+ */
+const addSensorThingsLayerToMap = async (observedProperty) => {
+  const things = await getThings(observedProperty.observedPropertyId);
+  // Used as source name and prefix for layer names
+  const layerName = 'STA' + observedProperty.dct_title;
+  
+  // Stop if Source already exists
+  if (map.getSource(layerName) != undefined) {
+    return;
+  }
+
+  // Add as source to the map
+  map.addSource(layerName, {
+    'type': 'geojson',
+    'data': things,
+    cluster: true,
+    clusterRadius: 20, // cluster two trailheads if less than 20 pixels apart
+    clusterMaxZoom: 14 // display all trailheads individually from zoom 14 up
+  });
+
+  // Add Cluster layer
+  map.addLayer({
+    id: layerName + '-clusters',
+    type: 'circle',
+    source: layerName,
+    filter: ['has', 'point_count'],
+    paint: {
+        'circle-color': '#11b4da',
+        'circle-radius': 10
+    },
+  });
+
+  map.addLayer({
+    id: layerName + 'cluster-count',
+    type: 'symbol',
+    source: layerName,
+    filter: ['has', 'point_count'],
+    layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['Noto Sans Regular'],
+        'text-size': 12
+    }
+  });
+
+  // Add unclustered/ single item layer
+  map.addLayer({
+    id: layerName + '-unclustered',
+    type: 'circle',
+    source: layerName,
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+        'circle-color': '#11b4da',
+        'circle-radius': 5,
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
+    }
+  });
+
+  addCursorStyleHovering(map, layerName + '-unclustered');
+  addCursorStyleHovering(map, layerName + '-clusters');
+
+  addZoomOnClusterLayer(map, layerName + "-clusters", layerName);
+
+  addOnClickSensorThingsLayer(map, layerName + '-unclustered', selectedFeature);
+}
+
+const removeSensorThingsLayerFromMap = (layerName) => {
+  layerName = 'STA' + layerName;
+  map.removeLayer(layerName + '-clusters');
+  map.removeLayer(layerName + 'cluster-count');
+  map.removeLayer(layerName + '-unclustered');
+  map.removeSource(layerName);
 }
 
 onUnmounted(() => {

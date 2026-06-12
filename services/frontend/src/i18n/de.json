@@ -80,6 +80,10 @@
         "geo":{
             "title":"Geodaten hinzufügen",
             "subtitle": "Beginne mit dem Suchen und Hinzufügen eines Geodaten aus dem Katalog."
+        },
+        "things":{
+            "title":"Sensordaten hinzufügen",
+            "subtitle": "Beginne mit dem Suchen und Hinzufügen von Sensordaten aus dem Katalog."
         }
     },
     "added-datasets":{
@@ -191,6 +195,15 @@
         "details": "Details/Zusatzinfos",
         "dct_type": "Datensatztyp",
         "imported": "Importdatum"
-
+    },
+    "chart": {
+        "interval": "Zeitraum",
+        "nodata": "Keine Daten für den ausgewählten Zeitraum",
+        "6h": "Letzten 6 Stunden",
+        "24h": "Letzten 24 Stunden",
+        "3d": "Letzten 3 Tage",
+        "7d": "Letzten 7 Tage",
+        "30d": "Letzten 30 Tage",
+        "90d": "Letzten 90 Tage"
     }
   }

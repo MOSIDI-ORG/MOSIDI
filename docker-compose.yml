@@ -121,23 +121,33 @@ services:
       - masterportal
       - tileserv
       - geoserver
+      - brandenburg_db
     restart: unless-stopped
   
   FROST-Server:
-    image: fraunhoferiosb/frost-server:latest
+    image: fraunhoferiosb/frost-server:2.6
     environment:
-      - serviceRootUrl=http:/${BASE_URL}/FROST-Server
+      - serviceRootUrl=http://localhost:8080/FROST-Server
       - plugins_multiDatastream.enable=false
-      - http_cors_enable=true
-      - http_cors_allowed_origins=*
+      - http.cors.enable=true
+      - http.cors.allowed.origins=https://localhost
+      - http.cors.support.credentials=true
       - persistence_db_driver=org.postgresql.Driver
       - persistence_db_url=jdbc:postgresql://brandenburg_db:5432/${POSTGRES_DB}
       - persistence_db_username=${POSTGRES_USER}
       - persistence_db_password=${POSTGRES_PASSWORD}
       - persistence_autoUpdateDatabase=true
-   
+      - auth_provider=de.fraunhofer.iosb.ilt.frostserver.auth.basic.BasicAuthProvider
+      - auth_autoUpdateDatabase=true
+      - auth_plainTextPassword=false
+      - auth_db_driver=org.postgresql.Driver
+      - auth_db_url=jdbc:postgresql://brandenburg_db:5432/${POSTGRES_DB}
+      - auth_db_username=${POSTGRES_USER}
+      - auth_db_password=${POSTGRES_PASSWORD}
     depends_on:
       - brandenburg_db
+    ports:
+      - "8080:8080"
     restart: unless-stopped
 
 volumes:
