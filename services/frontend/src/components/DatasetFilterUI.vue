@@ -48,7 +48,7 @@
                     </v-text-field>
                             
                 </div>
-                <div class="mb-4 ml-2 mr-2"  >
+                <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
                     <v-row no-gutters>
                        
                         <v-col>
@@ -377,7 +377,14 @@ onMounted(async()=>{
         tableMetadataRequest(),
         getExternalWMSLayers(),
         observedPropertiesRequest()
-    ])
+    ]);
+
+    // Sort metadata after request is done
+    tableMetadata.value.sort((a, b) =>
+        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+    );
+
+
     await nextTick()
     deepLink.attach()
     isLoading.value = false 
@@ -470,14 +477,10 @@ const toggleFilterUI = ()=>{
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
   
-  tableMetadata.value = [...tableMetadata.value,...response]
-  tableMetadata.value = [...tableMetadata.value, ...externalLayers]
+  tableMetadata.value.push(...response);
+  tableMetadata.value.push(...externalLayers);
 
-  tableMetadata.value.sort((a, b) =>
-        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-    );
   datasetSearchStore.addTableMetadata(response)
-  // --- filter based on activatedDatasetSearch ---
 }
 
 const observedPropertiesRequest = async () => {
@@ -486,7 +489,7 @@ const observedPropertiesRequest = async () => {
     response.forEach(item => {
         observedProperties.push(convertToMetadata(item))
     })
-    tableMetadata.value = [...tableMetadata.value, ...observedProperties]
+    tableMetadata.value.push( ...observedProperties);
     datasetSearchStore.addTableMetadata(response);
 }
 
@@ -1090,6 +1093,7 @@ const addTernaryLayerToMap = (data)=>{
     background: black; 
     border-radius: 8px;
     position: absolute;
+    min-height: 21%;
     top: 62px;
     left: 381px;
     z-index: 10;

@@ -428,7 +428,7 @@ const moveLayerToTop = (layerId)=>{
 const addSensorThingsLayerToMap = async (observedProperty) => {
   const things = await getThings(observedProperty.observedPropertyId);
   // Used as source name and prefix for layer names
-  const layerName = 'STA' + observedProperty.dct_title;
+  const layerName = observedProperty.dct_title;
   
   // Stop if Source already exists
   if (map.getSource(layerName) != undefined) {
@@ -491,7 +491,6 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
 }
 
 const removeSensorThingsLayerFromMap = (layerName) => {
-  layerName = 'STA' + layerName;
   map.removeLayer(layerName + '-clusters');
   map.removeLayer(layerName + 'cluster-count');
   map.removeLayer(layerName + '-unclustered');

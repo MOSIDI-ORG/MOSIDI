@@ -127,10 +127,10 @@
                                     <v-list-item-title class="ml-3">{{ $t('added-datasets.zoom') }}</v-list-item-title>
                                 </template>
                             </v-list-item>
-                            <!-- TODO: Fix Granularity for SensorThings-->
+                            <!-- TODO: What if dcatde_politicalgeocodingleveluri is undefined? -->
                             <v-list-item
                                 v-show="route?.query?.mode === 'edit'"
-                                @click="addedLayer.dct_type==='raster'? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
+                                @click="addedLayer.dct_type==='raster' || addedLayer.dct_type === DatasetTypes.SensorThings ? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
