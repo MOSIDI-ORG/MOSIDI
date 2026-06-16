@@ -11,7 +11,30 @@ export const convertToMetadata = (observedProperty) => {
         dct_type: DatasetTypes.SensorThings,
         dct_description: observedProperty.description,
         geometry_type: 'Point',
-        observedPropertyId: observedProperty['@iot.id']
+        observedPropertyId: observedProperty['@iot.id'], // Specific to SensorThings
+        dct_catalog_title: observedProperty.name, 
+        dct_catalog_description: observedProperty.description,
+        dct_catalog_publisher: null, 
+		dct_accessurl: null, 
+		dct_license: null,
+		dct_identifier: 'sensorthings_'+observedProperty.name, 
+		dcatde_contributorid: 'Internal Contributor',
+        dct_distribution: null, 
+		dct_language: 'de', 
+		dct_bbox: null, 
+		dct_centroid: null,
+		dcatde_politicalGeocodingLevelURI: null,
+        dcatde_politicalGeocodingURI: null, 
+		dcatde_geocodingText: null, 
+		dct_modified: null, 
+		dct_issued: null,
+        dct_accrualperiodicity: 'PT4H',
+		dct_temporal_startdata: null, 
+		dct_temporal_enddate: null, 
+		table_name: 'OBSERVEDPROPERTIES',
+        details: '', 
+		imported: null,
+        legend_url: null
     }
     return metadata;
 }
