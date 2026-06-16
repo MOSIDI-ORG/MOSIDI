@@ -432,7 +432,7 @@ const renderSensorThingsChart = (data) => {
 #chart-ui-container {
     position: absolute;
     top: 60px;
-    right: 65px;
+    right: 10px;
     width: 600px;
     height: 370px;
     z-index: 1000;
