@@ -185,7 +185,7 @@
                                     </v-list-item>
 
                                     <v-list-item 
-                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type,{mode: 'csv'})"
+                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type,{mode: 'csv'},  addedLayer.dcatde_politicalgeocodingleveluri)"
                                     >
                                         <v-list-item-title>CSV</v-list-item-title>
                                     </v-list-item>
@@ -545,7 +545,6 @@ const exportData = async(layerName, type, exportType, granularity)=>{
         progress: true
     })
     let indicatorArray = indicatorStore.indicatorArray[layerName+'_'+granularity][0][0]
-    
     let selectedYear = indicatorStore.indicatorArray[layerName+'_'+granularity].selectedYear
     let filteredArray
     if (type =="indikator"){
