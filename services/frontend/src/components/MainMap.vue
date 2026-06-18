@@ -488,11 +488,18 @@ const addTernaryLayerToMap = (data)=>{
 <style scoped>
   ::v-deep .maplibregl-popup-content {
     border-radius:10px;
+    width: 100% !important;
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);
     animation: easeOutElastic 0.5s;
     border: 1px solid rgba(0, 0, 0, 0.2);   
   }
+  ::v-deep .maplibregl-popup {
+    /* Allow the popup to expand dynamically up to 300px */
+    max-width: 300px !important; 
+    /* Prevent it from shrinking too much on tiny mobile screens */
+    min-width: 100px; 
+}
   @keyframes easeOutElastic {
   0% {
     transform: scale(0.98);
