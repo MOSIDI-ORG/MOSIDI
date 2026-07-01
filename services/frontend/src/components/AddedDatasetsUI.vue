@@ -114,7 +114,7 @@
                             <v-list-item
                                    
                                 @click="getLayerExtentFromDB(addedLayer)"
-                                v-if="(addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table' || addedLayer.dct_type==='raster') && addedLayer.dct_bbox!=undefined"
+                                v-if="(addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table' || (addedLayer.dct_type==='raster' && addedLayer.dct_bbox!=undefined) || addedLayer.dct_type==='indikator') "
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -186,7 +186,7 @@
                                     </v-list-item>
 
                                     <v-list-item 
-                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type,{mode: 'csv'})"
+                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type,{mode: 'csv'},  addedLayer.dcatde_politicalgeocodingleveluri)"
                                     >
                                         <v-list-item-title>CSV</v-list-item-title>
                                     </v-list-item>
@@ -391,6 +391,11 @@ const getLayerExtentFromDB = async (addedLayer)=>{
         }
             
     }
+    else if(addedLayer.dct_type=='indikator'){
+        const layerExtent =  await getLayerExtent(addedLayer.dcatde_politicalgeocodingleveluri)
+        emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
+       
+    }
     
 }
 
@@ -539,7 +544,6 @@ const exportData = async(layerName, type, exportType, granularity)=>{
         progress: true
     })
     let indicatorArray = indicatorStore.indicatorArray[layerName+'_'+granularity][0][0]
-    
     let selectedYear = indicatorStore.indicatorArray[layerName+'_'+granularity].selectedYear
     let filteredArray
     if (type =="indikator"){
