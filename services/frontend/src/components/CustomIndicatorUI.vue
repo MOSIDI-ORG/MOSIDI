@@ -220,16 +220,24 @@ let tableMetadata = ref([])
 
 onMounted(async()=>{
    
-    tableMetadataRequest()
+    await tableMetadataRequest()
 })
+const deduplicateMetadata = (items) => {
+  const seen = new Set()
+  return items.filter(item => {
+    const key = `${item.dct_title}__${item.dcatde_politicalgeocodingleveluri ?? ''}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
-  
-  tableMetadata.value = response
+  tableMetadata.value = deduplicateMetadata(response)  // ← add this back
   tableMetadata.value.sort((a, b) =>
-        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-    );
-  // --- filter based on activatedDatasetSearch ---
+    a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+  )
 }
 
 const getYear = (dateString) => {

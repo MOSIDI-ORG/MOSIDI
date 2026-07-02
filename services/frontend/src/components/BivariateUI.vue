@@ -209,26 +209,35 @@ watch(
   (newVal) => {
     if (!newVal?.length) return
 
-    tableMetadataForBivariate.value = newVal
+    // Deduplicate by composite key — same logic as the main dataset filter
+    const seen = new Set()
+    tableMetadataForBivariate.value = newVal.filter(item => {
+      const key = `${item.dct_title}__${item.dcatde_politicalgeocodingleveluri ?? ''}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+
+    const deduped = tableMetadataForBivariate.value
 
     dataSources.value = [
-      ...new Set(newVal.map(item => item.dct_catalog_publisher)),
+      ...new Set(deduped.map(item => item.dct_catalog_publisher)),
       "All"
     ]
     geometryTypes.value = [
-      ...new Set(newVal.map(item => item.dcatde_politicalgeocodingleveluri)),
+      ...new Set(deduped.map(item => item.dcatde_politicalgeocodingleveluri)),
       "All"
     ]
     availableYearsForIndicatorFilter.value = [
       ...new Set(
-        newVal
+        deduped
           .map(item => new Date(item.dct_temporal_enddate).getFullYear())
           .sort()
       ),
       "All"
     ]
   },
-  { immediate: true } // ✅ handles case where tableMetadata is already loaded
+  { immediate: true }
 )
 
 //import {getTableMetadata} from "../services/backend.calls";
@@ -254,7 +263,7 @@ watch(
 */
 
 const filteredItems = computed(() => {
-    return tableMetadata?.value?.filter(item => {
+   return tableMetadataForBivariate.value?.filter(item => {  // ← was tableMetadata?.value
         const matchesSearchText = layerSearchText.value
             ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
             : true;

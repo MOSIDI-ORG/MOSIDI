@@ -460,14 +460,10 @@ const toggleFilterUI = ()=>{
 }
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
-  
-  tableMetadata.value = response
-  tableMetadata.value = [...tableMetadata.value, ...externalLayers]
-  tableMetadata.value.sort((a, b) =>
-        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-    );
-  datasetSearchStore.setTableMetadata(response)
-  // --- filter based on activatedDatasetSearch ---
+
+  tableMetadata.value = deduplicateMetadata(response).sort((a, b) =>
+    a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+  )
 }
 // reactive filtered metadata based on activatedDatasetSearch
 const filteredMeta = computed(() => {
@@ -989,21 +985,46 @@ const addDeckglLayer = (geojson, style)=>{
 const updateDeckglLayer = (geojson, style)=>{
     emit("updateDeckglLayer", geojson,  style);
 }
-const getExternalWMSLayers = async ()=>{
-    const response = await externalLayerFromDB()
-    response.forEach(newLayer => {
-        const index = externalWMSLayers.value.findIndex(l => l.id === newLayer.id);
-        if (index !== -1) {
-            // Replace existing layer
-            externalWMSLayers.value[index] = newLayer;
-        } else {
-            // Add new layer
-            externalWMSLayers.value.push(newLayer);
-        }
-    });
-     externalLayers.forEach(newLayer => {
-        externalWMSLayers.value.push(newLayer);
-    });
+
+const getExternalWMSLayers = async () => {
+  const response = await externalLayerFromDB()
+
+  // Only populate externalWMSLayers for use in addExternaWMSLayerToMap()
+  // Do NOT merge into tableMetadata — they're already there from get_table_metadata
+  response.forEach(newLayer => {
+    const index = externalWMSLayers.value.findIndex(l => l.id === newLayer.id)
+    if (index !== -1) {
+      externalWMSLayers.value[index] = newLayer
+    } else {
+      externalWMSLayers.value.push(newLayer)
+    }
+  })
+
+  // Static externalLayers: add to externalWMSLayers lookup AND tableMetadata
+  // only if not already present from the DB
+  externalLayers.forEach(newLayer => {
+    const alreadyExists = externalWMSLayers.value.some(l => l.dct_title === newLayer.dct_title)
+    if (!alreadyExists) {
+      externalWMSLayers.value.push(newLayer)
+      tableMetadata.value.push(newLayer)  // only truly new static layers go in
+    }
+  })
+
+  tableMetadata.value = deduplicateMetadata(tableMetadata.value)
+    .sort((a, b) => a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' }))
+
+  datasetSearchStore.setTableMetadata(tableMetadata.value)
+}
+const deduplicateMetadata = (items) => {
+  const seen = new Set()
+  return items.filter(item => {
+    const key = item.dcatde_politicalgeocodingleveluri
+      ? `${item.dct_title}__${item.dcatde_politicalgeocodingleveluri}`  // indicators
+      : `${item.dct_title}`                                              // WMS — title alone is enough
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
 }
 const addTernaryLayerToMap = (data)=>{
     emit("addTernaryLayerToMap", data)
