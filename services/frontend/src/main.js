@@ -19,9 +19,9 @@ import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import { loadConfig } from './services/config';
 
 library.add(fas, far, fab);
-const app = createApp(App);
 
 // i18n part
 // Detect the user's browser language
@@ -51,9 +51,15 @@ const vuetify = createVuetify({
     },
 })
 
-app.use(router);
-app.use(createPinia());
-app.use(vuetify);
-app.component('font-awesome-icon', FontAwesomeIcon);
-app.use(i18n);
-app.mount("#app");
+// The map center/zoom/extent, title and favicon are loaded from
+// public/configs/<name>.json at runtime (see ?config= URL param) rather
+// than baked into the build, so stores relying on getConfig() must wait.
+loadConfig().then(() => {
+  const app = createApp(App);
+  app.use(router);
+  app.use(createPinia());
+  app.use(vuetify);
+  app.component('font-awesome-icon', FontAwesomeIcon);
+  app.use(i18n);
+  app.mount("#app");
+});
