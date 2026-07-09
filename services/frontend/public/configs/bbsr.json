@@ -1,6 +1,7 @@
 {
 "title": "InNoWest - MOSIDI",
 "favicon": "innowest-favicon.ico",
+"logo": "icons/innowest.svg",
 "map-center": [18.39217,81.11024],
 "map-extent": [ 
                 [5.8662503507227770, 47.2701236046689104], 

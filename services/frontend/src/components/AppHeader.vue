@@ -4,7 +4,7 @@
  
         <v-row class="d-flex align-center justify-between mt-2" >
             <v-img
-                :src="isMinimized?'icons/mosidi-logo-minimized.svg':'icons/innowest.svg'"
+                :src="isMinimized?'icons/mosidi-logo-minimized.svg':logoSrc"
                 :height="isMinimized?'20':'15'"
                 :width="isMinimized?'20':'15'"
                 :style="isMinimized?'margin-left:25px; margin-top: 9px':'margin-left:-10px;margin-top: 5px'"
@@ -160,6 +160,9 @@ import { useI18n } from 'vue-i18n';
 import { useMapExportStore } from '../stores/mapExport'
 import { useMapShareStore } from '../stores/mapShare'
 import { useMenuStore } from '../stores/menu'
+import { getConfig } from '../services/config'
+
+const logoSrc = getConfig().logo || 'icons/innowest.svg'
 
 const { locale } = useI18n();
 const toggleMinimize = ()=>{
