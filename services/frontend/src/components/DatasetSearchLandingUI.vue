@@ -16,11 +16,8 @@
             
         </template>
         <template #prepend>
-        <v-avatar class="icon-button-circle">
-                <svg width="40" height="40" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px; display: block;">
-                    <path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" class="icon-button-circle-bg"/>
-                    <path d="M29.6291 39.7042H50.3709M40 29.3333V50.0751" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
-                </svg>
+        <v-avatar>
+                <IconCirclePlus :size="40" />
             </v-avatar>
         
 
@@ -44,11 +41,8 @@
             
         </template>
         <template #prepend>
-        <v-avatar class="icon-button-circle">
-                <svg width="40" height="40" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px; display: block;">
-                    <path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" class="icon-button-circle-bg"/>
-                    <path d="M29.6291 39.7042H50.3709M40 29.3333V50.0751" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
-                </svg>
+        <v-avatar>
+                <IconCirclePlus :size="40" />
             </v-avatar>
         
 
@@ -62,6 +56,7 @@
 
 <script setup>
 import { useDatasetSearchStore } from '../stores/datasetSearch'
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
 const datasetSearchStore = useDatasetSearchStore()
 
 
@@ -91,17 +86,6 @@ const activatedDatasetSearchComponent=(value)=>{
 </script>
 
 <style scoped>
-
-/* Uses the configurable button/button-hover colors (see
-   src/services/config.js) to recolor icons/plus.svg's circular
-   background. */
-.icon-button-circle-bg {
-  fill: var(--color-button, #000000);
-  transition: fill 0.2s ease;
-}
-.icon-button-circle:hover .icon-button-circle-bg {
-  fill: var(--color-button-hover, #444444);
-}
 
 .dataset-search-ui{
     overflow-y: scroll;

@@ -2,17 +2,11 @@
     <div class="legend-container">
         <div :class="['map-navigation-container', { 'mb-12': isMaximized==false }, { 'mb-2': isMaximized }]">
            
-            <v-avatar  style="cursor: pointer;" @click="zoomIn"  class="mb-2 icon-button-circle">
-                <svg width="35" height="35" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" class="icon-button-circle-bg"/>
-                    <path d="M29.6291 39.7042H50.3709M40 29.3333V50.0751" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
-                </svg>
+            <v-avatar  style="cursor: pointer;" @click="zoomIn"  class="mb-2">
+                <IconCirclePlus :size="35" />
             </v-avatar>
-            <v-avatar  style="cursor: pointer;" @click="zoomOut" class="icon-button-circle">
-                <svg width="35" height="35" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" class="icon-button-circle-bg"/>
-                    <path d="M29.6291 39.7042H50.3709" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
-                </svg>
+            <v-avatar  style="cursor: pointer;" @click="zoomOut">
+                <IconCircleMinus :size="35" />
             </v-avatar>
             <v-avatar  style="cursor: pointer;" @click="geocodingToggle=!geocodingToggle">
                 <v-img src="icons/search.svg" width="35" height="35" ></v-img>
@@ -231,6 +225,8 @@ import { useMapLegendStore } from '../stores/mapLegend'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useIndicatorStore } from '@/stores/indicator'
 import GeocodingUI from './GeocodingUI.vue'
+import IconCirclePlus from './icons/IconCirclePlus.vue'
+import IconCircleMinus from './icons/IconCircleMinus.vue'
 import * as d3 from "d3"
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
@@ -726,17 +722,6 @@ watch(
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* Uses the configurable button/button-hover colors (see
-   src/services/config.js) to recolor icons/plus.svg and icons/minus.svg's
-   circular background. */
-.icon-button-circle-bg {
-  fill: var(--color-button, #000000);
-  transition: fill 0.2s ease;
-}
-.icon-button-circle:hover .icon-button-circle-bg {
-  fill: var(--color-button-hover, #444444);
 }
 
 

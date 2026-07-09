@@ -104,21 +104,17 @@
 
 
                         <template v-slot:prepend>
-                            <v-avatar :class="{ 'icon-button-circle': ['icons/plus.svg', 'icons/minus.svg'].includes(getIcon(metadata.dct_title, index, metadata.geometry_type)) }">
-                                <svg
+                            <v-avatar>
+                                <IconCirclePlus
                                     v-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/plus.svg'"
-                                    width="40" height="40" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="cursor: pointer;"
-                                >
-                                    <path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" class="icon-button-circle-bg"/>
-                                    <path d="M29.6291 39.7042H50.3709M40 29.3333V50.0751" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
-                                </svg>
-                                <svg
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <IconCircleMinus
                                     v-else-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/minus.svg'"
-                                    width="40" height="40" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="cursor: pointer;"
-                                >
-                                    <path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" class="icon-button-circle-bg"/>
-                                    <path d="M29.6291 39.7042H50.3709" stroke="white" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
-                                </svg>
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
                                 <v-img
                                     v-else
                                     :src="getIcon(metadata.dct_title, index, metadata.geometry_type)"
@@ -219,6 +215,8 @@ import { storeToRefs } from 'pinia'
 import { useIndicatorStore } from '@/stores/indicator'
 import {getIndicatorData} from "../services/backend.calls";
 import {getternaryDataFromDB} from "../services/backend.calls";
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
+import IconCircleMinus from '@/components/icons/IconCircleMinus.vue'
 const emit = defineEmits("addTernaryLayerToMap", "backtoUnivariateMap")
 const indicatorStore = useIndicatorStore()
 
@@ -453,17 +451,6 @@ const clearIndicators = () => {
     flex-direction: column;
     height: 100%;       /* fill the parent */
     overflow: hidden;
-}
-
-/* Uses the configurable button/button-hover colors (see
-   src/services/config.js) to recolor icons/plus.svg and icons/minus.svg's
-   circular background. */
-.icon-button-circle-bg {
-  fill: var(--color-button, #000000);
-  transition: fill 0.2s ease;
-}
-.icon-button-circle:hover .icon-button-circle-bg {
-  fill: var(--color-button-hover, #444444);
 }
 
 .header{
