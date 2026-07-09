@@ -9,6 +9,7 @@ import { createApp } from 'vue';
 import axios from 'axios';
 import { createPinia } from "pinia";
 import '../node_modules/maplibre-gl/dist/maplibre-gl.css';
+import './assets/icon-buttons.css';
 import App from './App.vue';
 import router from './router';
 import { createI18n } from 'vue-i18n';

@@ -1,0 +1,21 @@
+/* Shared styling for the icon components in src/components/icons/ that
+   consume the configurable button/button-hover colors (see
+   src/services/config.js). Hover is self-contained on the icon's own
+   root <svg>, so no wrapper element needs an extra class. */
+.icon-circle-btn-bg {
+  fill: var(--color-button, #000000);
+  transition: fill 0.2s ease;
+}
+.icon-circle-btn:hover .icon-circle-btn-bg {
+  fill: var(--color-button-hover, #444444);
+}
+
+.icon-mono-btn-fill {
+  fill: var(--color-button, #000000);
+  stroke: var(--color-button, #000000);
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+.icon-mono-btn:hover .icon-mono-btn-fill {
+  fill: var(--color-button-hover, #444444);
+  stroke: var(--color-button-hover, #444444);
+}
