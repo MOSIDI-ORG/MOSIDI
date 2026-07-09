@@ -181,7 +181,7 @@ const toggleLanguage =(lang) => {
 </script>
 <style scoped>
   .app-header{
-    border-radius: 8px;  
+    border-radius: 8px;
     position: absolute;
     top: 10px;
     left: 10px;

@@ -446,12 +446,11 @@ defineExpose({
 }
 
 .header{
-    background: black; 
     position: sticky;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .dataset-filter-ui {

@@ -21,7 +21,7 @@
             class="header mx-auto d-flex animated-transform" 
             width="371"    
         >
-            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
+            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: var(--color-background, black); color: white;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{$t('dataset-filter.title')}}</span>
                     <v-spacer></v-spacer>
@@ -34,111 +34,115 @@
                     ></v-img>
                 </div>
 
-                <div v-if="!isLoading[activatedDatasetSearch]">
-                    <div style="padding: 8px;">
-                        <v-text-field
-                            :label="$t('dataset-filter.search')"
-                            prepend-inner-icon="mdi-magnify"
-                            class="expanding-search"
-                            filled
-                            outlined
-                            density="compact"
-                            clearable
-                            dense
-                            single-line
-                            hide-details
-                            v-model="layerSearchText"
-                        >
-                        </v-text-field>
-
-                    </div>
-                    <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
-                        <v-row no-gutters>
-                        
-                            <v-col>
-                                <v-select
-                                    :items="datasetCategories"
-                                    :item-title="'label'"
-                                    :item-value="'value'"
-                                    :label="$t('dataset-filter.filter-label.category')"
-                                    dense
-                                    outlined
-                                    density="compact"
-                                    single-line
-                                    hide-details
-                                    rounded
-                                    solo                
-                                    v-model="selectedDatasetCategory"
-                                ></v-select>
-                            </v-col>
-                            <v-col>
-                                <v-select
-                                    :items=dataSources
-                                    item-value="value"
-                                    item-title="label"
-                                    :label="$t('dataset-filter.filter-label.source')"
-                                    dense
-                                    outlined
-                                    single-line
-                                    density="compact"
-                                    hide-details
-                                    rounded
-                                    solo 
-                                    v-model="selectedDatasetSource"
-                                >
-
-                                </v-select>
-                            </v-col>
-
-                        
-                        </v-row>
-                        <v-row no-gutters>
-                            <v-col>
-                                <v-select
-                                    :items=geometryTypes
-                                    item-value="value"
-                                    item-title="label"
-                                    :label="$t('dataset-filter.filter-label.geometry')"
-                                    dense
-                                    outlined
-                                    single-line
-                                    hide-details
-                                    rounded
-                                     density="compact"
-                                    solo 
-                                    v-model="selectedGeometryTypee"
-                                >
-
-                            </v-select>
-                            </v-col>
-                            <v-col>
-                                <v-select
-                                    :items=availableYearsForIndicatorFilter
-                                    item-value="value"
-                                    item-title="label"
-                                    :label="$t('dataset-filter.filter-label.time')"
-                                    dense
-                                    outlined
-                                    single-line
-                                    hide-details
-                                    rounded
-                                     density="compact"
-                                    solo 
-                                    v-model="selectedYearIndicatorFilter"
-                                >
-
-                                </v-select>
-                            </v-col>
-                        </v-row>
-                    </div>
+                <div style="padding: 8px;">
+                    <v-text-field
+                        :label="$t('dataset-filter.search')"
+                        prepend-inner-icon="mdi-magnify"
+                        class="expanding-search"
+                        filled
+                        outlined
+                        density="compact"
+                        clearable
+                        dense
+                        single-line
+                        hide-details
+                        v-model="layerSearchText"
+                    >
+                    </v-text-field>
+                            
                 </div>
-                <div v-if="isLoading[activatedDatasetSearch]" class="d-flex align-center justify-center" style="height:50%;">
-                    <div class="d-flex align-center">
-                        <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
-                        <span>Loading datasets...</span>
-                    </div>
+                <div class="mb-4 ml-2 mr-2"  >
+                    <v-row no-gutters>
+                       
+                        <v-col>
+                            <v-select
+                                :items="datasetCategories"
+                                :item-title="'label'"
+                                :item-value="'value'"
+                                :label="$t('dataset-filter.filter-label.category')"
+                                dense
+                                outlined
+                                density="compact"
+                                single-line
+                                hide-details
+                                rounded
+                                solo                
+                                v-model="selectedDatasetCategory"
+                            ></v-select>
+                        </v-col>
+                        <v-col>
+                            <v-select
+                                :items=dataSources
+                                item-value="value"
+                                item-title="label"
+                                :label="$t('dataset-filter.filter-label.source')"
+                                dense
+                                outlined
+                                single-line
+                                density="compact"
+                                hide-details
+                                rounded
+                                solo 
+                                v-model="selectedDatasetSource"
+                            >
+                               
+                            </v-select>
+                        </v-col>
+                        
+                       
+                    </v-row>
+                    <v-row no-gutters>
+                        <v-col>
+                            <v-select
+                                :items=geometryTypes
+                                item-value="value"
+                                item-title="label"
+                                :label="$t('dataset-filter.filter-label.geometry')"
+                                dense
+                                outlined
+                                single-line
+                                hide-details
+                                rounded
+                                 density="compact"
+                                solo 
+                                v-model="selectedGeometryTypee"
+                            >
+                            
+                        </v-select>
+                        </v-col>
+                        <v-col>
+                            <v-select
+                                :items=availableYearsForIndicatorFilter
+                                item-value="value"
+                                item-title="label"
+                                :label="$t('dataset-filter.filter-label.time')"
+                                dense
+                                outlined
+                                single-line
+                                hide-details
+                                rounded
+                                 density="compact"
+                                solo 
+                                v-model="selectedYearIndicatorFilter"
+                            >
+                                
+                            </v-select>
+                        </v-col>
+                    </v-row>
                 </div>
             </v-card>
+        
+
+        </v-card>
+        <v-card
+            v-if="isLoading"
+            :style="{ left: isMinimized ? '90px' : '382px' }"
+            class="header mx-auto d-flex align-center justify-center animated-transform"
+            width="371"
+            style="background-color: black; color: white; padding: 16px;"
+        >
+            <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
+            <span>Loading datasets...</span>
         </v-card>
         <v-card 
             v-show="filterInitiated==true" 
@@ -225,7 +229,7 @@
         
     </div>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
                     {{ $t('dataset-filter.custom.header') }}
@@ -252,11 +256,7 @@
                 v-if="customIndicatorUI==true"
         ></CustomIndicatorUI>
     </v-card>
-    <v-card 
-        :style="cardLeftPosition"
-        v-show="(metadataUI || dialog)" 
-        class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371"
-    >
+    <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
         <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{ $t('dataset-filter.metadata.title') }}
@@ -1261,15 +1261,15 @@ const addTernaryLayerToMap = (data)=>{
 }
 
 .header{
-    overflow-y: auto; 
+    overflow-y: scroll; 
     background: black; 
     border-radius: 8px;
     position: relative;
     min-height: 210px;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .animated-transform {
