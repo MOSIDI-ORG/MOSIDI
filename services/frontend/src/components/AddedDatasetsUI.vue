@@ -632,15 +632,14 @@ const exportData = async(layerName, type, exportType, granularity)=>{
 <style scoped>
 
 .header{
-    overflow-y: scroll; 
-    background: black; 
+    overflow-y: scroll;
     border-radius: 8px;
     position: absolute;
     top: 62px;
     left: 381px;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 </style>

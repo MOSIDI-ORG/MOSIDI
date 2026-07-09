@@ -2,6 +2,15 @@
 "title": "InNoWest - MOSIDI",
 "favicon": "innowest-favicon.ico",
 "logo": "icons/innowest.svg",
+"fonts": {
+  "family": "Helvetica, Arial, sans-serif",
+  "url": ""
+},
+"colors": {
+  "background": "rgba(0, 0, 0, 1)",
+  "button": "#000000",
+  "button-hover": "#444444"
+},
 "map-center": [18.39217,81.11024],
 "map-extent": [ 
                 [5.8662503507227770, 47.2701236046689104], 

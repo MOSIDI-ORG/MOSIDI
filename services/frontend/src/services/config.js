@@ -30,6 +30,39 @@ function applyDocumentMeta(config) {
   }
 }
 
+// Applies the `fonts` and `colors` blocks of a site config as CSS custom
+// properties on :root, so plain CSS (e.g. `var(--color-button)`) can react
+// to the active site config without any per-component config lookups.
+function applyTheme(config) {
+  const root = document.documentElement.style
+  const fonts = config.fonts || {}
+  const colors = config.colors || {}
+
+  if (fonts.url) {
+    let link = document.querySelector("link[data-config-font]")
+    if (!link) {
+      link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.dataset.configFont = 'true'
+      document.head.appendChild(link)
+    }
+    link.href = fonts.url
+  }
+  if (fonts.family) {
+    root.setProperty('--app-font-family', fonts.family)
+  }
+
+  if (colors.background) {
+    root.setProperty('--color-background', colors.background)
+  }
+  if (colors.button) {
+    root.setProperty('--color-button', colors.button)
+  }
+  if (colors['button-hover']) {
+    root.setProperty('--color-button-hover', colors['button-hover'])
+  }
+}
+
 // Loads the runtime config named by the `config` URL parameter (falling back
 // to default.json if absent or if loading fails) and caches it for getConfig().
 export async function loadConfig() {
@@ -52,6 +85,7 @@ export async function loadConfig() {
   }
 
   applyDocumentMeta(cachedConfig)
+  applyTheme(cachedConfig)
   return cachedConfig
 }
 

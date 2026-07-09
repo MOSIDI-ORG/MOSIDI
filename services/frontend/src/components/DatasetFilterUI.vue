@@ -18,7 +18,7 @@
         
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
 
-            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
+            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: var(--color-background, black); color: white;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{$t('dataset-filter.title')}}</span>
                     <v-spacer></v-spacer>
@@ -136,7 +136,7 @@
             :style="{ left: isMinimized ? '90px' : '382px' }"
             class="header mx-auto d-flex align-center justify-center animated-transform"
             width="371"
-            style="background-color: black; color: white; padding: 16px;"
+            style="background-color: var(--color-background, black); color: white; padding: 16px;"
         >
             <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
             <span>Loading datasets...</span>
@@ -226,7 +226,7 @@
         
     </div>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
                     {{ $t('dataset-filter.custom.header') }}
@@ -254,7 +254,7 @@
         ></CustomIndicatorUI>
     </v-card>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{ $t('dataset-filter.metadata.title') }}
                    
@@ -1087,16 +1087,15 @@ const addTernaryLayerToMap = (data)=>{
    
 }
 .header{
-    overflow-y: scroll; 
-    background: black; 
+    overflow-y: scroll;
     border-radius: 8px;
     position: absolute;
     top: 62px;
     left: 381px;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 .animated-transform {
   transition: width 0.3s ease, left 0.3s ease;
