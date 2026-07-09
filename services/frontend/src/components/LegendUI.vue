@@ -3,10 +3,10 @@
         <div :class="['map-navigation-container', { 'mb-12': isMaximized==false }, { 'mb-2': isMaximized }]">
            
             <v-avatar  style="cursor: pointer;" @click="zoomIn"  class="mb-2">
-                <v-img src="icons/plus.svg" width="35" height="35"></v-img>
+                <IconCirclePlus :size="35" />
             </v-avatar>
             <v-avatar  style="cursor: pointer;" @click="zoomOut">
-                <v-img src="icons/minus.svg" width="35" height="35" ></v-img>
+                <IconCircleMinus :size="35" />
             </v-avatar>
             <v-avatar  style="cursor: pointer;" @click="geocodingToggle=!geocodingToggle">
                 <v-img src="icons/search.svg" width="35" height="35" ></v-img>
@@ -225,6 +225,8 @@ import { useMapLegendStore } from '../stores/mapLegend'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useIndicatorStore } from '@/stores/indicator'
 import GeocodingUI from './GeocodingUI.vue'
+import IconCirclePlus from './icons/IconCirclePlus.vue'
+import IconCircleMinus from './icons/IconCircleMinus.vue'
 import * as d3 from "d3"
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 

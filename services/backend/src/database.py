@@ -88,29 +88,50 @@ def get_indicator_list():
 def get_indicator_data(indicator, granularity):
     conn = connect()
     cur = conn.cursor()
+    query = sql.SQL("""
+        SELECT  json_agg(
+            json_build_object(
+                'kennziffer', kennziffer,
+                'wert', wert,
+                'zeitbezug', zeitbezug
+                )
+            ) 
+        FROM dashboard_data_de
+        WHERE indikator = {indicator_name} and granularity = {granul_level}
+    """).format(
+        indicator_name=sql.Literal(indicator),
+        granul_level=sql.Literal(granularity)
+    )
+    cur.execute(query)
     
-    cur.execute("""SELECT  json_agg(
-    json_build_object(
-        'kennziffer', kennziffer,
-        'wert', wert,
-        'zeitbezug', zeitbezug
-        )
-    ) 
-    FROM dashboard_data_de
-    WHERE indikator = '%s' and granularity = '%s' ; """ % (indicator,granularity,))
     
     #cur.execute(""" select zeit_wert_array from dashboard_data_de where indikator = '%s'; """ % (indicator,))
 
     data = cur.fetchall()
-    cur.execute("""SELECT json_agg(row_to_json(d)) 
+
+    query2 = sql.SQL(
+        """SELECT json_agg(row_to_json(d)) 
         FROM (
             SELECT *
             FROM dashboard_data_metadata 
-            WHERE kurzname = '%s'
-        ) d; """ % (indicator,))
+            WHERE kurzname = {indicator_name}
+        ) d; """
+    ).format(indicator_name=sql.Literal(indicator))
+    cur.execute(query2)
+    
     metadata = cur.fetchall()[0][0]
 
-    cur.execute("""SELECT json_agg(distinct zeitbezug) from dashboard_data_de where indikator = '%s' and granularity = '%s'; """ % (indicator,granularity))
+    query3 = sql.SQL(
+
+    """
+                SELECT json_agg(distinct zeitbezug) from dashboard_data_de 
+                where indikator = {indicator_name} and granularity = {granul_level}; """
+    ).format(
+        indicator_name=sql.Literal(indicator),
+        granul_level=sql.Literal(granularity)
+    )
+    cur.execute(query3)
+    
     availabeYears = cur.fetchall()
     
     cur.close()
@@ -325,7 +346,9 @@ def get_table_metadata_from_db():
                 m.details,
                 m.imported,
                 m.dct_type,
-                m.legend_url
+                m.legend_url,
+                m.dcat_ap_id,
+                m.dcat_ap_title
             FROM table_metadata m
             INNER JOIN source_granularities d ON m.dct_title = d.indikator
                                              AND m.dct_catalog_publisher = d.source
@@ -356,19 +379,25 @@ def get_geojson_instance(tablename, featureId):
     conn = connect()
     cur = conn.cursor()
   
-    cur.execute("""
-            SELECT json_build_object(
-                'type', 'FeatureCollection',
-                'features', json_agg(
+    query = sql.SQL("""
+        SELECT json_build_object(
+            'type', 'FeatureCollection',
+            'features', json_agg(
                 json_build_object(
-                        'type', 'Feature',
-                        'geometry', ST_AsGeoJSON(t.geom)::json,
-                        'properties', to_jsonb(t) - 'geom'
-                    )
+                    'type', 'Feature',
+                    'geometry', ST_AsGeoJSON(t.geom)::json,
+                    'properties', to_jsonb(t) - 'geom'
                 )
             )
-    from "%s" as t where t.nationalco= '%s'
-        ;""" %(tablename, featureId))
+        )
+        FROM {table} as t 
+        WHERE t.nationalco = {feature_id};
+    """).format(
+        table=sql.Identifier(tablename),
+        feature_id=sql.Literal(featureId)
+    )
+
+    cur.execute(query)
     user = cur.fetchall()[0][0]
     cur.close()
     conn.close()

@@ -134,7 +134,18 @@
                         
                         <template v-slot:prepend>
                             <v-avatar>
-                                <v-img 
+                                <IconCirclePlus
+                                    v-if="getIcon(metadata.dct_title, metadata.dct_title, metadata.geometry_type, metadata.dcatde_politicalgeocodingleveluri) === 'icons/plus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <IconCircleMinus
+                                    v-else-if="getIcon(metadata.dct_title, metadata.dct_title, metadata.geometry_type, metadata.dcatde_politicalgeocodingleveluri) === 'icons/minus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <v-img
+                                    v-else
                                     :src="getIcon(metadata.dct_title, metadata.dct_title, metadata.geometry_type, metadata.dcatde_politicalgeocodingleveluri)"
                                     max-height="40"
                                     max-width="40"
@@ -202,6 +213,8 @@ import {getIndicatorData, classification, getTableMetadata} from "../services/ba
 import { useAlertStore } from '@/stores/alert'
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { storeToRefs } from 'pinia'
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
+import IconCircleMinus from '@/components/icons/IconCircleMinus.vue'
 
 const alertStore = useAlertStore()
 let {  activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
@@ -220,16 +233,24 @@ let tableMetadata = ref([])
 
 onMounted(async()=>{
    
-    tableMetadataRequest()
+    await tableMetadataRequest()
 })
+const deduplicateMetadata = (items) => {
+  const seen = new Set()
+  return items.filter(item => {
+    const key = `${item.dct_title}__${item.dcatde_politicalgeocodingleveluri ?? ''}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
-  
-  tableMetadata.value = response
+  tableMetadata.value = deduplicateMetadata(response)  // ← add this back
   tableMetadata.value.sort((a, b) =>
-        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-    );
-  // --- filter based on activatedDatasetSearch ---
+    a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+  )
 }
 
 const getYear = (dateString) => {

@@ -18,7 +18,7 @@
         
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
 
-            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
+            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: var(--color-background, black); color: white;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{$t('dataset-filter.title')}}</span>
                     <v-spacer></v-spacer>
@@ -50,12 +50,13 @@
                 </div>
                 <div class="mb-4 ml-2 mr-2"  >
                     <v-row no-gutters>
-                        <v-col >
+                       
+                        <v-col>
                             <v-select
-                                :items="datasetTypes"
-                                :item-title="'alias'"
-                                :item-value="'name'"
-                                :label="$t('dataset-filter.filter-label.type')"
+                                :items="datasetCategories"
+                                :item-title="'label'"
+                                :item-value="'value'"
+                                :label="$t('dataset-filter.filter-label.category')"
                                 dense
                                 outlined
                                 density="compact"
@@ -63,7 +64,7 @@
                                 hide-details
                                 rounded
                                 solo                
-                                v-model="selectedDatasetType"
+                                v-model="selectedDatasetCategory"
                             ></v-select>
                         </v-col>
                         <v-col>
@@ -135,7 +136,7 @@
             :style="{ left: isMinimized ? '90px' : '382px' }"
             class="header mx-auto d-flex align-center justify-center animated-transform"
             width="371"
-            style="background-color: black; color: white; padding: 16px;"
+            style="background-color: var(--color-background, black); color: white; padding: 16px;"
         >
             <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
             <span>Loading datasets...</span>
@@ -179,7 +180,13 @@
 
                     <template v-slot:prepend>
                         <v-avatar>
-                        <v-img 
+                        <IconCirclePlus
+                            v-if="getIcon(item.dct_title, index, item.geometry_type, item.dcatde_politicalgeocodingleveluri) === 'icons/plus.svg'"
+                            :size="40"
+                            style="cursor: pointer;"
+                        />
+                        <v-img
+                            v-else
                             :src="getIcon(item.dct_title, index, item.geometry_type, item.dcatde_politicalgeocodingleveluri)"
                             max-height="40"
                             max-width="40"
@@ -189,15 +196,15 @@
                     </template>
 
                     <template v-slot:append>
-                        <v-btn 
+                        <v-btn
                         v-show="hoveredItem === index"
-                        density="compact" 
-                        variant="text" 
-                        icon 
+                        density="compact"
+                        variant="text"
+                        icon
                         @click.stop="showLayerMetadata(item.dct_title, item.dcatde_politicalgeocodingleveluri), customIndicatorUI = false"
                         >
-                        <img src="icons/information.svg" alt="Information Icon" width="18" height="18" />
-                        </v-btn> 
+                        <IconInformation :size="18" />
+                        </v-btn>
                     </template>
                     </v-list-item>
                 </template>
@@ -214,10 +221,7 @@
             >
                 <template v-slot:prepend>
                 <v-avatar style="cursor: pointer;">
-                    <v-img 
-                    src="icons/calculate.svg" 
-                    
-                    />
+                    <IconCircleCalculate :size="40" />
                 </v-avatar>
                 </template>
             </v-list-item>
@@ -225,7 +229,7 @@
         
     </div>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
                     {{ $t('dataset-filter.custom.header') }}
@@ -253,7 +257,7 @@
         ></CustomIndicatorUI>
     </v-card>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{ $t('dataset-filter.metadata.title') }}
                    
@@ -304,7 +308,10 @@ import { createHistogram } from '../utils/histogram';
 import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
 //import { isValidURL } from '../utils/isValidURL';
-import { externalLayers } from '../assets/externalLayers'; 
+import { externalLayers } from '../assets/externalLayers';
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue';
+import IconCircleCalculate from '@/components/icons/IconCircleCalculate.vue';
+import IconInformation from '@/components/icons/IconInformation.vue'; 
 import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
 
 
@@ -351,6 +358,7 @@ let hoveredItem = ref(null)
 let tableMetadata = ref([])
 let layerSearchText= ref("")
 let selectedDatasetType = ref(null)
+let selectedDatasetCategory = ref(null)
 
 
 
@@ -385,12 +393,14 @@ watch(activatedDatasetSearch, () => {
   selectedGeometryTypee.value = null
   selectedDatasetSource.value = null
   selectedLayerMetadata.value = null
+  selectedDatasetCategory.value = null
 })
 const getYear = (dateString) => {
   if (!dateString) return '';
   return new Date(dateString).getFullYear();
 };
 const filteredItems = computed(() => {
+    const typeFilter = activatedDatasetSearch.value?.toLowerCase()
     return tableMetadata.value.filter(item => {
         const matchesSearchText = layerSearchText.value
             ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
@@ -398,7 +408,7 @@ const filteredItems = computed(() => {
         const matchesDatasetType = selectedDatasetType.value && selectedDatasetType.value !== 'all'
             ? item.dct_type === selectedDatasetType.value
             : true;
-       const preFilterDatasetType = (() => {
+        const preFilterDatasetType = (() => {
             if (activatedDatasetSearch.value === 'indicator') {
                 return item.dct_type === 'indikator';
             } else if (activatedDatasetSearch.value === 'geodata') {
@@ -407,6 +417,10 @@ const filteredItems = computed(() => {
                 return true; 
             }
         })();
+       // ONLY apply category filtering if we are dealing with indicators
+        const matchesDatasetCategory = (typeFilter === 'indicator' && selectedDatasetCategory.value && selectedDatasetCategory.value !== 'All')
+            ? item.dcat_ap_title === selectedDatasetCategory.value
+            : true;
         const matchesDatasetSource = selectedDatasetSource.value && selectedDatasetSource.value !== 'All'
             ? item.dct_catalog_publisher === selectedDatasetSource.value
             : true;
@@ -418,22 +432,11 @@ const filteredItems = computed(() => {
         const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
             ? new Date(item.dct_temporal_enddate).getFullYear() >= parseInt(selectedYearIndicatorFilter.value)
             : true;
-        return matchesSearchText && matchesDatasetType &&  preFilterDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
+        return matchesSearchText && matchesDatasetType && preFilterDatasetType && matchesDatasetCategory && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
     });
 });
-const datasetTypes = computed(() => {
-  if (activatedDatasetSearch.value === 'indicator') {
-    return [{ alias: 'Indicator', name: 'indikator' }];
-  } else if (activatedDatasetSearch.value === 'geodata') {
-    return [{ alias: 'WMS', name: 'raster' }];
-  } else {
-    return [
-      { alias: 'Indicator', name: 'indikator' },
-      { alias: 'WMS', name: 'raster' },
-      { alias: 'All', name: 'all' },
-    ];
-  }
-});
+
+
 const getIcon = (title, index, geomType, granularity)=> {
     let layerName = title+'_'+granularity
         if (addedDatasetsStore.addedLayers[layerName]) {
@@ -463,14 +466,10 @@ const toggleFilterUI = ()=>{
 }
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
-  
-  tableMetadata.value = response
-  tableMetadata.value = [...tableMetadata.value, ...externalLayers]
-  tableMetadata.value.sort((a, b) =>
-        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-    );
-  datasetSearchStore.setTableMetadata(response)
-  // --- filter based on activatedDatasetSearch ---
+
+  tableMetadata.value = deduplicateMetadata(response).sort((a, b) =>
+    a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+  )
 }
 // reactive filtered metadata based on activatedDatasetSearch
 const filteredMeta = computed(() => {
@@ -488,6 +487,41 @@ const filteredMeta = computed(() => {
   })
 })
 
+const datasetCategories = computed(() => {
+  // 1. Safely determine the active filter type (handling strings or wrapped store objects)
+  const rawFilter = typeof activatedDatasetSearch.value === 'object' 
+    ? activatedDatasetSearch.value?.value 
+    : activatedDatasetSearch.value;
+
+  const typeFilter = rawFilter?.toLowerCase()?.trim();
+
+  // 2. If it's NOT an indicator (e.g., geodata), ONLY show the "All" option
+  if (typeFilter !== 'indicator') {
+    return [
+      { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+    ]
+  }
+
+  // 3. If it IS an indicator, safely calculate category counts
+  const counts = filteredMeta.value.reduce((acc, item) => {
+    // Fallback if an indicator row accidentally missing a title string
+    const key = item.dcat_ap_title ? item.dcat_ap_title.trim() : 'Uncategorized'
+    acc[key] = (acc[key] || 0) + 1
+    return acc
+  }, {})
+
+  return [
+    ...Object.entries(counts).map(([value, count]) => ({
+      value,
+      count,
+      label: `${value} (${count})`
+    }))
+    .sort((a, b) =>
+      a.value.localeCompare(b.value, 'de', { sensitivity: 'base' })
+    ),
+    { value: 'All', count: filteredMeta.value.length, label: `All (${filteredMeta.value.length})` }
+  ]
+})
 // reactive dataSources with counts
 const dataSources = computed(() => {
   const counts = filteredMeta.value.reduce((acc, item) => {
@@ -957,21 +991,46 @@ const addDeckglLayer = (geojson, style)=>{
 const updateDeckglLayer = (geojson, style)=>{
     emit("updateDeckglLayer", geojson,  style);
 }
-const getExternalWMSLayers = async ()=>{
-    const response = await externalLayerFromDB()
-    response.forEach(newLayer => {
-        const index = externalWMSLayers.value.findIndex(l => l.id === newLayer.id);
-        if (index !== -1) {
-            // Replace existing layer
-            externalWMSLayers.value[index] = newLayer;
-        } else {
-            // Add new layer
-            externalWMSLayers.value.push(newLayer);
-        }
-    });
-     externalLayers.forEach(newLayer => {
-        externalWMSLayers.value.push(newLayer);
-    });
+
+const getExternalWMSLayers = async () => {
+  const response = await externalLayerFromDB()
+
+  // Only populate externalWMSLayers for use in addExternaWMSLayerToMap()
+  // Do NOT merge into tableMetadata — they're already there from get_table_metadata
+  response.forEach(newLayer => {
+    const index = externalWMSLayers.value.findIndex(l => l.id === newLayer.id)
+    if (index !== -1) {
+      externalWMSLayers.value[index] = newLayer
+    } else {
+      externalWMSLayers.value.push(newLayer)
+    }
+  })
+
+  // Static externalLayers: add to externalWMSLayers lookup AND tableMetadata
+  // only if not already present from the DB
+  externalLayers.forEach(newLayer => {
+    const alreadyExists = externalWMSLayers.value.some(l => l.dct_title === newLayer.dct_title)
+    if (!alreadyExists) {
+      externalWMSLayers.value.push(newLayer)
+      tableMetadata.value.push(newLayer)  // only truly new static layers go in
+    }
+  })
+
+  tableMetadata.value = deduplicateMetadata(tableMetadata.value)
+    .sort((a, b) => a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' }))
+
+  datasetSearchStore.setTableMetadata(tableMetadata.value)
+}
+const deduplicateMetadata = (items) => {
+  const seen = new Set()
+  return items.filter(item => {
+    const key = item.dcatde_politicalgeocodingleveluri
+      ? `${item.dct_title}__${item.dcatde_politicalgeocodingleveluri}`  // indicators
+      : `${item.dct_title}`                                              // WMS — title alone is enough
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
 }
 const addTernaryLayerToMap = (data)=>{
     emit("addTernaryLayerToMap", data)
@@ -1034,17 +1093,17 @@ const addTernaryLayerToMap = (data)=>{
    
 }
 .header{
-    overflow-y: scroll; 
-    background: black; 
+    overflow-y: scroll;
     border-radius: 8px;
     position: absolute;
     top: 62px;
     left: 381px;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
+
 .animated-transform {
   transition: width 0.3s ease, left 0.3s ease;
 }

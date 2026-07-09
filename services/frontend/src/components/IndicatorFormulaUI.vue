@@ -8,7 +8,7 @@
                 <v-avatar style="cursor: pointer;">
                     <v-menu offset-x top >
                         <template v-slot:activator="{ props }">
-                            <v-img src="icons/calculate.svg" v-bind="props" />
+                            <IconCircleCalculate v-bind="props" :size="40" />
                         </template>
                         <v-card width="350" style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
                             <v-container @click.stop>
@@ -31,6 +31,7 @@
 import {ref, defineEmits} from "vue"
 import { storeToRefs } from "pinia";
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
+import IconCircleCalculate from "@/components/icons/IconCircleCalculate.vue";
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import * as colorbrewer from 'colorbrewer';
 const emit = defineEmits(["addDeckglLayer", "updateDeckglLayer"]);

@@ -1,0 +1,903 @@
+id,title,description,dcat_ap_id,dcat_ap_title,en_iso_19115_id,en_iso_19115_title,inspire_id,inspire_title
+Bundestagswahl Wähler,Bundestagswahl Wähler,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach überwiegender Heizungsart keine Heizung,Gebäude nach überwiegender Heizungsart keine Heizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Bundestagswahl Zweitstimme FWD,Bundestagswahl Zweitstimme FWD,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+(SDG 7) Ladesäuleninfrastruktur,(SDG 7) Ladesäuleninfrastruktur,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+Erreichbarkeit,Erreichbarkeit,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bundestagswahl Erststimme MLPD,Bundestagswahl Erststimme MLPD,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Allgemeinärzte,Allgemeinärzte,,HEAL,Health,health,Health,HH,Human health and safety
+Bundestagswahl Zweitstimme BüSo,Bundestagswahl Zweitstimme BüSo,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Eingetragene Lebenspartnerschaft und min. ein Kind unter 18,Typ der Kernfamilie  nach Kindern Eingetragene Lebenspartnerschaft und min. ein Kind unter 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme FAMILIE,Bundestagswahl Erststimme FAMILIE,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Einfamilienhaus Reihenhaus,Wohnung Gebäudetyp Größe Einfamilienhaus Reihenhaus,,SOCI,Population and society,structure,Structure,BU,Buildings
+Seniorenstatus eines privaten Haushalts Haushalte insgesamt,Seniorenstatus eines privaten Haushalts Haushalte insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle unter 30,Fläche der Wohnung 10m2 Intervalle unter 30,,SOCI,Population and society,society,Society,BU,Buildings
+Bundestagswahl Erststimme Demokratie verteidigen,Bundestagswahl Erststimme Demokratie verteidigen,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Zuzugsrate Frauen,Zuzugsrate Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Munder und min. ein Kind unter 18,Typ der Kernfamilie  nach Kindern Munder und min. ein Kind unter 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Leerstandsquote Leerstandsquote,Leerstandsquote Leerstandsquote,,SOCI,Population and society,society,Society,BU,Buildings
+Heißen Tage,Heißen Tage,,ENVI,Environment,climatologyMeteorologyAtmosphere,Climatology / Meteorology / Atmosphere,AC-MF,Atmospheric Conditions and meteorological geographical features
+Größe Kernfamilie bis und mehr Personen Familien insgesamt,Größe Kernfamilie bis und mehr Personen Familien insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Energieträger der Heizung Kein Energieträger,Gebäude nach Energieträger der Heizung Kein Energieträger,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+"Bundestagswahl Erststimme Wirklich besser regieren, für unser Land und für unsere Zukun","Bundestagswahl Erststimme Wirklich besser regieren, für unser Land und für unsere Zukun",,GOVE,Government and public sector,society,Society,SU,Statistical units
+Bundestagswahl Zweitstimme REP,Bundestagswahl Zweitstimme REP,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme EW 8,Bundestagswahl Erststimme EW 8,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Heizungsart keine Heizung,Heizungsart keine Heizung,,SOCI,Population and society,society,Society,BU,Buildings
+Zahl der Staatsangehörigkeiten Bevölkerung insgesamt,Zahl der Staatsangehörigkeiten Bevölkerung insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"GRW, Bereich Förderung der gewerblichen Wirtschaft (kurzfristig)","GRW, Bereich Förderung der gewerblichen Wirtschaft (kurzfristig)",,GOVE,Government and public sector,society,Society,US,Utility and governmental services
+Gebäudetyp Größe Mehrfamilienhaus 3 bis 6 Wohnungen,Gebäudetyp Größe Mehrfamilienhaus 3 bis 6 Wohnungen,,SOCI,Population and society,structure,Structure,BU,Buildings
+Gebäudetyp Größe Anderer Gebäudetyp,Gebäudetyp Größe Anderer Gebäudetyp,,REGI,Regions and cities,structure,Structure,BU,Buildings
+Bundestagswahl Zweitstimme Die PARTEI,Bundestagswahl Zweitstimme Die PARTEI,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 130 bis 139,Fläche der Wohnung 10m2 Intervalle 130 bis 139,,SOCI,Population and society,society,Society,BU,Buildings
+Typ private Haushalte Lebensform Ehepaare,Typ private Haushalte Lebensform Ehepaare,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Gültige Stimmen,Bundestagswahl Gültige Stimmen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter infr 40 bis 59,Alter infr 40 bis 59,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter in 10er Jahresgruppen 60 bis 69,Alter in 10er Jahresgruppen 60 bis 69,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Heizungsart Fernheizung,Heizungsart Fernheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+Gebäude nach überwiegender Heizungsart Blockheizung,Gebäude nach überwiegender Heizungsart Blockheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Bundestagswahl Zweitstimme dieBasis,Bundestagswahl Zweitstimme dieBasis,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Zahl der Staatsangehörigkeiten nicht bekannt,Zahl der Staatsangehörigkeiten nicht bekannt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Haushaltsgröße,Haushaltsgröße,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme SPD,Bundestagswahl Zweitstimme SPD,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Arbeitslosenquote,Arbeitslosenquote,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Bundestagswahl Zweitstimme DIE LINKE,Bundestagswahl Zweitstimme DIE LINKE,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pendler mit Arbeitsweg 150 km und mehr,Pendler mit Arbeitsweg 150 km und mehr,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Baujahr in MZ-Klassen 1991 bis 2000,Gebäude nach Baujahr in MZ-Klassen 1991 bis 2000,,SOCI,Population and society,society,Society,BU,Buildings
+SGBII-Leistungen,SGBII-Leistungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Nichteheliche Lebensgemeinschaft und min. ein Kind unter 18,Typ der Kernfamilie  nach Kindern Nichteheliche Lebensgemeinschaft und min. ein Kind unter 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Baujahr 2010 bis 2015,Baujahr 2010 bis 2015,,SOCI,Population and society,structure,Structure,BU,Buildings
+Gebäudetyp Größe Freistehendes Zweifamilienhaus,Gebäudetyp Größe Freistehendes Zweifamilienhaus,,SOCI,Population and society,society,Society,BU,Buildings
+Bundestagswahl Erststimme FDP,Bundestagswahl Erststimme FDP,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Religion Bevölkerung insgesamt,Religion Bevölkerung insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Energieträger der Heizung Solar / Geothermie / Wärmepumpe,Gebäude nach Energieträger der Heizung Solar / Geothermie / Wärmepumpe,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Staatsangehörigkeit Gruppen Bevölkerung insgesamt,Staatsangehörigkeit Gruppen Bevölkerung insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 60 bis 69,Fläche der Wohnung 10m2 Intervalle 60 bis 69,,SOCI,Population and society,society,Society,SU,Statistical units
+Heizungsart Zentralheizung,Heizungsart Zentralheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+Bundestagswahl Erststimme Einzelwahlvorschlag,Bundestagswahl Erststimme Einzelwahlvorschlag,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Niederschlag,Niederschlag,,ENVI,Environment,climatologyMeteorologyAtmosphere,Climatology / Meteorology / Atmosphere,AC-MF,Atmospheric Conditions and meteorological geographical features
+Bundestagswahl Erststimme FREIE WÄHLER,Bundestagswahl Erststimme FREIE WÄHLER,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Energieträger der Heizung Heizöl,Gebäude nach Energieträger der Heizung Heizöl,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Binnenwanderungsvolumen der Männer,Binnenwanderungsvolumen der Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Familienstand geschieden,Familienstand geschieden,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Baujahr in MZ-Klassen vor 1919,Gebäude nach Baujahr in MZ-Klassen vor 1919,,SOCI,Population and society,structure,Structure,BU,Buildings
+Bundestagswahl Zweitstimme FDP,Bundestagswahl Zweitstimme FDP,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Typ private Haushalte Familie Paare mit Kindern,Typ private Haushalte Familie Paare mit Kindern,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Gesicht zeigen,Bundestagswahl Erststimme Gesicht zeigen,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Bundestagswahl Erststimme Internationalistisches Bündnis,Bundestagswahl Erststimme Internationalistisches Bündnis,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+(SDG 16) Straftaten,(SDG 16) Straftaten,,JUST,"Justice, legal system and public safety",society,Society,HH,Human health and safety
+Größe Kernfamilie bis und mehr Personen 4 Personen,Größe Kernfamilie bis und mehr Personen 4 Personen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Nichteheliche Lebensgemeinschaft  und Kinder ab 18,Typ der Kernfamilie  nach Kindern Nichteheliche Lebensgemeinschaft  und Kinder ab 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche Schulabgänger mit Hauptschulabschluss,Weibliche Schulabgänger mit Hauptschulabschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Mehrfamilienhaus 3 bis 6 Wohnungen,Wohnung Gebäudetyp Größe Mehrfamilienhaus 3 bis 6 Wohnungen,,SOCI,Population and society,structure,Structure,BU,Buildings
+Erwerbsfähige Bevölkerung (15 bis unter 65 Jahre),Erwerbsfähige Bevölkerung (15 bis unter 65 Jahre),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pkw Gas,Pkw Gas,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+"Einwohner 85 Jahre und älter, Frauen","Einwohner 85 Jahre und älter, Frauen",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ private Haushalte Lebensform Haushalte insgesamt,Typ private Haushalte Lebensform Haushalte insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Ihre parteilose Direktstimme im Bundestag für Mitbestimmung,Bundestagswahl Erststimme Ihre parteilose Direktstimme im Bundestag für Mitbestimmung,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Gebäudetyp Größe Mehrfamilienhaus 7 bis 12 Wohnungen,Gebäudetyp Größe Mehrfamilienhaus 7 bis 12 Wohnungen,,SOCI,Population and society,structure,Structure,BU,Buildings
+Gebäude nach Energieträger der Heizung Gas,Gebäude nach Energieträger der Heizung Gas,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Neubauwohnungen in Ein- und Zweifamilienhäusern,Neubauwohnungen in Ein- und Zweifamilienhäusern,,SOCI,Population and society,society,Society,LU,Land use
+Wohngeldhaushalte,Wohngeldhaushalte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme DM,Bundestagswahl Zweitstimme DM,,GOVE,Government and public sector,society,Society,PS,Protected sites
+Wohnung Gebäudetyp Größe Zweifamilienhaus Doppelhaushälfte,Wohnung Gebäudetyp Größe Zweifamilienhaus Doppelhaushälfte,,SOCI,Population and society,society,Society,BU,Buildings
+Bundestagswahl Erststimme EW 12,Bundestagswahl Erststimme EW 12,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Staatsangehörigkeit Gruppen Ausland sonstige,Staatsangehörigkeit Gruppen Ausland sonstige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme EW 6,Bundestagswahl Erststimme EW 6,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäudetyp Größe Freistehendes Einfamilienhaus,Gebäudetyp Größe Freistehendes Einfamilienhaus,,SOCI,Population and society,society,Society,BU,Buildings
+Bundestagswahl Erststimme AfD,Bundestagswahl Erststimme AfD,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Wohnungen insgesamt,Wohnung Gebäudetyp Größe Wohnungen insgesamt,,SOCI,Population and society,society,Society,BU,Buildings
+Geringfügig Beschäftigte 65 Jahre und älter,Geringfügig Beschäftigte 65 Jahre und älter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 16) Steuereinnahmen,(SDG 16) Steuereinnahmen,,ECON,Economy and finance,economy,Farming,SU,Statistical units
+Anteil Erwerbstätige Finanz- und Unternehmensdienstleistungen,Anteil Erwerbstätige Finanz- und Unternehmensdienstleistungen,,ECON,Economy and finance,economy,Farming,US,Utility and governmental services
+Familienstand verheiratet,Familienstand verheiratet,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Baujahr in MZ-Klassen 1919 bis 1948,Gebäude nach Baujahr in MZ-Klassen 1919 bis 1948,,SOCI,Population and society,structure,Structure,BU,Buildings
+Bruttowertschöpfung je Erwerbstätigen Sekundärer Sektor,Bruttowertschöpfung je Erwerbstätigen Sekundärer Sektor,,ECON,Economy and finance,economy,Farming,SU,Statistical units
+Arbeitslosigkeit - Struktur,Arbeitslosigkeit - Struktur,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Geringfügig Beschäftigte 65 Jahre und älter weiblich,Geringfügig Beschäftigte 65 Jahre und älter weiblich,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter infr unter 3,Alter infr unter 3,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 40 bis 49,Fläche der Wohnung 10m2 Intervalle 40 bis 49,,SOCI,Population and society,society,Society,BU,Buildings
+Wohnungen nach Zahl der Räume 6 Räume,Wohnungen nach Zahl der Räume 6 Räume,,REGI,Regions and cities,society,Society,BU,Buildings
+Fläche der Wohnung 10m2 Intervalle 100 bis 109,Fläche der Wohnung 10m2 Intervalle 100 bis 109,,SOCI,Population and society,society,Society,BU,Buildings
+Apotheken,Apotheken,,HEAL,Health,health,Health,HH,Human health and safety
+Kommunale Schulden,Kommunale Schulden,,ECON,Economy and finance,economy,Farming,US,Utility and governmental services
+Bundestagswahl Erststimme dieBasis,Bundestagswahl Erststimme dieBasis,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Alter in 10er Jahresgruppen unter 10,Alter in 10er Jahresgruppen unter 10,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schulabgänger mit mittlerem Abschluss,Schulabgänger mit mittlerem Abschluss,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Beschäftigte mit Anforderungsniveau Helfer,Beschäftigte mit Anforderungsniveau Helfer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Willi-Weise-Projekt,Bundestagswahl Erststimme Willi-Weise-Projekt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ausbildungsplätze,Ausbildungsplätze,,EDUC,"Education, culture and sport",society,Society,EF,Environmental monitoring facilities
+Beschäftigte Tertiärer Sektor,Beschäftigte Tertiärer Sektor,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Typ private Haushalte Lebensform Alleinerziehende Mütter,Typ private Haushalte Lebensform Alleinerziehende Mütter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnungen nach Zahl der Räume 3 Räume,Wohnungen nach Zahl der Räume 3 Räume,,SOCI,Population and society,society,Society,BU,Buildings
+Bevölkerung weiblich,Bevölkerung weiblich,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter in 10er Jahresgruppen 80 und älter,Alter in 10er Jahresgruppen 80 und älter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Ehepaar ohne Kinder,Typ der Kernfamilie  nach Kindern Ehepaar ohne Kinder,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäudetyp Größe Gebäude insgesamt,Gebäudetyp Größe Gebäude insgesamt,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+Außenwanderungssaldo Frauen,Außenwanderungssaldo Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter in 10er Jahresgruppen 10 bis 19,Alter in 10er Jahresgruppen 10 bis 19,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme PIRATEN,Bundestagswahl Erststimme PIRATEN,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Alter in 10er Jahresgruppen 20 bis 29,Alter in 10er Jahresgruppen 20 bis 29,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme FREIE WÄHLER,Bundestagswahl Zweitstimme FREIE WÄHLER,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Leistungen für Unterkunft an SGBII,Leistungen für Unterkunft an SGBII,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Siedlungsstruktur,Siedlungsstruktur,,REGI,Regions and cities,society,Society,BU,Buildings
+Bundestagswahl Erststimme ehrliche Politik / Transparenz,Bundestagswahl Erststimme ehrliche Politik / Transparenz,,GOVE,Government and public sector,society,Society,US,Utility and governmental services
+Kreisverwaltungen,Kreisverwaltungen,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Männliche Langzeitarbeitslose,Männliche Langzeitarbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ältere Arbeitslose,Ältere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Haushalte mit hohem Einkommen,Haushalte mit hohem Einkommen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Energieträger der Heizung Biomasse / Biogas,Gebäude nach Energieträger der Heizung Biomasse / Biogas,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Gebäude nach Anzahl der Wohnungen Gebäude insgesamt,Gebäude nach Anzahl der Wohnungen Gebäude insgesamt,,SOCI,Population and society,society,Society,BU,Buildings
+Ausländeranteil,Ausländeranteil,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme DM,Bundestagswahl Erststimme DM,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Bundestagswahl Zweitstimme DIE LINKE ,Bundestagswahl Zweitstimme DIE LINKE ,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pkw Plug-In-Hybrid (PHEV),Pkw Plug-In-Hybrid (PHEV),,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Stationäre Pflege,Stationäre Pflege,,HEAL,Health,health,Health,HH,Human health and safety
+Ausländerinnen,Ausländerinnen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme DKP,Bundestagswahl Erststimme DKP,,SOCI,Population and society,society,Society,SU,Statistical units
+Bundestagswahl Erststimme GRÜNE/B90,Bundestagswahl Erststimme GRÜNE/B90,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme UNABHÄNGIGE,Bundestagswahl Erststimme UNABHÄNGIGE,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Ausländische Berufsschüler,Ausländische Berufsschüler,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Industriequote,Industriequote,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Beschäftigte Pimärer Sektor,Beschäftigte Pimärer Sektor,,AGRI,"Agriculture, fisheries, forestry and food",farming,Farming,AF,Agricultural and aquaculture facilities
+Bundestagswahl Zweitstimme BSW,Bundestagswahl Zweitstimme BSW,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+Bandbreitenverfügbarkeit mindestens 100 Mbit/s,Bandbreitenverfügbarkeit mindestens 100 Mbit/s,,TECH,Science and technology,utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Fläche der Wohnung 10m2 Intervalle Wohnungen insgesamt,Fläche der Wohnung 10m2 Intervalle Wohnungen insgesamt,,SOCI,Population and society,society,Society,BU,Buildings
+Arbeitslose Frauen,Arbeitslose Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigtendichte (WO),Beschäftigtendichte (WO),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Bürger bewirbt sich als freier Direktkandidat,Bundestagswahl Erststimme Bürger bewirbt sich als freier Direktkandidat,,GOVE,Government and public sector,society,Society,AU,Administrative units
+(SDG 8) Erwerbstätige Aufstocker,(SDG 8) Erwerbstätige Aufstocker,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Gebäude nach Energieträger der Heizung Strom,Gebäude nach Energieträger der Heizung Strom,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Bundestagswahl Erststimme Direkte Demokratie und NATO-Austritt,Bundestagswahl Erststimme Direkte Demokratie und NATO-Austritt,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Berufsschülerinnen,Berufsschülerinnen,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Arbeitsvolumen,Arbeitsvolumen,,ECON,Economy and finance,economy,Farming,SU,Statistical units
+Auszubildende je 100 Einwohner 15 bis 25 Jahre,Auszubildende je 100 Einwohner 15 bis 25 Jahre,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Wohngeldhaushalte (Mietzuschuss),Wohngeldhaushalte (Mietzuschuss),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Minijobs (Frauen),Anteil Minijobs (Frauen),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Bruttowertschöpfung Primärer Sektor,Anteil Bruttowertschöpfung Primärer Sektor,,AGRI,"Agriculture, fisheries, forestry and food",farming,Farming,AF,Agricultural and aquaculture facilities
+Bundestagswahl Erststimme REP,Bundestagswahl Erststimme REP,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Angebotsmietpreise,Angebotsmietpreise,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Personal in Pflegeheimen,Personal in Pflegeheimen,,HEAL,Health,health,Health,HH,Human health and safety
+Bundestagswahl Zweitstimme ÖDP,Bundestagswahl Zweitstimme ÖDP,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Alter infr 67 bis 74,Alter infr 67 bis 74,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Geborene,Geborene,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Familienstand ohne Angabe,Familienstand ohne Angabe,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"Polizeidienststellen, durchgehend besetzt","Polizeidienststellen, durchgehend besetzt",,JUST,"Justice, legal system and public safety",society,Society,US,Utility and governmental services
+Alter infr 25 bis 39,Alter infr 25 bis 39,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Geringfügig Beschäftigte 65 Jahre und älter männlich,Geringfügig Beschäftigte 65 Jahre und älter männlich,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Umsatz Bauhauptgewerbe,Umsatz Bauhauptgewerbe,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+(SDG 11) Verunglückte im Verkehr,(SDG 11) Verunglückte im Verkehr,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bundestagswahl Erststimme Die PARTEI,Bundestagswahl Erststimme Die PARTEI,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Bundestagswahl Erststimme Die Linke,Bundestagswahl Erststimme Die Linke,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Staatsangehörigkeit Gruppen EU27-Land,Staatsangehörigkeit Gruppen EU27-Land,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme ,Bundestagswahl Erststimme ,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Fertiggestellte Wohnungen mit erneuerbarer Heizenergie,Fertiggestellte Wohnungen mit erneuerbarer Heizenergie,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+Bundestagswahl Zweitstimme BGE,Bundestagswahl Zweitstimme BGE,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Anzahl der Wohnungen 3 bis 6 Wohnungen,Gebäude nach Anzahl der Wohnungen 3 bis 6 Wohnungen,,SOCI,Population and society,structure,Structure,BU,Buildings
+Sicherheit,Sicherheit,,JUST,"Justice, legal system and public safety",society,Society,HH,Human health and safety
+Bundestagswahl Erststimme Freie Union,Bundestagswahl Erststimme Freie Union,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Betreuungsquote Kleinkinder,Betreuungsquote Kleinkinder,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitslose mit Anforderungsniveau Fachkraft,Arbeitslose mit Anforderungsniveau Fachkraft,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 1) Armut - Altersarmut,(SDG 1) Armut - Altersarmut,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Staatsangehörigkeit Gruppen Deutschland,Staatsangehörigkeit Gruppen Deutschland,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Sozialleistungen – Bedarfsgemeinschaften,Sozialleistungen – Bedarfsgemeinschaften,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erwerbsquote Frauen,Erwerbsquote Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Amtsgerichte,Amtsgerichte,,JUST,"Justice, legal system and public safety",society,Society,AU,Administrative units
+Seniorenstatus eines privaten Haushalts Haushalt ohne Senior:innen,Seniorenstatus eines privaten Haushalts Haushalt ohne Senior:innen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pkw Hybrid insgesamt,Pkw Hybrid insgesamt,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+(SDG 8) Beschäftigungsquote - 55 Jahre und älter,(SDG 8) Beschäftigungsquote - 55 Jahre und älter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter in 10er Jahresgruppen 30 bis 39,Alter in 10er Jahresgruppen 30 bis 39,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte am AO ohne Berufsabschluss,Beschäftigte am AO ohne Berufsabschluss,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Monatliches Haushaltseinkommen,Monatliches Haushaltseinkommen,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Baujahr Gebäude insgesamt,Baujahr Gebäude insgesamt,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+Weibliche Schulabgänger mit allgemeiner Hochschulreife,Weibliche Schulabgänger mit allgemeiner Hochschulreife,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Bruttoinlandsprodukt in 1000 Euro,Bruttoinlandsprodukt in 1000 Euro,,ECON,Economy and finance,economy,Farming,SU,Statistical units
+Alter in 10er Jahresgruppen 50 bis 59,Alter in 10er Jahresgruppen 50 bis 59,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Selbstständigenquote,Selbstständigenquote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gemittelten Lufttemperatur,Gemittelten Lufttemperatur,,ENVI,Environment,climatologyMeteorologyAtmosphere,Climatology / Meteorology / Atmosphere,AC-MF,Atmospheric Conditions and meteorological geographical features
+Kinosäle,Kinosäle,,EDUC,"Education, culture and sport",society,Society,PF,Production and industrial facilities
+(SDG 1) SGB II-/SGB XII-Quote,(SDG 1) SGB II-/SGB XII-Quote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ruhestandswanderer,Ruhestandswanderer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter infr 6 bis 9,Alter infr 6 bis 9,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Staatsangehörigkeit Gruppen Sonstige,Staatsangehörigkeit Gruppen Sonstige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 16) Liquiditätskredite,(SDG 16) Liquiditätskredite,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Bodenfläche gesamt qkm,Bodenfläche gesamt qkm,,ENVI,Environment,geoscientificInformation,Geoscientific Information,SO,Soil
+Verbraucherinsolvenzverfahren Gläubigerforderungen,Verbraucherinsolvenzverfahren Gläubigerforderungen,,JUST,"Justice, legal system and public safety",society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Vater und Kinder ab 18,Typ der Kernfamilie  nach Kindern Vater und Kinder ab 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bildung,Bildung,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme Die Humanisten,Bundestagswahl Zweitstimme Die Humanisten,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Bruttowertschöpfung Sekundärer Sektor,Anteil Bruttowertschöpfung Sekundärer Sektor,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Sozialleistungen - Leistungsempfänger,Sozialleistungen - Leistungsempfänger,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"Zahl der Staatsangehörigkeiten mehrere, nur ausländische","Zahl der Staatsangehörigkeiten mehrere, nur ausländische",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnungen nach Zahl der Räume 7 und mehr Räume,Wohnungen nach Zahl der Räume 7 und mehr Räume,,SOCI,Population and society,society,Society,BU,Buildings
+Baugenehmigungen für Wohnungen in Mehrfamilienhäusern,Baugenehmigungen für Wohnungen in Mehrfamilienhäusern,,SOCI,Population and society,structure,Structure,BU,Buildings
+Bundestagswahl Zweitstimme pro Deutschland,Bundestagswahl Zweitstimme pro Deutschland,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Trinkwasserverbrauch,Trinkwasserverbrauch,,ENVI,Environment,inlandWaters,Inland Waters,HY,Hydrography
+Fläche der Wohnung 10m2 Intervalle 50 bis 59,Fläche der Wohnung 10m2 Intervalle 50 bis 59,,SOCI,Population and society,society,Society,BU,Buildings
+Familienstand eingetragene:r Lebenspartner verstorben,Familienstand eingetragene:r Lebenspartner verstorben,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+ÖV-Haltestellen,ÖV-Haltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Umsatzsteuer,Umsatzsteuer,,ECON,Economy and finance,economy,Farming,AM,Area management/restriction/regulation zones and reporting units
+Weibliche ältere Arbeitslose,Weibliche ältere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+hochfrequentierte Bushaltestellen,hochfrequentierte Bushaltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Zuzugsrate,Zuzugsrate,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme ZUKUNFT,Bundestagswahl Erststimme ZUKUNFT,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Fläche der Wohnung 10m2 Intervalle 90 bis 99,Fläche der Wohnung 10m2 Intervalle 90 bis 99,,SOCI,Population and society,society,Society,BU,Buildings
+Bundestagswahl Zweitstimme GRÜNE/B 90,Bundestagswahl Zweitstimme GRÜNE/B 90,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gewerbesteuer,Gewerbesteuer,,ECON,Economy and finance,economy,Farming,US,Utility and governmental services
+"Einwohner 75 Jahre und älter, Frauen","Einwohner 75 Jahre und älter, Frauen",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+schule,schule,,EDUC,"Education, culture and sport",society,Society,BU,Buildings
+Bedarfsgemeinschaften mit Kindern,Bedarfsgemeinschaften mit Kindern,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach überwiegender Heizungsart Fernheizung,Gebäude nach überwiegender Heizungsart Fernheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Weibliche Langzeitarbeitslose,Weibliche Langzeitarbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Sozialleistungen - Transferleistungen,Sozialleistungen - Transferleistungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach überwiegender Heizungsart Zentralheizung,Gebäude nach überwiegender Heizungsart Zentralheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Bauüberhänge,Bauüberhänge,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+Ein- und Zweifamilienhäuser,Ein- und Zweifamilienhäuser,,SOCI,Population and society,society,Society,BU,Buildings
+Wirtschaft – Wirtschaftliche Leistung,Wirtschaft – Wirtschaftliche Leistung,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Berufsbildende Schulen,Berufsbildende Schulen,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Neubauwohnungen in Ein- und Zweifamilienhäusern je Einwohner,Neubauwohnungen in Ein- und Zweifamilienhäusern je Einwohner,,SOCI,Population and society,society,Society,BU,Buildings
+Direkte Projektförderung (kurfristig),Direkte Projektförderung (kurfristig),,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Mittlere Unternehmen,Mittlere Unternehmen,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Erwerbsquote Männer,Erwerbsquote Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche jüngere Arbeitslose,Weibliche jüngere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ambulante Pflege,Ambulante Pflege,,HEAL,Health,health,Health,HH,Human health and safety
+Gebäudetyp Größe Einfamilienhaus Reihenhaus,Gebäudetyp Größe Einfamilienhaus Reihenhaus,,SOCI,Population and society,society,Society,BU,Buildings
+Schüler an allgemeinbildenden Schulen mit Förderschwerpunkt je 1.000 Einwohner,Schüler an allgemeinbildenden Schulen mit Förderschwerpunkt je 1.000 Einwohner,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Heizungsart Heizungsart insgesamt,Heizungsart Heizungsart insgesamt,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+Bundestagswahl Zweitstimme CDU,Bundestagswahl Zweitstimme CDU,,GOVE,Government and public sector,society,Society,US,Utility and governmental services
+Sonstige Arbeitsmarktverwaltungseinrichtungen,Sonstige Arbeitsmarktverwaltungseinrichtungen,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Wohnung Gebäudetyp Größe Anderer Gebäudetyp,Wohnung Gebäudetyp Größe Anderer Gebäudetyp,,SOCI,Population and society,structure,Structure,BU,Buildings
+Öffentliche Finanzen,Öffentliche Finanzen,,ECON,Economy and finance,economy,Farming,US,Utility and governmental services
+Bundestagswahl Erststimme CDU,Bundestagswahl Erststimme CDU,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ältere erwerbsfähige Leistungsberechtigte,Ältere erwerbsfähige Leistungsberechtigte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Steuerkraft,Steuerkraft,,ECON,Economy and finance,economy,Farming,AM,Area management/restriction/regulation zones and reporting units
+Auslandsumsatz im Bergbau u. Verarb. Gewerbe,Auslandsumsatz im Bergbau u. Verarb. Gewerbe,,ECON,Economy and finance,economy,Farming,SU,Statistical units
+Fertiggestellte Wohngebäude mit erneuerbarer Heizenergie,Fertiggestellte Wohngebäude mit erneuerbarer Heizenergie,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Typ private Haushalte Familie Alleinerziehende,Typ private Haushalte Familie Alleinerziehende,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner von 6 bis unter 18 Jahren,Einwohner von 6 bis unter 18 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einpersonenhaushalte,Einpersonenhaushalte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"Einwohner von 75 bis unter 85 Jahren, Frauen","Einwohner von 75 bis unter 85 Jahren, Frauen",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pendler mit Arbeitsweg 50 km und mehr,Pendler mit Arbeitsweg 50 km und mehr,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme für mehr Bürgerbeteiligung,Bundestagswahl Erststimme für mehr Bürgerbeteiligung,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Anteil männliche jüngere Arbeitslose,Anteil männliche jüngere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner von 3 bis unter 6 Jahren,Einwohner von 3 bis unter 6 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schüler an allgemeinbildenden Schulen mit Förderschwerpunkt,Schüler an allgemeinbildenden Schulen mit Förderschwerpunkt,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Wohnungen nach Zahl der Räume 5 Räume,Wohnungen nach Zahl der Räume 5 Räume,,SOCI,Population and society,society,Society,SU,Statistical units
+Staatsangehörigkeit Gruppen Sonstige Welt,Staatsangehörigkeit Gruppen Sonstige Welt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einbürgerungen je Einwohner,Einbürgerungen je Einwohner,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Ungültige Stimmen,Bundestagswahl Ungültige Stimmen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"Einwohner 65 Jahre und älter, Frauen","Einwohner 65 Jahre und älter, Frauen",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme ÖDP,Bundestagswahl Erststimme ÖDP,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Bundestagswahl Erststimme Tierschutzpartei,Bundestagswahl Erststimme Tierschutzpartei,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäudetyp Größe Zweifamilienhaus Doppelhaushälfte,Gebäudetyp Größe Zweifamilienhaus Doppelhaushälfte,,SOCI,Population and society,society,Society,BU,Buildings
+Ärzte,Ärzte,,HEAL,Health,health,Health,HH,Human health and safety
+Krankenhäuser der Umfassenden Notfallversorgung,Krankenhäuser der Umfassenden Notfallversorgung,,HEAL,Health,health,Health,HH,Human health and safety
+Bundestagswahl Erststimme EW 1,Bundestagswahl Erststimme EW 1,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+hochfrequentierte Bahnhaltestellen,hochfrequentierte Bahnhaltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bundestagswahl Zweitstimme Volt,Bundestagswahl Zweitstimme Volt,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Außenwanderungssaldo Männer,Außenwanderungssaldo Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 140 bis 149,Fläche der Wohnung 10m2 Intervalle 140 bis 149,,SOCI,Population and society,society,Society,BU,Buildings
+Fläche der Wohnung 10m2 Intervalle 110 bis 119,Fläche der Wohnung 10m2 Intervalle 110 bis 119,,SOCI,Population and society,society,Society,BU,Buildings
+Privateinkommen und private Schulden,Privateinkommen und private Schulden,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Wertstoffe,Wertstoffe,,ENVI,Environment,environment,Environment,US,Utility and governmental services
+Schüler an allgemeinbildenden Schulen,Schüler an allgemeinbildenden Schulen,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Bundestagswahl Erststimme EW 5,Bundestagswahl Erststimme EW 5,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Verdienstabstand zwischen Frauen und Männern,Verdienstabstand zwischen Frauen und Männern,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Männliche Schulabgänger mit allgemeiner Hochschulreife,Männliche Schulabgänger mit allgemeiner Hochschulreife,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Erreichbarkeit von Oberzentren,Erreichbarkeit von Oberzentren,,REGI,Regions and cities,transportation,Transportation,TN,Transport networks
+Weibliche Bildungswanderer,Weibliche Bildungswanderer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 6) Abwasserbehandlung,(SDG 6) Abwasserbehandlung,,ENVI,Environment,environment,Environment,US,Utility and governmental services
+Nahversorgung ÖV Haltestelle,Nahversorgung ÖV Haltestelle,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Fertilitätsrate,Fertilitätsrate,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ private Haushalte Familie Einpersonenhaushalt,Typ private Haushalte Familie Einpersonenhaushalt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Ehepaar und Kinder ab 18,Typ der Kernfamilie  nach Kindern Ehepaar und Kinder ab 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schüler an allgemeinbildenden Schulen je 1.000 Einwohner,Schüler an allgemeinbildenden Schulen je 1.000 Einwohner,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+(SDG 2) Stickstoffüberschuss der Landwirtschaft,(SDG 2) Stickstoffüberschuss der Landwirtschaft,,AGRI,"Agriculture, fisheries, forestry and food",farming,Farming,AF,Agricultural and aquaculture facilities
+Arbeitslosenquote Ältere,Arbeitslosenquote Ältere,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Eistage,Eistage,,ENVI,Environment,climatologyMeteorologyAtmosphere,Climatology / Meteorology / Atmosphere,AC-MF,Atmospheric Conditions and meteorological geographical features
+(SDG 3) Wohnungsnahe Grundversorgung - Hausarzt,(SDG 3) Wohnungsnahe Grundversorgung - Hausarzt,,HEAL,Health,health,Health,HH,Human health and safety
+Geburten älterer Mütter (>=40 Jahre),Geburten älterer Mütter (>=40 Jahre),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+ALG I-Leistungen Männer,ALG I-Leistungen Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Bruttowertschöpfung Tertiärer Sektor,Anteil Bruttowertschöpfung Tertiärer Sektor,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Erreichbarkeit von Flughäfen,Erreichbarkeit von Flughäfen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bundestagswahl Erststimme Einzelwahlvorschlag 2,Bundestagswahl Erststimme Einzelwahlvorschlag 2,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Prognostizierte Bevölkerungsentwicklung (2022-2030),Prognostizierte Bevölkerungsentwicklung (2022-2030),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Staatsangehörigkeit Deutschland,Staatsangehörigkeit Deutschland,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gerichte,Gerichte,,JUST,"Justice, legal system and public safety",society,Society,SU,Statistical units
+U-/Strassenbahnhaltestellen,U-/Strassenbahnhaltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bundestagswahl Erststimme EW 7,Bundestagswahl Erststimme EW 7,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte in Kreativbranchen,Beschäftigte in Kreativbranchen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fertiggestellte Wohnungen je Wohnung im Bestand,Fertiggestellte Wohnungen je Wohnung im Bestand,,SOCI,Population and society,society,Society,BU,Buildings
+Seniorenstatus eines privaten Haushalts Haushalt nur Senior:innen,Seniorenstatus eines privaten Haushalts Haushalt nur Senior:innen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter infr 19 bis 24,Alter infr 19 bis 24,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Minijobs (Männer),Anteil Minijobs (Männer),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche Berufseinstiegswanderer,Weibliche Berufseinstiegswanderer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bevölkerung - Natürliche Bevölkerungsbewegungen,Bevölkerung - Natürliche Bevölkerungsbewegungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Studierende an FH,Studierende an FH,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme DVU,Bundestagswahl Zweitstimme DVU,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Dienstleistungsquote,Dienstleistungsquote,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+U-/Straßenbahn-Abfahrten,U-/Straßenbahn-Abfahrten,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Verunglückte im Straßenverkehr,Verunglückte im Straßenverkehr,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Verkehr und Erreichbarkeit - Straßenverkehr,Verkehr und Erreichbarkeit - Straßenverkehr,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bundestagswahl Zweitstimme MLPD,Bundestagswahl Zweitstimme MLPD,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Öffentliche Bäder,Öffentliche Bäder,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Bruttowertschöpfung je Erwerbstätigen Primärer Sektor,Bruttowertschöpfung je Erwerbstätigen Primärer Sektor,,AGRI,"Agriculture, fisheries, forestry and food",farming,Farming,AF,Agricultural and aquaculture facilities
+Baujahr 1919 bis 1949,Baujahr 1919 bis 1949,,SOCI,Population and society,society,Society,SU,Statistical units
+Bundestagswahl Erststimme Internationalistisches Bündnis 2,Bundestagswahl Erststimme Internationalistisches Bündnis 2,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Medianeinkommen Frauen,Medianeinkommen Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 11) Wohnungsnahe Grundversorgung - Supermarkt,(SDG 11) Wohnungsnahe Grundversorgung - Supermarkt,,SOCI,Population and society,society,Society,BU,Buildings
+Bundestagswahl Erststimme Spitzenkandidat der Bürger,Bundestagswahl Erststimme Spitzenkandidat der Bürger,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Zuweisungen für Investitionsfördermaßnahmen,Zuweisungen für Investitionsfördermaßnahmen,,ECON,Economy and finance,economy,Farming,US,Utility and governmental services
+Größe Kernfamilie bis und mehr Personen 5 Personen,Größe Kernfamilie bis und mehr Personen 5 Personen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Durchschnittsalter der Bevölkerung,Durchschnittsalter der Bevölkerung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 70 bis 79,Fläche der Wohnung 10m2 Intervalle 70 bis 79,,SOCI,Population and society,society,Society,BU,Buildings
+Ausländische Schüler je 100 Ausländer 6 bis 18 Jahre,Ausländische Schüler je 100 Ausländer 6 bis 18 Jahre,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Wohnungen nach Zahl der Räume Wohnungen insgesamt,Wohnungen nach Zahl der Räume Wohnungen insgesamt,,REGI,Regions and cities,society,Society,BU,Buildings
+Medianeinkommen akademischer Berufsabschluss,Medianeinkommen akademischer Berufsabschluss,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Schulabgänger mit Hauptschulabschluss,Schulabgänger mit Hauptschulabschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme NPD,Bundestagswahl Zweitstimme NPD,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 5) Verhältnis der Beschäftigungsquote von Frauen zu Männern,(SDG 5) Verhältnis der Beschäftigungsquote von Frauen zu Männern,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gesamtwanderungssaldo,Gesamtwanderungssaldo,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+5- und mehr Raum-Wohnungen,5- und mehr Raum-Wohnungen,,SOCI,Population and society,society,Society,BU,Buildings
+Quote jüngere Beschäftigte,Quote jüngere Beschäftigte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erwerbstätige Primärer Sektor,Erwerbstätige Primärer Sektor,,AGRI,"Agriculture, fisheries, forestry and food",farming,Farming,AF,Agricultural and aquaculture facilities
+Männliche Auszubildende,Männliche Auszubildende,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Beschäftigtenquote Ausländer,Beschäftigtenquote Ausländer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Stimmenanteile Sonstige Parteien,Stimmenanteile Sonstige Parteien,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Bundestagswahl Erststimme EW 3,Bundestagswahl Erststimme EW 3,,SOCI,Population and society,society,Society,SU,Statistical units
+Gebäude nach überwiegender Heizungsart Etagenheizung,Gebäude nach überwiegender Heizungsart Etagenheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Naturnähere Fläche,Naturnähere Fläche,,ENVI,Environment,environment,Environment,HB,Habitats and biotopes
+Beschäftigung und Erwerbstätigkeit – Struktur,Beschäftigung und Erwerbstätigkeit – Struktur,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Familienstand ledig,Familienstand ledig,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 3) Personal in Pflegediensten,(SDG 3) Personal in Pflegediensten,,HEAL,Health,health,Health,HH,Human health and safety
+Fläche der Wohnung 10m2 Intervalle 150 bis 159,Fläche der Wohnung 10m2 Intervalle 150 bis 159,,SOCI,Population and society,society,Society,BU,Buildings
+Verkehr und Erreichbarkeit,Verkehr und Erreichbarkeit,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Elterngeldbezieher (Mütter),Elterngeldbezieher (Mütter),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Grundschulen,Grundschulen,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+"GRW, Bereich Förderung wirtschaftsnaher Infrastruktur (kurzfristig)","GRW, Bereich Förderung wirtschaftsnaher Infrastruktur (kurzfristig)",,ECON,Economy and finance,economy,Farming,AM,Area management/restriction/regulation zones and reporting units
+Arbeitslose,Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Freifläche,Freifläche,,REGI,Regions and cities,environment,Environment,LU,Land use
+Schüler an berufsbildenden Schulen,Schüler an berufsbildenden Schulen,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Bus-Abfahrten,Bus-Abfahrten,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+(SDG 12) Trinkwasserverbrauch - Private Haushalte,(SDG 12) Trinkwasserverbrauch - Private Haushalte,,ENVI,Environment,environment,Environment,HY,Hydrography
+Junge erwerbsfähige Leistungsberechtigte,Junge erwerbsfähige Leistungsberechtigte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner unter 6 Jahre,Einwohner unter 6 Jahre,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Kinderarmut,Kinderarmut,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Investitionen im Bergbau und Verarb. Gewerbe,Investitionen im Bergbau und Verarb. Gewerbe,,ECON,Economy and finance,economy,Farming,MR,Mineral resources
+Allgemeinbildende Schulen,Allgemeinbildende Schulen,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Bundestagswahl Zweitstimme Tierschutzpartei,Bundestagswahl Zweitstimme Tierschutzpartei,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+Beschäftigte in unternehmensbezogenen Dienstleistungen,Beschäftigte in unternehmensbezogenen Dienstleistungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+SGB II - Quote,SGB II - Quote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme BGE,Bundestagswahl Erststimme BGE,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Stimmenanteile CDU/CSU,Stimmenanteile CDU/CSU,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erwerbsfähige Leistungsberechtigte,Erwerbsfähige Leistungsberechtigte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Energieträger der Heizung Kohle,Gebäude nach Energieträger der Heizung Kohle,,ENER,Energy,structure,Structure,BU,Buildings
+Naturnähere Fläche je Einwohner,Naturnähere Fläche je Einwohner,,ENVI,Environment,environment,Environment,LU,Land use
+Bundestagswahl Zweitstimme Die Linke,Bundestagswahl Zweitstimme Die Linke,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Wahlberechtigte insgesamt,Bundestagswahl Wahlberechtigte insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigtenquote Männer,Beschäftigtenquote Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil weibliche ältere Arbeitslose,Anteil weibliche ältere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Größe Kernfamilie bis und mehr Personen 6 Personen und mehr,Größe Kernfamilie bis und mehr Personen 6 Personen und mehr,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme UBB,Bundestagswahl Erststimme UBB,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Seniorenheime,Seniorenheime,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach überwiegender Heizungsart Heizungsart insgesamt,Gebäude nach überwiegender Heizungsart Heizungsart insgesamt,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Straftaten,Straftaten,,JUST,"Justice, legal system and public safety",society,Society,HH,Human health and safety
+Ladepunkte je 100 Elektrofahrzeuge (BEV),Ladepunkte je 100 Elektrofahrzeuge (BEV),,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Fläche der Wohnung 10m2 Intervalle 160 bis 169,Fläche der Wohnung 10m2 Intervalle 160 bis 169,,SOCI,Population and society,society,Society,BU,Buildings
+Wohnung Gebäudetyp Größe Mehrfamilienhaus 7 bis 12 Wohnungen,Wohnung Gebäudetyp Größe Mehrfamilienhaus 7 bis 12 Wohnungen,,REGI,Regions and cities,society,Society,BU,Buildings
+Religion Römisch-katholisch,Religion Römisch-katholisch,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Baujahr 1990 bis 1999,Baujahr 1990 bis 1999,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Freistehendes Einfamilienhaus,Wohnung Gebäudetyp Größe Freistehendes Einfamilienhaus,,SOCI,Population and society,structure,Structure,BU,Buildings
+(SDG 3) Wohnungsnahe Grundversorgung - Apotheke,(SDG 3) Wohnungsnahe Grundversorgung - Apotheke,,HEAL,Health,health,Health,HH,Human health and safety
+Männliche Studierende,Männliche Studierende,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Stickstoffüberschuss,Stickstoffüberschuss,,ENVI,Environment,environment,Environment,AC,Atmospheric conditions
+Natürlicher Saldo,Natürlicher Saldo,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Die Humanisten,Bundestagswahl Erststimme Die Humanisten,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schüler an Grundschulen,Schüler an Grundschulen,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+ALG II-Leistungen an SGBII,ALG II-Leistungen an SGBII,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Neue Ein- und Zweifamilienhäuser,Neue Ein- und Zweifamilienhäuser,,REGI,Regions and cities,society,Society,BU,Buildings
+Raumwirksame Mittel,Raumwirksame Mittel,,GOVE,Government and public sector,planningCadastre,Planning / Cadastre,LU,Land use
+Typ private Haushalte Familie Mehrpersonenhaushalte ohne Kernfamilie,Typ private Haushalte Familie Mehrpersonenhaushalte ohne Kernfamilie,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Abhängigenquote Junge,Abhängigenquote Junge,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pkw-Dichte,Pkw-Dichte,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Gebäude nach Anzahl der Wohnungen 1 Wohnung,Gebäude nach Anzahl der Wohnungen 1 Wohnung,,SOCI,Population and society,society,Society,BU,Buildings
+Schüler an berufsbildenden Schulen je 1.000 Einwohner,Schüler an berufsbildenden Schulen je 1.000 Einwohner,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Kurzarbeiter,Kurzarbeiter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme EW 9,Bundestagswahl Erststimme EW 9,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Männliche Schulabgänger mit Hauptschulabschluss,Männliche Schulabgänger mit Hauptschulabschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Waldfläche,Waldfläche,,ENVI,Environment,environment,Environment,LC,Land cover
+Bundestagswahl Erststimme Willi-Weise-Projekt  2,Bundestagswahl Erststimme Willi-Weise-Projekt  2,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Familienstand verwitwet,Familienstand verwitwet,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Baujahr in MZ-Klassen 2020 und später,Gebäude nach Baujahr in MZ-Klassen 2020 und später,,SOCI,Population and society,structure,Structure,BU,Buildings
+Empfänger von Pflegegeld,Empfänger von Pflegegeld,,HEAL,Health,health,Health,HH,Human health and safety
+Bevölkerungsentwicklung (5 Jahre),Bevölkerungsentwicklung (5 Jahre),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Freistehendes Zweifamilienhaus,Wohnung Gebäudetyp Größe Freistehendes Zweifamilienhaus,,SOCI,Population and society,society,Society,BU,Buildings
+Typ der Kernfamilie  nach Kindern Familie insgesamt,Typ der Kernfamilie  nach Kindern Familie insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme Team Todenhöfer,Bundestagswahl Zweitstimme Team Todenhöfer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Bobby,Bundestagswahl Erststimme Bobby,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Bundestagswahl Erststimme Zukunft für uns,Bundestagswahl Erststimme Zukunft für uns,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Baujahr vor 1919,Baujahr vor 1919,,SOCI,Population and society,society,Society,BU,Buildings
+Größe Kernfamilie bis und mehr Personen 3 Personen,Größe Kernfamilie bis und mehr Personen 3 Personen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Männliche ältere Arbeitslose,Männliche ältere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bahnhaltestellen,Bahnhaltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Gebäude nach Energieträger der Heizung Energieträger insgesamt,Gebäude nach Energieträger der Heizung Energieträger insgesamt,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Wohnungen nach Zahl der Räume 1 Raum,Wohnungen nach Zahl der Räume 1 Raum,,SOCI,Population and society,society,Society,BU,Buildings
+Allgemeinbildende Schulen mit Förderschwerpunkt,Allgemeinbildende Schulen mit Förderschwerpunkt,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+kitas,kitas,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Haushalte mit mittlerem Einkommen,Haushalte mit mittlerem Einkommen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte mit Anforderungsniveau Spezialist,Beschäftigte mit Anforderungsniveau Spezialist,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schutzsuchende an ausländischer Bevölkerung,Schutzsuchende an ausländischer Bevölkerung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schlafgelegenheiten in Beherbergungsbetrieben,Schlafgelegenheiten in Beherbergungsbetrieben,,SOCI,Population and society,society,Society,SU,Statistical units
+Alter infr 3 bis 5,Alter infr 3 bis 5,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche Empfänger von Grundsicherung im Alter (Altersarmut),Weibliche Empfänger von Grundsicherung im Alter (Altersarmut),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bauen und Wohnen - Gebäude- und Wohnungsbestand,Bauen und Wohnen - Gebäude- und Wohnungsbestand,,SOCI,Population and society,society,Society,BU,Buildings
+Wissenschaftliche Bibliotheken,Wissenschaftliche Bibliotheken,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Haus- und Sperrmüll,Haus- und Sperrmüll,,ENVI,Environment,environment,Environment,AM,Area management/restriction/regulation zones and reporting units
+Ausländische Studierende,Ausländische Studierende,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 3) Pflegeheimplätze,(SDG 3) Pflegeheimplätze,,HEAL,Health,health,Health,HH,Human health and safety
+Fläche der Wohnung 10m2 Intervalle 180 und mehr,Fläche der Wohnung 10m2 Intervalle 180 und mehr,,REGI,Regions and cities,society,Society,BU,Buildings
+Berufseinstiegswanderer,Berufseinstiegswanderer,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Bundestagswahl Erststimme EW 2,Bundestagswahl Erststimme EW 2,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Kinder ausländischer Herkunft in Tageseinrichtungen,Kinder ausländischer Herkunft in Tageseinrichtungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Familienwanderer,Familienwanderer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner-Arbeitsplatz-Dichte,Einwohner-Arbeitsplatz-Dichte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohngeldhaushalte (Lastenzuschuss),Wohngeldhaushalte (Lastenzuschuss),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner von 65 bis unter 75 Jahren,Einwohner von 65 bis unter 75 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erholungsfläche je Einwohner,Erholungsfläche je Einwohner,,SOCI,Population and society,society,Society,LU,Land use
+Eheschließungen,Eheschließungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Krankenhausbetten je 1.000 Einwohner,Krankenhausbetten je 1.000 Einwohner,,HEAL,Health,health,Health,HH,Human health and safety
+Beschäftigte am WO mit akademischen Abschluss,Beschäftigte am WO mit akademischen Abschluss,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Nichteheliche Lebensgemeinschaft ohne Kinder,Typ der Kernfamilie  nach Kindern Nichteheliche Lebensgemeinschaft ohne Kinder,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+hochfrequentierte U-/Strassenbahnhaltestellen,hochfrequentierte U-/Strassenbahnhaltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Kleinstbetriebe,Kleinstbetriebe,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+"GRW, Bereich Förderung der gewerblichen Wirtschaft (langfristig)","GRW, Bereich Förderung der gewerblichen Wirtschaft (langfristig)",,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Einwohner 85 Jahre und älter,Einwohner 85 Jahre und älter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+sozialversicherungspflichtig Beschäftigte am Wohnort,sozialversicherungspflichtig Beschäftigte am Wohnort,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitsmarktpolitische Hilfen der BA für Arbeit (langfristig),Arbeitsmarktpolitische Hilfen der BA für Arbeit (langfristig),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Anzahl der Wohnungen 7 bis 12 Wohnungen,Gebäude nach Anzahl der Wohnungen 7 bis 12 Wohnungen,,SOCI,Population and society,structure,Structure,BU,Buildings
+Haushalte mit niedrigem Einkommen,Haushalte mit niedrigem Einkommen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Religion Evangelisch,Religion Evangelisch,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Teilzeitbeschäftige Frauen,Teilzeitbeschäftige Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Medizinische und soziale Versorgung,Medizinische und soziale Versorgung,,HEAL,Health,health,Health,HH,Human health and safety
+Polizeidienststellen,Polizeidienststellen,,JUST,"Justice, legal system and public safety",society,Society,US,Utility and governmental services
+Öffentliche Bibliotheken,Öffentliche Bibliotheken,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Nahversorgung Grundschule,Nahversorgung Grundschule,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+(SDG 3) Vorzeitige Sterblichkeit,(SDG 3) Vorzeitige Sterblichkeit,,HEAL,Health,health,Health,HH,Human health and safety
+Baulandpreise,Baulandpreise,,ECON,Economy and finance,economy,Farming,LU,Land use
+(SDG 12) Abfallmenge,(SDG 12) Abfallmenge,,ENVI,Environment,environment,Environment,NZ,Natural risk zones
+Männliche Schulabgänger ohne Abschluss,Männliche Schulabgänger ohne Abschluss,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+(SDG 10) Beschäftigungsquote - Ausländer,(SDG 10) Beschäftigungsquote - Ausländer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme EW 4,Bundestagswahl Erststimme EW 4,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Absolutzahlen,Absolutzahlen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme DIE LINKE ,Bundestagswahl Erststimme DIE LINKE ,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme DKP,Bundestagswahl Zweitstimme DKP,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche Studierende,Weibliche Studierende,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pkw Diesel,Pkw Diesel,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Verkehr,Verkehr,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Ehescheidungen,Ehescheidungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Umwelt,Umwelt,,ENVI,Environment,environment,Environment,AM,Area management/restriction/regulation zones and reporting units
+Erwerbsquote,Erwerbsquote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Binnenwanderungssaldo,Binnenwanderungssaldo,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+arzt,arzt,,HEAL,Health,health,Health,HH,Human health and safety
+Bundestagswahl Erststimme EW 10,Bundestagswahl Erststimme EW 10,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte Sekundärer Sektor,Beschäftigte Sekundärer Sektor,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Ausländische weibliche Arbeitslose,Ausländische weibliche Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Eingetragene Lebenspartnerschaft ohne Kinder,Typ der Kernfamilie  nach Kindern Eingetragene Lebenspartnerschaft ohne Kinder,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohnerdichte,Einwohnerdichte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Direkte Projektförderung (langfristig),Direkte Projektförderung (langfristig),,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+sozialversicherungspflichtig Beschäftigte Binnenpendler,sozialversicherungspflichtig Beschäftigte Binnenpendler,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bibliotheksentleihungen,Bibliotheksentleihungen,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Wohnungen nach Zahl der Räume 2 Räume,Wohnungen nach Zahl der Räume 2 Räume,,SOCI,Population and society,society,Society,BU,Buildings
+Gebäudetyp Größe Einfamilienhaus Doppelhaushälfte,Gebäudetyp Größe Einfamilienhaus Doppelhaushälfte,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+Bruttoinlandsprodukt je Erwerbstätigen,Bruttoinlandsprodukt je Erwerbstätigen,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Zweifamilienhaus Reihenhaus,Wohnung Gebäudetyp Größe Zweifamilienhaus Reihenhaus,,SOCI,Population and society,society,Society,BU,Buildings
+Wohnungen in Mehrfamilienhäusern,Wohnungen in Mehrfamilienhäusern,,SOCI,Population and society,society,Society,BU,Buildings
+Baujahr 2016 und später,Baujahr 2016 und später,,SOCI,Population and society,society,Society,BU,Buildings
+Bahn-Abfahrten,Bahn-Abfahrten,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Flächennutzung,Flächennutzung,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,LU,Land use
+Typ private Haushalte Familie Paare ohne Kinder,Typ private Haushalte Familie Paare ohne Kinder,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche Auszubildende,Weibliche Auszubildende,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Bauen und Wohnen - Baulandmarkt und Bautätigkeit,Bauen und Wohnen - Baulandmarkt und Bautätigkeit,,SOCI,Population and society,structure,Structure,BU,Buildings
+(SDG 5) Frauenanteil im Stadtrat bzw. Kreistag,(SDG 5) Frauenanteil im Stadtrat bzw. Kreistag,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Kindertagesstätten,Kindertagesstätten,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Baujahr 1950 bis 1959,Baujahr 1950 bis 1959,,SOCI,Population and society,society,Society,BU,Buildings
+Postfillialen insgesamt,Postfillialen insgesamt,,SOCI,Population and society,utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Pendlersaldo,Pendlersaldo,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erwerbstätige,Erwerbstätige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Stimmenanteile Die Linke,Stimmenanteile Die Linke,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Bundestagswahl Erststimme DIE LINKE,Bundestagswahl Erststimme DIE LINKE,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Pflegebedürftige,Pflegebedürftige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitslosigkeit,Arbeitslosigkeit,,SOCI,Population and society,economy,Farming,PD,Population distribution — demography
+Offene Stellen mit Anforderungsniveau Helfer,Offene Stellen mit Anforderungsniveau Helfer,,ECON,Economy and finance,economy,Farming,LU,Land use
+Kassenkredite,Kassenkredite,,ECON,Economy and finance,economy,Farming,US,Utility and governmental services
+Nebenstelle eines Oberlandesgerichts,Nebenstelle eines Oberlandesgerichts,,JUST,"Justice, legal system and public safety",society,Society,AU,Administrative units
+Fläche der Wohnung 10m2 Intervalle 30 bis 39,Fläche der Wohnung 10m2 Intervalle 30 bis 39,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schüler an Grundschulen je 1.000 Einwohner,Schüler an Grundschulen je 1.000 Einwohner,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Krankenhäuser ohne allg. stationäre Notfallversorgung,Krankenhäuser ohne allg. stationäre Notfallversorgung,,HEAL,Health,health,Health,HH,Human health and safety
+(SDG 11) Fertiggestellte Wohngebäude mit erneuerbarer Heizenergie,(SDG 11) Fertiggestellte Wohngebäude mit erneuerbarer Heizenergie,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Hochschulförderung (langfristig),Hochschulförderung (langfristig),,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Wirtschaft,Wirtschaft,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Gesundheitsversorgungsfunktion,Gesundheitsversorgungsfunktion,,HEAL,Health,health,Health,HH,Human health and safety
+Betreuungsquote Vorschulkinder,Betreuungsquote Vorschulkinder,,SOCI,Population and society,society,Society,SU,Statistical units
+Verkehr und Erreichbarkeit - Pendler,Verkehr und Erreichbarkeit - Pendler,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Offene Stellen mit Anforderungsniveau Spezialist,Offene Stellen mit Anforderungsniveau Spezialist,,SOCI,Population and society,society,Society,PS,Protected sites
+Studierende,Studierende,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Fortzugsrate Männer,Fortzugsrate Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigung und Erwerbstätigkeit - Atypische Beschäftigung,Beschäftigung und Erwerbstätigkeit - Atypische Beschäftigung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schüler an weiterführenden Schulen je 1.000 Einwohner,Schüler an weiterführenden Schulen je 1.000 Einwohner,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Beschäftigung und Erwerbstätigkeit,Beschäftigung und Erwerbstätigkeit,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Kinos,Kinos,,EDUC,"Education, culture and sport",society,Society,PF,Production and industrial facilities
+Alter infr 60 bis 66,Alter infr 60 bis 66,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Steuereinnahmen,Steuereinnahmen,,ECON,Economy and finance,economy,Farming,AU,Administrative units
+Typ private Haushalte Lebensform Alleinerziehende Väter,Typ private Haushalte Lebensform Alleinerziehende Väter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Öffentliche Verwaltungsfunktion,Öffentliche Verwaltungsfunktion,,GOVE,Government and public sector,utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Beschäftigte am WO ohne Berufsabschluss,Beschäftigte am WO ohne Berufsabschluss,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnungen in Ein- und Zweifamilienhäusern,Wohnungen in Ein- und Zweifamilienhäusern,,SOCI,Population and society,society,Society,BU,Buildings
+Gebäude nach Baujahr in MZ-Klassen 1979 bis 1990,Gebäude nach Baujahr in MZ-Klassen 1979 bis 1990,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+ALG II-Leistungen (Höhe),ALG II-Leistungen (Höhe),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Studierende an Fachhochschulen je 1.000 Einwohner,Studierende an Fachhochschulen je 1.000 Einwohner,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Beschäftigung und Erwerbstätigkeit – Wirtschafts- und Berufszweige,Beschäftigung und Erwerbstätigkeit – Wirtschafts- und Berufszweige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Heizungsart Blockheizung,Heizungsart Blockheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+(SDG 11) Wohnfläche,(SDG 11) Wohnfläche,,SOCI,Population and society,society,Society,BU,Buildings
+Umsatz im Bergbau u. Verarb. Gewerbe,Umsatz im Bergbau u. Verarb. Gewerbe,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Anteil weibliche jüngere Arbeitslose,Anteil weibliche jüngere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Vater und min. ein Kind unter 18,Typ der Kernfamilie  nach Kindern Vater und min. ein Kind unter 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme BUNDESTAGVERKLEINERUNG,Bundestagswahl Erststimme BUNDESTAGVERKLEINERUNG,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erreichbarkeit KV-Terminal,Erreichbarkeit KV-Terminal,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Typ private Haushalte Lebensform Eingetragene Lebenspartnerschaft,Typ private Haushalte Lebensform Eingetragene Lebenspartnerschaft,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Krankenhäuser mit Spezialversorgung,Krankenhäuser mit Spezialversorgung,,HEAL,Health,health,Health,HH,Human health and safety
+Erreichbarkeit von Mittelzentren,Erreichbarkeit von Mittelzentren,,REGI,Regions and cities,society,Society,AU,Administrative units
+zahnarzt,zahnarzt,,HEAL,Health,health,Health,HH,Human health and safety
+Berufsschüler,Berufsschüler,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Teilzeitbeschäftigte,Teilzeitbeschäftigte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bevölkerungsentwicklung,Bevölkerungsentwicklung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitslosenquote Frauen,Arbeitslosenquote Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 120 bis 129,Fläche der Wohnung 10m2 Intervalle 120 bis 129,,SOCI,Population and society,society,Society,BU,Buildings
+Gästeübernachtungen in Beherbergungsbetrieben,Gästeübernachtungen in Beherbergungsbetrieben,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte in wissensintensiven Industrien,Beschäftigte in wissensintensiven Industrien,,TECH,Science and technology,society,Society,PF,Production and industrial facilities
+Einwohner unter 3 Jahren,Einwohner unter 3 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Baujahr in MZ-Klassen 1949 bis 1978,Gebäude nach Baujahr in MZ-Klassen 1949 bis 1978,,SOCI,Population and society,society,Society,BU,Buildings
+Beschäftigte am WO mit Berufsabschluss,Beschäftigte am WO mit Berufsabschluss,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schutzsuchende an Bevölkerung,Schutzsuchende an Bevölkerung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitslose mit Anforderungsniveau Experte,Arbeitslose mit Anforderungsniveau Experte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner je Arzt,Einwohner je Arzt,,HEAL,Health,health,Health,HH,Human health and safety
+Bundestagswahl Erststimme EB - unabhängig,Bundestagswahl Erststimme EB - unabhängig,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+Medianeinkommen Männer,Medianeinkommen Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Geburten junger Mütter (<20 Jahre),Geburten junger Mütter (<20 Jahre),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bevölkerung männlich,Bevölkerung männlich,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte in IT- und naturwissenschaftlichen Dienstleistungsberufen,Beschäftigte in IT- und naturwissenschaftlichen Dienstleistungsberufen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+krankenhaus,krankenhaus,,HEAL,Health,health,Health,BU,Buildings
+Gebäude nach überwiegender Heizungsart Einzel- / Mehrraumöfen,Gebäude nach überwiegender Heizungsart Einzel- / Mehrraumöfen,,ENER,Energy,structure,Structure,BU,Buildings
+Medianeinkommen,Medianeinkommen,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Erwerbsfähige Leistungsberechtigte (Frauen),Erwerbsfähige Leistungsberechtigte (Frauen),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Stimmenanteile SPD,Stimmenanteile SPD,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+Sonnenscheindauer,Sonnenscheindauer,,ENVI,Environment,climatologyMeteorologyAtmosphere,Climatology / Meteorology / Atmosphere,AC-MF,Atmospheric Conditions and meteorological geographical features
+Bevölkerungsentwicklung (10 Jahre),Bevölkerungsentwicklung (10 Jahre),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 9) Hochqualifizierte,(SDG 9) Hochqualifizierte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Baugenehmigungen für Wohnungen in Ein- und Zweifamilienhäusern,Baugenehmigungen für Wohnungen in Ein- und Zweifamilienhäusern,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+Bundestagswahl Zweitstimme UNABHÄNGIGE,Bundestagswahl Zweitstimme UNABHÄNGIGE,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Anteil Erwerbstätige Verarbeitendes Gewerbe an Industrie,Anteil Erwerbstätige Verarbeitendes Gewerbe an Industrie,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Alter infr 16 bis 18,Alter infr 16 bis 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gesundheit,Gesundheit,,HEAL,Health,health,Health,HH,Human health and safety
+Binnenwanderungssaldo Frauen,Binnenwanderungssaldo Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Verhältnis junge zu alte Erwerbsfähige,Verhältnis junge zu alte Erwerbsfähige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Medizinische Versorgung,Medizinische Versorgung,,HEAL,Health,health,Health,HH,Human health and safety
+Leistungen für Unterkunft (Höhe),Leistungen für Unterkunft (Höhe),,SOCI,Population and society,society,Society,BU,Buildings
+Bevölkerung in Oberzentren,Bevölkerung in Oberzentren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Größe Kernfamilie bis und mehr Personen 2 Personen,Größe Kernfamilie bis und mehr Personen 2 Personen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigung und Erwerbstätigkeit - Qualifikation,Beschäftigung und Erwerbstätigkeit - Qualifikation,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Unterbeschäftigungsquote,Unterbeschäftigungsquote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitslosenquote Jüngere,Arbeitslosenquote Jüngere,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme AfD,Bundestagswahl Zweitstimme AfD,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Wirtschaftlich-Ökologisch-Familienfreundlich,Bundestagswahl Erststimme Wirtschaftlich-Ökologisch-Familienfreundlich,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Nebenstelle eines Amtsgerichts,Nebenstelle eines Amtsgerichts,,JUST,"Justice, legal system and public safety",boundaries,Boundaries,AU,Administrative units
+Bundestagswahl Zweitstimme BÜNDNIS DEUTSCHLAND,Bundestagswahl Zweitstimme BÜNDNIS DEUTSCHLAND,,GOVE,Government and public sector,society,Society,AD,Addresses
+Entfernung zur Apotheke,Entfernung zur Apotheke,,HEAL,Health,health,Health,HH,Human health and safety
+Städtebauförderung (kurzfristig),Städtebauförderung (kurzfristig),,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Typ private Haushalte Familie Haushalte insgesamt,Typ private Haushalte Familie Haushalte insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gemeindeverwaltungen,Gemeindeverwaltungen,,GOVE,Government and public sector,structure,Structure,US,Utility and governmental services
+Gebäude nach Energieträger der Heizung Holz / Holzpellets,Gebäude nach Energieträger der Heizung Holz / Holzpellets,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+Prognostizierte Bevölkerungsentwicklung (2022-2040),Prognostizierte Bevölkerungsentwicklung (2022-2040),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 11) Angebotsmietpreise,(SDG 11) Angebotsmietpreise,,REGI,Regions and cities,society,Society,BU,Buildings
+Schüler,Schüler,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Typ private Haushalte Lebensform Einpersonenhaushalte,Typ private Haushalte Lebensform Einpersonenhaushalte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner 75 Jahre und älter,Einwohner 75 Jahre und älter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Schuldnerquote,Schuldnerquote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Außenwanderungssaldo,Außenwanderungssaldo,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Minijobs (ausschließlich) an geringfügig Beschäftigten,Anteil Minijobs (ausschließlich) an geringfügig Beschäftigten,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Staatsangehörige ab 18 Deutsche ab 18,Staatsangehörige ab 18 Deutsche ab 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Nahversorgung Hausarzt,Nahversorgung Hausarzt,,HEAL,Health,health,Health,HH,Human health and safety
+(SDG 9) Breitbandversorgung privater Haushalte,(SDG 9) Breitbandversorgung privater Haushalte,,SOCI,Population and society,utilitiesCommunication,Utilities / Communication,SU,Statistical units
+Bildung – Ausbildungsangebot,Bildung – Ausbildungsangebot,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Ausgaben für Sachinvestitionen,Ausgaben für Sachinvestitionen,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Eigentümerquote Eigentümerquote,Eigentümerquote Eigentümerquote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 4) Integrative Kindertageseinrichtungen,(SDG 4) Integrative Kindertageseinrichtungen,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Mehrfamilienhäuser,Mehrfamilienhäuser,,SOCI,Population and society,structure,Structure,BU,Buildings
+Anteil Minijobs an den Beschäftigungsverhältnissen,Anteil Minijobs an den Beschäftigungsverhältnissen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Verkehrs- und Kommunikationsfunktion,Verkehrs- und Kommunikationsfunktion,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bevölkerung gesamt,Bevölkerung gesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Soziale Versorgung,Soziale Versorgung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bruttoverdienst im Produzierenden Gewerbe,Bruttoverdienst im Produzierenden Gewerbe,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Krankenhäuser mit Schlaganfallversorgung,Krankenhäuser mit Schlaganfallversorgung,,HEAL,Health,health,Health,HH,Human health and safety
+Sozialversicherungspflichtig Beschäftigte am Arbeitsort,Sozialversicherungspflichtig Beschäftigte am Arbeitsort,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Selbständige an Insolvenzen,Anteil Selbständige an Insolvenzen,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Hochschulen gesamt,Hochschulen gesamt,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Medianeinkommen anerkannter Berufsabschluss,Medianeinkommen anerkannter Berufsabschluss,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wasserfläche,Wasserfläche,,ENVI,Environment,inlandWaters,Inland Waters,HY,Hydrography
+Zuzugsrate Männer,Zuzugsrate Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bevölkerung – Bevölkerungsstruktur,Bevölkerung – Bevölkerungsstruktur,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte am AO mit Berufsabschluss,Beschäftigte am AO mit Berufsabschluss,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner von 30 bis unter 50 Jahren,Einwohner von 30 bis unter 50 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Kinositzplätze,Kinositzplätze,,EDUC,"Education, culture and sport",society,Society,PF,Production and industrial facilities
+(SDG 8) Beschäftigungsquote - 15- bis 64-Jährige,(SDG 8) Beschäftigungsquote - 15- bis 64-Jährige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Familienstand eingetragene Lebenspartnerschaft,Familienstand eingetragene Lebenspartnerschaft,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter infr 75 und älter,Alter infr 75 und älter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Baujahr in MZ-Klassen 2001 bis 2010,Gebäude nach Baujahr in MZ-Klassen 2001 bis 2010,,SOCI,Population and society,society,Society,BU,Buildings
+Asylbewerber,Asylbewerber,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ländlichkeit,Ländlichkeit,,REGI,Regions and cities,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Bundestagswahl Erststimme BÜNDNIS DEUTSCHLAND,Bundestagswahl Erststimme BÜNDNIS DEUTSCHLAND,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Familienstand Bevölkerung insgesamt,Familienstand Bevölkerung insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 170 bis 179,Fläche der Wohnung 10m2 Intervalle 170 bis 179,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Unternehmensinsolvenzen,Unternehmensinsolvenzen,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Städtebauförderung (langfristig),Städtebauförderung (langfristig),,REGI,Regions and cities,planningCadastre,Planning / Cadastre,LU,Land use
+Sozialversicherungspflichtig Beschäftigte am Wohnort,Sozialversicherungspflichtig Beschäftigte am Wohnort,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter in 10er Jahresgruppen Bevölkerung insgesamt,Alter in 10er Jahresgruppen Bevölkerung insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitsmarktpolitische Hilfen der BA für Arbeit (kurzfristig),Arbeitsmarktpolitische Hilfen der BA für Arbeit (kurzfristig),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Krankenhäuser mit Nofallversorgung Kinder,Krankenhäuser mit Nofallversorgung Kinder,,HEAL,Health,health,Health,HH,Human health and safety
+Gebäude nach Baujahr in MZ-Klassen 2011 bis 2019,Gebäude nach Baujahr in MZ-Klassen 2011 bis 2019,,SOCI,Population and society,structure,Structure,BU,Buildings
+Ausländische männliche Arbeitslose,Ausländische männliche Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme SPD,Bundestagswahl Erststimme SPD,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Familienstand eingetragene Lebenspartnerschaft aufgehoben,Familienstand eingetragene Lebenspartnerschaft aufgehoben,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Landwirtschaftsfläche,Landwirtschaftsfläche,,AGRI,"Agriculture, fisheries, forestry and food",farming,Farming,AF,Agricultural and aquaculture facilities
+Umsatz im Handwerk,Umsatz im Handwerk,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Spezialbibliotheken,Spezialbibliotheken,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Pkw Benzin,Pkw Benzin,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Großunternehmen,Großunternehmen,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Arbeitslosenquote Männer,Arbeitslosenquote Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Männliche Schulabgänger mit mittlerem Abschluss,Männliche Schulabgänger mit mittlerem Abschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Bildungswanderer,Bildungswanderer,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Bevölkerung (mit BBSR-Zensuskorrekturen),Bevölkerung (mit BBSR-Zensuskorrekturen),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Siedlungs- und Verkehrsfläche,Siedlungs- und Verkehrsfläche,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,LU,Land use
+Marktaktive Leerstandsquote Marktaktive Leerstandsquote,Marktaktive Leerstandsquote Marktaktive Leerstandsquote,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+Baujahr 2000 bis 2009,Baujahr 2000 bis 2009,,SOCI,Population and society,society,Society,BU,Buildings
+(SDG 11) Flächeninanspruchnahme,(SDG 11) Flächeninanspruchnahme,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,LU,Land use
+Männliche Bildungswanderer,Männliche Bildungswanderer,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Aufstocker,Aufstocker,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche Schulabgänger mit mittlerem Abschluss,Weibliche Schulabgänger mit mittlerem Abschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Schlüsselzuweisungen,Schlüsselzuweisungen,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+(SDG 11) Flächenneuinanspruchnahme,(SDG 11) Flächenneuinanspruchnahme,,ENVI,Environment,environment,Environment,LU,Land use
+Frauenanteil 20 bis unter 40 Jahre,Frauenanteil 20 bis unter 40 Jahre,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigtenquote Frauen,Beschäftigtenquote Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Seniorenstatus eines privaten Haushalts Haushalt mit Senior:innen,Seniorenstatus eines privaten Haushalts Haushalt mit Senior:innen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bildung - Schulische Bildung,Bildung - Schulische Bildung,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Ladepunkte je 100.000 Einwohner,Ladepunkte je 100.000 Einwohner,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+"GRW, Bereich Förderung wirtschaftsnaher Infrastruktur (langfristig)","GRW, Bereich Förderung wirtschaftsnaher Infrastruktur (langfristig)",,ECON,Economy and finance,economy,Farming,AM,Area management/restriction/regulation zones and reporting units
+Bundestagswahl Erststimme PARTEILOS - FÜR MEHR DIREKTE DEMOKRATIE,Bundestagswahl Erststimme PARTEILOS - FÜR MEHR DIREKTE DEMOKRATIE,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Wirtschaft – Fremdenverkehr,Wirtschaft – Fremdenverkehr,,ECON,Economy and finance,economy,Farming,AM,Area management/restriction/regulation zones and reporting units
+Landgerichte,Landgerichte,,JUST,"Justice, legal system and public safety",society,Society,US,Utility and governmental services
+Anteil Minijobs (ausschließlich) an den Beschäftigungsverhältnissen,Anteil Minijobs (ausschließlich) an den Beschäftigungsverhältnissen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einkommensteuer,Einkommensteuer,,ECON,Economy and finance,economy,Farming,SU,Statistical units
+Gebäudetyp Größe Mehrfamilienhaus 13 und mehr Wohnungen,Gebäudetyp Größe Mehrfamilienhaus 13 und mehr Wohnungen,,SOCI,Population and society,structure,Structure,BU,Buildings
+Empfänger von Mindestsicherungen,Empfänger von Mindestsicherungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Unternehmensinsolvenzen Gläubigerforderungen,Unternehmensinsolvenzen Gläubigerforderungen,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+(SDG 4) Wohnungsnahe Grundversorgung - Grundschule,(SDG 4) Wohnungsnahe Grundversorgung - Grundschule,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Abfallmenge,Abfallmenge,,ENVI,Environment,environment,Environment,AC,Atmospheric conditions
+Arbeitslose mit Anforderungsniveau Helfer,Arbeitslose mit Anforderungsniveau Helfer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Krankenhäuser der Erweiterten Notfallversorgung,Krankenhäuser der Erweiterten Notfallversorgung,,HEAL,Health,health,Health,HH,Human health and safety
+Bibliotheken,Bibliotheken,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Wohnungseinbruchdiebstahl,Wohnungseinbruchdiebstahl,,JUST,"Justice, legal system and public safety",society,Society,HH,Human health and safety
+Getötete im Straßenverkehr,Getötete im Straßenverkehr,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Postagenturen der Deutschen Post AG,Postagenturen der Deutschen Post AG,,GOVE,Government and public sector,utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Arbeitslose mit Anforderungsniveau Spezialist,Arbeitslose mit Anforderungsniveau Spezialist,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte im Handwerk,Beschäftigte im Handwerk,,SOCI,Population and society,society,Society,SU,Statistical units
+Weibliche Schulabgänger ohne Abschluss,Weibliche Schulabgänger ohne Abschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Flächennutzung und Umwelt,Flächennutzung und Umwelt,,ENVI,Environment,environment,Environment,LU,Land use
+Ganztags-Betreuungsquote Vorschulkinder,Ganztags-Betreuungsquote Vorschulkinder,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bevölkerung in Mittelzentren,Bevölkerung in Mittelzentren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"Polizeidienststellen, teilweise besetzt","Polizeidienststellen, teilweise besetzt",,JUST,"Justice, legal system and public safety",society,Society,SU,Statistical units
+Wahlbeteiligung,Wahlbeteiligung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bildungsversorgungs- und Kulturfunktion,Bildungsversorgungs- und Kulturfunktion,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Bäder,Bäder,,SOCI,Population and society,society,Society,BU,Buildings
+sozialversicherungspflichtig Beschäftigte Einpendler,sozialversicherungspflichtig Beschäftigte Einpendler,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Zweitstimme PIRATEN,Bundestagswahl Zweitstimme PIRATEN,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Erwerbstätige Tertiärer Sektor,Erwerbstätige Tertiärer Sektor,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weibliche SGB II-Empfänger,Weibliche SGB II-Empfänger,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bevölkerung – Wanderungen,Bevölkerung – Wanderungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erholungsfläche,Erholungsfläche,,SOCI,Population and society,society,Society,LU,Land use
+(SDG 11) Naherholungsflächen,(SDG 11) Naherholungsflächen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Freifläche je Einwohner,Freifläche je Einwohner,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte mit Anforderungsniveau Experte,Beschäftigte mit Anforderungsniveau Experte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitsagenturen,Arbeitsagenturen,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Zahl der Staatsangehörigkeiten eine Staatsangehörigkeit,Zahl der Staatsangehörigkeiten eine Staatsangehörigkeit,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Entfernung zum Supermarkt/Discounter,Entfernung zum Supermarkt/Discounter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ private Haushalte Lebensform Nichteheliche Lebensgemeinschaft,Typ private Haushalte Lebensform Nichteheliche Lebensgemeinschaft,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Säuglingssterblichkeit (<1 Jahr),Säuglingssterblichkeit (<1 Jahr),,HEAL,Health,health,Health,HH,Human health and safety
+Studierende an Hochschulen,Studierende an Hochschulen,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Alter infr 10 bis 15,Alter infr 10 bis 15,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bruttoverdienst,Bruttoverdienst,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Anteil ältere Arbeitslose,Anteil ältere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Baujahr 1960 bis 1969,Baujahr 1960 bis 1969,,SOCI,Population and society,society,Society,BU,Buildings
+Religion Sonstige / Keine / Ohne Angabe,Religion Sonstige / Keine / Ohne Angabe,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einwohner von 25 bis unter 30 Jahren,Einwohner von 25 bis unter 30 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ausländische Schüler,Ausländische Schüler,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Bushaltestellen,Bushaltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Personal der Kommunen,Personal der Kommunen,,GOVE,Government and public sector,society,Society,US,Utility and governmental services
+Ganztags-Betreuungsquote Kleinkinder,Ganztags-Betreuungsquote Kleinkinder,,EDUC,"Education, culture and sport",society,Society,AC-MF,Atmospheric Conditions and meteorological geographical features
+Auspendler,Auspendler,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Quote ältere Beschäftigte,Quote ältere Beschäftigte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Oberlandesgerichte,Oberlandesgerichte,,JUST,"Justice, legal system and public safety",society,Society,US,Utility and governmental services
+ALG I-Leistungen Frauen,ALG I-Leistungen Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Kinderärzte,Kinderärzte,,HEAL,Health,health,Health,HH,Human health and safety
+Verweildauer in Beherbergungsbetrieben,Verweildauer in Beherbergungsbetrieben,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Baujahr 1970 bis 1979,Baujahr 1970 bis 1979,,SOCI,Population and society,society,Society,BU,Buildings
+Elterngeldbezieher (Väter),Elterngeldbezieher (Väter),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Finanzämter,Finanzämter,,GOVE,Government and public sector,structure,Structure,US,Utility and governmental services
+Beschäftigte im Baugewerbe,Beschäftigte im Baugewerbe,,SOCI,Population and society,society,Society,SU,Statistical units
+Wirtschafts- und Arbeitsmarktfunktion,Wirtschafts- und Arbeitsmarktfunktion,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Bundestagswahl Erststimme Volt,Bundestagswahl Erststimme Volt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 8) Bruttoinlandsprodukt,(SDG 8) Bruttoinlandsprodukt,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Studierende je 100 Einwohner 18 bis 25 Jahre,Studierende je 100 Einwohner 18 bis 25 Jahre,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Haushalte mit Kindern,Haushalte mit Kindern,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Studierende im 1. Semester,Studierende im 1. Semester,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Arbeitslosigkeit - Allgemein,Arbeitslosigkeit - Allgemein,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Mutter und Kinder ab 18,Typ der Kernfamilie  nach Kindern Mutter und Kinder ab 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Heizungsart Etagenheizung,Heizungsart Etagenheizung,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+Gebäude nach Energieträger der Heizung Fernwärme,Gebäude nach Energieträger der Heizung Fernwärme,,ENER,Energy,utilitiesCommunication,Utilities / Communication,BU,Buildings
+(SDG 11) PKW mit Elektroantrieb,(SDG 11) PKW mit Elektroantrieb,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+sozialversicherungspflichtig Beschäftigte Auspendler,sozialversicherungspflichtig Beschäftigte Auspendler,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+sozialversicherungspflichtig Beschäftigte am Arbeitsort,sozialversicherungspflichtig Beschäftigte am Arbeitsort,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Anzahl der Wohnungen 2 Wohnungen,Gebäude nach Anzahl der Wohnungen 2 Wohnungen,,REGI,Regions and cities,structure,Structure,BU,Buildings
+Baujahr 1980 bis 1989,Baujahr 1980 bis 1989,,SOCI,Population and society,society,Society,BU,Buildings
+Fortzugsrate Frauen,Fortzugsrate Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Personen in Bedarfsgemeinschaften,Personen in Bedarfsgemeinschaften,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Straßenverkehrsunfälle,Straßenverkehrsunfälle,,JUST,"Justice, legal system and public safety",transportation,Transportation,TN,Transport networks
+Stimmenanteile Grüne,Stimmenanteile Grüne,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Krankenhausbetten,Krankenhausbetten,,HEAL,Health,health,Health,HH,Human health and safety
+Bundestagswahl Erststimme Volksbegehren,Bundestagswahl Erststimme Volksbegehren,,GOVE,Government and public sector,society,Society,SU,Statistical units
+Gebäudetyp Größe Zweifamilienhaus Reihenhaus,Gebäudetyp Größe Zweifamilienhaus Reihenhaus,,SOCI,Population and society,society,Society,BU,Buildings
+Gender-Index,Gender-Index,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnungen nach Zahl der Räume 4 Räume,Wohnungen nach Zahl der Räume 4 Räume,,SOCI,Population and society,society,Society,BU,Buildings
+"Einwohner von 65 bis unter 75 Jahren, Frauen","Einwohner von 65 bis unter 75 Jahren, Frauen",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Jüngere Arbeitslose,Jüngere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Haushaltsabfälle,Haushaltsabfälle,,ENVI,Environment,environment,Environment,EF,Environmental monitoring facilities
+Entfernung zur Grundschule,Entfernung zur Grundschule,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Neubauwohnungen in Mehrfamilienhäusern je Einwohner,Neubauwohnungen in Mehrfamilienhäusern je Einwohner,,SOCI,Population and society,society,Society,BU,Buildings
+Arbeitslosigkeit - Altersgruppen,Arbeitslosigkeit - Altersgruppen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gestorbene,Gestorbene,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bandbreitenverfügbarkeit mindestens 50 Mbit/s,Bandbreitenverfügbarkeit mindestens 50 Mbit/s,,TECH,Science and technology,utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Hausärzte,Hausärzte,,HEAL,Health,health,Health,HH,Human health and safety
+Schulabgänger mit allgemeiner Hochschulreife,Schulabgänger mit allgemeiner Hochschulreife,,EDUC,"Education, culture and sport",society,Society,HH,Human health and safety
+Einwohner von 75 bis unter 85 Jahren,Einwohner von 75 bis unter 85 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitslose Männer,Arbeitslose Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Nebenstelle eines Landgerichts,Nebenstelle eines Landgerichts,,JUST,"Justice, legal system and public safety",utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Ausländische Gäste in Beherbergungsbetrieben,Ausländische Gäste in Beherbergungsbetrieben,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Kleinbetriebe,Kleinbetriebe,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+(SDG 4) Betreuung von Kindern (unter 3-Jährige),(SDG 4) Betreuung von Kindern (unter 3-Jährige),,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Pkw Elektro (BEV),Pkw Elektro (BEV),,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Einwohner von 50 bis unter 65 Jahren,Einwohner von 50 bis unter 65 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Postfilialen der Deutschen Post AG,Postfilialen der Deutschen Post AG,,SOCI,Population and society,utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Einwohner 65 Jahre und älter,Einwohner 65 Jahre und älter,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Stimmenanteile AfD,Stimmenanteile AfD,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Leistungen für Wohngeld,Leistungen für Wohngeld,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Weiterführende Schulen,Weiterführende Schulen,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Abhängigenquote Alte,Abhängigenquote Alte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einpersonen-Bedarfsgemeinschaften,Einpersonen-Bedarfsgemeinschaften,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Beschäftigte mit Anforderungsniveau Fachkraft,Beschäftigte mit Anforderungsniveau Fachkraft,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bauen und Wohnen,Bauen und Wohnen,,SOCI,Population and society,society,Society,BU,Buildings
+Frauenanteil,Frauenanteil,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Flächenneuinanspruchnahme,Flächenneuinanspruchnahme,,ENVI,Environment,planningCadastre,Planning / Cadastre,LU,Land use
+Durchschnittliche Nettokaltmiete / Anzahl der Wohnungen Anzahl der Wohnungen,Durchschnittliche Nettokaltmiete / Anzahl der Wohnungen Anzahl der Wohnungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Binnenwanderungsvolumen,Binnenwanderungsvolumen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Binnenwanderungsvolumen der Frauen,Binnenwanderungsvolumen der Frauen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einpendler,Einpendler,,REGI,Regions and cities,society,Society,PD,Population distribution — demography
+Pendler mit Arbeitsweg 300 km und mehr,Pendler mit Arbeitsweg 300 km und mehr,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil Minijobs (Nebenverdienst) an den Beschäftigungsverhältnissen,Anteil Minijobs (Nebenverdienst) an den Beschäftigungsverhältnissen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Elterngeldbezieher (Väter) im ersten Lebensjahr,Elterngeldbezieher (Väter) im ersten Lebensjahr,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Pflegeheimplätze,Pflegeheimplätze,,HEAL,Health,health,Health,HH,Human health and safety
+Entfernung zur ÖV Haltestelle,Entfernung zur ÖV Haltestelle,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Anteil Minijobs (Nebenverdienst),Anteil Minijobs (Nebenverdienst),,SOCI,Population and society,society,Society,SU,Statistical units
+Einwohner von 18 bis unter 25 Jahren,Einwohner von 18 bis unter 25 Jahren,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 9) Existenzgründungen,(SDG 9) Existenzgründungen,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Bundestagswahl Erststimme GRÜNE/B 90,Bundestagswahl Erststimme GRÜNE/B 90,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Männliche Berufseinstiegswanderer,Männliche Berufseinstiegswanderer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 1) Armut - Kinderarmut,(SDG 1) Armut - Kinderarmut,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+ALG I-Leistungen,ALG I-Leistungen,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Auszubildende,Auszubildende,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Schüler an weiterführenden Schulen,Schüler an weiterführenden Schulen,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Langzeitarbeitslose,Langzeitarbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"Einwohner von 18 bis unter 25 Jahren, Frauen","Einwohner von 18 bis unter 25 Jahren, Frauen",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alleinerziehende erwerbsfähige Leistungsberechtigte,Alleinerziehende erwerbsfähige Leistungsberechtigte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Einfamilienhaus Doppelhaushälfte,Wohnung Gebäudetyp Größe Einfamilienhaus Doppelhaushälfte,,SOCI,Population and society,structure,Structure,BU,Buildings
+Studierende an Hochschulen je 1.000 Einwohner,Studierende an Hochschulen je 1.000 Einwohner,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Beschäftigtendichte (AO),Beschäftigtendichte (AO),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Männliche jüngere Arbeitslose,Männliche jüngere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Nahversorgung Supermarkt/Discounter,Nahversorgung Supermarkt/Discounter,,REGI,Regions and cities,society,Society,PF,Production and industrial facilities
+Bevölkerung – Altersstruktur,Bevölkerung – Altersstruktur,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 8) Langzeitarbeitslosenquote,(SDG 8) Langzeitarbeitslosenquote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche,Fläche,,REGI,Regions and cities,location,Location,AM,Area management/restriction/regulation zones and reporting units
+Prognostizierte Bevölkerungsentwicklung (2022-2045),Prognostizierte Bevölkerungsentwicklung (2022-2045),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Gebäude nach Baujahr in MZ-Klassen Gebäude insgesamt,Gebäude nach Baujahr in MZ-Klassen Gebäude insgesamt,,SOCI,Population and society,structure,Structure,BU,Buildings
+Jobcenter,Jobcenter,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Krankenhäuser der Basisnotfallversorgung,Krankenhäuser der Basisnotfallversorgung,,HEAL,Health,health,Health,HH,Human health and safety
+Anteil jüngere Arbeitslose,Anteil jüngere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bandbreitenverfügbarkeit mindestens 1.000 Mbit/s,Bandbreitenverfügbarkeit mindestens 1.000 Mbit/s,,TECH,Science and technology,utilitiesCommunication,Utilities / Communication,US,Utility and governmental services
+Staatsangehörigkeit Bevölkerung insgesamt,Staatsangehörigkeit Bevölkerung insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 11) Flächennutzungsintensität,(SDG 11) Flächennutzungsintensität,,ENVI,Environment,environment,Environment,AM,Area management/restriction/regulation zones and reporting units
+Staatsangehörigkeit Gruppen Sonstiges Europa,Staatsangehörigkeit Gruppen Sonstiges Europa,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Krankenhäuser mit Versorgung für akute Herzerkrankungen,Krankenhäuser mit Versorgung für akute Herzerkrankungen,,HEAL,Health,health,Health,HH,Human health and safety
+Alter in 10er Jahresgruppen 70 bis 79,Alter in 10er Jahresgruppen 70 bis 79,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Prognostizierte Bevölkerungsentwicklung (2022-2035),Prognostizierte Bevölkerungsentwicklung (2022-2035),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bevölkerung,Bevölkerung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Sozialleistungen,Sozialleistungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitsplatzzentralität,Arbeitsplatzzentralität,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erwerbstätige Sekundärer Sektor,Erwerbstätige Sekundärer Sektor,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Erreichbarkeit Flughäfen,Erreichbarkeit Flughäfen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Gebäude nach Anzahl der Wohnungen 13 und mehr Wohnungen,Gebäude nach Anzahl der Wohnungen 13 und mehr Wohnungen,,SOCI,Population and society,society,Society,BU,Buildings
+Entfernung zum Hausarzt,Entfernung zum Hausarzt,,HEAL,Health,health,Health,HH,Human health and safety
+Nicht öffentliche Bäder,Nicht öffentliche Bäder,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Medianeinkommen 55 bis unter 65-Jährige,Medianeinkommen 55 bis unter 65-Jährige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Arbeitsmarktverwaltungseinrichtungen,Arbeitsmarktverwaltungseinrichtungen,,SOCI,Population and society,society,Society,SU,Statistical units
+Beschäftigte am AO mit akademischem Berufsabschluss,Beschäftigte am AO mit akademischem Berufsabschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Verbraucherinsolvenzverfahren,Verbraucherinsolvenzverfahren,,ECON,Economy and finance,economy,Farming,PF,Production and industrial facilities
+Offene Stellen mit Anforderungsniveau Experte,Offene Stellen mit Anforderungsniveau Experte,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Kaufkraft,Kaufkraft,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Wohnung Gebäudetyp Größe Mehrfamilienhaus 13 und mehr Wohnungen,Wohnung Gebäudetyp Größe Mehrfamilienhaus 13 und mehr Wohnungen,,SOCI,Population and society,society,Society,BU,Buildings
+(SDG 10) Einbürgerungen,(SDG 10) Einbürgerungen,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme NPD,Bundestagswahl Erststimme NPD,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bruttowertschöpfung je Erwerbstätigen,Bruttowertschöpfung je Erwerbstätigen,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Siedlungsdichte in km²,Siedlungsdichte in km²,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Integrative Kindertageseinrichtungen,Integrative Kindertageseinrichtungen,,SOCI,Population and society,society,Society,US,Utility and governmental services
+Bundestagswahl Zweitstimme GRÜNE/B90,Bundestagswahl Zweitstimme GRÜNE/B90,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+ÖV-Abfahrten,ÖV-Abfahrten,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Fortzugsrate,Fortzugsrate,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Typ private Haushalte Lebensform Mehrpersonenhaushalte ohne Kernfamilie,Typ private Haushalte Lebensform Mehrpersonenhaushalte ohne Kernfamilie,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Einbürgerungen je Ausländer,Einbürgerungen je Ausländer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 4) Schulabbrecherquote,(SDG 4) Schulabbrecherquote,,EDUC,"Education, culture and sport",society,Society,SU,Statistical units
+Einzelhandelsrelevante Kaufkraft,Einzelhandelsrelevante Kaufkraft,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Bundestagswahlen,Bundestagswahlen,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Erreichbarkeit von IC/EC/ICE-Bahnhöfen,Erreichbarkeit von IC/EC/ICE-Bahnhöfen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Erreichbarkeit von Autobahnen,Erreichbarkeit von Autobahnen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+"Einwohner von 25 bis unter 30 Jahren, Frauen","Einwohner von 25 bis unter 30 Jahren, Frauen",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ausländische Arbeitslose,Ausländische Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Personal in Pflegediensten,Personal in Pflegediensten,,HEAL,Health,health,Health,HH,Human health and safety
+Offene Stellen mit Anforderungsniveau Fachkraft,Offene Stellen mit Anforderungsniveau Fachkraft,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme Parteilos 2,Bundestagswahl Erststimme Parteilos 2,,GOVE,Government and public sector,society,Society,AU,Administrative units
+Wohnfläche,Wohnfläche,,SOCI,Population and society,society,Society,BU,Buildings
+Krankenhäuser mit Schwerverletztenversorgung,Krankenhäuser mit Schwerverletztenversorgung,,HEAL,Health,health,Health,BU,Buildings
+Typ der Kernfamilie  nach Kindern Ehepaar und min. ein Kind unter 18,Typ der Kernfamilie  nach Kindern Ehepaar und min. ein Kind unter 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Empfänger von Grundsicherung im Alter (Altersarmut),Empfänger von Grundsicherung im Alter (Altersarmut),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bruttowertschöpfung je Erwerbstätigen Tertiärer Sektor,Bruttowertschöpfung je Erwerbstätigen Tertiärer Sektor,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography
+Typ der Kernfamilie  nach Kindern Eingetragene Lebenspartnerschaft und Kinder ab 18,Typ der Kernfamilie  nach Kindern Eingetragene Lebenspartnerschaft und Kinder ab 18,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Anteil männliche ältere Arbeitslose,Anteil männliche ältere Arbeitslose,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Alter infr Bevölkerung insgesamt,Alter infr Bevölkerung insgesamt,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Baugenehmigungen für Wohnungenje Einwohner,Baugenehmigungen für Wohnungenje Einwohner,,REGI,Regions and cities,planningCadastre,Planning / Cadastre,BU,Buildings
+Heizungsart Einzel- / Mehrraumöfen,Heizungsart Einzel- / Mehrraumöfen,,ENER,Energy,utilitiesCommunication,Utilities / Communication,ER,Energy resources
+Bundestagswahl Erststimme Parteilos,Bundestagswahl Erststimme Parteilos,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+hochfrequentierte ÖV-Haltestellen,hochfrequentierte ÖV-Haltestellen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Alter in 10er Jahresgruppen 40 bis 49,Alter in 10er Jahresgruppen 40 bis 49,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Große Bedarfsgemeinschaften,Große Bedarfsgemeinschaften,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erreichbarkeit Autobahnen,Erreichbarkeit Autobahnen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Bruttoinlandsprodukt je Einwohner,Bruttoinlandsprodukt je Einwohner,,ECON,Economy and finance,economy,Farming,SU,Statistical units
+Binnenwanderungssaldo Männer,Binnenwanderungssaldo Männer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Ein- und Zweiraumwohnungen,Ein- und Zweiraumwohnungen,,SOCI,Population and society,society,Society,BU,Buildings
+Internisten,Internisten,,HEAL,Health,health,Health,HH,Human health and safety
+Arbeitslose ohne Ausbildung,Arbeitslose ohne Ausbildung,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Männliche Empfänger von Grundsicherung im Alter (Altersarmut),Männliche Empfänger von Grundsicherung im Alter (Altersarmut),,SOCI,Population and society,society,Society,PD,Population distribution — demography
+"Zahl der Staatsangehörigkeiten mehrere, deutsch und ausländisch","Zahl der Staatsangehörigkeiten mehrere, deutsch und ausländisch",,SOCI,Population and society,society,Society,PD,Population distribution — demography
+(SDG 11) Pkw-Dichte,(SDG 11) Pkw-Dichte,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Pädagogisches Personal in Tageseinrichtungen,Pädagogisches Personal in Tageseinrichtungen,,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Bundestagswahl Erststimme EINFACH MACHEN,Bundestagswahl Erststimme EINFACH MACHEN,,GOVE,Government and public sector,society,Society,AM,Area management/restriction/regulation zones and reporting units
+Erreichbarkeit von IC-/EC-/ICE-Bahnhöfen,Erreichbarkeit von IC-/EC-/ICE-Bahnhöfen,,TRAN,Transport,transportation,Transportation,TN,Transport networks
+Beschäftigtenquote,Beschäftigtenquote,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Krankenhäuser insgesamt,Krankenhäuser insgesamt,,HEAL,Health,health,Health,HH,Human health and safety
+Schulabgänger ohne Abschluss,Schulabgänger ohne Abschluss,,EDUC,"Education, culture and sport",society,Society,PD,Population distribution — demography
+Hochschulförderung (kurzfristig),Hochschulförderung (kurzfristig),,EDUC,"Education, culture and sport",society,Society,US,Utility and governmental services
+Organischer Abfall,Organischer Abfall,,ENVI,Environment,environment,Environment,AM,Area management/restriction/regulation zones and reporting units
+Trockenheitsindex,Trockenheitsindex,,ENVI,Environment,climatologyMeteorologyAtmosphere,Climatology / Meteorology / Atmosphere,AC-MF,Atmospheric Conditions and meteorological geographical features
+Staatsangehörigkeit Ausland / Sonstige,Staatsangehörigkeit Ausland / Sonstige,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Bundestagswahl Erststimme EW 11,Bundestagswahl Erststimme EW 11,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Erwerbswanderer,Erwerbswanderer,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Nahversorgung Apotheke,Nahversorgung Apotheke,,HEAL,Health,health,Health,HH,Human health and safety
+Stimmenanteile FDP,Stimmenanteile FDP,,GOVE,Government and public sector,society,Society,PD,Population distribution — demography
+Neubauwohnungen je Einwohner,Neubauwohnungen je Einwohner,,SOCI,Population and society,society,Society,PD,Population distribution — demography
+Fläche der Wohnung 10m2 Intervalle 80 bis 89,Fläche der Wohnung 10m2 Intervalle 80 bis 89,,SOCI,Population and society,society,Society,SU,Statistical units
+Medianeinkommen 25 bis unter 55-Jährige,Medianeinkommen 25 bis unter 55-Jährige,,ECON,Economy and finance,economy,Farming,PD,Population distribution — demography

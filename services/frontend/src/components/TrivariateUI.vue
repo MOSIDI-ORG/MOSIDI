@@ -105,12 +105,22 @@
 
                         <template v-slot:prepend>
                             <v-avatar>
-                                <v-img 
+                                <IconCirclePlus
+                                    v-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/plus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <IconCircleMinus
+                                    v-else-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/minus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <v-img
+                                    v-else
                                     :src="getIcon(metadata.dct_title, index, metadata.geometry_type)"
                                     max-height="40"
                                     max-width="40"
                                     style="cursor: pointer;"
-                                    
                                 ></v-img>
                             </v-avatar>
                         </template>
@@ -205,6 +215,8 @@ import { storeToRefs } from 'pinia'
 import { useIndicatorStore } from '@/stores/indicator'
 import {getIndicatorData} from "../services/backend.calls";
 import {getternaryDataFromDB} from "../services/backend.calls";
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
+import IconCircleMinus from '@/components/icons/IconCircleMinus.vue'
 const emit = defineEmits("addTernaryLayerToMap", "backtoUnivariateMap")
 const indicatorStore = useIndicatorStore()
 
@@ -266,61 +278,72 @@ watch(
   (newVal) => {
     if (!newVal?.length) return
 
+    const seen = new Set()
+    const deduped = newVal.filter(item => {
+      const key = `${item.dct_title}__${item.dcatde_politicalgeocodingleveluri ?? ''}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
 
     dataSources.value = [
-      ...new Set(newVal.map(item => item.dct_catalog_publisher)),
+      ...new Set(deduped.map(item => item.dct_catalog_publisher)),
       "All"
     ]
     geometryTypes.value = [
-      ...new Set(newVal.map(item => item.dcatde_politicalgeocodingleveluri)),
+      ...new Set(deduped.map(item => item.dcatde_politicalgeocodingleveluri)),
       "All"
     ]
     availableYearsForIndicatorFilter.value = [
       ...new Set(
-        newVal
+        deduped
           .map(item => new Date(item.dct_temporal_enddate).getFullYear())
           .sort()
       ),
       "All"
     ]
   },
-  { immediate: true } // ✅ handles case where tableMetadata is already loaded
+  { immediate: true }
 )
 
 
 
+const deduplicatedMetadata = computed(() => {
+  if (!tableMetadata.value?.length) return []
+  const seen = new Set()
+  return tableMetadata.value.filter(item => {
+    const key = `${item.dct_title}__${item.dcatde_politicalgeocodingleveluri ?? ''}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+})
+
 const filteredItems = computed(() => {
-    return tableMetadata?.value?.filter(item => {
-        const matchesSearchText = layerSearchText.value
-            ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
-            : true;
-        const matchesDatasetType = selectedDatasetType.value && selectedDatasetType.value !== 'all'
-            ? item.dct_type === selectedDatasetType.value
-            : true;
-       const preFilterDatasetType = (() => {
-            if (activatedDatasetSearch.value === 'indicator') {
-                return item.dct_type === 'indikator';
-            } else if (activatedDatasetSearch.value === 'geodata') {
-                return item.dct_type === 'raster';
-            } else {
-                return true; 
-            }
-        })();
-
-        const matchesDatasetSource = selectedDatasetSource.value && selectedDatasetSource.value !== 'All'
-            ? item.dct_catalog_publisher === selectedDatasetSource.value
-            : true;
-        
-        const matchesGeometryType = selectedGeometryTypee.value && selectedGeometryTypee.value !== 'All'
-            ? item.dcatde_politicalgeocodingleveluri === selectedGeometryTypee.value
-            : true;
-
-        const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
-            ? new Date(item.dct_temporal_enddate).getFullYear() >= parseInt(selectedYearIndicatorFilter.value)
-            : true;
-        return matchesSearchText && matchesDatasetType &&  preFilterDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear;
-    });
-});
+  return deduplicatedMetadata.value.filter(item => {  // ← was tableMetadata?.value
+    const matchesSearchText = layerSearchText.value
+      ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
+      : true
+    const matchesDatasetType = selectedDatasetType.value && selectedDatasetType.value !== 'all'
+      ? item.dct_type === selectedDatasetType.value
+      : true
+    const preFilterDatasetType = (() => {
+      if (activatedDatasetSearch.value === 'indicator') return item.dct_type === 'indikator'
+      if (activatedDatasetSearch.value === 'geodata') return item.dct_type === 'raster'
+      return true
+    })()
+    const matchesDatasetSource = selectedDatasetSource.value && selectedDatasetSource.value !== 'All'
+      ? item.dct_catalog_publisher === selectedDatasetSource.value
+      : true
+    const matchesGeometryType = selectedGeometryTypee.value && selectedGeometryTypee.value !== 'All'
+      ? item.dcatde_politicalgeocodingleveluri === selectedGeometryTypee.value
+      : true
+    const matchesDatasetYear = selectedYearIndicatorFilter.value && selectedYearIndicatorFilter.value !== 'All'
+      ? new Date(item.dct_temporal_enddate).getFullYear() >= parseInt(selectedYearIndicatorFilter.value)
+      : true
+    return matchesSearchText && matchesDatasetType && preFilterDatasetType && matchesDatasetSource && matchesGeometryType && matchesDatasetYear
+  })
+})
 const getIcon = (layerName, index, geomType) => {
 
     const isSelected = selectedIndicators.value?.some(
@@ -431,12 +454,11 @@ const clearIndicators = () => {
 }
 
 .header{
-    background: black; 
     position: sticky;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .dataset-filter-ui {

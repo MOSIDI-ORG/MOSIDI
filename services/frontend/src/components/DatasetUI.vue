@@ -177,7 +177,7 @@
                     >
                         <template v-slot:prepend>
                             <v-avatar>
-                                <v-img src="icons/combine.svg" />
+                                <IconCircleCombine :size="40" />
                             </v-avatar>
                         </template>
                     </v-list-item>
@@ -330,6 +330,7 @@ import { useMenuStore } from '../stores/menu'
 import { useTimeSliderStore } from '@/stores/timeSlider'
 import { useCartographyDeepLink } from "@/utils/useCartographyDeepLink"
 import TrivariateUI from "@/components/TrivariateUI.vue";
+import IconCircleCombine from "@/components/icons/IconCircleCombine.vue";
 
 let { isMinimized } = storeToRefs(useMenuStore())
 let classificationMethods = ref([ "NaturalBreaks", "Quantiles", "EqualInterval"])
@@ -516,6 +517,7 @@ const updateIndicatoreStore = (data)=>{
     bottom: 10px;
     left: 381px;
     z-index: 10;
+    height: fit-content;
     background-color: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);

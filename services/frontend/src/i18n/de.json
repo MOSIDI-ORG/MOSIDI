@@ -100,7 +100,8 @@
             "type":"Typ",
             "source":"Quelle",
             "geometry":"Geometrie",
-            "time":"Zeit"
+            "time":"Zeit",
+            "category":"Kategorie"
         },
         "results": "Ergebnisse",
         "custom":{
@@ -191,5 +192,10 @@
         "dct_type": "Datensatztyp",
         "imported": "Importdatum"
 
+    },
+    "chart-ui":{
+        "download": "Chart herunterladen",
+        "close": "Schließen",
+        "years": "Jahre"
     }
   }
