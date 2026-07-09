@@ -88,7 +88,7 @@ services:
       GEOSERVER_ADMIN_USER: ${GEOSERVER_ADMIN}
       GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_PASSWORD}
       GEOSERVER_CSRF_DISABLE: "false"
-      GEOSERVER_CSRF_WHITELIST: "tv4-geo-dev.innowest-brandenburg.de,tv4-geo-dev.innowest-brandenburg.de:8080"
+      GEOSERVER_CSRF_WHITELIST: "tv4-geo.innowest-brandenburg.de,tv4-geo.innowest-brandenburg.de:8080"
     env_file:
       - .env
     depends_on:

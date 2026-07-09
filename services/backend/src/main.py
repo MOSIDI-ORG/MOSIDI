@@ -25,7 +25,6 @@ import warnings
 from .db_migrations import run_db_migrations
 import gzip
 import json
-
 app = FastAPI()
 
 app.add_middleware(

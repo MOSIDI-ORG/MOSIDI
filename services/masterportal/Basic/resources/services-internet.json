@@ -43,7 +43,7 @@
   {
     "id": "1",
     "name": "KITA-Zugänglichkeit",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/aa_kita/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/aa_kita/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "aa_kita",
     "format": "image/png",
@@ -89,7 +89,7 @@
   {
     "id": "2",
     "name": "hochwasserrisikogebeite",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/ows?version=1.3.0",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/ows?version=1.3.0",
     "typ": "WMS",
     "layers": "hochwasserrisikogebeite",
     "format": "image/png",
@@ -130,7 +130,7 @@
   {
     "id": "3",
     "name": "landcover",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/landcover/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/landcover/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "landcover",
     "format": "image/png",
@@ -169,7 +169,7 @@
   {
     "id": "4",
     "name": "tree_cover_density",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/tree_cover_density/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/tree_cover_density/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "tree_cover_density",
     "format": "image/png",
@@ -208,7 +208,7 @@
   {
     "id": "5",
     "name": "kommunales_gebiet",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/kommunales_gebiet/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/kommunales_gebiet/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "kommunales_gebiet",
     "format": "image/png",
@@ -254,7 +254,7 @@
   {
     "id": "6",
     "name": "wasser",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/wasser/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/wasser/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "wasser",
     "format": "image/png",
@@ -302,7 +302,7 @@
   {
     "id": "7",
     "name": "gebaeude",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/gebaeude/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/gebaeude/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "gebaeude",
     "format": "image/png",
@@ -348,7 +348,7 @@
   {
     "id": "8",
     "name": "kita",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/kita/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/kita/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "kita",
     "format": "image/png",
@@ -398,7 +398,7 @@
   {
     "id": "9",
     "name": "windkraftanlagen",
-    "url": "https://tv4-geo-dev.innowest-brandenburg.de/geoserver/brandenburg/windkraftanlagen/wms?request=GetCapabilities",
+    "url": "https://tv4-geo.innowest-brandenburg.de/geoserver/brandenburg/windkraftanlagen/wms?request=GetCapabilities",
     "typ": "WMS",
     "layers": "windkraftanlagen",
     "format": "image/png",

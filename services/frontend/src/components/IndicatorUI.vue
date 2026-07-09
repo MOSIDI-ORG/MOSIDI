@@ -344,7 +344,6 @@ const sendIndicarorRequest = async () => {
 }
 
 
-
 const handleItemClick = async (indicator) => {
     selectedIndicator.value = indicator.raw?.indikator
     if(isCommuneLayerAdded.value==false){
@@ -383,7 +382,6 @@ const addCommuneTileLayer = async () => {
     emit("addLayerToMap", layerSpecification);
     isCommuneLayerAdded.value=true
 };
-
 
 const getIndicator = async (indicatorName) => {
     progressStore.setProgressBar({
@@ -501,7 +499,6 @@ const classify = async() => {
     })
 
 }
-
 const mapStylization = () => {
     ////////////////////// ** stylization ** /////////////////
 
@@ -570,7 +567,6 @@ const mapLegend = () => {
         return colors[index % colors.length];
     }
 }
-
 const getColorPalette = (item) =>{
     selectedColorPalette.value = item
     mapLegend()
