@@ -21,13 +21,14 @@ npm run lint
 ```
 
 ### Site configuration (runtime)
-The app's map center/zoom/extent, page title, and favicon are not baked into
-the build. Instead they are loaded at runtime from a JSON file in
+The app's map center/zoom/extent, page title, favicon, and header logo are not
+baked into the build. Instead they are loaded at runtime from a JSON file in
 [`public/configs/`](public/configs/), e.g. `public/configs/default.json`:
 ```
 {
   "title": "InNoWest - MOSIDI",
   "favicon": "innowest-favicon.ico",
+  "logo": "icons/innowest.svg",
   "map-center": [18.39217, 81.11024],
   "map-extent": [
     [5.8662503507227770, 47.2701236046689104],
@@ -36,6 +37,9 @@ the build. Instead they are loaded at runtime from a JSON file in
   "map-zoom": 5.4
 }
 ```
+`favicon` and `logo` are paths relative to `public/` (e.g. an SVG placed under
+`public/icons/`). `logo` is shown in the app header ([`AppHeader.vue`](src/components/AppHeader.vue));
+it falls back to `icons/innowest.svg` if omitted.
 
 Which config file is loaded is controlled by the `site` URL query parameter,
 using the file name without the `.json` extension, e.g.:
