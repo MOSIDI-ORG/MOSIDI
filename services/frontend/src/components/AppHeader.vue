@@ -4,7 +4,7 @@
  
         <v-row class="d-flex align-center justify-between mt-2" >
             <v-img
-                :src="isMinimized?'icons/mosidi-logo-minimized.svg':'icons/mosidi-logo.svg'"
+                :src="isMinimized?'icons/mosidi-logo-minimized.svg':'icons/innowest.svg'"
                 :height="isMinimized?'20':'15'"
                 :width="isMinimized?'20':'15'"
                 :style="isMinimized?'margin-left:25px; margin-top: 9px':'margin-left:-10px;margin-top: 5px'"
