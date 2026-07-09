@@ -1,5 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
-const config = require('./src/config.json')
+// Only used to seed the static <title>/favicon in the built index.html.
+// The app itself loads its config at runtime from public/configs/*.json.
+const config = require('./public/configs/default.json')
 const path = require('path')
 module.exports = defineConfig({
   transpileDependencies: true,
