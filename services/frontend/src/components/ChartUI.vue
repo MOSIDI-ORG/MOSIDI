@@ -1,12 +1,34 @@
 <template>
-    <div v-show="selectedFeature && Object.keys(props.indicatorArray).length">
-       <v-btn 
-        density="compact" 
-        icon="mdi-close" 
-        style="position: absolute; top: 10px; right: 10px; z-index: 1000; background-color: transparent;"
-        @click="closeChart()"
-        ></v-btn>
-        <svg class="chart-ui" id="indicatorChart" width="350" height="350"></svg>
+    <div v-show="selectedFeature && Object.keys(props.indicatorArray).length"
+     class="chart-container">
+
+        <div class="chart-toolbar">
+            <v-tooltip :text="$t('chart-ui.download')">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        density="compact"
+                        icon="mdi-download"
+                        variant="text"
+                        @click="downloadChart"
+                    />
+                </template>
+            </v-tooltip>
+            <v-tooltip :text="$t('chart-ui.close')">
+                <template v-slot:activator="{ props }">
+                   <v-btn
+                    v-bind="props"
+                    density="compact"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="closeChart()"
+                />
+                </template>
+            </v-tooltip>
+            
+        </div>
+
+        <svg class="chart-ui" id="indicatorChart" width="350" height="370"></svg>
     </div>
 </template>
 
@@ -16,6 +38,8 @@ import { storeToRefs } from 'pinia';
 import * as d3 from 'd3';
 import { useChartStore } from '../stores/chart';
 import { useAlertStore } from '@/stores/alert';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const alertStore = useAlertStore();
 const props = defineProps(['indicatorArray', 'secondIndicatorArray', 'selectedIndicator', 'selectedSecondIndicator']);
@@ -26,7 +50,7 @@ let indicatorName = ref(null);
 const renderChart = (labels, dataValues) => {
     const svg = d3.select('#indicatorChart');
     svg.selectAll('*').remove();
-    const margin = { top: 30, right: 20, bottom: 40, left: 50 };
+    const margin = { top: 60, right: 20, bottom: 40, left: 50 };
     const width = +svg.attr('width') - margin.left - margin.right;
     const height = +svg.attr('height') - margin.top - margin.bottom;
 
@@ -34,6 +58,17 @@ const renderChart = (labels, dataValues) => {
 
     const x = d3.scalePoint().domain(labels).range([0, width]);
     const y = d3.scaleLinear().domain([0, d3.max(dataValues)]).range([height, 0]);
+
+    const getTickStep = (count) => {
+        if (count > 40) return 5;
+        if (count > 25) return 3;
+        if (count > 15) return 2;
+        return 1;
+    };
+
+    const tickStep = getTickStep(labels.length);
+
+    const displayedTicks = labels.filter((_, index) => index % tickStep === 0);
 
     // Grid lines for X axis
 g.append('g')
@@ -54,18 +89,21 @@ g.append('g')
     
     // X Axis
     g.append('g')
-        .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x));
+    .attr('transform', `translate(0,${height})`)
+    .call(
+        d3.axisBottom(x)
+            .tickValues(displayedTicks)
+    );
     g.append('text')
         .attr('x', width / 2)
         .attr('y', height + margin.bottom-10 )
         .attr('text-anchor', 'middle')
         .attr('font-size', '12px')
         .attr('fill', 'black')
-        .text('Jahre');
+        .text(t('chart-ui.years'));
     g.append('text')
         .attr('x', width / 2)
-        .attr('y', -margin.top / 2)
+        .attr('y', -margin.top +40)
         .attr('text-anchor', 'middle')
         .attr('font-size', '12px')
         .attr('fill', 'black')
@@ -88,6 +126,19 @@ g.append('g')
         .attr('d', line);
 
     // Add circles at data points
+    const tooltip = d3.select('body')
+        .selectAll('.chart-tooltip')
+        .data([null])
+        .join('div')
+        .attr('class', 'chart-tooltip')
+        .style('position', 'absolute')
+        .style('background', 'rgba(0,0,0,0.6)')
+        .style('color', 'white')
+        .style('padding', '6px 10px')
+        .style('border-radius', '5px')
+        .style('font-size', '12px')
+        .style('pointer-events', 'none')
+        .style('opacity', 0);
     g.selectAll('.circle')
         .data(dataValues)
         .enter()
@@ -97,7 +148,38 @@ g.append('g')
         .attr('r', 4)
         .attr('fill', 'steelblue')
         .attr('stroke', 'white')
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1)
+
+        .on('mouseover', function(event, d) {
+            d3.select(this)
+                .transition()
+                .duration(100)
+                .attr('r', 7);
+
+            const i = dataValues.indexOf(d);
+
+            tooltip
+                .style('opacity', 1)
+                .html(`
+                    <strong>Year:</strong> ${labels[i]}<br>
+                    <strong>Value:</strong> ${d}
+                `);
+        })
+
+        .on('mousemove', function(event) {
+            tooltip
+                .style('left', (event.pageX + 12) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+        })
+
+        .on('mouseout', function() {
+            d3.select(this)
+                .transition()
+                .duration(100)
+                .attr('r', 4);
+
+            tooltip.style('opacity', 0);
+    });
     // Append labels for each data point with percentage change
     g.selectAll('.label')
         .data(dataValues)
@@ -113,6 +195,8 @@ g.append('g')
         })
     .text((d, i) => {
         if (i === 0) return ''; // No change for the first point
+        // Skip labels that shouldn't be displayed
+        if (i % tickStep !== 0 && i !== dataValues.length - 1) return '';
         const prev = dataValues[i - 1];
         const change = ((d - prev) / prev) * 100;
         return `${change.toFixed(1)}%`;
@@ -162,7 +246,54 @@ watch(() => selectedFeature.value, () => {
     }
     
 });
+const downloadChart = () => {
+    const svg = document.getElementById("indicatorChart");
 
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svg);
+
+    const svgBlob = new Blob([svgString], {
+        type: "image/svg+xml;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+
+    img.onload = () => {
+        const scale = 4; // 4x resolution
+
+        const canvas = document.createElement("canvas");
+        canvas.width = svg.width.baseVal.value * scale;
+        canvas.height = svg.height.baseVal.value * scale;
+
+        const ctx = canvas.getContext("2d");
+
+        // white background
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // scale drawing
+        ctx.scale(scale, scale);
+
+        ctx.drawImage(
+            img,
+            0,
+            0,
+            svg.width.baseVal.value,
+            svg.height.baseVal.value
+        );
+
+        URL.revokeObjectURL(url);
+
+        const link = document.createElement("a");
+        link.download = `${indicatorName.value}_${selectedFeature.value.featureName}.png`;
+        link.href = canvas.toDataURL("image/png", 1.0);
+        link.click();
+    };
+
+    img.src = url;
+};
 onUnmounted(() => {
     d3.select('#indicatorChart').selectAll('*').remove();
 });
@@ -190,4 +321,15 @@ onUnmounted(() => {
 .grid path {
     stroke-width: 0;
 }
+
+
+.chart-toolbar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    z-index: 1000;
+    display: flex;
+    gap: 4px;
+}
+
 </style>

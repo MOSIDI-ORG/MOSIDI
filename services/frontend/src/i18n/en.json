@@ -195,5 +195,10 @@
 
 
 
+    },
+    "chart-ui":{
+        "download": "Download Chart",
+        "close": "Close",
+        "years": "Years"
     }
   }

@@ -192,5 +192,10 @@
         "dct_type": "Datensatztyp",
         "imported": "Importdatum"
 
+    },
+    "chart-ui":{
+        "download": "Chart herunterladen",
+        "close": "Schließen",
+        "years": "Jahre"
     }
   }
