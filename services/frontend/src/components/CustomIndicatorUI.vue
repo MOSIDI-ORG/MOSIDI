@@ -169,29 +169,55 @@
             </v-virtual-scroll>
         </div>
        <v-divider class=" mt-1 mb-0"></v-divider>
-        <v-container fluid >
-            <v-textarea
-                style="width: 100%; margin-top: 0;"
-                :label="$t('custom-indicator.formula')"
-                :model-value="formula? formula: ''"
-                rows="2"
-                id="formulatext"
-                hide-details
-            >
-           
-        </v-textarea>
-        </v-container>
-        <div style="float:left; margin-left: 15px; margin-bottom:10px; margin-top:10px">
-            <v-btn 
-                :disabled= "addedIndicator?.['indicator0'] ? false: true" 
-                size="small" 
-                color="green" 
-                @click="calculate()"
-                prepend-icon="mdi-calculator-variant"
-            >
-            {{$t('custom-indicator.add-layer')}}
-            </v-btn>
-        </div>
+        <v-container fluid>
+    <v-textarea
+        :label="$t('custom-indicator.formula')"
+        :model-value="formula ? formula : ''"
+        rows="2"
+        hide-details
+    />
+
+    <v-expand-transition>
+        <v-alert
+            v-if="showFormulaHelp"
+            type="info"
+            variant="tonal"
+            density="compact"
+            class="mt-3"
+        >
+            <div style="white-space: pre-line;">
+                {{ $t('custom-indicator.formula-help') }}
+            </div>
+        </v-alert>
+    </v-expand-transition>
+</v-container>
+
+<div
+    style="display:flex; align-items:center; gap:8px; margin-left:15px; margin-bottom:10px; margin-top:10px;"
+>
+
+
+    <v-btn
+        :disabled="!addedIndicator?.['indicator0']"
+        size="small"
+        color="green"
+        @click="calculate()"
+        prepend-icon="mdi-calculator-variant"
+    >
+        {{ $t('custom-indicator.add-layer') }}
+    </v-btn>
+    <v-tooltip :text="$t('custom-indicator.formula-help-title')">
+        <template #activator="{ props }">
+            <v-btn
+                v-bind="props"
+                icon="mdi-help-circle-outline"
+                size="small"
+                variant="text"
+                @click="showFormulaHelp = !showFormulaHelp"
+            />
+        </template>
+    </v-tooltip>
+</div>
         
     </div>
 </template>
@@ -216,6 +242,7 @@ let selectedDatasetSource = ref(null)
 let selectedYearIndicatorFilter = ref(null)
 let selectedDatasetType = ref(null)
 let tableMetadata = ref([])
+const showFormulaHelp = ref(false)
 
 
 onMounted(async()=>{
