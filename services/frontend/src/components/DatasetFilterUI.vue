@@ -253,13 +253,21 @@
                 v-if="customIndicatorUI==true"
         ></CustomIndicatorUI>
     </v-card>
-    <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
+    <v-card 
+        :style="cardLeftPosition"
+        v-show="(metadataUI || dialog)" 
+        class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371"
+    >
         <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{ $t('dataset-filter.metadata.title') }}
                    
                         
-                    {{ selectedLayerName?.length> 15 ? selectedLayerName.substring(0,15) + '...': selectedLayerName }}
+                   {{
+                    (metadataUI ? selectedLayerName : tablename)?.length > 15
+                        ? (metadataUI ? selectedLayerName : tablename).substring(0, 15) + '...'
+                        : (metadataUI ? selectedLayerName : tablename)
+                    }}
                 </span>
                 <v-spacer></v-spacer>
                 <v-img 
@@ -267,16 +275,16 @@
                     max-height="40"
                     max-width="40"
                     style="cursor: pointer;"
-                    @click="metadataUI=false"
+                    @click="metadataUI=false; dialog = false"
                 ></v-img>
             </div>
             
                 
         </v-card>
-        <MetadataUI
-            :metadata="selectedLayerMetadata"
-            :layer-name="selectedLayerName"
-            v-if="metadataUI==true"
+       <MetadataUI
+            :metadata="metadataUI ? selectedLayerMetadata : metadataa"
+            :layer-name="metadataUI ? selectedLayerName : tablename"
+            v-if="dialog || metadataUI"
         />
     </v-card>
 </div>
@@ -287,7 +295,7 @@
 import { onMounted, ref, computed, defineEmits, watch, nextTick } from 'vue';
 import {getTableMetadata, getIndicatorData, classification, externalLayerFromDB} from "../services/backend.calls";
 import { useDatasetSearchStore } from '../stores/datasetSearch'
-//import { useMetadataDialogStore } from '../stores/metadataDialog'
+import { useMetadataDialogStore } from '../stores/metadataDialog'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useLineStyleStore } from '../stores/lineStyle'
 import { useAlertStore } from '@/stores/alert'
@@ -319,7 +327,7 @@ let externalWMSLayers = ref([])
 let { circleStyleParams } = storeToRefs(usePointStyleStore())
 let { polygonStyleParams } = storeToRefs(usePolygonStyleStore())
 let {  lineStyleParams } = storeToRefs(useLineStyleStore())
-//const { metadataa, tablename } = storeToRefs(useMetadataDialogStore())
+const { metadataa, tablename, dialog } = storeToRefs(useMetadataDialogStore())
 
 
 let layerType = ref(null)
@@ -380,6 +388,40 @@ onMounted(async()=>{
     isLoading.value = false 
 
 })
+const cardLeftPosition = computed(() => {
+  // 1. Check your most specific condition first
+  if (isMinimized.value && !filterInitiated.value) {
+    return { left: '100px' };
+  }
+
+  // 2. Check the next condition
+  if (isMinimized.value) {
+    return { left: '461px' };
+  }
+  if (dialog.value == true && filterInitiated.value ==false && dataUiInitiated.value ==false) {
+    return { left: '382px' };
+  }
+if (dialog.value == true && dataUiInitiated.value ==true) {
+    return { left: '753px' };
+  }
+
+
+  // 3. Default fallback
+  return { left: '753px' };
+});
+
+watch(dialog, (newDialogValue) => {
+  if (newDialogValue && metadataUI.value) {
+    metadataUI.value = false;
+  }
+});
+
+// 2. When metadataUI opens, close dialog
+watch(metadataUI, (newMetadataValue) => {
+  if (newMetadataValue && dialog.value) {
+    dialog.value = false;
+  }
+});
 
 // reset the selected filter when toggling the activatedDatasetSearch (geodata and indicator)
 watch(activatedDatasetSearch, () => {
