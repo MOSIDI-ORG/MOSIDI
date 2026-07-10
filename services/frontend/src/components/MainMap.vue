@@ -13,7 +13,6 @@
       <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap"></DatasetSearchUI>
     </div>
   </v-app>
-  <MetadataDialog> </MetadataDialog>
   <AlertUI> </AlertUI>
   <MapExport @export-map="onExportMap"> </MapExport>
   <MapShare > </MapShare>
@@ -31,7 +30,6 @@ import LayerUI from "@/components/LayerUI.vue";
 //import IndicatorUI from "@/components/IndicatorUI.vue";
 import LegendUI from "@/components/LegendUI.vue";
 //import MenuUI from "@/components/MenuUI.vue";
-import MetadataDialog from "@/components/MetadataDialog.vue";
 import AlertUI from "@/components/AlertUI.vue";
 import MapExport from "@/components/MapExport.vue";
 import MapShare from "@/components/MapShare.vue";
