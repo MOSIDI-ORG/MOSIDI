@@ -144,7 +144,7 @@
 </template>
 
 <script setup>
-import {ref, defineEmits, computed, onMounted, nextTick, watch} from "vue"
+import {ref, defineEmits, computed, onMounted, nextTick, watch, defineExpose} from "vue"
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { storeToRefs } from 'pinia'
 import {getIndicatorData, classification} from "@/services/backend.calls";
@@ -154,6 +154,7 @@ import { useProgressStore } from '@/stores/progress'
 import { useI18n } from 'vue-i18n';
 import { useCartographyDeepLink } from "@/utils/useCartographyDeepLink"
 
+const datasetSearchStore = useDatasetSearchStore()
 
 const { t } = useI18n();
 const progressStore = useProgressStore()
@@ -321,9 +322,7 @@ const getIcon = (layerName, index, geomType)=> {
     
   }
 const addSecondIndicator =  async (indicator) => {
-    console.log(indicator, "indicator")
-     console.log(indicatorArray?.value[selectedDataset?.value], "array")
-     console.log(selectedDataset?.value, "selectedDataset?.value")
+   
     if(indicator.dct_title ==indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName){
         //selectedSecondIndicator.value = null
         indicatorStore.setSecondIndicatordata({
@@ -437,13 +436,19 @@ const bivariateStylization=()=>{
         // Push the result to the match expression
         matchExpression.push(row['kennziffer'].toString(), color);
     }
+    const visualizationType = indicatorStore?.indicatorArray[datasetSearchStore?.selectedDataset]?.visualizationType
+    let styleProperty = visualizationType === 'polygon' ? 'fill-color' : 'circle-color';
     matchExpression.push('rgba(0, 0, 0, 0)');
-    emit("addStyleExpressionByYear",'kommunales_gebiet_dashboard' + selectedDataset.value , 'fill-color', matchExpression)
+    emit("addStyleExpressionByYear",'kommunales_gebiet_dashboard' + selectedDataset.value , styleProperty, matchExpression)
      progressStore.setProgressBar({
         progress: false
     })
     
 }
+
+defineExpose({
+  getSecondIndicator
+})
 </script>
 
 <style scoped>
