@@ -13,6 +13,7 @@
         @addStyleLayerToMap="addStyleLayerToMap" 
         @customMapStylization="customMapStylization" 
         @addTernaryLayerToMap="addTernaryLayerToMap"
+        @addLayerbyMapType="addCommuneTileLayer"
     ></DatasetUI>
     <div v-show="filterInitiated==true && dataUiInitiated==false">
         
@@ -621,8 +622,8 @@ const showLayerMetadata= (layerName, granularity)=>{
     //metadataDialogStore.assignMetadata(selectedLayerMetadata.value,layerName)
     metadataUI.value= true
 }
-const addLayerToMap = async (layerName,geomType, granularity)=>{    
-    
+const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{    
+
     if (geomType=='raster'){
         let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
         addExternaWMSLayerToMap(item)
@@ -635,10 +636,10 @@ const addLayerToMap = async (layerName,geomType, granularity)=>{
     }
     else if(selectedLayerMetadata?.dct_type==='indikator'){
         selectedIndicator.value = layerName
-        
+        await getIndicator(selectedIndicator.value, selectedLayerMetadata.dcatde_politicalgeocodingleveluri, mapType);
         await addCommuneTileLayer(layerName+'_'+granularity, selectedLayerMetadata.dcatde_politicalgeocodingleveluri);
         emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
-        await getIndicator(selectedIndicator.value, selectedLayerMetadata.dcatde_politicalgeocodingleveluri);
+        
         for(let layer in  addedDatasetsStore.addedLayers){
             
             if (layer!=layerName){
@@ -682,15 +683,37 @@ const addExternaWMSLayerToMap=(item)=>{
 
 
 const addCommuneTileLayer = async (layerName, layerNameInDatabase) => {
-    style.value= {
-        'fill-color': '#0080ff',
-        'fill-opacity': 1,
-        'fill-outline-color': 'grey'
+    const visualizationType = indicatorStore?.indicatorArray[datasetSearchStore?.selectedDataset]?.visualizationType
+    let layernameInDatabase = layerNameInDatabase
+    if (visualizationType === "polygon") {
+
+        style.value = {
+            'fill-color': '#0080ff',
+            'fill-opacity': 1,
+            'fill-outline-color': 'grey'
+        };
+
+        layerType.value = "fill";
+        layout.value = {};
+        layernameInDatabase = layerNameInDatabase
+
+    } else if (visualizationType === "glyph") {
+        style.value = {
+            'circle-color': '#0080ff',
+            'circle-radius': 6,
+            'circle-opacity': 1,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 1
+        };
+
+        layerType.value = "circle";
+        layout.value = {};
+        layernameInDatabase = layerNameInDatabase+'_centroid'
+
     }
-    layout.value = {}
-    layerType.value="fill"
+
     let layerSpecification = {
-        layerNameInDatabase: layerNameInDatabase,
+        layerNameInDatabase: layernameInDatabase,
         id: 'kommunales_gebiet_dashboard' + layerName,
         style: style,
         layout: layout,
@@ -700,7 +723,8 @@ const addCommuneTileLayer = async (layerName, layerNameInDatabase) => {
     emit("addLayerToMap", layerSpecification);
     isCommuneLayerAdded.value=true
 };
-const getIndicator = async (indicatorName, granularity) => {
+const getIndicator = async (indicatorName, granularity, mapType) => {
+    let visualizationType = mapType? mapType : 'polygon'
     progressStore.setProgressBar({
         text: `Abrufen des ${indicatorName} ...`,
         progress: true
@@ -713,6 +737,7 @@ const getIndicator = async (indicatorName, granularity) => {
         selectedYear: indocatorData.availabeYears[0][0].at(-1),
         colorPalette: colorbrewer.default.RdPu[5],
         granularity: granularity,
+        visualizationType: visualizationType,
         type: "indikator"
     })
     datasetSearchStore.setSelecteddatasetName({
@@ -788,51 +813,77 @@ const classify = async(indicatorName) => {
     })
 
 }
-const mapStylization = (indicatorName) => {
+const mapStylization =  (indicatorName) => {
     selectedYear.value = []
     indicatorStore.indicatorArray[indicatorName].forEach(innerArray => {
         innerArray.forEach(subArray => {
-        selectedYear.value.push(...subArray.filter(item => item.zeitbezug === indicatorStore.indicatorArray[indicatorName].selectedYear));
+            selectedYear.value.push(...subArray.filter(item => item.zeitbezug === indicatorStore.indicatorArray[indicatorName].selectedYear));
         });
     });
+
     ////////////////////// ** stylization ** /////////////////
-    // Build a GL expression that defines the color for every pg_tileserve (vector tile) feature
-    matchExpression = ['match', ['get', 'nationalco']];
+    // 1. Initialize two distinct match expressions
+    const colorMatchExpression = ['match', ['get', 'nationalco']];
+    const radiusMatchExpression = ['match', ['get', 'nationalco']];
+
     classification_result.value = indicatorStore.indicatorArray[indicatorName].classification_result
     selectedColorPalette.value = indicatorStore.indicatorArray[indicatorName]['colorPalette']
 
+    // Define pixel sizes for your circle radius based on classification intervals (Class 1 to Class 5)
+    const radiusSteps = [2, 3, 5, 8, 13]; 
 
     // conditions for each communale gebiete code
     for (const row of selectedYear.value) {
         const value = row['wert'];
        
         let color;
+        let radius;
 
         if (value <= classification_result.value?.intervals[0]) {
-            //color = '#feebe2'; // Class 1
-            color = selectedColorPalette.value[0]
-            //color = colorbrewer.default.selectedColorPalette.value.title
+            color = selectedColorPalette.value[0];
+            radius = radiusSteps[0];
         } else if (value <= classification_result.value?.intervals[1]) {
-            //color = '#fbb4b9'; // Class 2
-            color = selectedColorPalette.value[1]
+            color = selectedColorPalette.value[1];
+            radius = radiusSteps[1];
         } else if (value <= classification_result.value?.intervals[2]) {
-            //color = '#f768a1'; // Class 3
-            color = selectedColorPalette.value[2]
+            color = selectedColorPalette.value[2];
+            radius = radiusSteps[2];
         } else if (value <= classification_result.value?.intervals[3]) {
-            //color = '#c51b8a'; // Class 4
-            color = selectedColorPalette.value[3]
+            color = selectedColorPalette.value[3];
+            radius = radiusSteps[3];
         } else {
-            //color = '#7a0177'; // Class 5 (Default color)
-            color = selectedColorPalette.value[4]
+            color = selectedColorPalette.value[4];
+            radius = radiusSteps[4];
         }
-        matchExpression.push(row['kennziffer'].toString(), color);
+
+        // Push the identifier and the respective value to each stack
+        colorMatchExpression.push(row['kennziffer'].toString(), color);
+        radiusMatchExpression.push(row['kennziffer'].toString(), radius);
     }
 
-    // Last value is the default color, used where there is no data
-    matchExpression.push('rgba(169,169,169, 1)');
-    emit("addStyleExpressionByYear",'kommunales_gebiet_dashboard' + indicatorName , 'fill-color', matchExpression)
+    // Default values if no matching data is found
+    colorMatchExpression.push('rgba(169,169,169, 1)'); // Gray color fallback
+    radiusMatchExpression.push(2);                     // Small fallback size for missing data
+
+    const centroidLayerId = 'kommunales_gebiet_dashboard' + indicatorName;
+    const polygonLayerId = 'kommunales_gebiet_dashboard' + indicatorName;
+
+    
+
+
+    // 3. EMIT GLYPH STYLES (Circles - both color and radius)
+    if (indicatorStore.indicatorArray[indicatorName].visualizationType === "glyph") {
+        emit("addStyleExpressionByYear", centroidLayerId, 'circle-radius', radiusMatchExpression);
+        emit("addStyleExpressionByYear", centroidLayerId, 'circle-color', colorMatchExpression);
+
+    }
+    else {    
+        emit("addStyleExpressionByYear", polygonLayerId, 'fill-color', colorMatchExpression);
+
+    }
+
     indicatorStore.setColorPalette({
-            selectedColorPalette: selectedColorPalette.value
+        selectedColorPalette: selectedColorPalette.value
     })
     mapLegend(indicatorName)
 }
