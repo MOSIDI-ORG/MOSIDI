@@ -2,9 +2,10 @@ import * as d3 from 'd3';
 
 export const createHistogram = (data, canvasId) => {
     // Set dimensions
-    const margin = { top: 50, right: 10, bottom: 50, left: 60 };
-    const width = 350 - margin.left - margin.right;
-    const height = 250 - margin.top - margin.bottom;
+    const margin = { top: 15, right: 10, bottom: 100, left: 60 };
+    const width = 320 - margin.left - margin.right;
+    
+    const height = 230 - margin.top - margin.bottom; 
 
     // Clear previous content
     d3.select(`#${canvasId}`).selectAll('*').remove();
@@ -13,7 +14,7 @@ export const createHistogram = (data, canvasId) => {
     const dropdown = d3.select(`#${canvasId}`)
         .append('select')
         .attr('id', `${canvasId}-scale`)
-        .style('margin-bottom', '10px');
+        .style('margin-bottom', '0px');
 
     dropdown.selectAll('option')
         .data(['linear', 'logarithmic'])
@@ -115,7 +116,7 @@ export const createHistogram = (data, canvasId) => {
         svg.append('text')
             .attr('text-anchor', 'end')
             .attr('x', width / 2)
-            .attr('y', height + margin.bottom - 18)
+            .attr('y', height + margin.bottom - 68)
             .attr('fill', '#000')
             .text('Value Range')
             .style('font-size', '12px');
