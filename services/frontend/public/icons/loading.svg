@@ -1,0 +1,26 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <style>
+    .circle  { transform-origin:60px 60px; animation:circleBreath 2.8s ease-in-out infinite; }
+    .square  { transform-origin:60px 60px; animation:squareRock 4s ease-in-out infinite; }
+    .diamond { transform-origin:60px 60px; animation:diamondSpin 3.1s ease-in-out infinite; }
+    @keyframes circleBreath {
+      0%,100% { transform:scale(1); }
+      50%     { transform:scale(0.94); }
+    }
+    @keyframes squareRock {
+      0%,100% { transform:rotate(0deg) scale(1); }
+      25%     { transform:rotate(10deg) scale(0.88); }
+      75%     { transform:rotate(-10deg) scale(0.88); }
+    }
+    @keyframes diamondSpin {
+      0%   { transform:rotate(0deg) scale(0.58); }
+      50%  { transform:rotate(200deg) scale(0.52); }
+      100% { transform:rotate(360deg) scale(0.58); }
+    }
+  </style>
+</defs>
+<circle class="circle" cx="60" cy="60" r="60" fill="rgb(65 182 196)"/>
+<rect class="square"  x="21" y="21" width="78" height="78" rx="4" fill="rgb(178 217 180)"/>
+<rect class="diamond" x="21" y="21" width="78" height="78" rx="4" fill="rgb(255 255 205)"/>
+</svg>
