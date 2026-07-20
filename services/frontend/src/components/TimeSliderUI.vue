@@ -55,7 +55,7 @@ let { selectedColorPalette } = storeToRefs(useIndicatorStore())
 let intervalId = null;
 let selectedTime = ref(0); 
 let selectedYear = ref(null)
-let matchExpression = [];
+//let matchExpression = [];
 const emit = defineEmits(["performTimeSlider"]);
 
 
@@ -88,42 +88,61 @@ const increment = () => {
 }
 const applySliderValueOnMapLayer = (time)=> {
     selectedYear.value = []
-    matchExpression = null
     indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset].forEach(innerArray => {
         innerArray.forEach(subArray => {
         selectedYear.value.push(...subArray.filter(item => item.zeitbezug === time));
         });
     });
-    matchExpression = ['match', ['get', 'nationalco']];
+    const colorMatchExpression = ['match', ['get', 'nationalco']];
+    const radiusMatchExpression = ['match', ['get', 'nationalco']];
+
     let classification_results= indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset].classification_result
+    const radiusSteps = [2, 3, 5, 8, 13]; 
     // conditions for each communale gebiete code
     for (const row of selectedYear.value) {
         const value = row['wert'];
         let color;
-
+        let radius;
         if (value <= classification_results.intervals[0]) {
             //color = '#feebe2'; // Class 1
             color = selectedColorPalette.value[0]
+            radius = radiusSteps[0];
             //color = colorbrewer.default.selectedColorPalette.value.title
         } else if (value <= classification_results.intervals[1]) {
             //color = '#fbb4b9'; // Class 2
             color = selectedColorPalette.value[1]
+            radius = radiusSteps[1];
         } else if (value <= classification_results.intervals[2]) {
             //color = '#f768a1'; // Class 3
             color = selectedColorPalette.value[2]
+            radius = radiusSteps[2];
         } else if (value <= classification_results.intervals[3]) {
             //color = '#c51b8a'; // Class 4
             color = selectedColorPalette.value[3]
+            radius = radiusSteps[3];
         } else {
             //color = '#7a0177'; // Class 5 (Default color)
             color = selectedColorPalette.value[4]
+            radius = radiusSteps[4];
         }
-        matchExpression.push(row['kennziffer'].toString(), color);
+        colorMatchExpression.push(row['kennziffer'].toString(), color);
+        radiusMatchExpression.push(row['kennziffer'].toString(), radius);
     }
-
+    colorMatchExpression.push('rgba(169,169,169, 1)'); // Gray color fallback
+    radiusMatchExpression.push(2);
+    const centroidLayerId = 'kommunales_gebiet_dashboard' + datasetSearchStore?.selectedDataset;
+    const polygonLayerId = 'kommunales_gebiet_dashboard' + datasetSearchStore?.selectedDataset;
     // Last value is the default color, used where there is no data
-    matchExpression.push('rgba(0, 0, 0, 0)');
-    emit("performTimeSlider",{'layer':"kommunales_gebiet_dashboard"+datasetSearchStore.selectedDataset, 'paint_property':'fill-color', 'expression':matchExpression})
+    if (indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset].visualizationType === "glyph") {
+        emit("performTimeSlider", {'layer': centroidLayerId, 'paint_property': 'circle-radius', 'expression': radiusMatchExpression});
+        emit("performTimeSlider", {'layer': centroidLayerId, 'paint_property': 'circle-color', 'expression': colorMatchExpression});
+    }
+    else {    
+
+        emit("performTimeSlider", {'layer': polygonLayerId, 'paint_property': 'fill-color', 'expression': colorMatchExpression});
+
+
+    }
 }
 onUnmounted(() => {
     clearInterval(intervalId);

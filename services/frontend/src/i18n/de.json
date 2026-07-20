@@ -129,7 +129,10 @@
         "add": "Indikator hinzufügen",
         "formula": "Formel",
         "calculate": "Kalkulieren",
-        "add-layer": "Layer hinzufügen"
+        "add-layer": "Layer hinzufügen",
+        "formula-help": "• Mehrere gewünschte Datensätze auswählen.\n• In das Formelfeld Operatoren einfügen: +, -, *, /, (, ), ^.\n• Mit Klick auf \"Layer hinzufügen\" einen neuen Datensatz erstellen. Der Datensatz erscheint anschließend in der Datensatzliste links.",
+        "formula-help-title": "Formel Hilfe"
+
     },
     "dataset":{
         "year-filter-title":"Jahr auswählen",
@@ -205,5 +208,10 @@
         "7d": "Letzten 7 Tage",
         "30d": "Letzten 30 Tage",
         "90d": "Letzten 90 Tage"
+    },
+    "chart-ui":{
+        "download": "Chart herunterladen",
+        "close": "Schließen",
+        "years": "Jahre"
     }
   }

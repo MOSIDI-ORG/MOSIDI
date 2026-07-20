@@ -13,7 +13,6 @@
       <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap" @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap"></DatasetSearchUI>
     </div>
   </v-app>
-  <MetadataDialog> </MetadataDialog>
   <AlertUI> </AlertUI>
   <MapExport @export-map="onExportMap"> </MapExport>
   <MapShare > </MapShare>
@@ -31,7 +30,6 @@ import LayerUI from "@/components/LayerUI.vue";
 //import IndicatorUI from "@/components/IndicatorUI.vue";
 import LegendUI from "@/components/LegendUI.vue";
 //import MenuUI from "@/components/MenuUI.vue";
-import MetadataDialog from "@/components/MetadataDialog.vue";
 import AlertUI from "@/components/AlertUI.vue";
 import MapExport from "@/components/MapExport.vue";
 import MapShare from "@/components/MapShare.vue";
@@ -155,71 +153,83 @@ const onExportMap = (payload)=> {
 const addLayerToMap = (layerSpecification)=>{
   let vectorSourceLayer = layerSpecification.layerNameInDatabase;
   let vectorUrl = vectorServer + 'gwc/service/tms/1.0.0/brandenburg:' + vectorSourceLayer + '@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf';
-  if(map.getSource(layerSpecification.id)==undefined){
-    if(layerSpecification.sourceType== "vector_tile"){
-      map.addSource(layerSpecification.id, {
-          "type": "vector",
-          "scheme": 'tms',
-          "tiles": [vectorUrl],
-          "promoteId":'nationalco',
-          "minzoom": 0,
-          "maxzoom": 22
-      });
-      let layer = {
-          "id": layerSpecification.id,
-          "source": layerSpecification.id,
-          "source-layer": vectorSourceLayer,
-          "type": layerSpecification.layerType.value,
-          "paint":  layerSpecification.style.value,
-          "layout":layerSpecification.layout.value
-      };
-      map.addLayer(layer)
-    }
-    else if (layerSpecification.sourceType== "geojson") {
-      map.addSource(layerSpecification.id, {
-        'type': 'geojson',
-        'data': layerSpecification.geoGjsonData
-       
-      });
-      let layer = {
-          "id": layerSpecification.id,
-          "source": layerSpecification.id,
-         
-          "type": layerSpecification.layerType.value,
-          "paint":  layerSpecification.style.value,
-          'layout': {}
-      };
-      map.addLayer(layer)  
-    }
- 
-      
-   
+  
+  const layerId = layerSpecification.id;
+
+  // 1. CLEAR EXISTING LAYER AND SOURCE IF THEY EXIST
+  // This allows the new layer to claim the exact same ID cleanly
+  if (map.getLayer(layerId) !== undefined) {
+    map.removeLayer(layerId);
+  }
+  if (map.getSource(layerId) !== undefined) {
+    map.removeSource(layerId);
   }
 
-  map.on('click', layerSpecification.id, async function(e) {
-    if (layerSpecification.id.includes('kommunales_gebiet_dashboard') || layerSpecification.id == 'kommunales_gebiet_centroid'){
+  // 2. ADD SOURCE
+  if (layerSpecification.sourceType == "vector_tile") {
+    map.addSource(layerId, {
+        "type": "vector",
+        "scheme": 'tms',
+        "tiles": [vectorUrl],
+        "promoteId": 'nationalco',
+        "minzoom": 0,
+        "maxzoom": 22
+    });
+    
+    // 3. ADD VECTOR LAYER
+    let layer = {
+        "id": layerId,
+        "source": layerId,
+        "source-layer": vectorSourceLayer,
+        "type": layerSpecification.layerType.value,
+        "paint": layerSpecification.style.value,
+        "layout": layerSpecification.layout?.value || {}
+    };
+    map.addLayer(layer);
+  } 
+  else if (layerSpecification.sourceType == "geojson") {
+    map.addSource(layerId, {
+      'type': 'geojson',
+      'data': layerSpecification.geoGjsonData
+    });
+    
+    // 3. ADD GEOJSON LAYER
+    let layer = {
+        "id": layerId,
+        "source": layerId,
+        "type": layerSpecification.layerType.value,
+        "paint": layerSpecification.style.value,
+        "layout": layerSpecification.layout?.value || {}
+    };
+    map.addLayer(layer);  
+  }
+
+  // 4. ATTACH INTERACTIONS
+  map.on('click', layerId, async function(e) {
+    if (layerId.includes('kommunales_gebiet_dashboard') || layerId == 'kommunales_gebiet_centroid'){
       selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
-      removeLayerFromMap( {layerId: "highlight", sourceId: "highlight"})
-      addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
-      addHighlightLayer(layerSpecification.layerNameInDatabase, e.features[0].properties.nationalco, layerSpecification.id)
+      removeLayerFromMap({layerId: "highlight", sourceId: "highlight"})
+      addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId, e)
+      addHighlightLayer(layerSpecification.layerNameInDatabase, e.features[0].properties.nationalco, layerId)
     }
-      
-    
     else {
-      addPopupToMap(map, layerSpecification.id, vectorSourceLayer, selectedFeatureId, e)
+      addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId, e)
     }
-    
   });
 
-  addCursorStyleHovering(map, layerSpecification.id);
+  map.on('mouseenter', layerId, function() {
+    map.getCanvas().style.cursor = 'pointer';
+  });
+  map.on('mouseleave', layerId, function() {
+    map.getCanvas().style.cursor = '';
+  });
 
-  map.on('mousemove', 'kommunales_gebiet_dashboard', (e) =>{
+  map.on('mousemove', 'kommunales_gebiet_dashboard', (e) => {
     addHoverPopup(map, e)
-  })
+  });
   map.on('mouseleave', 'kommunales_gebiet_dashboard', () => {
     removeHoverPopup(map)
   });
- 
 }
 const addHighlightLayer = async (tablename, featureId, layerId)=>{
   const featureInstance = await getFeatureInstanceFromDB({tablename: tablename, featureId:featureId})
@@ -517,35 +527,50 @@ const zoomOut = ()=>{
 const addTernaryLayerToMap = (data)=>{
 
     const layerId = 'kommunales_gebiet_dashboard'+data.existingSourceId
+   
     const vectorSourceLayer = data.granularity
+    if (!map.getLayer(layerId)) {
+      console.warn("Layer does not exist.")
+      return
+    }
 
-  if (!map.getLayer(layerId)) {
-    console.warn("Layer does not exist.")
-    return
+    const layer = map.getLayer(layerId);
+    if (!layer) {
+        console.warn("Layer not found");
+        return;
+    }
+
+    const colorExpression = [
+      "case",
+      ["!=", ["feature-state", "share1"], null],
+      [
+          "rgb",
+          ["*", 255, ["feature-state", "share1"]],
+          ["*", 255, ["feature-state", "share2"]],
+          ["*", 255, ["feature-state", "share3"]]
+      ],
+      "#cccccc"
+    ];
+    let vectorSourceLayerId
+  if (layer.type === "fill") {
+    vectorSourceLayerId = vectorSourceLayer
+    map.setPaintProperty(layerId, "fill-color", colorExpression);
+    map.setPaintProperty(layerId, "fill-opacity", 1);
+    map.setPaintProperty(layerId, "fill-outline-color", "grey");
   }
-
-  // Update paint property directly
-  map.setPaintProperty(layerId, "fill-color", [
-    "case",
-    ["!=", ["feature-state", "share1"], null],
-    [
-      "rgb",
-      ["*", 255, ["feature-state", "share1"]],
-      ["*", 255, ["feature-state", "share2"]],
-      ["*", 255, ["feature-state", "share3"]]
-    ],
-    "#cccccc"
-  ])
-
-  map.setPaintProperty(layerId, "fill-opacity", 1)
-  map.setPaintProperty(layerId, "fill-outline-color", "grey")
+  else if (layer.type === "circle") {
+    vectorSourceLayerId = vectorSourceLayer+'_centroid'
+    map.setPaintProperty(layerId, "circle-color", colorExpression);
+    map.setPaintProperty(layerId, "circle-opacity", 1);
+    map.setPaintProperty(layerId, "circle-stroke-color", "grey");
+  }
 
   // Now set feature-state
   data.ternaryData.forEach(row => {
     map.setFeatureState(
       {
         source: layerId,
-        sourceLayer: vectorSourceLayer,
+        sourceLayer: vectorSourceLayerId,
         id: row.kennziffer
       },
       {

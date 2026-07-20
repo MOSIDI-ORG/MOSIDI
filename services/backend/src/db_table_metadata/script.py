@@ -15,7 +15,6 @@ dbConfig = {
 # Define your PostgreSQL connection string
 DATABASE_URL = f"postgresql://{dbConfig['user']}:{dbConfig['password']}@{dbConfig['host']}:{dbConfig['port']}/{dbConfig['dbname']}"
 
-# The SQL script for creating and populating the table_metadata table
 CREATE_METADATA_SQL = """
 CREATE OR REPLACE FUNCTION insert_table_metadata() 
 RETURNS void LANGUAGE plpgsql AS $$
@@ -42,7 +41,7 @@ BEGIN
         dct_language TEXT,
         dct_bbox GEOMETRY,
         dct_centroid GEOMETRY,
-        geometry_type TEXT, -- New column for geometry type
+        geometry_type TEXT,
         dcatde_politicalGeocodingLevelURI TEXT,
         dcatde_politicalGeocodingURI TEXT,
         dcatde_geocodingText TEXT,
@@ -56,103 +55,18 @@ BEGIN
         imported TIMESTAMP,
         dct_type TEXT,
         legend_url TEXT,
-        CONSTRAINT table_metadata_pkey PRIMARY KEY (table_name)
+        dcat_ap_id TEXT,
+        dcat_ap_title TEXT,
+        -- Composite primary key: table_name + granularity
+        CONSTRAINT table_metadata_pkey PRIMARY KEY (table_name, dcatde_politicalGeocodingLevelURI)
     );
-    ALTER TABLE public.table_metadata ADD COLUMN IF NOT EXISTS dcat_ap_id TEXT;
-    ALTER TABLE public.table_metadata ADD COLUMN IF NOT EXISTS dcat_ap_title TEXT;
 
-    -- Loop through all tables in the public schema
-    /*
-    FOR table_rec IN 
-        SELECT c.relname AS table_name
-        FROM pg_class c
-        JOIN pg_namespace n ON n.oid = c.relnamespace
-        WHERE c.relkind = 'r' AND n.nspname = 'public'
-    LOOP
-        -- Initialize bounding_box, centroid, and geometry_type as NULL
-        bounding_box := NULL;
-        centroid := NULL;
-        geom_type := NULL;
-
-        -- For each table, check if it has a geometry column
-        FOR column_rec IN 
-            SELECT a.attname AS column_name
-            FROM pg_attribute a
-            JOIN pg_type t ON t.oid = a.atttypid
-            WHERE a.attrelid = (quote_ident('public') || '.' || quote_ident(table_rec.table_name))::regclass
-              AND t.typname = 'geometry' -- Check if the column is a geometry type
-        LOOP
-            -- Get the bounding box and centroid
-            EXECUTE format('SELECT ST_Extent(%I) FROM public.%I', column_rec.column_name, table_rec.table_name) INTO bounding_box;
-            EXECUTE format('SELECT ST_Centroid(%I) FROM public.%I', column_rec.column_name, table_rec.table_name) INTO centroid;
-
-            -- Get the geometry type
-            --EXECUTE format('SELECT REPLACE(ST_GeometryType(%I), 'ST_', '') FROM public.%I LIMIT 1;', column_rec.column_name, table_rec.table_name) INTO geom_type;
-			EXECUTE format('SELECT REPLACE(ST_GeometryType(%I), ''ST_'', '''') FROM public.%I LIMIT 1', column_rec.column_name, table_rec.table_name) INTO geom_type;
-
-            
-            EXIT; -- Exit after processing the first geometry column
-        END LOOP;
-
-        -- Insert metadata for the table
-        INSERT INTO public.table_metadata (
-            dct_title, dct_description, dct_catalog_title, dct_catalog_description,
-            dct_catalog_publisher, dct_accessurl, dct_license, dct_identifier, dcatde_contributorid,
-            dct_distribution, dct_language, dct_bbox, dct_centroid, geometry_type,
-            dcatde_politicalGeocodingLevelURI, dcatde_politicalGeocodingURI, dcatde_geocodingText,
-            dct_modified, dct_issued, dct_accrualperiodicity, dct_temporal_startdata,
-            dct_temporal_enddate, table_name, details, imported, dct_type
-        )
-        SELECT 
-            table_rec.table_name AS dct_title,
-            table_rec.table_name AS dct_description,
-            table_rec.table_name AS dct_catalog_title,
-            table_rec.table_name AS dct_catalog_description,
-            'Publisher Name' AS dct_catalog_publisher,
-            table_rec.table_name AS dct_accessurl,
-            table_rec.table_name AS dct_license,
-            table_rec.table_name AS dct_identifier,
-            table_rec.table_name AS dcatde_contributorid,
-            table_rec.table_name AS dct_distribution,
-            'de' AS dct_language,
-            COALESCE(bounding_box, ST_GeomFromText('POLYGON((0 0, 0 0, 0 0, 0 0, 0 0))')) AS dct_bbox,
-            COALESCE(
-                CASE
-                    WHEN ST_IsValid(centroid) THEN centroid
-                    ELSE ST_GeomFromText('POINT(0 0)')
-                END,
-                ST_GeomFromText('POINT(0 0)')
-            ) AS dct_centroid,
-            geom_type AS geometry_type, -- Populate the geometry type
-            table_rec.table_name AS dcatde_politicalGeocodingLevelURI,
-            table_rec.table_name AS dcatde_politicalGeocodingURI,
-            table_rec.table_name AS dcatde_geocodingText,
-            CURRENT_TIMESTAMP AS dct_modified,
-            CURRENT_TIMESTAMP AS dct_issued,
-            'Monthly' AS dct_accrualperiodicity,
-            CURRENT_TIMESTAMP AS dct_temporal_startdata,
-            CURRENT_TIMESTAMP AS dct_temporal_enddate,
-            table_rec.table_name,
-            (SELECT jsonb_agg(
-                jsonb_build_object(
-                    'column_name', a.attname,
-                    'column_type', t.typname,
-                    'column_description', col_description(a.attrelid, a.attnum)
-                )
-            ) FROM pg_attribute a
-            JOIN pg_type t ON t.oid = a.atttypid
-            WHERE a.attrelid = (quote_ident('public') || '.' || quote_ident(table_rec.table_name))::regclass
-            AND a.attnum > 0) AS details,
-            CURRENT_TIMESTAMP AS imported,
-            'table' AS dct_type
-        ON CONFLICT (table_name) DO NOTHING;
-    END LOOP;
-        */
-    -- Loop through all external WMS sources
+   -- Loop through all external WMS sources
     FOR indikator_rec IN 
-        SELECT DISTINCT 
+        SELECT DISTINCT ON (id)
             id, dct_type, dct_title, description, url, bbox, layer, crs, periodicity, start_date, end_date, attribution, legend_url
         FROM public.external_wms_sources
+        ORDER BY id
     LOOP
         INSERT INTO public.table_metadata (
             geometry_type, 
@@ -242,7 +156,7 @@ BEGIN
             indikator_rec.dct_type,
             indikator_rec.legend_url
         )
-        ON CONFLICT (table_name)
+        ON CONFLICT (table_name, dcatde_politicalGeocodingLevelURI)
         DO UPDATE
         SET 
             dct_description = EXCLUDED.dct_description,
@@ -253,7 +167,7 @@ BEGIN
             dct_catalog_publisher= EXCLUDED.dct_catalog_publisher;
     END LOOP;
 
-    
+    -- Loop through dashboard_data_de indicators with distinct (indikator, granularity) combos
     FOR indikator_rec IN 
         SELECT DISTINCT indikator, source, granularity FROM public.dashboard_data_de
     LOOP
@@ -283,15 +197,16 @@ BEGIN
             table_name, 
             details, 
             imported, 
-            dct_type
+            dct_type,
+            dcat_ap_id  -- Set composite key as dcat_ap_id
         )
         SELECT 
             'Polygon', 
-            indikator_rec.indikator, 
+            indikator_rec.indikator,
             NULL, 
             NULL, 
             NULL,
-            indikator_rec.source, 
+            indikator_rec.source,
             NULL, 
             NULL, 
             NULL, 
@@ -300,7 +215,7 @@ BEGIN
             'de', 
             NULL,
             NULL, 
-            indikator_rec.granularity, 
+            indikator_rec.granularity,  -- dcatde_politicalGeocodingLevelURI
             NULL, 
             NULL,
             CURRENT_TIMESTAMP, 
@@ -312,7 +227,7 @@ BEGIN
             (SELECT TO_TIMESTAMP(MAX(zeitbezug)::text, 'YYYY') 
              FROM public.dashboard_data_de
              WHERE indikator = indikator_rec.indikator) AS dct_temporal_enddate,
-            indikator_rec.indikator,
+            indikator_rec.indikator,  -- table_name
             (SELECT jsonb_agg(
                 jsonb_build_object(
                     'column_name', a.attname,
@@ -324,14 +239,20 @@ BEGIN
             WHERE a.attrelid = 'public.dashboard_data_de'::regclass
             AND a.attnum > 0) AS details,
             CURRENT_TIMESTAMP,
-            'indikator'
-        ON CONFLICT (table_name)
-    DO UPDATE
-    SET 
-        -- only updates the following fields and doesn't touch the rest that had been modified manually
-        dct_temporal_startdata = EXCLUDED.dct_temporal_startdata,
-        dct_temporal_enddate = EXCLUDED.dct_temporal_enddate;
-        END LOOP;
+            'indikator',
+            -- dcat_ap_id = dct_title || dcatde_politicalGeocodingLevelURI || dct_catalog_publisher
+            CONCAT(
+                indikator_rec.indikator, '_',
+                indikator_rec.granularity, '_',
+                indikator_rec.source
+            ) AS dcat_ap_id
+        ON CONFLICT (table_name, dcatde_politicalGeocodingLevelURI)
+        DO UPDATE
+        SET 
+            dct_temporal_startdata = EXCLUDED.dct_temporal_startdata,
+            dct_temporal_enddate   = EXCLUDED.dct_temporal_enddate,
+            dcat_ap_id             = EXCLUDED.dcat_ap_id;
+    END LOOP;
 END;
 $$;
 

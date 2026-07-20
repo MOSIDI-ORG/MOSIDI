@@ -59,12 +59,35 @@
             </v-card>
         </v-card>
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='indikator'"  class="added-indikator-ui mx-auto animated-transform"  width="371">
+             <v-row no-gutters style="" class="d-flex mt-6 mb-0">
+                <v-col cols="12" sm="4" class=" ">
+                    <div class="v-label" >Map type</div>
+                </v-col>
+                <v-col cols="12" sm="6" class="ml-8 d-flex justify-end align-center" v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]">
+                    <v-select
+                        :items="visualizationTypes"
+                        item-title="title"
+                        item-value="value"
+                        density="compact"
+                        label="Visualization"
+                        v-model="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].visualizationType"
+                        @update:modelValue="changeVisualizationtype(datasetSearchStore?.selectedDataset)"
+                        variant="solo"
+                        dense
+                        outlined
+                        single-line
+                        hide-details
+                    >
+                    </v-select>
+                </v-col>
+            </v-row>
+            <v-divider style="margin-left: 15px; margin-right: 15px;"></v-divider>
             <v-row no-gutters style="" class="d-flex mt-4">
                 <v-col cols="12" sm="3" class=" ">
                     <div class="v-label" >{{$t('dataset.histogram.title')}}</div>
                 </v-col>
-                <div id="histogram" ref="histogram" style="width: 100%; height: 230px;"></div>
-
+                <!-- Changed height from 230px to 150px -->
+                <div id="histogram" ref="histogram" style="width: 100%; height: 150px;"></div>
             </v-row>
 
             <v-divider style="margin-left: 15px; margin-right: 15px;" class=" mt-10"></v-divider>
@@ -287,7 +310,7 @@
                
                     
             </v-card>
-            <BivariateUI @addStyleExpressionByYear="addStyleExpressionByYear" @backtoUnivariateMap="backtoUnivariateMap" class="mb-2"></BivariateUI>
+            <BivariateUI ref="bivariateRef" @addStyleExpressionByYear="addStyleExpressionByYear" @backtoUnivariateMap="backtoUnivariateMap" class="mb-2"></BivariateUI>
             
         </v-card>
         <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="trivariateUI==true" class="dataset-trivariate-ui mx-auto text-left animated-transform"  width="371">
@@ -308,7 +331,7 @@
                
                     
             </v-card>
-            <TrivariateUI @addTernaryLayerToMap="addTernaryLayerToMap" @backtoUnivariateMap="backtoUnivariateMap" style="flex: 1; min-height: 0; overflow: hidden;"></TrivariateUI>
+            <TrivariateUI ref="trivariateRef"  @addTernaryLayerToMap="addTernaryLayerToMap" @backtoUnivariateMap="backtoUnivariateMap" style="flex: 1; min-height: 0; overflow: hidden;"></TrivariateUI>
 
         </v-card>
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='table' || addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='raster'" class="added-table-ui mx-auto animated-transform"  width="371">
@@ -336,7 +359,7 @@ let classificationMethods = ref([ "NaturalBreaks", "Quantiles", "EqualInterval"]
 //let selectedClassificationMethod = ref("NaturalBreaks")
 let bivariateUI = ref(false)
 let trivariateUI = ref(false)
-const emit = defineEmits(["filterByYear", "mapLegend", "mapStylization", "customMapStylization", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleExpressionByYear", "addLayerToMap", "addTernaryLayerToMap"]);
+const emit = defineEmits(["filterByYear", "mapLegend", "mapStylization", "customMapStylization", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleExpressionByYear", "addLayerToMap", "addTernaryLayerToMap", "addLayerbyMapType"]);
 
 
 const datasetSearchStore = useDatasetSearchStore()
@@ -344,18 +367,18 @@ const indicatorStore = useIndicatorStore()
 const addedDatasetsStore = useaddedDatasetsStore()
 const timeSliderStore = useTimeSliderStore()
 
-
 onMounted(async () => {
   const { attach } = useCartographyDeepLink({
     mapStylizationFromDeepLink,
-    changeLayerOpacity,
+    changeLayerOpacityFromDyyplink,
     setLayerPintProperty
   })
    await nextTick()
   attach() 
 })
 
-
+const bivariateRef = ref(null)
+const trivariateRef = ref (null)
 
 let userSelectedYear = ref(null)
 const toggleDataUI = ()=>{
@@ -364,9 +387,36 @@ const toggleDataUI = ()=>{
     })
     
 }
+const visualizationTypes = [
+  {
+    title: 'Polygon',
+    value: 'polygon'
+  },
+  {
+    title: 'Circle Glyph',
+    value: 'glyph'
+  }
+]
 
 const filterByYear = (indicatorName)=>{
     emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
+
+}
+const changeVisualizationtype = (indicatorName)=>{
+        emit('addLayerbyMapType', indicatorName, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].granularity)
+        emit('filterByYear', indicatorName, userSelectedYear.value, indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].classificationMethod)
+
+    
+    if (indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].bivariate==true){
+
+        bivariateRef.value?.getSecondIndicator( 
+            indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['secondIndicator']?.secondIndicatorName,
+            indicatorStore.indicatorArray[datasetSearchStore.selectedDataset]['granularity'])
+    }
+    else if(indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].ternaryData!=null){
+        trivariateRef.value?.applyIndicators()
+    }
+    
 
 }
 const backtoUnivariateMap = (indicatorName)=>{
@@ -380,7 +430,7 @@ const mapStylizationFromDeepLink = (colorPalette, datatype, indicatorName)=>{
         indicatorName: indicatorName
       }
     )
-    emit('mapStylization', indicatorName)
+     emit('mapStylization', indicatorName)
 }   
 const assignColorPalette =  (colorPalette, datatype, indicatorName) => {
     indicatorStore.setIndicatorColorPalette(
@@ -399,7 +449,6 @@ const assignColorPalette =  (colorPalette, datatype, indicatorName) => {
             )
     }
     else if (datatype=='custom indikator'){
-        console.log( indicatorStore.indicatorArray[indicatorName], "custom indikator")
         emit('customMapStylization',
         indicatorStore.indicatorArray[indicatorName][0][0],
         indicatorStore.indicatorArray[indicatorName]['classification_result'],
@@ -447,6 +496,8 @@ const addLayerToMap = (layerSpecifications)=>{
 }
 
 const changeLayerOpacity = (value, dsname)=>{
+    let visType = indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.visualizationType
+    let styleProperty = visType === 'polygon' ? 'fill-opacity' : 'circle-opacity';
    indicatorStore.setIndicatorOpacity(
       {
         opacity: value,
@@ -456,7 +507,23 @@ const changeLayerOpacity = (value, dsname)=>{
      emit(
         "setLayerPintProperty",
         "kommunales_gebiet_dashboard"+dsname,
-        'fill-opacity',
+        styleProperty,
+        value
+    )
+}
+const changeLayerOpacityFromDyyplink = (value, dsname, styleProperty)=>{
+    //let visType = indicatorStore.indicatorArray[datasetSearchStore?.selectedDataset]?.visualizationType
+    //let styleProperty = visType === 'polygon' ? 'fill-opacity' : 'circle-opacity';
+   indicatorStore.setIndicatorOpacity(
+      {
+        opacity: value,
+        indicatorName: dsname
+      }
+    )
+     emit(
+        "setLayerPintProperty",
+        "kommunales_gebiet_dashboard"+dsname,
+        styleProperty,
         value
     )
 }
@@ -481,7 +548,6 @@ const addTernaryLayerToMap = (data)=>{
 
 const updateIndicatoreStore = (data)=>{
     if (data.mode=="bivariate"){
-        console.log("remove trivariate")
         indicatorStore.indicatorArray[datasetSearchStore.selectedDataset].ternaryData = null
 
     }
@@ -516,6 +582,7 @@ const updateIndicatoreStore = (data)=>{
     bottom: 10px;
     left: 381px;
     z-index: 10;
+    height: fit-content;
     background-color: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);

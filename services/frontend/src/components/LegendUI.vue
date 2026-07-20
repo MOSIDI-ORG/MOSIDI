@@ -179,12 +179,11 @@
                             <span>High</span>
                         </div>
                     
-                        <v-tooltip :text=" lastLegendItem.key" location="top">
+                        <v-tooltip :text=" indicatorArray[lastLegendItem.key].secondIndicatorName" location="top">
                     
                             <template v-slot:activator="{ props }">
                             
                                 <span v-bind="props" > 
-                        
                                     {{ indicatorArray[lastLegendItem.key].secondIndicatorName.length > 25
                                 ? indicatorArray[lastLegendItem.key].secondIndicatorName.slice(0, 25) + '...' 
                                 : indicatorArray[lastLegendItem.key].secondIndicatorName }}
@@ -240,6 +239,9 @@ let {addedLayers}=storeToRefs(useaddedDatasetsStore())
 
 
 const setHoverFilter = (index, layername, hoveredValue, legendGroup)=>{
+    let paintProperty = indicatorArray.value[lastLegendItem.value?.value?.selectedIndicator]?.visualizationType === "glyph" ? "circle-color" : "fill-color";
+    
+    
     let tempArray = null
     if (clickedlegendItems.value[legendGroup].indexOf(hoveredValue) === -1) {
         tempArray = clickedlegendItems.value[legendGroup].concat(hoveredValue)
@@ -247,7 +249,7 @@ const setHoverFilter = (index, layername, hoveredValue, legendGroup)=>{
             selectedColor: tempArray,
             layerId: layername,
             properties: 'nationalco',
-            styleParam: "fill-color"
+            styleParam: paintProperty
         }
         emit("setFilterForLegendInteraction", payload)
         document.getElementById(index).style.border = "2px solid orange"
@@ -256,6 +258,8 @@ const setHoverFilter = (index, layername, hoveredValue, legendGroup)=>{
 }
 
 const resetFilter = (index, layername, hoveredValue, legendGroup) => {
+    let paintProperty = indicatorArray.value[lastLegendItem.value?.value?.selectedIndicator]?.visualizationType === "glyph" ? "circle-color" : "fill-color";
+
     if (clickedlegendItems.value[legendGroup].indexOf(hoveredValue) === -1) {
         document.getElementById(index).style.border = ""
     }
@@ -264,7 +268,7 @@ const resetFilter = (index, layername, hoveredValue, legendGroup) => {
         selectedColor:clickedlegendItems.value[legendGroup],
         layerId: layername,
         properties: 'nationalco',
-        styleParam: "fill-color"
+        styleParam: paintProperty
     }
     
     if(clickedlegendItems.value[legendGroup].length>0){
@@ -291,11 +295,13 @@ const setClickFilter = (hoveredValue, index, legendGroup) => {
 
 
 watch(() => clickedlegendItems.value.first, () => {
+    let paintProperty = indicatorArray.value[lastLegendItem.value?.value?.selectedIndicator]?.visualizationType === "glyph" ? "circle-color" : "fill-color";
+
     let payload = {
         selectedColor: clickedlegendItems.value.first,
         layerId: 'kommunales_gebiet_dashboard'+clickedIndicator.value,
         properties: 'nationalco',
-        styleParam: "fill-color"
+        styleParam: paintProperty
     }
 
     if(clickedlegendItems.value.first.length>0 ){
@@ -315,11 +321,13 @@ watch(() => clickedlegendItems.value.first, () => {
     
 })
 watch(() => clickedlegendItems.value.second, () => {
+    let paintProperty = indicatorArray.value[lastLegendItem.value?.value?.selectedIndicator]?.visualizationType === "glyph" ? "circle-color" : "fill-color";
+
     let payload = {
         selectedColor: clickedlegendItems.value.second,
         layerId: 'kommunales_gebiet_dashboard'+clickedIndicator.value,
         properties: 'nationalco',
-        styleParam: "fill-color"
+        styleParam: paintProperty
     }
     if(clickedlegendItems.value.second.length>0 ){
         

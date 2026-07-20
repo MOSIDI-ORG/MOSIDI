@@ -3,13 +3,13 @@ import { defineStore } from 'pinia'
 export const useMetadataDialogStore = defineStore ({
     id: 'metadataDialog',
     state: () => ({
-       metadata: null,
+       metadataa: null,
        dialog: false,
        tablename: null
     }),
     actions: {
         assignMetadata(metadata, tablename) {
-            this.metadata = metadata
+            this.metadataa = metadata
             this.dialog = true,
             this.tablename = tablename
         },

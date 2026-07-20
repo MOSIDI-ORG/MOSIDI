@@ -130,7 +130,9 @@
         "add": "Add Indicator",
         "formula": "Formula",
         "calculate": "Calculate",
-        "add-layer": "Add Layer"
+        "add-layer": "Add Layer",
+        "formula-help": "• Select multiple desired datasets.\n• Insert operators into the formula field: +, -, *, /, (, ), ^.\n• Click \"Add Layer\" to create a new dataset. The dataset will appear in the dataset list on the left.",
+        "formula-help-title": "Formula Help"
     },
     "dataset":{
         "year-filter-title":"Select Year",
@@ -206,5 +208,10 @@
         "7d": "Last 7 days",
         "30d": "Last 30 days",
         "90d": "Last 90 days"
+    },
+    "chart-ui":{
+        "download": "Download Chart",
+        "close": "Close",
+        "years": "Years"
     }
   }

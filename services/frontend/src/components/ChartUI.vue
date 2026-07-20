@@ -1,35 +1,105 @@
 <template>
-    <div v-show="selectedFeature" id="chart-ui-container"> <!-- // && Object.keys(props.indicatorArray).length" -->
-        <v-btn density="compact" icon="mdi-close"
-            class="chart-button"
-            style="right: 15px;"
-            @click="closeChart()"></v-btn>
-        <v-btn density="compact" icon="mdi-fullscreen" v-show="!isFullscreen"
-            class="chart-button"
-            style="right: 55px;"
-            @click="enterFullscreen()"></v-btn>
-        <v-btn density="compact" icon="mdi-fullscreen-exit" v-show="isFullscreen"
-            class="chart-button"
-            style="right: 55px;"
-            @click="exitFullscreen()"></v-btn>
-        <v-select 
-            v-show="selectedFeature?.layerId == DatasetTypes.SensorThings"
-            :items="TIME_PRESETS"
-            item-title="label"
-            item-value="label"
-            :label="$t('chart.interval')"
-            return-object
-            dense
-            density="compact"
-            single-line
-            hide-details
-            rounded
-            solo
-            v-model="selectedTimeInterval" 
-            class="timeSelector"
-        >
-        </v-select>
-        <svg class="chart-ui" id="indicatorChart" width="600" height="370"></svg>
+    <div v-show="selectedFeature" class="chart-container"> <!-- // && Object.keys(props.indicatorArray).length" id="chart-ui-container"-->
+        <div class="chart-toolbar">
+            <v-tooltip>
+                <template v-slot:activator="{ props }">
+                    <v-select 
+                        v-show="selectedFeature?.layerId == DatasetTypes.SensorThings"
+                        :items="TIME_PRESETS"
+                        item-title="label"
+                        item-value="label"
+                        :label="$t('chart.interval')"
+                        return-object
+                        dense
+                        density="compact"
+                        single-line
+                        hide-details
+                        rounded
+                        solo
+                        v-model="selectedTimeInterval" 
+                        v-bind="props"
+                    >
+                    </v-select>
+                </template>
+            </v-tooltip>
+            <v-tooltip :text="$t('chart-ui.download')">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        density="compact"
+                        icon="mdi-download"
+                        variant="text"
+                        @click="downloadChart"
+                    />
+                </template>
+            </v-tooltip>
+            <v-tooltip>
+                <template v-slot:activator="{ props }" >
+                   <v-btn v-show="!isFullscreen"
+                    v-bind="props"
+                    density="compact"
+                    icon="mdi-fullscreen"
+                    variant="text"
+                    @click="enterFullscreen()"
+                />
+                </template>
+            </v-tooltip>
+            <v-tooltip>
+                <template v-slot:activator="{ props }" >
+                   <v-btn v-show="isFullscreen"
+                    v-bind="props"
+                    density="compact"
+                    icon="mdi-fullscreen-exit"
+                    variant="text"
+                    @click="exitFullscreen()"
+                />
+                </template>
+            </v-tooltip>
+            <v-tooltip :text="$t('chart-ui.close')">
+                <template v-slot:activator="{ props }">
+                   <v-btn
+                    v-bind="props"
+                    density="compact"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="closeChart()"
+                />
+                </template>
+            </v-tooltip>
+        </div>
+        <svg class="chart-ui" id="indicatorChart" width="450" height="370"></svg>
+<!--
+    <div v-show="selectedFeature && Object.keys(props.indicatorArray).length"
+     class="chart-container">
+
+        <div class="chart-toolbar">
+            <v-tooltip :text="$t('chart-ui.download')">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        density="compact"
+                        icon="mdi-download"
+                        variant="text"
+                        @click="downloadChart"
+                    />
+                </template>
+            </v-tooltip>
+            <v-tooltip :text="$t('chart-ui.close')">
+                <template v-slot:activator="{ props }">
+                   <v-btn
+                    v-bind="props"
+                    density="compact"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="closeChart()"
+                />
+                </template>
+            </v-tooltip>
+            
+        </div>
+
+        <svg class="chart-ui" id="indicatorChart" width="350" height="370"></svg>
+    -->
     </div>
 </template>
 
@@ -59,10 +129,10 @@ const TIME_PRESETS = [
   { label: t('chart.30d'), minutes: 43200, format: "%d.%m" },
   { label: t('chart.90d'), minutes: 129600, format: "%d.%m" },
 ]
-const selectedTimeInterval = ref(TIME_PRESETS[3]);
+const selectedTimeInterval = ref(TIME_PRESETS[0]);
 
 // innerMargins used for chart in svg
-const margin = { top: 50, right: 20, bottom: 40, left: 50 };
+const margin = { top: 60, right: 20, bottom: 40, left: 50 };
 var chart_timeAttributeName = null;
 var chart_valueAttributeName = null;
 
@@ -94,6 +164,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
 
     // Either create a time or point scale
     let x = null;
+    let timeLabels = [];
     if (isTimeScaled) {
         // Cast Date String from ISO 8601 to Date object
         data.forEach(element => {
@@ -104,7 +175,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
                     .domain(d3.extent(data, d => d[timeAttributeName]))
                     .range([ 0, width ]);
     } else {
-        let timeLabels = data.map(d => d[timeAttributeName])
+        timeLabels = data.map(d => d[timeAttributeName])
         x = d3.scalePoint().domain(timeLabels).range([0, width]);
     }
 
@@ -112,6 +183,17 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
     const y = d3.scaleLinear()
             .domain([0, maxValue + (1/10) * maxValue]) // y-axis is 10% larger than max value
             .range([height, 0]);
+
+    const getTickStep = (count) => {
+        if (count > 40) return 5;
+        if (count > 25) return 3;
+        if (count > 15) return 2;
+        return 1;
+    };
+
+    const tickStep = getTickStep(timeLabels.length);
+
+    const displayedTicks = timeLabels.filter((_, index) => index % tickStep === 0);
 
     // Grid lines for X axis
     g.append('g')
@@ -135,7 +217,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .attr('transform', `translate(0,${height})`)
         .call(isTimeScaled?
             d3.axisBottom(x).tickFormat(d3.timeFormat(selectedTimeInterval.value.format)) :
-            d3.axisBottom(x)
+            d3.axisBottom(x).tickValues(displayedTicks)
         );
     g.append('text')
         .attr('x', width / 2)
@@ -146,7 +228,7 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .text(xAxisLowerLabel);
     g.append('text')
         .attr('x', width / 2)
-        .attr('y', -margin.top / 2)
+        .attr('y', -margin.top +40)
         .attr('text-anchor', 'middle')
         .attr('font-size', '12px')
         .attr('fill', 'black')
@@ -181,15 +263,19 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
 
 
     // Add container for displaying tooltip
-    var tooltip = d3.select('body').append('div')
-        .attr('class', 'chart-ui-tooltip')
-        .style('opacity', 0)
+    const tooltip = d3.select('body')
+        .selectAll('.chart-tooltip')
+        .data([null])
+        .join('div')
+        .attr('class', 'chart-tooltip')
         .style('position', 'absolute')
-        .style('text-align', 'center')
-        .style('padding', '.5rem')
-        .style('background', '#FFFFFF')
-        .style('border', '1px solid #313639')
-        .style('border-radius', '8px')
+        .style('background', 'rgba(0,0,0,0.6)')
+        .style('color', 'white')
+        .style('padding', '6px 10px')
+        .style('border-radius', '5px')
+        .style('font-size', '12px')
+        .style('pointer-events', 'none')
+        .style('opacity', 0);
 
     // Hover over event
     var mouseover = function(event, d) {
@@ -206,10 +292,9 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         
         let text = '';
         if (isTimeScaled) {
-            text = d[timeAttributeName].toUTCString() +
-                    ':<br />' + Number(d[valueAttributeName]).toFixed(2) + unitOfMeasurement
+            text = `<strong>Year:</strong> ${d[timeAttributeName].toUTCString()}<br><strong>Value:</strong> ${Number(d[valueAttributeName]).toFixed(2)} ${unitOfMeasurement}`
         } else {
-            text = Number(d[valueAttributeName]).toFixed(2) + unitOfMeasurement
+            text = `<strong>Year:</strong> ${d[timeAttributeName]}<br><strong>Value:</strong> ${d[valueAttributeName]}`
         }
 
         tooltip.html(text)
@@ -229,7 +314,13 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
             .duration('200')
             .style('opacity', 0)
             .style('display', 'none');
-    }  
+    }
+    
+    var mousemove = function(event) {
+        tooltip
+            .style('left', (event.pageX + 12) + 'px')
+            .style('top', (event.pageY - 28) + 'px');
+    }
 
     // Add circles at data points
     g.selectAll('.circle')
@@ -243,7 +334,8 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
         .attr('stroke-width', 1)
         .style("opacity", data.length > 50 ? 0 : 1) // hide circles if more than 50 data points
         .on('mouseover', mouseover)
-        .on('mouseout', mouseout);
+        .on('mouseout', mouseout)
+        .on('mousemove', mousemove);
 
     // Append labels for each data point with percentage change
     if (showPercentageChange) {
@@ -261,6 +353,8 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
             })
             .text((d, i) => {
                 if (i === 0) return ''; // No change for the first point
+                // Skip labels that shouldn't be displayed
+                if (i % tickStep !== 0 && i !== data.length - 1) return '';
                 const prev = data[i - 1][valueAttributeName];
                 const change = ((d[valueAttributeName] - prev) / prev) * 100;
                 return `${change.toFixed(1)}%`;
@@ -349,7 +443,54 @@ watch(() => selectedFeature.value, () => {
     }
 
 });
+const downloadChart = () => {
+    const svg = document.getElementById("indicatorChart");
 
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svg);
+
+    const svgBlob = new Blob([svgString], {
+        type: "image/svg+xml;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+
+    img.onload = () => {
+        const scale = 4; // 4x resolution
+
+        const canvas = document.createElement("canvas");
+        canvas.width = svg.width.baseVal.value * scale;
+        canvas.height = svg.height.baseVal.value * scale;
+
+        const ctx = canvas.getContext("2d");
+
+        // white background
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // scale drawing
+        ctx.scale(scale, scale);
+
+        ctx.drawImage(
+            img,
+            0,
+            0,
+            svg.width.baseVal.value,
+            svg.height.baseVal.value
+        );
+
+        URL.revokeObjectURL(url);
+
+        const link = document.createElement("a");
+        link.download = `${indicatorName.value}_${selectedFeature.value.featureName}.png`;
+        link.href = canvas.toDataURL("image/png", 1.0);
+        link.click();
+    };
+
+    img.src = url;
+};
 onUnmounted(() => {
     d3.select('#indicatorChart').selectAll('*').remove();
 });
@@ -420,7 +561,10 @@ const renderSensorThingsChart = (data) => {
 }
 
 .chart-ui {
-    position: relative;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    bottom: 100px;
     z-index: 10;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 8px;
@@ -428,16 +572,6 @@ const renderSensorThingsChart = (data) => {
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
-
-#chart-ui-container {
-    position: absolute;
-    top: 60px;
-    right: 10px;
-    width: 600px;
-    height: 370px;
-    z-index: 1000;
-}
-
 .grid line {
     stroke: rgb(215, 16, 16);
     stroke-opacity: 0.4;
@@ -447,4 +581,15 @@ const renderSensorThingsChart = (data) => {
 .grid path {
     stroke-width: 0;
 }
+
+
+.chart-toolbar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    z-index: 1000;
+    display: flex;
+    gap: 4px;
+}
+
 </style>
