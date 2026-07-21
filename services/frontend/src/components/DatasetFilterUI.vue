@@ -1054,17 +1054,31 @@ const toggleClickedLayer = (layerName, geomType) => {
             }
             layerType.value = "raster"
         }
+
+
         if (geomType=='Raster'){
             emit("addCoverageLayerToMap", layerName, layerType, style)
         }
         else {
-            let layerSpecification = {
-                layerNameInDatabase: layerName,
-                id: layerName,
-                style: style,
-                layerType: layerType,
-                sourceType: "vector_tile",
-                layout: layout
+            let layerSpecification;
+            if (addedDatasetsStore.addedLayers[layerName].dct_type == DatasetTypes.SensorThings) {
+                layerSpecification = {
+                    layerNameInDatabase: layerName,
+                    id: layerName,
+                    style: style,
+                    layerType: layerType,
+                    sourceType: "SensorThings",
+                    layout: layout
+                }
+            } else {
+                layerSpecification = {
+                    layerNameInDatabase: layerName,
+                    id: layerName,
+                    style: style,
+                    layerType: layerType,
+                    sourceType: "vector_tile",
+                    layout: layout
+                }
             }
             emit("addLayerToMap", layerSpecification);
         }

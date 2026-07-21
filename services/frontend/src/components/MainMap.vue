@@ -63,6 +63,7 @@ import { useIndicatorStore } from '@/stores/indicator'
 import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
 import {getFeatureInstanceFromDB} from "../services/backend.calls";
 import { getThings } from '@/services/frost.service';
+import { DatasetTypes } from '@/utils/datasetTypes';
 
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
@@ -158,12 +159,17 @@ const addLayerToMap = (layerSpecification)=>{
 
   // 1. CLEAR EXISTING LAYER AND SOURCE IF THEY EXIST
   // This allows the new layer to claim the exact same ID cleanly
-  if (map.getLayer(layerId) !== undefined) {
-    map.removeLayer(layerId);
+  if (layerSpecification.sourceType == DatasetTypes.SensorThings) {
+    return;
+  } else {
+    if (map.getLayer(layerId) !== undefined) {
+      map.removeLayer(layerId);
+    }
+    if (map.getSource(layerId) !== undefined) {
+      map.removeSource(layerId);
+    }
   }
-  if (map.getSource(layerId) !== undefined) {
-    map.removeSource(layerId);
-  }
+  
 
   // 2. ADD SOURCE
   if (layerSpecification.sourceType == "vector_tile") {
@@ -501,6 +507,7 @@ const addSensorThingsLayerToMap = async (observedProperty) => {
 }
 
 const removeSensorThingsLayerFromMap = (layerName) => {
+  console.log("Removing layer: " + layerName)
   map.removeLayer(layerName + '-clusters');
   map.removeLayer(layerName + 'cluster-count');
   map.removeLayer(layerName + '-unclustered');
