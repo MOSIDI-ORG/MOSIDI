@@ -49,7 +49,7 @@
                     </v-text-field>
                             
                 </div>
-                <div class="mb-4 ml-2 mr-2"  >
+                <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
                     <v-row no-gutters>
                        
                         <v-col>
@@ -295,6 +295,7 @@
 <script setup>
 import { onMounted, ref, computed, defineEmits, watch, nextTick } from 'vue';
 import {getTableMetadata, getIndicatorData, classification, externalLayerFromDB} from "../services/backend.calls";
+import { getObservedProperties } from '@/services/frost.service';
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { useMetadataDialogStore } from '../stores/metadataDialog'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
@@ -311,18 +312,18 @@ import { usePointStyleStore } from '../stores/pointStyle'
 import { usePolygonStyleStore } from '../stores/polygonStyle'
 import { useIndicatorStore } from '@/stores/indicator'
 import { createHistogram } from '../utils/histogram';
+import { DatasetTypes } from '@/utils/datasetTypes';
 import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
 //import { isValidURL } from '../utils/isValidURL';
 import { externalLayers } from '../assets/externalLayers'; 
 import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
-
+import { convertToMetadata } from '@/utils/MetadataConverter';
 
 let { isMinimized } = storeToRefs(useMenuStore())
-const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressionByYear","addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleLayerToMap", "addExternaWMSLayerToMap","addTernaryLayerToMap"]);
+const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressionByYear","addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleLayerToMap", "addExternaWMSLayerToMap","addTernaryLayerToMap", "addSensorThingsLayerToMap"]);
 
-let {  filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
-
+let { filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
 
 let externalWMSLayers = ref([])
 let { circleStyleParams } = storeToRefs(usePointStyleStore())
@@ -375,19 +376,27 @@ let selectedYearIndicatorFilter = ref(null)
 let isLoading = ref(true)
 //let availableYearsForIndicatorFilter =ref(null)
 
+
 onMounted(async()=>{
     //tableMetadataRequest()
     //getExternalWMSLayers()
     const deepLink = useIndicatorDeepLink(addLayerToMap)
 
     await Promise.all([
-    tableMetadataRequest(),
-    getExternalWMSLayers()
-  ])
+        tableMetadataRequest(),
+        getExternalWMSLayers(),
+        observedPropertiesRequest()
+    ]);
+
+    // Sort metadata after request is done
+    tableMetadata.value.sort((a, b) =>
+        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+    );
+
+
     await nextTick()
     deepLink.attach()
     isLoading.value = false 
-
 })
 const cardLeftPosition = computed(() => {
   // 1. Check your most specific condition first
@@ -447,9 +456,11 @@ const filteredItems = computed(() => {
             : true;
         const preFilterDatasetType = (() => {
             if (activatedDatasetSearch.value === 'indicator') {
-                return item.dct_type === 'indikator';
+                return item.dct_type === DatasetTypes.Indicator;
             } else if (activatedDatasetSearch.value === 'geodata') {
-                return item.dct_type === 'raster';
+                return item.dct_type === DatasetTypes.Raster;
+            } else if (activatedDatasetSearch.value === DatasetTypes.SensorThings) {
+                return item.dct_type === DatasetTypes.SensorThings
             } else {
                 return true; 
             }
@@ -476,11 +487,11 @@ const filteredItems = computed(() => {
 
 const getIcon = (title, index, geomType, granularity)=> {
     let layerName = title+'_'+granularity
-        if (addedDatasetsStore.addedLayers[layerName]) {
+    if (addedDatasetsStore.addedLayers[layerName]) {
         return 'icons/check.svg'; 
-      } else if (hoveredItem.value === index) {
+    } else if (hoveredItem.value === index) {
         return 'icons/plus.svg'; 
-      } else {
+    } else {
         if (geomType=='Point'){
             return 'icons/point-blue.svg';
         }
@@ -489,12 +500,17 @@ const getIcon = (title, index, geomType, granularity)=> {
         }
         else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
             return 'icons/polygon-blue.svg';
-      }
-      else {
+        }
+        else {
             return 'icons/raster.svg';
         }
-      }
-  }
+    }
+}
+
+
+/**
+ * Hides this component on clicking close
+ */
 const toggleFilterUI = ()=>{
     datasetSearchStore.toggleFilter({
         filterInitiated : false
@@ -504,10 +520,21 @@ const toggleFilterUI = ()=>{
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
 
-  tableMetadata.value = deduplicateMetadata(response).sort((a, b) =>
+  tableMetadata.value.push(...deduplicateMetadata(response).sort((a, b) =>
     a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-  )
+  ));
 }
+
+const observedPropertiesRequest = async () => {
+    const response = await getObservedProperties();
+    let observedProperties = [];
+    response.forEach(item => {
+        observedProperties.push(convertToMetadata(item))
+    })
+    tableMetadata.value.push( ...observedProperties);
+    datasetSearchStore.addTableMetadata(response);
+}
+
 // reactive filtered metadata based on activatedDatasetSearch
 const filteredMeta = computed(() => {
   if (!tableMetadata.value) return []
@@ -613,9 +640,7 @@ const availableYearsForIndicatorFilter = computed(() => {
 })
 
 
-
-
-const showLayerMetadata= (layerName, granularity)=>{
+const showLayerMetadata= (layerName, granularity)=> {
     
     selectedLayerMetadata.value = tableMetadata.value.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     selectedLayerName.value = layerName
@@ -629,6 +654,7 @@ const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{
         addExternaWMSLayerToMap(item)
         
     }
+
     let selectedLayerMetadata = tableMetadata.value.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})
     if (selectedLayerMetadata?.dct_type==='table'){
@@ -647,7 +673,9 @@ const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{
             }
               
         }
-        //addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})       
+        //addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})             
+    } else if (selectedLayerMetadata?.dct_type == DatasetTypes.SensorThings) {
+        emit("addSensorThingsLayerToMap", selectedLayerMetadata);
     }
    
 
@@ -741,10 +769,10 @@ const getIndicator = async (indicatorName, granularity, mapType) => {
         type: "indikator"
     })
     datasetSearchStore.setSelecteddatasetName({
-            selectedDataset: indicatorName+'_'+granularity
+        selectedDataset: indicatorName+'_'+granularity
     })
     datasetSearchStore.setSelecteddatasetType({
-            selectedDatasetType: "indikator"
+        selectedDatasetType: "indikator"
     })
     
 
@@ -1026,17 +1054,31 @@ const toggleClickedLayer = (layerName, geomType) => {
             }
             layerType.value = "raster"
         }
+
+
         if (geomType=='Raster'){
             emit("addCoverageLayerToMap", layerName, layerType, style)
         }
         else {
-            let layerSpecification = {
-                layerNameInDatabase: layerName,
-                id: layerName,
-                style: style,
-                layerType: layerType,
-                sourceType: "vector_tile",
-                layout: layout
+            let layerSpecification;
+            if (addedDatasetsStore.addedLayers[layerName].dct_type == DatasetTypes.SensorThings) {
+                layerSpecification = {
+                    layerNameInDatabase: layerName,
+                    id: layerName,
+                    style: style,
+                    layerType: layerType,
+                    sourceType: "SensorThings",
+                    layout: layout
+                }
+            } else {
+                layerSpecification = {
+                    layerNameInDatabase: layerName,
+                    id: layerName,
+                    style: style,
+                    layerType: layerType,
+                    sourceType: "vector_tile",
+                    layout: layout
+                }
             }
             emit("addLayerToMap", layerSpecification);
         }
@@ -1126,7 +1168,7 @@ const addTernaryLayerToMap = (data)=>{
 
 <style scoped>
 .dataset-filter-ui{
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: transparent; 
     border-radius: 8px;
     position: absolute;
@@ -1140,11 +1182,10 @@ const addTernaryLayerToMap = (data)=>{
     -moz-backdrop-filter: blur(5px);
     -ms-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2); 
-    
-   
 }
+
 .dataset-metadata-ui{
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: transparent; 
     border-radius: 8px;
     position: absolute;
@@ -1158,11 +1199,10 @@ const addTernaryLayerToMap = (data)=>{
     -moz-backdrop-filter: blur(5px);
     -ms-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2); 
-    
-   
 }
+
 .custom-formula-ui{
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: transparent; 
     border-radius: 8px;
     position: absolute;
@@ -1176,14 +1216,14 @@ const addTernaryLayerToMap = (data)=>{
     -moz-backdrop-filter: blur(5px);
     -ms-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2); 
-    
-   
 }
+
 .header{
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: black; 
     border-radius: 8px;
     position: absolute;
+    min-height: 21%;
     top: 62px;
     left: 381px;
     z-index: 10;
@@ -1191,10 +1231,13 @@ const addTernaryLayerToMap = (data)=>{
     color: white;
     border: 1px solid rgba(0, 0, 0, 0.2); 
 }
+
 .animated-transform {
   transition: width 0.3s ease, left 0.3s ease;
 }
+
 .animated-metadata-transform {
   transition: width 0.3s ease, left 0.3s ease;
 }
+
 </style>

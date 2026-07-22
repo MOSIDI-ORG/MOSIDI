@@ -127,9 +127,10 @@
                                     <v-list-item-title class="ml-3">{{ $t('added-datasets.zoom') }}</v-list-item-title>
                                 </template>
                             </v-list-item>
+                            <!-- TODO: What if dcatde_politicalgeocodingleveluri is undefined? -->
                             <v-list-item
                                 v-show="route?.query?.mode === 'edit'"
-                                @click="addedLayer.dct_type==='raster'? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
+                                @click="addedLayer.dct_type==='raster' || addedLayer.dct_type === DatasetTypes.SensorThings ? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -201,11 +202,6 @@
       
     </v-list>
 
-       
-
-
-   
-
 </template>
 
 <script setup>
@@ -217,6 +213,7 @@ import { useMetadataDialogStore } from '../stores/metadataDialog'
 import { useMapLegendStore } from '@/stores/mapLegend'
 import { useIndicatorStore } from '@/stores/indicator'
 import { createHistogram } from '../utils/histogram';
+import { DatasetTypes } from '../utils/datasetTypes';
 
 
 import { useCartographyStore } from '../stores/cartography'
@@ -246,15 +243,12 @@ let { lineLayerSpecification } = storeToRefs(useLineStyleStore())
 let { rasterLayerSpecification } = storeToRefs(useRasterStyleStore())
 
 
-
-
-
 import {
     getLayerExtent,
     getGeojsonDataFromDB
 } from "../services/backend.calls";
 
-const emit = defineEmits(["addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "toggleLayerVisibilityWithValue", "moveLayerToTop"]);
+const emit = defineEmits(["addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "toggleLayerVisibilityWithValue", "moveLayerToTop", "removeSensorThingsLayerFromMap"]);
 
 const metadataDialogStore = useMetadataDialogStore();
 const mapLegendStore = useMapLegendStore();
@@ -280,34 +274,35 @@ const formatAvailableYears = (years) => {
 
   return `${years[0]}–${years[years.length - 1]}`
 }
-const addDataUI = (datasettitle, datasetType, geomType, granularity)=>{
+const addDataUI = (datasettitle, datasetType, geomType, granularity)=> {
     let datasetName = datasettitle+'_'+granularity
     if (datasetSearchStore.selectedDataset==datasetName && filterInitiated==false){
         removeLayer(datasetName, datasetType)
     }
     else {
-        datasetSearchStore.toggleDataUI({
-            dataUiInitiated : true
-       
-        })
-        datasetSearchStore.toggleFilter({
-            filterInitiated : false
-        })
-        datasetSearchStore.setSelecteddatasetName({
-            selectedDataset: datasetType=='indikator'? datasetName: datasettitle
-        })
-        if(datasetType=='indikator'){
+        if (datasetType != DatasetTypes.SensorThings) {
+            datasetSearchStore.toggleDataUI({
+                dataUiInitiated : true
+            })
+            datasetSearchStore.toggleFilter({
+                filterInitiated : false
+            })
+            datasetSearchStore.setSelecteddatasetName({
+                selectedDataset: datasetType=='indikator'? datasetName: datasettitle
+            })
+        }
+        if(datasetType==DatasetTypes.Indicator){
             createHistogramForSelectedLayer(datasetName)
             for(let layer in addedDatasetsStore.addedLayers){
                 if (layer!=datasetName){
                     emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'none')
-                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='indikator' || addedDatasetsStore.addedLayers[layer]['dct_type']=='custom indikator' ){
+                    if(addedDatasetsStore.addedLayers[layer]['dct_type']== DatasetTypes.Indicator || addedDatasetsStore.addedLayers[layer]['dct_type']== DatasetTypes.CustomIndicator ){
                         addedDatasetsStore.addedLayers[layer]['checked'] = false;
                     }
                 }
                 else {
                     emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'visible')
-                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='indikator'){
+                    if(addedDatasetsStore.addedLayers[layer]['dct_type']== DatasetTypes.Indicator){
                         addedDatasetsStore.addedLayers[layer]['checked'] = true;
                     }
                     
@@ -319,28 +314,28 @@ const addDataUI = (datasettitle, datasetType, geomType, granularity)=>{
             })
 
         }
-        else if (datasetType=='table'){
+        else if (datasetType==DatasetTypes.Table){
             activateStylePanel(datasetName,geomType)
             emit("moveLayerToTop", datasetName)
         }
         else if(datasetType=='raster'){
             activateStylePanel(datasettitle,geomType)
             datasetSearchStore.setSelecteddatasetType({
-            selectedDatasetType: "raster"
-    })
+                selectedDatasetType: "raster"
+            })
         }
         else if(datasetType=='custom indikator'){
             datasetName = datasettitle
             for(let layer in addedDatasetsStore.addedLayers){
                 if (layer!=datasetName){
                     emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'none')
-                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='custom indikator' || addedDatasetsStore.addedLayers[layer]['dct_type']=='indikator'){
+                    if(addedDatasetsStore.addedLayers[layer]['dct_type']== DatasetTypes.CustomIndicator || addedDatasetsStore.addedLayers[layer]['dct_type']== DatasetTypes.Indicator){
                         addedDatasetsStore.addedLayers[layer]['checked'] = false;
                     }
                 }
                 else {
                     emit("toggleLayerVisibilityWithValue", 'kommunales_gebiet_dashboard' + layer, 'visible')
-                    if(addedDatasetsStore.addedLayers[layer]['dct_type']=='custom indikator'){
+                    if(addedDatasetsStore.addedLayers[layer]['dct_type']== DatasetTypes.CustomIndicator){
                         addedDatasetsStore.addedLayers[layer]['checked'] = true;
                     }
                     
@@ -361,7 +356,6 @@ const createHistogramForSelectedLayer = (datasetName)=>{
 }
 
 const showLayerMetadata = (addedLayer)=>{ 
-
     metadataDialogStore.assignMetadata( addedLayer,addedLayer.dct_title)
 }
 const getLayerExtentFromDB = async (addedLayer)=>{
@@ -404,9 +398,10 @@ const getLayerExtentFromDB = async (addedLayer)=>{
     }
     
 }
+
 const toggleLayerVisibility = (layerName)=>{
     
-    if (layerName.dct_type=='table'){
+    if (layerName.dct_type==DatasetTypes.Table){
         emit("toggleLayerVisibility", layerName.dct_title)
         if(addedLayers.value[layerName.dct_title]['sublayers']){
             for(let sublayer in (addedLayers.value[layerName.dct_title]['sublayers'])){
@@ -414,7 +409,7 @@ const toggleLayerVisibility = (layerName)=>{
             }
         }
     }
-    else if (layerName.dct_type=='indikator'){
+    else if (layerName.dct_type==DatasetTypes.Indicator){
         emit("toggleLayerVisibility", 'kommunales_gebiet_dashboard' + layerName.dct_title)
     }
     
@@ -435,7 +430,7 @@ const removeLayer = (layerName, layerType)=>{
         dataUiInitiated : false
        
     })*/
-    if (layerType=='table'){
+    if (layerType==DatasetTypes.Table){
         emit("removeLayerFromMap",  {layerId:  layerName, sourceId: layerName})
         if(addedDatasetsStore.addedLayers[layerName]['sublayers']){
             for (let sublayerId in addedDatasetsStore.addedLayers[layerName]['sublayers']){
@@ -444,7 +439,7 @@ const removeLayer = (layerName, layerType)=>{
        
         }
     }
-    else if (layerType=='indikator'){
+    else if (layerType==DatasetTypes.Indicator){
         emit("removeLayerFromMap",  {layerId:  'kommunales_gebiet_dashboard' + layerName, sourceId: 'kommunales_gebiet_dashboard' + layerName})
         emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
         mapLegendStore.removeLegendItem(layerName);
@@ -457,19 +452,18 @@ const removeLayer = (layerName, layerType)=>{
             legend_url: addedDatasetsStore.addedLayers[layerName].legend_url,
             layername: layerName
         })
-
-       
     }
-    else if (layerType=='custom indikator'){
-        console.log("custom indikator removed")
+    else if (layerType==DatasetTypes.CustomIndicator){
         emit("removeLayerFromMap",  {layerId:  'kommunales_gebiet_dashboard' + layerName, sourceId: 'kommunales_gebiet_dashboard' + layerName})
         emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
         mapLegendStore.removeLegendItem(layerName);
         indicatorStore.removeIndicator(layerName)
+    } 
+    else if (layerType == DatasetTypes.SensorThings) {
+        emit("removeSensorThingsLayerFromMap", layerName);
     }
    
-    delete addedLayers.value[layerName]
-
+    delete addedLayers.value[layerName];
 }
 const activateStylePanel = (datasetName,geomType)=>{
    cartographyStore.setVisibility({catographyUIVisibility:true, geomTtype: geomType})

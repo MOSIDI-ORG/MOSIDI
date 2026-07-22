@@ -49,6 +49,30 @@
         </template>
         
     </v-card>
+    <v-card
+        class=" text-start"
+        density="compact"
+        :title="$t('dataset-search-landing.things.title')"
+        variant="text"
+        
+    >
+        
+        <template #subtitle >
+            <div   style="white-space: normal; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; line-clamp: 2; -webkit-box-orient: vertical;"
+            >
+                {{ $t('dataset-search-landing.things.subtitle') }}
+            </div>
+            
+        </template>
+        <template #prepend>
+        <v-avatar @click="addDatasets(), toggleFilterUI(), toggleDataUI(), activatedDatasetSearchComponent('SensorThings')" style="cursor: pointer;">
+                <v-img width="20" src="icons/plus.svg" ></v-img>
+            </v-avatar>
+        
+
+        </template>
+        
+    </v-card>
 
           
 
@@ -56,8 +80,8 @@
 
 <script setup>
 import { useDatasetSearchStore } from '../stores/datasetSearch'
-const datasetSearchStore = useDatasetSearchStore()
 
+const datasetSearchStore = useDatasetSearchStore();
 
 const toggleDataUI = ()=>{
     datasetSearchStore.toggleDataUI({
@@ -77,7 +101,7 @@ const toggleFilterUI = ()=>{
     })
 }
 
-const activatedDatasetSearchComponent=(value)=>{
+const activatedDatasetSearchComponent=(value) => {
      datasetSearchStore.setActivatedDatasetSearch({
         activatedDatasetSearch : value
     })
