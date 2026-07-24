@@ -174,6 +174,7 @@
         :label="$t('custom-indicator.formula')"
         :model-value="formula ? formula : ''"
         rows="2"
+        id="formulatext"
         hide-details
     />
 
@@ -457,8 +458,7 @@ const calculate = () => {
             });
         });
     }
-   
-    let formula = document.getElementById("formulatext").value
+    let formula = document.getElementById("formulatext")?.value
     function normalizeKennziffer(kennziffer) {
         return kennziffer.trim();
     }

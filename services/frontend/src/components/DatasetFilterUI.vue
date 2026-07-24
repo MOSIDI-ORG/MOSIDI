@@ -932,7 +932,8 @@ const addCustomLayer= (array,classes, formula, granularity)=>{
         availailableYearsForSelectedIndicator: [2024],
         selectedYear: 2024,
         colorPalette: colorbrewer.default.RdPu[5],
-        type: "custom indikator"
+        type: "custom indikator",
+        visualizationType: "polygon"
     })
     indicatorStore.setIndicatorClassificationResults({
             indicatorName: formula.value,
@@ -940,6 +941,10 @@ const addCustomLayer= (array,classes, formula, granularity)=>{
             classification_result_3_intervals: classes,
             classificationMethod: selectedClassificationMethod.value
         })
+        datasetSearchStore.setSelecteddatasetName({
+            selectedDataset: formula.value
+        })
+    
     addCommuneTileLayer(formula.value, granularity)
     customMapStylization(array,classes, formula)
 }
