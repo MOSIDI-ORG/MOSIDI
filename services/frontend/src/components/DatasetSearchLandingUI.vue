@@ -29,7 +29,8 @@
         density="compact"
         :title="$t('dataset-search-landing.geo.title')"
         variant="text"
-        @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('geodata')" style="cursor: pointer;"
+        @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('geodata')"
+        style="cursor: pointer;"
         
     >
         
@@ -54,7 +55,8 @@
         density="compact"
         :title="$t('dataset-search-landing.things.title')"
         variant="text"
-        
+        @click="addDatasets(), toggleFilterUI(), toggleDataUI(), activatedDatasetSearchComponent('SensorThings')" 
+        style="cursor: pointer;"
     >
         
         <template #subtitle >
@@ -65,7 +67,7 @@
             
         </template>
         <template #prepend>
-        <v-avatar @click="addDatasets(), toggleFilterUI(), toggleDataUI(), activatedDatasetSearchComponent('SensorThings')" style="cursor: pointer;">
+        <v-avatar >
                 <v-img width="20" src="icons/plus.svg" ></v-img>
             </v-avatar>
         
