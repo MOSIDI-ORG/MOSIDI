@@ -381,26 +381,29 @@ let isLoading = ref(true)
 
 
 onMounted(async()=>{
-    //tableMetadataRequest()
-    //getExternalWMSLayers()
+    // Internal Request
+    loadIndicatorData();
+    // External Requests/ APIs
+    observedPropertiesRequest()
+})
+
+const loadIndicatorData = async () => {
     const deepLink = useIndicatorDeepLink(addLayerToMap)
 
     await Promise.all([
         tableMetadataRequest(),
         getExternalWMSLayers(),
-        observedPropertiesRequest()
     ]);
 
     // Sort metadata after request is done
     tableMetadata.value.sort((a, b) =>
         a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
     );
-
-
+    
     await nextTick()
     deepLink.attach()
-    isLoading.value = false 
-})
+    isLoading.value = false
+}
 const cardLeftPosition = computed(() => {
   // 1. Check your most specific condition first
   if (isMinimized.value && !filterInitiated.value) {
