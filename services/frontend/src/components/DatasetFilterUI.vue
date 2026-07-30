@@ -147,8 +147,8 @@
         </v-card>
         <v-card 
             v-show="filterInitiated==true" 
-            height="700"
-            class="dataset-filter-ui mx-auto text-left animated-transform"  
+            height="calc(100% - 250px)"
+            class="dataset-filter-ui mx-auto text-left animated-transform d-flex flex-column"  
             width="371"
             >
 
@@ -161,7 +161,7 @@
                     :items="filteredItems"
                     :item-height="88"
                     height="calc(100% - 30px)"
-                    style="background-color: transparent;"
+                    style="background-color: transparent; flex: 1"
                 >
                 <template v-slot:default="{ item, index }">
                     <v-list-item
@@ -1251,6 +1251,10 @@ const addTernaryLayerToMap = (data)=>{
 
 .animated-metadata-transform {
   transition: width 0.3s ease, left 0.3s ease;
+}
+
+.fill-height {
+  flex: 1;
 }
 
 </style>
