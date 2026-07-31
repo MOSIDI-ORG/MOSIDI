@@ -394,14 +394,14 @@ onMounted(async()=>{
     await Promise.all([
         observedPropertiesRequest()
     ]).then(
-        isLoading.value.SensorThings = true
+        isLoading.value.SensorThings = false
     ).catch(err =>
         console.log(err)
     )
 })
 
 const doTableMetadatRequest = async() => {
-    await Promise.any([
+    await Promise.all([
         tableMetadataRequest()
     ]).then(() => {
         // Sort metadata after request is done
@@ -416,11 +416,11 @@ const doTableMetadatRequest = async() => {
 }
 
 const doExternalWMSLayersRequest = async() => {
-    await Promise.any([
+    await Promise.all([
         getExternalWMSLayers()
-    ]).then(
+    ]).then(() => {
         isLoading.value.geodata = false
-    ).catch(err =>
+    }).catch(err =>
         console.log(err)
     );
 }
