@@ -15,10 +15,12 @@
         @addTernaryLayerToMap="addTernaryLayerToMap"
         @addLayerbyMapType="addCommuneTileLayer"
     ></DatasetUI>
-    <div v-show="filterInitiated==true && dataUiInitiated==false">
+    <div v-show="filterInitiated==true && dataUiInitiated==false" class="main-container animated-transform" :style="{ left: isMinimized ? '90px' : '382px' }">
         
-        <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
-
+        <v-card 
+            class="header mx-auto d-flex animated-transform" 
+            width="371"    
+        >
             <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{$t('dataset-filter.title')}}</span>
@@ -32,120 +34,116 @@
                     ></v-img>
                 </div>
 
-                <div style="padding: 8px;">
-                    <v-text-field
-                        :label="$t('dataset-filter.search')"
-                        prepend-inner-icon="mdi-magnify"
-                        class="expanding-search"
-                        filled
-                        outlined
-                        density="compact"
-                        clearable
-                        dense
-                        single-line
-                        hide-details
-                        v-model="layerSearchText"
-                    >
-                    </v-text-field>
-                            
-                </div>
-                <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
-                    <v-row no-gutters>
-                       
-                        <v-col>
-                            <v-select
-                                :items="datasetCategories"
-                                :item-title="'label'"
-                                :item-value="'value'"
-                                :label="$t('dataset-filter.filter-label.category')"
-                                dense
-                                outlined
-                                density="compact"
-                                single-line
-                                hide-details
-                                rounded
-                                solo                
-                                v-model="selectedDatasetCategory"
-                            ></v-select>
-                        </v-col>
-                        <v-col>
-                            <v-select
-                                :items=dataSources
-                                item-value="value"
-                                item-title="label"
-                                :label="$t('dataset-filter.filter-label.source')"
-                                dense
-                                outlined
-                                single-line
-                                density="compact"
-                                hide-details
-                                rounded
-                                solo 
-                                v-model="selectedDatasetSource"
-                            >
-                               
-                            </v-select>
-                        </v-col>
+                <div v-if="!isLoading[activatedDatasetSearch]">
+                    <div style="padding: 8px;">
+                        <v-text-field
+                            :label="$t('dataset-filter.search')"
+                            prepend-inner-icon="mdi-magnify"
+                            class="expanding-search"
+                            filled
+                            outlined
+                            density="compact"
+                            clearable
+                            dense
+                            single-line
+                            hide-details
+                            v-model="layerSearchText"
+                        >
+                        </v-text-field>
+
+                    </div>
+                    <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
+                        <v-row no-gutters>
                         
-                       
-                    </v-row>
-                    <v-row no-gutters>
-                        <v-col>
-                            <v-select
-                                :items=geometryTypes
-                                item-value="value"
-                                item-title="label"
-                                :label="$t('dataset-filter.filter-label.geometry')"
-                                dense
-                                outlined
-                                single-line
-                                hide-details
-                                rounded
-                                 density="compact"
-                                solo 
-                                v-model="selectedGeometryTypee"
-                            >
-                            
-                        </v-select>
-                        </v-col>
-                        <v-col>
-                            <v-select
-                                :items=availableYearsForIndicatorFilter
-                                item-value="value"
-                                item-title="label"
-                                :label="$t('dataset-filter.filter-label.time')"
-                                dense
-                                outlined
-                                single-line
-                                hide-details
-                                rounded
-                                 density="compact"
-                                solo 
-                                v-model="selectedYearIndicatorFilter"
-                            >
-                                
+                            <v-col>
+                                <v-select
+                                    :items="datasetCategories"
+                                    :item-title="'label'"
+                                    :item-value="'value'"
+                                    :label="$t('dataset-filter.filter-label.category')"
+                                    dense
+                                    outlined
+                                    density="compact"
+                                    single-line
+                                    hide-details
+                                    rounded
+                                    solo                
+                                    v-model="selectedDatasetCategory"
+                                ></v-select>
+                            </v-col>
+                            <v-col>
+                                <v-select
+                                    :items=dataSources
+                                    item-value="value"
+                                    item-title="label"
+                                    :label="$t('dataset-filter.filter-label.source')"
+                                    dense
+                                    outlined
+                                    single-line
+                                    density="compact"
+                                    hide-details
+                                    rounded
+                                    solo 
+                                    v-model="selectedDatasetSource"
+                                >
+
+                                </v-select>
+                            </v-col>
+
+                        
+                        </v-row>
+                        <v-row no-gutters>
+                            <v-col>
+                                <v-select
+                                    :items=geometryTypes
+                                    item-value="value"
+                                    item-title="label"
+                                    :label="$t('dataset-filter.filter-label.geometry')"
+                                    dense
+                                    outlined
+                                    single-line
+                                    hide-details
+                                    rounded
+                                     density="compact"
+                                    solo 
+                                    v-model="selectedGeometryTypee"
+                                >
+
                             </v-select>
-                        </v-col>
-                    </v-row>
+                            </v-col>
+                            <v-col>
+                                <v-select
+                                    :items=availableYearsForIndicatorFilter
+                                    item-value="value"
+                                    item-title="label"
+                                    :label="$t('dataset-filter.filter-label.time')"
+                                    dense
+                                    outlined
+                                    single-line
+                                    hide-details
+                                    rounded
+                                     density="compact"
+                                    solo 
+                                    v-model="selectedYearIndicatorFilter"
+                                >
+
+                                </v-select>
+                            </v-col>
+                        </v-row>
+                    </div>
+                </div>
+                <div v-if="isLoading[activatedDatasetSearch]" class="d-flex align-center justify-center" style="height:50%;">
+                    <div class="d-flex align-center">
+                        <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
+                        <span>Loading datasets...</span>
+                    </div>
                 </div>
             </v-card>
-        
-
-        </v-card>
-        <v-card
-            v-if="isLoading"
-            :style="{ left: isMinimized ? '90px' : '382px' }"
-            class="header mx-auto d-flex align-center justify-center animated-transform"
-            width="371"
-            style="background-color: black; color: white; padding: 16px;"
-        >
-            <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
-            <span>Loading datasets...</span>
         </v-card>
         <v-card 
-            :style="{ left: isMinimized ? '90px' : '382px' }" 
             v-show="filterInitiated==true" 
-            class="dataset-filter-ui mx-auto text-left animated-transform"  
+            height="calc(100% - 230px)"
+            class="dataset-filter-ui mx-auto text-left animated-transform d-flex flex-column"  
             width="371"
             >
 
@@ -158,7 +156,7 @@
                     :items="filteredItems"
                     :item-height="88"
                     height="calc(100% - 30px)"
-                    style="background-color: transparent;"
+                    style="background-color: transparent; flex: 1"
                 >
                 <template v-slot:default="{ item, index }">
                     <v-list-item
@@ -373,31 +371,60 @@ let selectedDatasetSource = ref(null)
 let selectedLayerMetadata = ref(null)
 let selectedLayerName= ref(null)
 let selectedYearIndicatorFilter = ref(null)
-let isLoading = ref(true)
+let isLoading = ref({
+    indicator: true,
+    geodata: true,
+    SensorThings: true
+})
 //let availableYearsForIndicatorFilter =ref(null)
 
 
 onMounted(async()=>{
-    //tableMetadataRequest()
-    //getExternalWMSLayers()
     const deepLink = useIndicatorDeepLink(addLayerToMap)
 
-    await Promise.all([
-        tableMetadataRequest(),
-        getExternalWMSLayers(),
-        observedPropertiesRequest()
-    ]);
-
-    // Sort metadata after request is done
-    tableMetadata.value.sort((a, b) =>
-        a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-    );
-
+    // Internal Request
+    doTableMetadatRequest();
+    doExternalWMSLayersRequest();
 
     await nextTick()
     deepLink.attach()
-    isLoading.value = false 
+
+
+    // External Requests/ APIs
+    await Promise.all([
+        observedPropertiesRequest()
+    ]).then(
+        isLoading.value.SensorThings = false
+    ).catch(err =>
+        console.log(err)
+    )
 })
+
+const doTableMetadatRequest = async() => {
+    await Promise.all([
+        tableMetadataRequest()
+    ]).then(() => {
+        // Sort metadata after request is done
+        tableMetadata.value.sort((a, b) =>
+            a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+        )
+
+        isLoading.value.indicator = false
+    }).catch(err => 
+        console.log(err)
+    )
+}
+
+const doExternalWMSLayersRequest = async() => {
+    await Promise.all([
+        getExternalWMSLayers()
+    ]).then(() => {
+        isLoading.value.geodata = false
+    }).catch(err =>
+        console.log(err)
+    );
+}
+
 const cardLeftPosition = computed(() => {
   // 1. Check your most specific condition first
   if (isMinimized.value && !filterInitiated.value) {
@@ -1172,14 +1199,18 @@ const addTernaryLayerToMap = (data)=>{
 </script>
 
 <style scoped>
+
+.main-container {
+    position: absolute;
+    top: 62px;
+    bottom: 10px;
+}
+
 .dataset-filter-ui{
     overflow-y: auto; 
     background: transparent; 
     border-radius: 8px;
-    position: absolute;
-    top: 272px;
-    bottom: 10px;
-    left: 381px;
+    position: relative;
     z-index: 10;
     background-color: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);
@@ -1227,10 +1258,8 @@ const addTernaryLayerToMap = (data)=>{
     overflow-y: auto; 
     background: black; 
     border-radius: 8px;
-    position: absolute;
-    min-height: 21%;
-    top: 62px;
-    left: 381px;
+    position: relative;
+    min-height: 210px;
     z-index: 10;
     background-color: rgba(0,0,0,1);
     color: white;
@@ -1243,6 +1272,10 @@ const addTernaryLayerToMap = (data)=>{
 
 .animated-metadata-transform {
   transition: width 0.3s ease, left 0.3s ease;
+}
+
+.fill-height {
+  flex: 1;
 }
 
 </style>
