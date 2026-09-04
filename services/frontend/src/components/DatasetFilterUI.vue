@@ -15,7 +15,7 @@
         @addTernaryLayerToMap="addTernaryLayerToMap"
         @addLayerbyMapType="addCommuneTileLayer"
     ></DatasetUI>
-    <div v-show="filterInitiated==true && dataUiInitiated==false" class="main-container" :style="{ left: isMinimized ? '90px' : '382px' }">
+    <div v-show="filterInitiated==true && dataUiInitiated==false" class="main-container animated-transform" :style="{ left: isMinimized ? '90px' : '382px' }">
         
         <v-card 
             class="header mx-auto d-flex animated-transform" 
@@ -142,7 +142,7 @@
         </v-card>
         <v-card 
             v-show="filterInitiated==true" 
-            height="calc(100% - 250px)"
+            height="calc(100% - 230px)"
             class="dataset-filter-ui mx-auto text-left animated-transform d-flex flex-column"  
             width="371"
             >
