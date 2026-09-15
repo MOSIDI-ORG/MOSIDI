@@ -424,21 +424,28 @@ const backtoUnivariateMap = (indicatorName)=>{
 
 }
 const mapStylizationFromDeepLink = (colorPalette, datatype, indicatorName)=>{
-    indicatorStore.setIndicatorColorPalette(
-      {
-        colorPalette: colorPalette,
-        indicatorName: indicatorName
-      }
-    )
-     emit('mapStylization', indicatorName)
+
+    if (datatype==='indikator'){
+        indicatorStore.setIndicatorColorPalette(
+            {
+                colorPalette: colorPalette,
+                indicatorName: indicatorName
+            }
+        )
+        emit('mapStylization', indicatorName)
+    }
+    
 }   
 const assignColorPalette =  (colorPalette, datatype, indicatorName) => {
-    indicatorStore.setIndicatorColorPalette(
-      {
-        colorPalette: colorPalette,
-        indicatorName: indicatorName
-      }
-    )
+    if (datatype==='indikator'){
+        indicatorStore.setIndicatorColorPalette(
+            {
+                colorPalette: colorPalette,
+                indicatorName: indicatorName
+            }
+        )
+    }
+    
     emit('mapLegend', indicatorName)
     if (datatype === 'indikator') {
              emit(
