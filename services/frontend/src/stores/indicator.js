@@ -17,7 +17,8 @@ export const useIndicatorStore = defineStore ({
         this.indicatorArray[data.indicatorName]['type']=data.type,
         this.indicatorArray[data.indicatorName]['fill-opacity']=1,
         this.indicatorArray[data.indicatorName]['granularity']= data.granularity
-        
+        this.indicatorArray[data.indicatorName]['visualizationType'] = data.visualizationType
+
        },
        setIndicatorClassificationResults(payload){
         this.indicatorArray[payload.indicatorName]['classification_result']=payload.classification_result

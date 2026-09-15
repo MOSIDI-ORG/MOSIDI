@@ -5,7 +5,7 @@ import { useaddedDatasetsStore } from "@/stores/addedDatasets"
 
 export function useCartographyDeepLink({
   mapStylizationFromDeepLink,
-  changeLayerOpacity,
+  changeLayerOpacityFromDyyplink,
   setLayerPintProperty,
   addSecondIndicator
 }) {
@@ -23,30 +23,31 @@ export function useCartographyDeepLink({
   const parts = entry.split(":");
   const name = parts[0]?.trim();
   if (!name) return null;
-
-  const datatype = parts[1] || "indikator";
-  const granularity = parts[2]?.trim();
+  const maptype = parts[1];
+  const datatype = parts[2] || "indikator";
+  const granularity = parts[3]?.trim();
   // 2. Opacity check
-  const opacity = parts[3] !== undefined && !isNaN(Number(parts[3]))
-    ? Number(parts[3])
+  const opacity = parts[4] !== undefined && !isNaN(Number(parts[4]))
+    ? Number(parts[4])
     : 1;
 
   // 3. Palette logic: specifically look at index 3
   let palette = [];
-  if (parts[4]) {
-    palette = parts[4]
+  if (parts[5]) {
+    palette = parts[5]
       .split("|")
       .map(c => c.trim())
       .filter(Boolean)
       .map(c => c.startsWith('#') ? c : `#${c}`); // Ensure # is only added if missing
   }
   let secondIndicator
-  if(parts[5]){
-    secondIndicator= parts[5]?.trim()
+  if(parts[6]){
+    secondIndicator= parts[6]?.trim()
   }   
 
   return {
     name,
+    maptype,
     datatype,
     granularity,
     opacity,
@@ -70,16 +71,22 @@ async function applyUrlToStore() {
     const parsed = parseDatasetEntry(entry)
     if (!parsed) continue
 
-    const { name, datatype, granularity, opacity, palette, secondIndicator } = parsed
-
+    const { name, maptype, datatype, granularity, opacity, palette, secondIndicator } = parsed
     // WAIT HERE: Don't proceed until the store actually has this indicator
     //await waitForStore(name);
     if (palette.length && mapStylizationFromDeepLink) {
-      mapStylizationFromDeepLink(palette,datatype, name+'_'+granularity)
+      mapStylizationFromDeepLink(palette, datatype, name+'_'+granularity)
     }
 
-    if ((datatype=="Polygon" || datatype=="polygon" || datatype=="MultiPolygon" || datatype=="multipolygon") && changeLayerOpacity){
-      changeLayerOpacity(opacity, name+'_'+granularity)
+    if ((datatype=="Polygon" || datatype=="polygon" || datatype=="MultiPolygon" || datatype=="multipolygon") && changeLayerOpacityFromDyyplink) {
+      let styleProperty
+      if (maptype=="polygon"){
+        styleProperty = 'fill-opacity'
+      }
+      else if (maptype=="glyph"){
+        styleProperty = 'circle-opacity'
+      }
+      changeLayerOpacityFromDyyplink(opacity, name+'_'+granularity, styleProperty)
     }
     else if (datatype=="raster" && setLayerPintProperty){
       setLayerPintProperty(name+'_'+granularity, 'raster-opacity', opacity)

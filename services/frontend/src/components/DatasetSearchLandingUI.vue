@@ -29,7 +29,8 @@
         density="compact"
         :title="$t('dataset-search-landing.geo.title')"
         variant="text"
-        @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('geodata')" style="cursor: pointer;"
+        @click="addDatasets(),toggleFilterUI(),toggleDataUI(), activatedDatasetSearchComponent('geodata')"
+        style="cursor: pointer;"
         
     >
         
@@ -49,6 +50,31 @@
         </template>
         
     </v-card>
+    <v-card
+        class=" text-start"
+        density="compact"
+        :title="$t('dataset-search-landing.things.title')"
+        variant="text"
+        @click="addDatasets(), toggleFilterUI(), toggleDataUI(), activatedDatasetSearchComponent('SensorThings')" 
+        style="cursor: pointer;"
+    >
+        
+        <template #subtitle >
+            <div   style="white-space: normal; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; line-clamp: 2; -webkit-box-orient: vertical;"
+            >
+                {{ $t('dataset-search-landing.things.subtitle') }}
+            </div>
+            
+        </template>
+        <template #prepend>
+        <v-avatar >
+                <v-img width="20" src="icons/plus.svg" ></v-img>
+            </v-avatar>
+        
+
+        </template>
+        
+    </v-card>
 
           
 
@@ -56,9 +82,8 @@
 
 <script setup>
 import { useDatasetSearchStore } from '../stores/datasetSearch'
-import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
-const datasetSearchStore = useDatasetSearchStore()
 
+const datasetSearchStore = useDatasetSearchStore();
 
 const toggleDataUI = ()=>{
     datasetSearchStore.toggleDataUI({
@@ -78,7 +103,7 @@ const toggleFilterUI = ()=>{
     })
 }
 
-const activatedDatasetSearchComponent=(value)=>{
+const activatedDatasetSearchComponent=(value) => {
      datasetSearchStore.setActivatedDatasetSearch({
         activatedDatasetSearch : value
     })

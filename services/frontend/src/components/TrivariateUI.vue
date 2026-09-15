@@ -209,7 +209,7 @@
 </template>
 
 <script setup>
-import {ref, computed, watch, defineEmits} from "vue"
+import {ref, computed, watch, defineEmits, defineExpose} from "vue"
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { storeToRefs } from 'pinia'
 import { useIndicatorStore } from '@/stores/indicator'
@@ -234,7 +234,6 @@ watch(
                 const indicatorname = selectedDataset.value.replace(`_${granularity}`, '').replace(granularity, '')
                 const selectedYear = newVal.selectedYear
                 selectedIndicators.value = [{ indicatorname, granularity, selectedYear }]
-                console.log(selectedIndicators.value)
             }
             else {
                 selectedIndicators.value = indicatorArray.value[selectedDataset.value]?.ternaryData?.indicatorsInfo
@@ -410,7 +409,6 @@ const applyIndicators =async ()=>{
     const year3 = selectedIndicators.value[2].selectedYear
 
     const existingSourceId = selectedDataset.value
-
     const ternaryData = {
         ternaryData: data,
         granularity: gran,
@@ -422,6 +420,10 @@ const applyIndicators =async ()=>{
         ]
     }
     indicatorStore.setTernaryData(ternaryData)
+    addTernaryLayer(ternaryData)
+    
+}
+const addTernaryLayer = (ternaryData)=>{
     emit('addTernaryLayerToMap', ternaryData)
 }
 const removeIndicator = (index) => {
@@ -437,10 +439,12 @@ const clearIndicators = () => {
     }
     indicatorArray.value[selectedDataset.value].ternaryData = null
     emit("backtoUnivariateMap", selectedDataset.value)
-    console.log(indicatorArray.value[selectedDataset.value], "after clearing ternary data")
 
 }
 
+defineExpose({
+  applyIndicators
+})
 
 </script>
 

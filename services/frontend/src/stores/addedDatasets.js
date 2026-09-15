@@ -1,3 +1,4 @@
+import { DatasetTypes } from '@/utils/datasetTypes';
 import { defineStore } from 'pinia'
 
 export const useaddedDatasetsStore = defineStore ({
@@ -19,6 +20,9 @@ export const useaddedDatasetsStore = defineStore ({
               compositeKey = `${layerName}`;
             }
             else if(metadata.dct_type=='custom indikator'){
+              compositeKey = `${layerName}`;
+            }
+            else if(metadata.dct_type==DatasetTypes.SensorThings){
               compositeKey = `${layerName}`;
             }
             else {

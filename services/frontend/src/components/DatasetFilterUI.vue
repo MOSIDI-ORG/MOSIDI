@@ -13,12 +13,15 @@
         @addStyleLayerToMap="addStyleLayerToMap" 
         @customMapStylization="customMapStylization" 
         @addTernaryLayerToMap="addTernaryLayerToMap"
+        @addLayerbyMapType="addCommuneTileLayer"
     ></DatasetUI>
-    <div v-show="filterInitiated==true && dataUiInitiated==false">
+    <div v-show="filterInitiated==true && dataUiInitiated==false" class="main-container animated-transform" :style="{ left: isMinimized ? '90px' : '382px' }">
         
-        <v-card :style="{ left: isMinimized ? '90px' : '382px' }" class="header mx-auto d-flex align-center animated-transform" width="371">
-
-            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: var(--color-background, black); color: white;">
+        <v-card 
+            class="header mx-auto d-flex animated-transform" 
+            width="371"    
+        >
+            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{$t('dataset-filter.title')}}</span>
                     <v-spacer></v-spacer>
@@ -31,120 +34,116 @@
                     ></v-img>
                 </div>
 
-                <div style="padding: 8px;">
-                    <v-text-field
-                        :label="$t('dataset-filter.search')"
-                        prepend-inner-icon="mdi-magnify"
-                        class="expanding-search"
-                        filled
-                        outlined
-                        density="compact"
-                        clearable
-                        dense
-                        single-line
-                        hide-details
-                        v-model="layerSearchText"
-                    >
-                    </v-text-field>
-                            
-                </div>
-                <div class="mb-4 ml-2 mr-2"  >
-                    <v-row no-gutters>
-                       
-                        <v-col>
-                            <v-select
-                                :items="datasetCategories"
-                                :item-title="'label'"
-                                :item-value="'value'"
-                                :label="$t('dataset-filter.filter-label.category')"
-                                dense
-                                outlined
-                                density="compact"
-                                single-line
-                                hide-details
-                                rounded
-                                solo                
-                                v-model="selectedDatasetCategory"
-                            ></v-select>
-                        </v-col>
-                        <v-col>
-                            <v-select
-                                :items=dataSources
-                                item-value="value"
-                                item-title="label"
-                                :label="$t('dataset-filter.filter-label.source')"
-                                dense
-                                outlined
-                                single-line
-                                density="compact"
-                                hide-details
-                                rounded
-                                solo 
-                                v-model="selectedDatasetSource"
-                            >
-                               
-                            </v-select>
-                        </v-col>
+                <div v-if="!isLoading[activatedDatasetSearch]">
+                    <div style="padding: 8px;">
+                        <v-text-field
+                            :label="$t('dataset-filter.search')"
+                            prepend-inner-icon="mdi-magnify"
+                            class="expanding-search"
+                            filled
+                            outlined
+                            density="compact"
+                            clearable
+                            dense
+                            single-line
+                            hide-details
+                            v-model="layerSearchText"
+                        >
+                        </v-text-field>
+
+                    </div>
+                    <div v-show="activatedDatasetSearch != DatasetTypes.SensorThings" class="mb-4 ml-2 mr-2"  >
+                        <v-row no-gutters>
                         
-                       
-                    </v-row>
-                    <v-row no-gutters>
-                        <v-col>
-                            <v-select
-                                :items=geometryTypes
-                                item-value="value"
-                                item-title="label"
-                                :label="$t('dataset-filter.filter-label.geometry')"
-                                dense
-                                outlined
-                                single-line
-                                hide-details
-                                rounded
-                                 density="compact"
-                                solo 
-                                v-model="selectedGeometryTypee"
-                            >
-                            
-                        </v-select>
-                        </v-col>
-                        <v-col>
-                            <v-select
-                                :items=availableYearsForIndicatorFilter
-                                item-value="value"
-                                item-title="label"
-                                :label="$t('dataset-filter.filter-label.time')"
-                                dense
-                                outlined
-                                single-line
-                                hide-details
-                                rounded
-                                 density="compact"
-                                solo 
-                                v-model="selectedYearIndicatorFilter"
-                            >
-                                
+                            <v-col>
+                                <v-select
+                                    :items="datasetCategories"
+                                    :item-title="'label'"
+                                    :item-value="'value'"
+                                    :label="$t('dataset-filter.filter-label.category')"
+                                    dense
+                                    outlined
+                                    density="compact"
+                                    single-line
+                                    hide-details
+                                    rounded
+                                    solo                
+                                    v-model="selectedDatasetCategory"
+                                ></v-select>
+                            </v-col>
+                            <v-col>
+                                <v-select
+                                    :items=dataSources
+                                    item-value="value"
+                                    item-title="label"
+                                    :label="$t('dataset-filter.filter-label.source')"
+                                    dense
+                                    outlined
+                                    single-line
+                                    density="compact"
+                                    hide-details
+                                    rounded
+                                    solo 
+                                    v-model="selectedDatasetSource"
+                                >
+
+                                </v-select>
+                            </v-col>
+
+                        
+                        </v-row>
+                        <v-row no-gutters>
+                            <v-col>
+                                <v-select
+                                    :items=geometryTypes
+                                    item-value="value"
+                                    item-title="label"
+                                    :label="$t('dataset-filter.filter-label.geometry')"
+                                    dense
+                                    outlined
+                                    single-line
+                                    hide-details
+                                    rounded
+                                     density="compact"
+                                    solo 
+                                    v-model="selectedGeometryTypee"
+                                >
+
                             </v-select>
-                        </v-col>
-                    </v-row>
+                            </v-col>
+                            <v-col>
+                                <v-select
+                                    :items=availableYearsForIndicatorFilter
+                                    item-value="value"
+                                    item-title="label"
+                                    :label="$t('dataset-filter.filter-label.time')"
+                                    dense
+                                    outlined
+                                    single-line
+                                    hide-details
+                                    rounded
+                                     density="compact"
+                                    solo 
+                                    v-model="selectedYearIndicatorFilter"
+                                >
+
+                                </v-select>
+                            </v-col>
+                        </v-row>
+                    </div>
+                </div>
+                <div v-if="isLoading[activatedDatasetSearch]" class="d-flex align-center justify-center" style="height:50%;">
+                    <div class="d-flex align-center">
+                        <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
+                        <span>Loading datasets...</span>
+                    </div>
                 </div>
             </v-card>
-        
-
-        </v-card>
-        <v-card
-            v-if="isLoading"
-            :style="{ left: isMinimized ? '90px' : '382px' }"
-            class="header mx-auto d-flex align-center justify-center animated-transform"
-            width="371"
-            style="background-color: var(--color-background, black); color: white; padding: 16px;"
-        >
-            <v-progress-circular indeterminate color="white" size="24" class="mr-3" />
-            <span>Loading datasets...</span>
         </v-card>
         <v-card 
-            :style="{ left: isMinimized ? '90px' : '382px' }" 
             v-show="filterInitiated==true" 
-            class="dataset-filter-ui mx-auto text-left animated-transform"  
+            height="calc(100% - 230px)"
+            class="dataset-filter-ui mx-auto text-left animated-transform d-flex flex-column"  
             width="371"
             >
 
@@ -157,7 +156,7 @@
                     :items="filteredItems"
                     :item-height="88"
                     height="calc(100% - 30px)"
-                    style="background-color: transparent;"
+                    style="background-color: transparent; flex: 1"
                 >
                 <template v-slot:default="{ item, index }">
                     <v-list-item
@@ -256,13 +255,21 @@
                 v-if="customIndicatorUI==true"
         ></CustomIndicatorUI>
     </v-card>
-    <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && metadataUI==true" class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
+    <v-card 
+        :style="cardLeftPosition"
+        v-show="(metadataUI || dialog)" 
+        class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371"
+    >
+        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{ $t('dataset-filter.metadata.title') }}
                    
                         
-                    {{ selectedLayerName?.length> 15 ? selectedLayerName.substring(0,15) + '...': selectedLayerName }}
+                   {{
+                    (metadataUI ? selectedLayerName : tablename)?.length > 15
+                        ? (metadataUI ? selectedLayerName : tablename).substring(0, 15) + '...'
+                        : (metadataUI ? selectedLayerName : tablename)
+                    }}
                 </span>
                 <v-spacer></v-spacer>
                 <v-img 
@@ -270,16 +277,16 @@
                     max-height="40"
                     max-width="40"
                     style="cursor: pointer;"
-                    @click="metadataUI=false"
+                    @click="metadataUI=false; dialog = false"
                 ></v-img>
             </div>
             
                 
         </v-card>
-        <MetadataUI
-            :metadata="selectedLayerMetadata"
-            :layer-name="selectedLayerName"
-            v-if="metadataUI==true"
+       <MetadataUI
+            :metadata="metadataUI ? selectedLayerMetadata : metadataa"
+            :layer-name="metadataUI ? selectedLayerName : tablename"
+            v-if="dialog || metadataUI"
         />
     </v-card>
 </div>
@@ -289,8 +296,9 @@
 <script setup>
 import { onMounted, ref, computed, defineEmits, watch, nextTick } from 'vue';
 import {getTableMetadata, getIndicatorData, classification, externalLayerFromDB} from "../services/backend.calls";
+import { getObservedProperties } from '@/services/frost.service';
 import { useDatasetSearchStore } from '../stores/datasetSearch'
-//import { useMetadataDialogStore } from '../stores/metadataDialog'
+import { useMetadataDialogStore } from '../stores/metadataDialog'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useLineStyleStore } from '../stores/lineStyle'
 import { useAlertStore } from '@/stores/alert'
@@ -305,6 +313,7 @@ import { usePointStyleStore } from '../stores/pointStyle'
 import { usePolygonStyleStore } from '../stores/polygonStyle'
 import { useIndicatorStore } from '@/stores/indicator'
 import { createHistogram } from '../utils/histogram';
+import { DatasetTypes } from '@/utils/datasetTypes';
 import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
 //import { isValidURL } from '../utils/isValidURL';
@@ -313,19 +322,18 @@ import IconCirclePlus from '@/components/icons/IconCirclePlus.vue';
 import IconCircleCalculate from '@/components/icons/IconCircleCalculate.vue';
 import IconInformation from '@/components/icons/IconInformation.vue'; 
 import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
-
+import { convertToMetadata } from '@/utils/MetadataConverter';
 
 let { isMinimized } = storeToRefs(useMenuStore())
-const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressionByYear","addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleLayerToMap", "addExternaWMSLayerToMap","addTernaryLayerToMap"]);
+const emit = defineEmits(["updateDeckglLayer","addDeckglLayer","addStyleExpressionByYear","addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "setLayerPintProperty", "setLayerLayoutProperty", "addStyleLayerToMap", "addExternaWMSLayerToMap","addTernaryLayerToMap", "addSensorThingsLayerToMap"]);
 
-let {  filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
-
+let { filterInitiated, dataUiInitiated, activatedDatasetSearch } = storeToRefs(useDatasetSearchStore())
 
 let externalWMSLayers = ref([])
 let { circleStyleParams } = storeToRefs(usePointStyleStore())
 let { polygonStyleParams } = storeToRefs(usePolygonStyleStore())
 let {  lineStyleParams } = storeToRefs(useLineStyleStore())
-//const { metadataa, tablename } = storeToRefs(useMetadataDialogStore())
+const { metadataa, tablename, dialog } = storeToRefs(useMetadataDialogStore())
 
 
 let layerType = ref(null)
@@ -369,23 +377,94 @@ let selectedDatasetSource = ref(null)
 let selectedLayerMetadata = ref(null)
 let selectedLayerName= ref(null)
 let selectedYearIndicatorFilter = ref(null)
-let isLoading = ref(true)
+let isLoading = ref({
+    indicator: true,
+    geodata: true,
+    SensorThings: true
+})
 //let availableYearsForIndicatorFilter =ref(null)
 
+
 onMounted(async()=>{
-    //tableMetadataRequest()
-    //getExternalWMSLayers()
     const deepLink = useIndicatorDeepLink(addLayerToMap)
 
-    await Promise.all([
-    tableMetadataRequest(),
-    getExternalWMSLayers()
-  ])
+    // Internal Request
+    doTableMetadatRequest();
+    doExternalWMSLayersRequest();
+
     await nextTick()
     deepLink.attach()
-    isLoading.value = false 
 
+
+    // External Requests/ APIs
+    await Promise.all([
+        observedPropertiesRequest()
+    ]).then(
+        isLoading.value.SensorThings = false
+    ).catch(err =>
+        console.log(err)
+    )
 })
+
+const doTableMetadatRequest = async() => {
+    await Promise.all([
+        tableMetadataRequest()
+    ]).then(() => {
+        // Sort metadata after request is done
+        tableMetadata.value.sort((a, b) =>
+            a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
+        )
+
+        isLoading.value.indicator = false
+    }).catch(err => 
+        console.log(err)
+    )
+}
+
+const doExternalWMSLayersRequest = async() => {
+    await Promise.all([
+        getExternalWMSLayers()
+    ]).then(() => {
+        isLoading.value.geodata = false
+    }).catch(err =>
+        console.log(err)
+    );
+}
+
+const cardLeftPosition = computed(() => {
+  // 1. Check your most specific condition first
+  if (isMinimized.value && !filterInitiated.value) {
+    return { left: '100px' };
+  }
+
+  // 2. Check the next condition
+  if (isMinimized.value) {
+    return { left: '461px' };
+  }
+  if (dialog.value == true && filterInitiated.value ==false && dataUiInitiated.value ==false) {
+    return { left: '382px' };
+  }
+if (dialog.value == true && dataUiInitiated.value ==true) {
+    return { left: '753px' };
+  }
+
+
+  // 3. Default fallback
+  return { left: '753px' };
+});
+
+watch(dialog, (newDialogValue) => {
+  if (newDialogValue && metadataUI.value) {
+    metadataUI.value = false;
+  }
+});
+
+// 2. When metadataUI opens, close dialog
+watch(metadataUI, (newMetadataValue) => {
+  if (newMetadataValue && dialog.value) {
+    dialog.value = false;
+  }
+});
 
 // reset the selected filter when toggling the activatedDatasetSearch (geodata and indicator)
 watch(activatedDatasetSearch, () => {
@@ -410,9 +489,11 @@ const filteredItems = computed(() => {
             : true;
         const preFilterDatasetType = (() => {
             if (activatedDatasetSearch.value === 'indicator') {
-                return item.dct_type === 'indikator';
+                return item.dct_type === DatasetTypes.Indicator;
             } else if (activatedDatasetSearch.value === 'geodata') {
-                return item.dct_type === 'raster';
+                return item.dct_type === DatasetTypes.Raster;
+            } else if (activatedDatasetSearch.value === DatasetTypes.SensorThings) {
+                return item.dct_type === DatasetTypes.SensorThings
             } else {
                 return true; 
             }
@@ -439,11 +520,11 @@ const filteredItems = computed(() => {
 
 const getIcon = (title, index, geomType, granularity)=> {
     let layerName = title+'_'+granularity
-        if (addedDatasetsStore.addedLayers[layerName]) {
+    if (addedDatasetsStore.addedLayers[layerName]) {
         return 'icons/check.svg'; 
-      } else if (hoveredItem.value === index) {
+    } else if (hoveredItem.value === index) {
         return 'icons/plus.svg'; 
-      } else {
+    } else {
         if (geomType=='Point'){
             return 'icons/point-blue.svg';
         }
@@ -452,12 +533,17 @@ const getIcon = (title, index, geomType, granularity)=> {
         }
         else if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
             return 'icons/polygon-blue.svg';
-      }
-      else {
+        }
+        else {
             return 'icons/raster.svg';
         }
-      }
-  }
+    }
+}
+
+
+/**
+ * Hides this component on clicking close
+ */
 const toggleFilterUI = ()=>{
     datasetSearchStore.toggleFilter({
         filterInitiated : false
@@ -467,10 +553,21 @@ const toggleFilterUI = ()=>{
 const tableMetadataRequest = async () => {
   const response = await getTableMetadata()
 
-  tableMetadata.value = deduplicateMetadata(response).sort((a, b) =>
+  tableMetadata.value.push(...deduplicateMetadata(response).sort((a, b) =>
     a.dct_title.localeCompare(b.dct_title, 'de', { sensitivity: 'base' })
-  )
+  ));
 }
+
+const observedPropertiesRequest = async () => {
+    const response = await getObservedProperties();
+    let observedProperties = [];
+    response.forEach(item => {
+        observedProperties.push(convertToMetadata(item))
+    })
+    tableMetadata.value.push( ...observedProperties);
+    datasetSearchStore.addTableMetadata(response);
+}
+
 // reactive filtered metadata based on activatedDatasetSearch
 const filteredMeta = computed(() => {
   if (!tableMetadata.value) return []
@@ -576,22 +673,21 @@ const availableYearsForIndicatorFilter = computed(() => {
 })
 
 
-
-
-const showLayerMetadata= (layerName, granularity)=>{
+const showLayerMetadata= (layerName, granularity)=> {
     
     selectedLayerMetadata.value = tableMetadata.value.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     selectedLayerName.value = layerName
     //metadataDialogStore.assignMetadata(selectedLayerMetadata.value,layerName)
     metadataUI.value= true
 }
-const addLayerToMap = async (layerName,geomType, granularity)=>{    
-    
+const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{    
+
     if (geomType=='raster'){
         let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
         addExternaWMSLayerToMap(item)
         
     }
+
     let selectedLayerMetadata = tableMetadata.value.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})
     if (selectedLayerMetadata?.dct_type==='table'){
@@ -599,10 +695,10 @@ const addLayerToMap = async (layerName,geomType, granularity)=>{
     }
     else if(selectedLayerMetadata?.dct_type==='indikator'){
         selectedIndicator.value = layerName
-        
+        await getIndicator(selectedIndicator.value, selectedLayerMetadata.dcatde_politicalgeocodingleveluri, mapType);
         await addCommuneTileLayer(layerName+'_'+granularity, selectedLayerMetadata.dcatde_politicalgeocodingleveluri);
         emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
-        await getIndicator(selectedIndicator.value, selectedLayerMetadata.dcatde_politicalgeocodingleveluri);
+        
         for(let layer in  addedDatasetsStore.addedLayers){
             
             if (layer!=layerName){
@@ -610,7 +706,9 @@ const addLayerToMap = async (layerName,geomType, granularity)=>{
             }
               
         }
-        //addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})       
+        //addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})             
+    } else if (selectedLayerMetadata?.dct_type == DatasetTypes.SensorThings) {
+        emit("addSensorThingsLayerToMap", selectedLayerMetadata);
     }
    
 
@@ -646,15 +744,37 @@ const addExternaWMSLayerToMap=(item)=>{
 
 
 const addCommuneTileLayer = async (layerName, layerNameInDatabase) => {
-    style.value= {
-        'fill-color': '#0080ff',
-        'fill-opacity': 1,
-        'fill-outline-color': 'grey'
+    const visualizationType = indicatorStore?.indicatorArray[datasetSearchStore?.selectedDataset]?.visualizationType
+    let layernameInDatabase = layerNameInDatabase
+    if (visualizationType === "polygon") {
+
+        style.value = {
+            'fill-color': '#0080ff',
+            'fill-opacity': 1,
+            'fill-outline-color': 'grey'
+        };
+
+        layerType.value = "fill";
+        layout.value = {};
+        layernameInDatabase = layerNameInDatabase
+
+    } else if (visualizationType === "glyph") {
+        style.value = {
+            'circle-color': '#0080ff',
+            'circle-radius': 6,
+            'circle-opacity': 1,
+            'circle-stroke-color': '#ffffff',
+            'circle-stroke-width': 1
+        };
+
+        layerType.value = "circle";
+        layout.value = {};
+        layernameInDatabase = layerNameInDatabase+'_centroid'
+
     }
-    layout.value = {}
-    layerType.value="fill"
+
     let layerSpecification = {
-        layerNameInDatabase: layerNameInDatabase,
+        layerNameInDatabase: layernameInDatabase,
         id: 'kommunales_gebiet_dashboard' + layerName,
         style: style,
         layout: layout,
@@ -664,7 +784,8 @@ const addCommuneTileLayer = async (layerName, layerNameInDatabase) => {
     emit("addLayerToMap", layerSpecification);
     isCommuneLayerAdded.value=true
 };
-const getIndicator = async (indicatorName, granularity) => {
+const getIndicator = async (indicatorName, granularity, mapType) => {
+    let visualizationType = mapType? mapType : 'polygon'
     progressStore.setProgressBar({
         text: `Abrufen des ${indicatorName} ...`,
         progress: true
@@ -677,13 +798,14 @@ const getIndicator = async (indicatorName, granularity) => {
         selectedYear: indocatorData.availabeYears[0][0].at(-1),
         colorPalette: colorbrewer.default.RdPu[5],
         granularity: granularity,
+        visualizationType: visualizationType,
         type: "indikator"
     })
     datasetSearchStore.setSelecteddatasetName({
-            selectedDataset: indicatorName+'_'+granularity
+        selectedDataset: indicatorName+'_'+granularity
     })
     datasetSearchStore.setSelecteddatasetType({
-            selectedDatasetType: "indikator"
+        selectedDatasetType: "indikator"
     })
     
 
@@ -752,51 +874,77 @@ const classify = async(indicatorName) => {
     })
 
 }
-const mapStylization = (indicatorName) => {
+const mapStylization =  (indicatorName) => {
     selectedYear.value = []
     indicatorStore.indicatorArray[indicatorName].forEach(innerArray => {
         innerArray.forEach(subArray => {
-        selectedYear.value.push(...subArray.filter(item => item.zeitbezug === indicatorStore.indicatorArray[indicatorName].selectedYear));
+            selectedYear.value.push(...subArray.filter(item => item.zeitbezug === indicatorStore.indicatorArray[indicatorName].selectedYear));
         });
     });
+
     ////////////////////// ** stylization ** /////////////////
-    // Build a GL expression that defines the color for every pg_tileserve (vector tile) feature
-    matchExpression = ['match', ['get', 'nationalco']];
+    // 1. Initialize two distinct match expressions
+    const colorMatchExpression = ['match', ['get', 'nationalco']];
+    const radiusMatchExpression = ['match', ['get', 'nationalco']];
+
     classification_result.value = indicatorStore.indicatorArray[indicatorName].classification_result
     selectedColorPalette.value = indicatorStore.indicatorArray[indicatorName]['colorPalette']
 
+    // Define pixel sizes for your circle radius based on classification intervals (Class 1 to Class 5)
+    const radiusSteps = [2, 3, 5, 8, 13]; 
 
     // conditions for each communale gebiete code
     for (const row of selectedYear.value) {
         const value = row['wert'];
        
         let color;
+        let radius;
 
         if (value <= classification_result.value?.intervals[0]) {
-            //color = '#feebe2'; // Class 1
-            color = selectedColorPalette.value[0]
-            //color = colorbrewer.default.selectedColorPalette.value.title
+            color = selectedColorPalette.value[0];
+            radius = radiusSteps[0];
         } else if (value <= classification_result.value?.intervals[1]) {
-            //color = '#fbb4b9'; // Class 2
-            color = selectedColorPalette.value[1]
+            color = selectedColorPalette.value[1];
+            radius = radiusSteps[1];
         } else if (value <= classification_result.value?.intervals[2]) {
-            //color = '#f768a1'; // Class 3
-            color = selectedColorPalette.value[2]
+            color = selectedColorPalette.value[2];
+            radius = radiusSteps[2];
         } else if (value <= classification_result.value?.intervals[3]) {
-            //color = '#c51b8a'; // Class 4
-            color = selectedColorPalette.value[3]
+            color = selectedColorPalette.value[3];
+            radius = radiusSteps[3];
         } else {
-            //color = '#7a0177'; // Class 5 (Default color)
-            color = selectedColorPalette.value[4]
+            color = selectedColorPalette.value[4];
+            radius = radiusSteps[4];
         }
-        matchExpression.push(row['kennziffer'].toString(), color);
+
+        // Push the identifier and the respective value to each stack
+        colorMatchExpression.push(row['kennziffer'].toString(), color);
+        radiusMatchExpression.push(row['kennziffer'].toString(), radius);
     }
 
-    // Last value is the default color, used where there is no data
-    matchExpression.push('rgba(169,169,169, 1)');
-    emit("addStyleExpressionByYear",'kommunales_gebiet_dashboard' + indicatorName , 'fill-color', matchExpression)
+    // Default values if no matching data is found
+    colorMatchExpression.push('rgba(169,169,169, 1)'); // Gray color fallback
+    radiusMatchExpression.push(2);                     // Small fallback size for missing data
+
+    const centroidLayerId = 'kommunales_gebiet_dashboard' + indicatorName;
+    const polygonLayerId = 'kommunales_gebiet_dashboard' + indicatorName;
+
+    
+
+
+    // 3. EMIT GLYPH STYLES (Circles - both color and radius)
+    if (indicatorStore.indicatorArray[indicatorName].visualizationType === "glyph") {
+        emit("addStyleExpressionByYear", centroidLayerId, 'circle-radius', radiusMatchExpression);
+        emit("addStyleExpressionByYear", centroidLayerId, 'circle-color', colorMatchExpression);
+
+    }
+    else {    
+        emit("addStyleExpressionByYear", polygonLayerId, 'fill-color', colorMatchExpression);
+
+    }
+
     indicatorStore.setColorPalette({
-            selectedColorPalette: selectedColorPalette.value
+        selectedColorPalette: selectedColorPalette.value
     })
     mapLegend(indicatorName)
 }
@@ -817,7 +965,8 @@ const addCustomLayer= (array,classes, formula, granularity)=>{
         availailableYearsForSelectedIndicator: [2024],
         selectedYear: 2024,
         colorPalette: colorbrewer.default.RdPu[5],
-        type: "custom indikator"
+        type: "custom indikator",
+        visualizationType: "polygon"
     })
     indicatorStore.setIndicatorClassificationResults({
             indicatorName: formula.value,
@@ -825,6 +974,10 @@ const addCustomLayer= (array,classes, formula, granularity)=>{
             classification_result_3_intervals: classes,
             classificationMethod: selectedClassificationMethod.value
         })
+        datasetSearchStore.setSelecteddatasetName({
+            selectedDataset: formula.value
+        })
+    
     addCommuneTileLayer(formula.value, granularity)
     customMapStylization(array,classes, formula)
 }
@@ -939,17 +1092,31 @@ const toggleClickedLayer = (layerName, geomType) => {
             }
             layerType.value = "raster"
         }
+
+
         if (geomType=='Raster'){
             emit("addCoverageLayerToMap", layerName, layerType, style)
         }
         else {
-            let layerSpecification = {
-                layerNameInDatabase: layerName,
-                id: layerName,
-                style: style,
-                layerType: layerType,
-                sourceType: "vector_tile",
-                layout: layout
+            let layerSpecification;
+            if (addedDatasetsStore.addedLayers[layerName].dct_type == DatasetTypes.SensorThings) {
+                layerSpecification = {
+                    layerNameInDatabase: layerName,
+                    id: layerName,
+                    style: style,
+                    layerType: layerType,
+                    sourceType: "SensorThings",
+                    layout: layout
+                }
+            } else {
+                layerSpecification = {
+                    layerNameInDatabase: layerName,
+                    id: layerName,
+                    style: style,
+                    layerType: layerType,
+                    sourceType: "vector_tile",
+                    layout: layout
+                }
             }
             emit("addLayerToMap", layerSpecification);
         }
@@ -1038,14 +1205,18 @@ const addTernaryLayerToMap = (data)=>{
 </script>
 
 <style scoped>
+
+.main-container {
+    position: absolute;
+    top: 62px;
+    bottom: 10px;
+}
+
 .dataset-filter-ui{
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: transparent; 
     border-radius: 8px;
-    position: absolute;
-    top: 272px;
-    bottom: 10px;
-    left: 381px;
+    position: relative;
     z-index: 10;
     background-color: rgba(255,255,255,0.6);
     backdrop-filter: blur(5px);
@@ -1053,11 +1224,10 @@ const addTernaryLayerToMap = (data)=>{
     -moz-backdrop-filter: blur(5px);
     -ms-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2); 
-    
-   
 }
+
 .dataset-metadata-ui{
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: transparent; 
     border-radius: 8px;
     position: absolute;
@@ -1071,11 +1241,10 @@ const addTernaryLayerToMap = (data)=>{
     -moz-backdrop-filter: blur(5px);
     -ms-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2); 
-    
-   
 }
+
 .custom-formula-ui{
-    overflow-y: scroll; 
+    overflow-y: auto; 
     background: transparent; 
     border-radius: 8px;
     position: absolute;
@@ -1089,15 +1258,14 @@ const addTernaryLayerToMap = (data)=>{
     -moz-backdrop-filter: blur(5px);
     -ms-backdrop-filter: blur(5px);
     border: 1px solid rgba(0, 0, 0, 0.2); 
-    
-   
 }
+
 .header{
-    overflow-y: scroll;
+    overflow-y: auto; 
+    background: black; 
     border-radius: 8px;
-    position: absolute;
-    top: 62px;
-    left: 381px;
+    position: relative;
+    min-height: 210px;
     z-index: 10;
     background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
@@ -1107,7 +1275,13 @@ const addTernaryLayerToMap = (data)=>{
 .animated-transform {
   transition: width 0.3s ease, left 0.3s ease;
 }
+
 .animated-metadata-transform {
   transition: width 0.3s ease, left 0.3s ease;
 }
+
+.fill-height {
+  flex: 1;
+}
+
 </style>

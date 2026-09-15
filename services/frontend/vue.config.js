@@ -11,7 +11,16 @@ module.exports = defineConfig({
       rewrites: [
         { from: /^\/landing-page/, to: '/landing-page/index.html' }
       ]
-    }
+    },
+    // Enable Hot Reload
+    host: "0.0.0.0",
+    port: 8080,
+    watchFiles: {
+      paths: ["src/**/*"],
+      options: {
+        usePolling: true,
+      },
+    },
   },
   pages: {
     index: {

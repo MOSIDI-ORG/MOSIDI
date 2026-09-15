@@ -34,9 +34,10 @@ export function useIndicatorDeepLink(addLayerToMap) {
       datasetSearchStore.searchInitiated=true
     }
     for (const entry of entries) {
-      const [name, type, granularity] = entry.split(":")
-      if (!name || !type) continue
-        await addLayerToMap(name, type, granularity)
+      const [name, mapType, type, granularity] = entry.split(":")
+      if (!name || !mapType || !type) continue
+        //indicatorStore.indicatorArray[name]['visualizationType'] = mapType
+        await addLayerToMap(name, type, granularity, mapType)
      
     }
   }
@@ -69,9 +70,11 @@ export function useIndicatorDeepLink(addLayerToMap) {
 
   // ✅ addedLayers = [ { name: { geometry_type, ... } } ]
   const layersObj = addedDatasetsStore?.addedLayers
+   
   if (layersObj) {
     addedDatasets = Object.entries(layersObj).map(
       ([name, meta]) => {
+        const maptype = indicatorStore.indicatorArray[name]?.visualizationType || 'polygon'
         // 2. Extract opacity (using your 'fill-opacity' key)
         const opacity = indicatorStore.indicatorArray[name]?.['fill-opacity'] ?? 1
 
@@ -88,7 +91,7 @@ export function useIndicatorDeepLink(addLayerToMap) {
         const displayName = meta.dcatde_politicalgeocodingleveluri
         ? name.replace(`_${meta.dcatde_politicalgeocodingleveluri}`, '')
         : name.replace('_unknown', '');
-        return `${displayName}:${meta.geometry_type}:${meta.dcatde_politicalgeocodingleveluri}:${opacity}:${palette}:${secondIndicator}`
+        return `${displayName}:${maptype}:${meta.geometry_type}:${meta.dcatde_politicalgeocodingleveluri}:${opacity}:${palette}:${secondIndicator}`
 
         
       }
@@ -125,6 +128,7 @@ export function useIndicatorDeepLink(addLayerToMap) {
       () =>
         Object.entries(addedDatasetsStore.addedLayers ?? {}).map(([name]) => ({
           name,
+          maptype: indicatorStore.indicatorArray[name]?.visualizationType,
           opacity: indicatorStore.indicatorArray[name]?.['fill-opacity'],
           palette: indicatorStore.indicatorArray[name]?.colorPalette,
           secondIndicator: indicatorStore.indicatorArray[name]?.secondIndicatorName

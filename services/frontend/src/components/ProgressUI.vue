@@ -4,6 +4,9 @@
         align-content="center"
         justify="center"
       >
+        <v-col cols="12" class="d-flex justify-center mb-1">
+          <img src="icons/loading.svg" alt="Loading..." width="64" height="64" />
+        </v-col>
         <v-col
           class="text-subtitle-1 text-center"
           cols="12"
