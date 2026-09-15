@@ -385,26 +385,28 @@ let isLoading = ref({
 //let availableYearsForIndicatorFilter =ref(null)
 
 
-onMounted(async()=>{
-    const deepLink = useIndicatorDeepLink(addLayerToMap)
+onMounted(async () => {
+    const deepLink = useIndicatorDeepLink(addLayerToMap);
 
-    // Internal Request
-    doTableMetadatRequest();
-    doExternalWMSLayersRequest();
-
-    await nextTick()
-    deepLink.attach()
-
-
-    // External Requests/ APIs
+    // 1. Await both metadata and external WMS API requests so tableMetadata.value is populated
     await Promise.all([
-        observedPropertiesRequest()
-    ]).then(
-        isLoading.value.SensorThings = false
-    ).catch(err =>
-        console.log(err)
-    )
-})
+        doTableMetadatRequest(),
+        doExternalWMSLayersRequest()
+    ]);
+
+    // 2. Wait for DOM updates
+    await nextTick();
+
+    // 3. Attach and execute the deeplink now that tableMetadata is ready
+    deepLink.attach();
+
+    // 4. Trigger remaining background API requests
+    observedPropertiesRequest()
+        .then(() => {
+            isLoading.value.SensorThings = false;
+        })
+        .catch(err => console.log(err));
+});
 
 const doTableMetadatRequest = async() => {
     await Promise.all([
@@ -680,15 +682,19 @@ const showLayerMetadata= (layerName, granularity)=> {
     //metadataDialogStore.assignMetadata(selectedLayerMetadata.value,layerName)
     metadataUI.value= true
 }
-const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{    
+const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{
+    if (geomType === 'raster') {
+        const item = externalWMSLayers.value.find(
+            item => item.dct_title === layerName
+        );
 
-    if (geomType=='raster'){
-        let item = externalWMSLayers.value.find(item => item.dct_title === layerName)
-        addExternaWMSLayerToMap(item)
-        
+        if (item) {
+            addExternaWMSLayerToMap(item);
+        }
+
+        return;
     }
-
-    let selectedLayerMetadata = tableMetadata.value.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
+    let selectedLayerMetadata = tableMetadata?.value?.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})
     if (selectedLayerMetadata?.dct_type==='table'){
         toggleClickedLayer (layerName, geomType)

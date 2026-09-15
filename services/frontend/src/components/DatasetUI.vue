@@ -425,8 +425,6 @@ const backtoUnivariateMap = (indicatorName)=>{
 
 }
 const mapStylizationFromDeepLink = (colorPalette, datatype, indicatorName)=>{
-
-    if (datatype==='indikator'){
         indicatorStore.setIndicatorColorPalette(
             {
                 colorPalette: colorPalette,
@@ -434,18 +432,15 @@ const mapStylizationFromDeepLink = (colorPalette, datatype, indicatorName)=>{
             }
         )
         emit('mapStylization', indicatorName)
-    }
-    
 }   
 const assignColorPalette =  (colorPalette, datatype, indicatorName) => {
-    if (datatype==='indikator'){
+
         indicatorStore.setIndicatorColorPalette(
             {
                 colorPalette: colorPalette,
                 indicatorName: indicatorName
             }
         )
-    }
     
     emit('mapLegend', indicatorName)
     if (datatype === 'indikator') {
