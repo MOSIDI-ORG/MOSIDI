@@ -1,7 +1,7 @@
 <template>
     <v-card class="logo-ui">
         <small>Powered by</small><br />
-        <a href="https://www.mosidi.org" target="_blank"><v-img class="logo-img" src="icons/mosidi-logo.svg" width="80px"></v-img></a>
+        <a href="https://www.mosidi.de" target="_blank"><v-img class="logo-img" src="icons/mosidi-logo.svg" width="80px"></v-img></a>
     </v-card>
 </template>
 <script setup>
