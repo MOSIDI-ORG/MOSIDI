@@ -82,6 +82,7 @@
 
 <script setup>
 import { useDatasetSearchStore } from '../stores/datasetSearch'
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
 
 const datasetSearchStore = useDatasetSearchStore();
 
