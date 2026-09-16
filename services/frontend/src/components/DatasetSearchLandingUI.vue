@@ -16,8 +16,8 @@
             
         </template>
         <template #prepend>
-        <v-avatar >
-                <v-img width="20" src="icons/plus.svg" ></v-img>
+        <v-avatar>
+                <IconCirclePlus :size="40" />
             </v-avatar>
         
 
@@ -43,7 +43,7 @@
         </template>
         <template #prepend>
         <v-avatar>
-                <v-img width="20" src="icons/plus.svg" ></v-img>
+                <IconCirclePlus :size="40" />
             </v-avatar>
         
 
@@ -68,7 +68,7 @@
         </template>
         <template #prepend>
         <v-avatar >
-                <v-img width="20" src="icons/plus.svg" ></v-img>
+                <IconCirclePlus :size="40" />
             </v-avatar>
         
 
@@ -82,6 +82,7 @@
 
 <script setup>
 import { useDatasetSearchStore } from '../stores/datasetSearch'
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
 
 const datasetSearchStore = useDatasetSearchStore();
 
@@ -111,6 +112,7 @@ const activatedDatasetSearchComponent=(value) => {
 </script>
 
 <style scoped>
+
 .dataset-search-ui{
     overflow-y: scroll;
     background: transparent;

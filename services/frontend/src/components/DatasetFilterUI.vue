@@ -179,7 +179,13 @@
 
                     <template v-slot:prepend>
                         <v-avatar>
-                        <v-img 
+                        <IconCirclePlus
+                            v-if="getIcon(item.dct_title, index, item.geometry_type, item.dcatde_politicalgeocodingleveluri) === 'icons/plus.svg'"
+                            :size="40"
+                            style="cursor: pointer;"
+                        />
+                        <v-img
+                            v-else
                             :src="getIcon(item.dct_title, index, item.geometry_type, item.dcatde_politicalgeocodingleveluri)"
                             max-height="40"
                             max-width="40"
@@ -189,15 +195,15 @@
                     </template>
 
                     <template v-slot:append>
-                        <v-btn 
+                        <v-btn
                         v-show="hoveredItem === index"
-                        density="compact" 
-                        variant="text" 
-                        icon 
+                        density="compact"
+                        variant="text"
+                        icon
                         @click.stop="showLayerMetadata(item.dct_title, item.dcatde_politicalgeocodingleveluri), customIndicatorUI = false"
                         >
-                        <img src="icons/information.svg" alt="Information Icon" width="18" height="18" />
-                        </v-btn> 
+                        <IconInformation :size="18" />
+                        </v-btn>
                     </template>
                     </v-list-item>
                 </template>
@@ -214,10 +220,7 @@
             >
                 <template v-slot:prepend>
                 <v-avatar style="cursor: pointer;">
-                    <v-img 
-                    src="icons/calculate.svg" 
-                    
-                    />
+                    <IconCircleCalculate :size="40" />
                 </v-avatar>
                 </template>
             </v-list-item>
@@ -225,7 +228,7 @@
         
     </div>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
                     {{ $t('dataset-filter.custom.header') }}
@@ -314,7 +317,10 @@ import { DatasetTypes } from '@/utils/datasetTypes';
 import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
 //import { isValidURL } from '../utils/isValidURL';
-import { externalLayers } from '../assets/externalLayers'; 
+import { externalLayers } from '../assets/externalLayers';
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue';
+import IconCircleCalculate from '@/components/icons/IconCircleCalculate.vue';
+import IconInformation from '@/components/icons/IconInformation.vue'; 
 import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
 import { convertToMetadata } from '@/utils/MetadataConverter';
 
@@ -1267,9 +1273,9 @@ const addTernaryLayerToMap = (data)=>{
     position: relative;
     min-height: 210px;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .animated-transform {
