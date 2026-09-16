@@ -68,7 +68,7 @@
         </template>
         <template #prepend>
         <v-avatar >
-                <v-img width="20" src="icons/plus.svg" ></v-img>
+                <IconCirclePlus :size="40" />
             </v-avatar>
         
 
