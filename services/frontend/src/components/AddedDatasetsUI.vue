@@ -114,7 +114,7 @@
                             <v-list-item
                                    
                                 @click="getLayerExtentFromDB(addedLayer)"
-                                v-if="(addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table' || (addedLayer.dct_type==='raster' && addedLayer.dct_bbox!=undefined) || addedLayer.dct_type==='indikator') "
+                                v-if="(addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table' || (addedLayer.dct_type==='raster' && addedLayer.bbox) || addedLayer.dct_type==='indikator') "
                             >
                                 <template v-slot:prepend>
                                     <v-btn 
@@ -365,11 +365,12 @@ const getLayerExtentFromDB = async (addedLayer)=>{
         emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
     }
     else if (addedLayer.dct_type=='raster'){ 
+        console.log(addedLayer, "addedLayer")
         /* the bbox from WMS coming from metadate table in GeoJson format
         so it needs to be transfromed to Maplibre fitBounds format
         */
         try {
-            const geojson = addedLayer.dct_bbox;
+            /*const geojson = addedLayer.dct_bbox;
         
             const bbox = geojson?.coordinates?.[0]?.length 
             ? [
@@ -380,10 +381,12 @@ const getLayerExtentFromDB = async (addedLayer)=>{
               ]
             : null;
 
-
+        */
+       const bbox = addedLayer.bbox[0]
+       console.log(bbox, "bbox")
 
             if (bbox) {
-                emit("fitBoundsToBBOX", [bbox[0], bbox[1], bbox[2], bbox[3]])
+                emit("fitBoundsToBBOX", [bbox.miny, bbox.minx, bbox.maxy, bbox.maxx])
             }
 
         } catch (e) {
