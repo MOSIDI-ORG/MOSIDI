@@ -66,18 +66,19 @@ export async function getObservations(datastreamId, from = null, to = "now()", t
  * @returns all ObservedProperties
  */
 export async function getObservedProperties() {
-    try {
-        const response = await axios.get(
-            FROST_BASE_URL + "/ObservedProperties" +
-            "?$select=id,name,description" +
-            "&$top=1000",
-            getHeader()
-        );
-        return response.data.value;
-    } catch(error) {
-        console.error("Error fetching ObservedProperties from FROST");
-        throw error;
-    }
+  try {
+    const response = await axios.get(
+      FROST_BASE_URL + "/ObservedProperties" +
+      "?$select=id,name,description" +
+      "&$filter=Datastreams/any(d: true)" +
+      "&$top=1000",
+      getHeader()
+    );
+    return response.data.value;
+  } catch (error) {
+    console.error("Error fetching ObservedProperties from FROST");
+    throw error;
+  }
 }
 
 /**
