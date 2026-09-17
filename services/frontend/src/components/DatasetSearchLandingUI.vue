@@ -85,8 +85,6 @@ import { useDatasetSearchStore } from '../stores/datasetSearch'
 import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
 const datasetSearchStore = useDatasetSearchStore()
 
-const datasetSearchStore = useDatasetSearchStore();
-
 const toggleDataUI = ()=>{
     datasetSearchStore.toggleDataUI({
             dataUiInitiated : false
