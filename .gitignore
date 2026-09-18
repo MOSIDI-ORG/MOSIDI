@@ -8,4 +8,5 @@ services/frontend/.DS_Store
 services/frontend/dist
 services/frontend/.DS_Store
 services/.DS_Store
-agents.md
+services/frontend/.env.production
+services/frontend/.env.development
