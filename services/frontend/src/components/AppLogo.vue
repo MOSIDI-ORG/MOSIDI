@@ -1,8 +1,7 @@
 <template>
     <v-card class="logo-ui">
-        <v-img class="logo-img" src="icons/innowest.svg" width="80px"> 
-        </v-img>
-        
+        <small>Powered by</small><br />
+        <a href="https://www.mosidi.org" target="_blank"><v-img class="logo-img" src="icons/mosidi-logo.svg" width="80px"></v-img></a>
     </v-card>
 </template>
 <script setup>
@@ -25,7 +24,7 @@
     -ms-backdrop-filter: blur(5px);
 }
 .logo-img{
-    margin:10px
+    margin:0 10px 10px 10px;
 }
 
 </style>

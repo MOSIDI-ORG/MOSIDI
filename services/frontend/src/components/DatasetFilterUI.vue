@@ -21,7 +21,7 @@
             class="header mx-auto d-flex animated-transform" 
             width="371"    
         >
-            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: black; color: white;">
+            <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: var(--color-background, black); color: white;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{$t('dataset-filter.title')}}</span>
                     <v-spacer></v-spacer>
@@ -179,6 +179,11 @@
 
                     <template v-slot:prepend>
                         <v-avatar>
+                        <IconCirclePlus
+                            v-if="getIcon(item.dct_title, index, item.geometry_type, item.dcatde_politicalgeocodingleveluri) === 'icons/plus.svg'"
+                            :size="40"
+                            style="cursor: pointer;"
+                        />
                         <v-img 
                             :src="getIcon(item.dct_title, index, item.geometry_type, item.dcatde_politicalgeocodingleveluri)"
                             max-height="40"
@@ -196,7 +201,7 @@
                         icon 
                         @click.stop="showLayerMetadata(item.dct_title, item.dcatde_politicalgeocodingleveluri), customIndicatorUI = false"
                         >
-                        <img src="icons/information.svg" alt="Information Icon" width="18" height="18" />
+                        <IconInformation :size="18" />
                         </v-btn> 
                     </template>
                     </v-list-item>
@@ -214,10 +219,7 @@
             >
                 <template v-slot:prepend>
                 <v-avatar style="cursor: pointer;">
-                    <v-img 
-                    src="icons/calculate.svg" 
-                    
-                    />
+                    <IconCircleCalculate :size="40" />
                 </v-avatar>
                 </template>
             </v-list-item>
@@ -225,7 +227,7 @@
         
     </div>
     <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
                     {{ $t('dataset-filter.custom.header') }}
@@ -257,7 +259,7 @@
         v-show="(metadataUI || dialog)" 
         class="dataset-metadata-ui mx-auto text-left animated-metadata-transform"  width="371"
     >
-        <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
+        <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">{{ $t('dataset-filter.metadata.title') }}
                    
@@ -314,7 +316,10 @@ import { DatasetTypes } from '@/utils/datasetTypes';
 import { useMenuStore } from '../stores/menu'
 import CustomIndicatorUI from "@/components/CustomIndicatorUI.vue";
 //import { isValidURL } from '../utils/isValidURL';
-import { externalLayers } from '../assets/externalLayers'; 
+import { externalLayers } from '../assets/externalLayers';
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue';
+import IconCircleCalculate from '@/components/icons/IconCircleCalculate.vue';
+import IconInformation from '@/components/icons/IconInformation.vue'; 
 import { useIndicatorDeepLink } from "@/utils/useIndicatorDeepLink"
 import { convertToMetadata } from '@/utils/MetadataConverter';
 
@@ -1262,7 +1267,7 @@ const addTernaryLayerToMap = (data)=>{
 
 .header{
     overflow-y: auto; 
-    background: black; 
+    background: var(--color-background, black); 
     border-radius: 8px;
     position: relative;
     min-height: 210px;

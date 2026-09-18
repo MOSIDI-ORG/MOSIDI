@@ -105,12 +105,22 @@
 
                         <template v-slot:prepend>
                             <v-avatar>
-                                <v-img 
+                                <IconCirclePlus
+                                    v-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/plus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <IconCircleMinus
+                                    v-else-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/minus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <v-img
+                                    v-else
                                     :src="getIcon(metadata.dct_title, index, metadata.geometry_type)"
                                     max-height="40"
                                     max-width="40"
                                     style="cursor: pointer;"
-                                    
                                 ></v-img>
                             </v-avatar>
                         </template>
@@ -205,6 +215,8 @@ import { storeToRefs } from 'pinia'
 import { useIndicatorStore } from '@/stores/indicator'
 import {getIndicatorData} from "../services/backend.calls";
 import {getternaryDataFromDB} from "../services/backend.calls";
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
+import IconCircleMinus from '@/components/icons/IconCircleMinus.vue'
 const emit = defineEmits("addTernaryLayerToMap", "backtoUnivariateMap")
 const indicatorStore = useIndicatorStore()
 
@@ -446,12 +458,11 @@ defineExpose({
 }
 
 .header{
-    background: black; 
     position: sticky;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .dataset-filter-ui {

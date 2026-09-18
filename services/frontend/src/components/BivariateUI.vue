@@ -106,12 +106,22 @@
 
                         <template v-slot:prepend>
                             <v-avatar>
-                                <v-img 
+                                <IconCirclePlus
+                                    v-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/plus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <IconCircleMinus
+                                    v-else-if="getIcon(metadata.dct_title, index, metadata.geometry_type) === 'icons/minus.svg'"
+                                    :size="40"
+                                    style="cursor: pointer;"
+                                />
+                                <v-img
+                                    v-else
                                     :src="getIcon(metadata.dct_title, index, metadata.geometry_type)"
                                     max-height="40"
                                     max-width="40"
                                     style="cursor: pointer;"
-                                    
                                 ></v-img>
                             </v-avatar>
                         </template>
@@ -153,6 +163,8 @@ import { useBivariateStore } from '../stores/bivariate'
 import { useProgressStore } from '@/stores/progress'
 import { useI18n } from 'vue-i18n';
 import { useCartographyDeepLink } from "@/utils/useCartographyDeepLink"
+import IconCirclePlus from '@/components/icons/IconCirclePlus.vue'
+import IconCircleMinus from '@/components/icons/IconCircleMinus.vue'
 
 const datasetSearchStore = useDatasetSearchStore()
 
@@ -458,15 +470,15 @@ defineExpose({
     z-index: 10;
 }
 .bivariate-ui{
-     overflow-y: scroll; 
+     overflow-y: scroll;
      bottom: 100px;
 }
+
 .header{
-    background: black; 
     position: sticky;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 </style>

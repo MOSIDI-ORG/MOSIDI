@@ -100,13 +100,13 @@
                                     @click="showLayerMetadata(addedLayer)"
                             >
                                 <template v-slot:prepend>
-                                    <v-btn 
-                                        density="compact" 
-                                        variant="text" 
-                                        icon 
+                                    <v-btn
+                                        density="compact"
+                                        variant="text"
+                                        icon
                                     >
-                                        <img src="icons/information.svg" alt="Information Icon" width="18" height="18" />
-                                    </v-btn> 
+                                        <IconInformation :size="18" />
+                                    </v-btn>
                                     <v-list-item-title class="ml-3">{{ $t('added-datasets.metadata') }}</v-list-item-title>
                                 </template>
                                
@@ -225,6 +225,7 @@ import { useAlertStore } from '@/stores/alert'
 import { useMenuStore } from '../stores/menu'
 import { useProgressStore } from '@/stores/progress'
 import { useRoute } from "vue-router"
+import IconInformation from '@/components/icons/IconInformation.vue'
 
 const route = useRoute()
 
@@ -629,15 +630,14 @@ const exportData = async(layerName, type, exportType, granularity)=>{
 <style scoped>
 
 .header{
-    overflow-y: scroll; 
-    background: black; 
+    overflow-y: scroll;
     border-radius: 8px;
     position: absolute;
     top: 62px;
     left: 381px;
     z-index: 10;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
-    border: 1px solid rgba(0, 0, 0, 0.2); 
+    border: 1px solid rgba(0, 0, 0, 0.2);
 }
 </style>
