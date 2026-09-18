@@ -17,89 +17,207 @@
     </v-card>
     
     
-    <v-list v-show="Object.keys(addedLayers).length>0" lines="two" style="background-color:transparent;" class="ml-1 mr-1 text-left">
-           
-            <span v-show="isMinimized==false" style="font-size: 1rem; font-weight: 500;" class="ml-2">{{$t('added-datasets.dataset-count')}} ({{ Object.keys(addedLayers).length }})</span>
-            <v-divider style="margin-left: 15px; margin-right: 15px;"  class=" mt-1 mb-1"></v-divider>
+<v-list
+    v-show="Object.keys(addedLayers).length > 0"
+    lines="two"
+    style="background-color: transparent;"
+    class="ml-1 mr-1 text-left"
+>
+
+    <!-- Header -->
+    <span
+        v-show="!isMinimized"
+        style="font-size: 1rem; font-weight: 500;"
+        class="ml-2"
+    >
+        {{$t('added-datasets.dataset-count')}}
+        ({{ Object.keys(addedLayers).length }})
+    </span>
+
+    <v-divider
+        style="margin-left: 15px; margin-right: 15px;"
+        class="mt-1 mb-1"
+    ></v-divider>
+
+
+    <!-- draggable list (re-ordering added layers) -->
+    <draggable
+        v-model="orderedLayers"
+        item-key="_layerKey"
+        handle=".drag-handle"
+        animation="200"
+        ghost-class="drag-ghost"
+    >
+        <template #item="{ element: addedLayer, index }">
+
             <v-list-item
-               v-for="(addedLayer, index) in Object.keys(addedLayers).reverse().map(key => addedLayers[key])"
-                :key="addedLayer.dct_title"
+                :key="addedLayer._layerKey"
                 style="border-radius: 5px;"
-                @click="addDataUI(addedLayer.dct_title, addedLayer.dct_type,addedLayer.geometry_type, addedLayer.dcatde_politicalgeocodingleveluri )"
+                @click="addDataUI(
+                    addedLayer.dct_title,
+                    addedLayer.dct_type,
+                    addedLayer.geometry_type,
+                    addedLayer.dcatde_politicalgeocodingleveluri
+                )"
                 @mouseover="hoveredItem = index"
                 @mouseleave="hoveredItem = null"
             >
-           
-            <v-list-item-subtitle v-if="addedLayer.dct_type==='indikator'"  class="text-wrap text-caption">
-                {{ addedLayer.dcatde_politicalgeocodingleveluri }}, {{ formatAvailableYears(
-                    indicatorStore?.indicatorArray?.[addedLayer?.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]
-                        ?.availailableYearsForSelectedIndicator
-                    ) }}
-            </v-list-item-subtitle>
-            <v-list-item-title
-                v-show="!isMinimized"
-                class="text-wrap"
-            >
-            {{ addedLayer.dct_title }}
-            <span >
-                ({{ 
-                indicatorStore?.indicatorArray?.[addedLayer?.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.selectedYear
-                }})
-            </span>
-            </v-list-item-title>
-                <v-list-item-subtitle v-show="isMinimized==false" class="text-wrap text-caption" v-text="addedLayer.dct_catalog_publisher"></v-list-item-subtitle>
-                    <template v-slot:prepend>
-                        <v-avatar>
-                            <v-img 
-                                :src="getIcon(addedLayer.checked, addedLayer.geometry_type)"
-                                max-height="40"
-                                max-width="40"
-                                style="cursor: pointer;"
-                            ></v-img>
-                        </v-avatar>
-                    </template>
-                <template v-slot:append>
+
+                <template #prepend>
+
+                    <v-icon
+                        class="drag-handle mr-2"
+                        size="20"
+                    >
+                        mdi-drag-vertical
+                    </v-icon>
+
+                    <v-avatar>
+                        <v-img
+                            :src="getIcon(
+                                addedLayer.checked,
+                                addedLayer.geometry_type
+                            )"
+                            max-height="40"
+                            max-width="40"
+                        />
+                    </v-avatar>
+
+                </template>
+
+
+                <v-list-item-subtitle
+                    v-if="addedLayer.dct_type === 'indikator'"
+                    class="text-wrap text-caption"
+                >
+                    {{ addedLayer.dcatde_politicalgeocodingleveluri }},
+                    {{
+                        formatAvailableYears(
+                            indicatorStore?.indicatorArray?.[
+                                addedLayer.dct_title +
+                                '_' +
+                                addedLayer.dcatde_politicalgeocodingleveluri
+                            ]?.availailableYearsForSelectedIndicator
+                        )
+                    }}
+                </v-list-item-subtitle>
+
+
+                <v-list-item-title
+                    v-show="!isMinimized"
+                    class="text-wrap"
+                >
+                    {{ addedLayer.dct_title }}
+
+                    <span>
+                        ({{
+                            indicatorStore?.indicatorArray?.[
+                                addedLayer.dct_title +
+                                '_' +
+                                addedLayer.dcatde_politicalgeocodingleveluri
+                            ]?.selectedYear
+                        }})
+                    </span>
+                </v-list-item-title>
+
+
+                <v-list-item-subtitle
+                    v-show="!isMinimized"
+                    class="text-wrap text-caption"
+                >
+                    {{ addedLayer.dct_catalog_publisher }}
+                </v-list-item-subtitle>
+
+
+                <template #append>
+
                     <v-menu
-                     
                         activator="parent"
                         offset-y
                         close-on-click
                         close-on-content-click
                     >
-                        <template v-slot:activator="{ props }">
-                            <v-btn 
-                                v-show="isMinimized==false"
+
+                        <template #activator="{ props }">
+
+                            <v-btn
+                                v-show="!isMinimized"
                                 v-bind="props"
-                                density="compact" 
-                                variant="text" 
-                                icon 
+                                density="compact"
+                                variant="text"
+                                icon
                             >
-                                <img src="icons/ellipsis-vertical.svg" alt="More Options Icon" width="30" height="30" />
+                                <img
+                                    src="icons/ellipsis-vertical.svg"
+                                    alt="More Options Icon"
+                                    width="30"
+                                    height="30"
+                                />
                             </v-btn>
+
                         </template>
 
-                        <!-- Menu Content -->
-                        <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
+
+                        <v-list
+                            style="
+                                border-radius: 8px;
+                                border: 1px solid rgba(0, 0, 0, 0.2);
+                            "
+                        >
+
+                            <!-- SHOW / HIDE -->
                             <v-list-item
-                                    @click="toggleLayerVisibility(addedLayer)"
-                                    v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table'"
+                                v-if="
+                                    addedLayers[
+                                        addedLayer.dct_title +
+                                        '_' +
+                                        addedLayer.dcatde_politicalgeocodingleveluri
+                                    ]?.dct_type === 'table'
+                                "
+                                @click.stop="toggleLayerVisibility(addedLayer)"
                             >
-                                <template v-slot:prepend>
-                                    <v-btn 
-                                        density="compact" 
-                                        variant="text" 
-                                        icon 
+                                <template #prepend>
+                                    <v-btn
+                                        density="compact"
+                                        variant="text"
+                                        icon
                                     >
-                                        <img :src="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['checked']? 'icons/eye-close.svg':'icons/eye-open.svg'" alt="Information Icon" width="18" height="18" />
-                                    </v-btn> 
-                                    <v-list-item-title class="ml-3"> {{addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]['checked']?$t('added-datasets.hide'):$t('added-datasets.show')}}</v-list-item-title>
+                                        <img
+                                            :src="
+                                                addedLayers[
+                                                    addedLayer.dct_title +
+                                                    '_' +
+                                                    addedLayer.dcatde_politicalgeocodingleveluri
+                                                ]?.checked
+                                                    ? 'icons/eye-close.svg'
+                                                    : 'icons/eye-open.svg'
+                                            "
+                                            alt="Visibility Icon"
+                                            width="18"
+                                            height="18"
+                                        />
+                                    </v-btn>
+
+                                    <v-list-item-title class="ml-3">
+                                        {{
+                                            addedLayers[
+                                                addedLayer.dct_title +
+                                                '_' +
+                                                addedLayer.dcatde_politicalgeocodingleveluri
+                                            ]?.checked
+                                                ? $t('added-datasets.hide')
+                                                : $t('added-datasets.show')
+                                        }}
+                                    </v-list-item-title>
                                 </template>
-                               
                             </v-list-item>
+
+
+                            <!-- METADATA -->
                             <v-list-item
-                                    @click="showLayerMetadata(addedLayer)"
+                                @click.stop="showLayerMetadata(addedLayer)"
                             >
-                                <template v-slot:prepend>
+                                <template #prepend>
                                     <v-btn
                                         density="compact"
                                         variant="text"
@@ -107,105 +225,197 @@
                                     >
                                         <IconInformation :size="18" />
                                     </v-btn>
-                                    <v-list-item-title class="ml-3">{{ $t('added-datasets.metadata') }}</v-list-item-title>
+
+                                    <v-list-item-title class="ml-3">
+                                        {{ $t('added-datasets.metadata') }}
+                                    </v-list-item-title>
                                 </template>
-                               
                             </v-list-item>
+
+
+                            <!-- ZOOM -->
                             <v-list-item
-                                   
-                                @click="getLayerExtentFromDB(addedLayer)"
-                                v-if="(addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type=='table' || (addedLayer.dct_type==='raster' && addedLayer.bbox) || addedLayer.dct_type==='indikator') "
+                                v-if="
+                                    addedLayers[
+                                        addedLayer.dct_title +
+                                        '_' +
+                                        addedLayer.dcatde_politicalgeocodingleveluri
+                                    ]?.dct_type === 'table'
+                                    ||
+                                    (
+                                        addedLayer.dct_type === 'raster'
+                                        &&
+                                        addedLayer.bbox
+                                    )
+                                    ||
+                                    addedLayer.dct_type === 'indikator'
+                                "
+                                @click.stop="getLayerExtentFromDB(addedLayer)"
                             >
-                                <template v-slot:prepend>
-                                    <v-btn 
-                                        density="compact" 
-                                        variant="text" 
-                                        icon 
+                                <template #prepend>
+                                    <v-btn
+                                        density="compact"
+                                        variant="text"
+                                        icon
                                     >
-                                        <img src="icons/search.svg" alt="Information Icon" width="18" height="18" />
-                                    </v-btn> 
-                                    <v-list-item-title class="ml-3">{{ $t('added-datasets.zoom') }}</v-list-item-title>
+                                        <img
+                                            src="icons/search.svg"
+                                            alt="Zoom Icon"
+                                            width="18"
+                                            height="18"
+                                        />
+                                    </v-btn>
+
+                                    <v-list-item-title class="ml-3">
+                                        {{ $t('added-datasets.zoom') }}
+                                    </v-list-item-title>
                                 </template>
                             </v-list-item>
-                            <!-- TODO: What if dcatde_politicalgeocodingleveluri is undefined? -->
+
+
+                            <!-- REMOVE -->
                             <v-list-item
                                 v-show="route?.query?.mode === 'edit'"
-                                @click="addedLayer.dct_type==='raster' || addedLayer.dct_type === DatasetTypes.SensorThings ? removeLayer(addedLayer.dct_title, addedLayer.dct_type): removeLayer(addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri, addedLayer.dct_type)"
+                                @click.stop="
+                                    addedLayer.dct_type === 'raster'
+                                    ||
+                                    addedLayer.dct_type === DatasetTypes.SensorThings
+                                        ? removeLayer(
+                                            addedLayer.dct_title,
+                                            addedLayer.dct_type
+                                        )
+                                        : removeLayer(
+                                            addedLayer.dct_title +
+                                            '_' +
+                                            addedLayer.dcatde_politicalgeocodingleveluri,
+                                            addedLayer.dct_type
+                                        )
+                                "
                             >
-                                <template v-slot:prepend>
-                                    <v-btn 
-                                        density="compact" 
-                                        variant="text" 
-                                        icon 
+                                <template #prepend>
+                                    <v-btn
+                                        density="compact"
+                                        variant="text"
+                                        icon
                                     >
-                                        <img src="icons/delete.svg" alt="Information Icon" width="18" height="18" />
-                                    </v-btn> 
-                                    <v-list-item-title class="ml-3">{{ $t('added-datasets.remove') }}</v-list-item-title>
+                                        <img
+                                            src="icons/delete.svg"
+                                            alt="Remove Icon"
+                                            width="18"
+                                            height="18"
+                                        />
+                                    </v-btn>
+
+                                    <v-list-item-title class="ml-3">
+                                        {{ $t('added-datasets.remove') }}
+                                    </v-list-item-title>
                                 </template>
                             </v-list-item>
-                            <v-menu 
-                                open-on-click 
-                                location="end" 
+
+
+                            <!-- EXPORT -->
+                            <v-menu
+                                open-on-click
+                                location="end"
                                 offset-x
                             >
-                                <template v-slot:activator="{ props }">
+                                <template #activator="{ props }">
+
                                     <v-list-item
-                                        v-if="addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type == 'indikator' || addedLayers[addedLayer.dct_title+'_'+addedLayer.dcatde_politicalgeocodingleveluri]?.dct_type == 'custom indikator'"
-                                        v-bind="props" 
+                                        v-if="
+                                            addedLayer.dct_type === 'indikator'
+                                            ||
+                                            addedLayer.dct_type === 'custom indikator'
+                                        "
+                                        v-bind="props"
                                         class="v-list-item-export"
                                     >
-                                        <template v-slot:prepend>
-                                            <v-btn 
-                                                density="compact" 
-                                                variant="text" 
-                                                icon 
+
+                                        <template #prepend>
+                                            <v-btn
+                                                density="compact"
+                                                variant="text"
+                                                icon
                                                 aria-label="Export Menu"
                                             >
-                                                <img src="icons/export.svg" alt="Export Icon" width="18" height="18" />
-                                            </v-btn> 
+                                                <img
+                                                    src="icons/export.svg"
+                                                    alt="Export Icon"
+                                                    width="18"
+                                                    height="18"
+                                                />
+                                            </v-btn>
                                         </template>
-                                        
-                                        <v-list-item-title class="ml-3">{{ $t('added-datasets.export') }}</v-list-item-title>
 
-                                        <template v-slot:append>
-                                            <v-icon 
-                                                size="small"
-                                                aria-label="Submenu Indicator"
-                                            >
+                                        <v-list-item-title class="ml-3">
+                                            {{ $t('added-datasets.export') }}
+                                        </v-list-item-title>
+
+                                        <template #append>
+                                            <v-icon size="small">
                                                 mdi-chevron-right
-                                            </v-icon> 
+                                            </v-icon>
                                         </template>
+
                                     </v-list-item>
+
                                 </template>
 
+
                                 <v-list>
-                                    <v-list-item 
-                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type, {mode: 'geojson'}, addedLayer.dcatde_politicalgeocodingleveluri)"
+
+                                    <v-list-item
+                                        @click.stop="
+                                            exportData(
+                                                addedLayer.dct_title,
+                                                addedLayer.dct_type,
+                                                { mode: 'geojson' },
+                                                addedLayer.dcatde_politicalgeocodingleveluri
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title>GeoJSON</v-list-item-title>
+                                        <v-list-item-title>
+                                            GeoJSON
+                                        </v-list-item-title>
                                     </v-list-item>
 
-                                    <v-list-item 
-                                        @click="exportData(addedLayer.dct_title, addedLayer.dct_type,{mode: 'csv'},  addedLayer.dcatde_politicalgeocodingleveluri)"
+
+                                    <v-list-item
+                                        @click.stop="
+                                            exportData(
+                                                addedLayer.dct_title,
+                                                addedLayer.dct_type,
+                                                { mode: 'csv' },
+                                                addedLayer.dcatde_politicalgeocodingleveluri
+                                            )
+                                        "
                                     >
-                                        <v-list-item-title>CSV</v-list-item-title>
+                                        <v-list-item-title>
+                                            CSV
+                                        </v-list-item-title>
                                     </v-list-item>
+
                                 </v-list>
+
                             </v-menu>
-                           
+
                         </v-list>
+
                     </v-menu>
+
                 </template>
-                
+
             </v-list-item>
 
-      
-    </v-list>
+        </template>
+    </draggable>
+
+</v-list>
 
 </template>
 
 <script setup>
-import {ref, defineEmits} from 'vue'
+import {ref, defineEmits, computed} from 'vue'
 import { storeToRefs } from 'pinia'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useDatasetSearchStore } from '../stores/datasetSearch'
@@ -226,7 +436,7 @@ import { useMenuStore } from '../stores/menu'
 import { useProgressStore } from '@/stores/progress'
 import { useRoute } from "vue-router"
 import IconInformation from '@/components/icons/IconInformation.vue'
-
+import draggable from 'vuedraggable'
 const route = useRoute()
 
 const progressStore = useProgressStore()
@@ -265,7 +475,42 @@ let { filterInitiated} = storeToRefs(useDatasetSearchStore())
 
 
 let hoveredItem = ref(null)
+const orderedLayers = computed({
+    get() {
+        return Object.keys(addedLayers.value)
+            .reverse()
+            .map(key => ({
+                ...addedLayers.value[key],
+                _layerKey: key
+            }))
+    },
 
+    set(newOrder) {
+        const reordered = {}
+
+        newOrder.forEach(layer => {
+            reordered[layer._layerKey] =
+                addedLayers.value[layer._layerKey]
+        })
+
+        addedLayers.value = Object.fromEntries(
+            Object.entries(reordered).reverse()
+        )
+
+        
+       addDataUI(
+            newOrder[0].dct_title,
+            newOrder[0].dct_type,
+            newOrder[0].geometry_type,
+            newOrder[0].dcatde_politicalgeocodingleveluri
+        )
+        datasetSearchStore.toggleDataUI({
+                dataUiInitiated : false
+        })
+       
+       
+    }
+})
 const formatAvailableYears = (years) => {
   if (!Array.isArray(years) || years.length === 0) return ''
 
@@ -639,5 +884,16 @@ const exportData = async(layerName, type, exportType, granularity)=>{
     background-color: var(--color-background, rgba(0,0,0,1));
     color: white;
     border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.drag-handle {
+    cursor: grab;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-ghost {
+    opacity: 0.4;
 }
 </style>
