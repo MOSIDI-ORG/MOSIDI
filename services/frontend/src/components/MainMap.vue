@@ -10,7 +10,7 @@
       <TimeSliderUI @performTimeSlider="performTimeSlider"></TimeSliderUI>
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
-      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap" @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap"></DatasetSearchUI>
+      <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap" @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap" @handleLayersReordered="handleLayersReordered"></DatasetSearchUI>
     </div>
   </v-app>
   <AlertUI> </AlertUI>
@@ -173,6 +173,7 @@ const addLayerToMap = (layerSpecification)=>{
 
   // 2. ADD SOURCE
   if (layerSpecification.sourceType == "vector_tile") {
+    console.log("layerID", layerId)
     map.addSource(layerId, {
         "type": "vector",
         "scheme": 'tms',
@@ -212,6 +213,7 @@ const addLayerToMap = (layerSpecification)=>{
 
   // 4. ATTACH INTERACTIONS
   map.on('click', layerId, async function(e) {
+    console.log(layerId, "Layer clicked")
     if (layerId.includes('kommunales_gebiet_dashboard') || layerId == 'kommunales_gebiet_centroid'){
       selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
       removeLayerFromMap({layerId: "highlight", sourceId: "highlight"})
@@ -236,6 +238,7 @@ const addLayerToMap = (layerSpecification)=>{
   map.on('mouseleave', 'kommunales_gebiet_dashboard', () => {
     removeHoverPopup(map)
   });
+  console.log(map.getLayer(layerId), "Layer added to map with ID: " + layerId);
 }
 const addHighlightLayer = async (tablename, featureId, layerId)=>{
   const featureInstance = await getFeatureInstanceFromDB({tablename: tablename, featureId:featureId})
@@ -269,6 +272,35 @@ const addHighlightLayer = async (tablename, featureId, layerId)=>{
       }
   
 }
+const getMapLayerId = (metadata) => {
+    if (metadata.dct_type === 'raster') {
+        return metadata.dct_title;
+    }
+
+    if (metadata.dct_type === 'indikator') {
+        return `kommunales_gebiet_dashboard${metadata.dct_title}` +'_'+`${metadata.dcatde_politicalgeocodingleveluri}`;
+    }
+
+    return null;
+};
+const handleLayersReordered = (newOrder) => {
+
+    const mapOrder = [...newOrder].reverse();
+
+    mapOrder.forEach(layer => {
+
+        const layerId = getMapLayerId(layer);
+
+        if (!layerId) return;
+
+        if (!map.getLayer(layerId)) {
+            console.warn("MapLibre layer NOT FOUND:", layerId);
+            return;
+        }
+
+        map.moveLayer(layerId);
+    });
+};
 const addStyleExpressionByYear = (layerId, styleProperty, fillStyle)=>{   
   map.setPaintProperty(
     layerId,
