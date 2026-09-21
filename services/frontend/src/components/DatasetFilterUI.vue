@@ -682,6 +682,7 @@ const showLayerMetadata= (layerName, granularity)=> {
     metadataUI.value= true
 }
 const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{
+    let selectedLayerMetadata = tableMetadata?.value?.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     if (geomType === 'raster') {
         const item = externalWMSLayers.value.find(
             item => item.dct_title === layerName
@@ -693,7 +694,6 @@ const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{
 
         return;
     }
-    let selectedLayerMetadata = tableMetadata?.value?.find(item => item['dct_title'] === layerName && item['dcatde_politicalgeocodingleveluri']===granularity)
     addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})
     if (selectedLayerMetadata?.dct_type==='table'){
         toggleClickedLayer (layerName, geomType)
@@ -704,13 +704,12 @@ const addLayerToMap = async (layerName,geomType, granularity, mapType)=>{
         await addCommuneTileLayer(layerName+'_'+granularity, selectedLayerMetadata.dcatde_politicalgeocodingleveluri);
         emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
         
-        for(let layer in  addedDatasetsStore.addedLayers){
-            
+        /*for(let layer in  addedDatasetsStore.addedLayers){
             if (layer!=layerName){
                 toggleClickedLayer(layer, "Polygon")
             }
               
-        }
+        }*/
         //addedDatasetsStore.addLayer({layerName:layerName, metadata:selectedLayerMetadata})             
     } else if (selectedLayerMetadata?.dct_type == DatasetTypes.SensorThings) {
         emit("addSensorThingsLayerToMap", selectedLayerMetadata);
@@ -1056,7 +1055,6 @@ const mapLegend = (indicatorName) => {
 
 const toggleClickedLayer = (layerName, geomType) => {
     let index = tableMetadata.value.findIndex(obj => obj.name==layerName);
-   
     if (!addedDatasetsStore.addedLayers[layerName].value) {
         if (geomType == "MultiPolygon" || geomType == "Polygon" || geomType == "Geometry"){
             
