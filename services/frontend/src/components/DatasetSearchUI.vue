@@ -30,6 +30,8 @@
             @toggleLayerVisibility="toggleLayerVisibility" 
             @removeLayerFromMap="removeLayerFromMap" 
             @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap"
+            @layers-reordered="handleLayersReordered"
+
             v-if="searchInitiated==true"/>
       
     </v-card>
@@ -96,6 +98,9 @@ const toggleLayerVisibilityWithValue = (layername, visibility)=>{
 const moveLayerToTop = (layername)=>{
     emit("moveLayerToTop", layername)
 }
+const handleLayersReordered = (newOrder) => {
+    emit("handleLayersReordered", newOrder);
+};
 
 const addDeckglLayer = (geojson, style)=>{
     emit("addDeckglLayer", geojson,  style);

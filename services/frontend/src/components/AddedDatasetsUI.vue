@@ -459,7 +459,7 @@ import {
     getGeojsonDataFromDB
 } from "../services/backend.calls";
 
-const emit = defineEmits(["addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "toggleLayerVisibilityWithValue", "moveLayerToTop", "removeSensorThingsLayerFromMap"]);
+const emit = defineEmits(["addLayerToMap", "toggleLayerVisibility",  "addCoverageLayerToMap", "toggleCoverageLayerVisibility", "fitBoundsToBBOX", "removeLayerFromMap", "toggleLayerVisibilityWithValue", "moveLayerToTop", "removeSensorThingsLayerFromMap", "layers-reordered"]);
 
 const metadataDialogStore = useMetadataDialogStore();
 const mapLegendStore = useMapLegendStore();
@@ -497,6 +497,7 @@ const orderedLayers = computed({
             Object.entries(reordered).reverse()
         )
 
+        emit('layers-reordered', newOrder)
         
        addDataUI(
             newOrder[0].dct_title,
