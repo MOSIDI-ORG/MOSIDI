@@ -53,12 +53,18 @@ export function addPopupToMap(map, layerId, vectorSourceLayer, selectedFeatureId
     
 
     popup.on("close", () => {
+      
         if (selectedFeatureId) {
             map.removeFeatureState({
                 source: layerId,
                 sourceLayer: vectorSourceLayer,
                 id: selectedFeatureId
             });
+           
+        }
+        let mapLayer = map.getLayer("highlight");
+        if(typeof mapLayer !== 'undefined') {
+          map.removeLayer("highlight").removeSource("highlight");
         }
     })
 }
