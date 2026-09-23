@@ -52,8 +52,10 @@
                           
                        </v-list>
             </v-menu>
-            <v-menu offset-y
-                       >
+            <v-menu 
+                offset-y
+                
+            >
                 <template v-slot:activator="{ props }">
                     <v-btn
                         v-bind="props"
@@ -73,7 +75,23 @@
                 </template>
 
                 <v-list style="border-radius:8px;  border: 1px solid rgba(0, 0, 0, 0.2); ">
-                           
+                           <v-list-item
+                            @click="onboardingTutorial=true"
+                            
+                            >
+                                <template  v-slot:prepend>
+                                    <v-btn 
+                                        density="compact" 
+                                        variant="text" 
+                                        icon 
+                                        
+                                    >
+                                        <img src="icons/information.svg"  width="18" height="18" />
+                                    </v-btn> 
+                                    <v-list-item-title class="ml-3">Tutorial</v-list-item-title>
+                                </template>
+                               
+                            </v-list-item>
                             <v-list-item
                             @click="shareDialog=true"
                             
@@ -160,6 +178,7 @@ import { useI18n } from 'vue-i18n';
 import { useMapExportStore } from '../stores/mapExport'
 import { useMapShareStore } from '../stores/mapShare'
 import { useMenuStore } from '../stores/menu'
+import { useTutorialStore } from '../stores/tutorial'
 import { getConfig } from '../services/config'
 
 const logoSrc = getConfig().logo || 'icons/innowest.svg'
@@ -173,6 +192,8 @@ let { isMinimized } = storeToRefs(useMenuStore())
 
 let { exportDialog } = storeToRefs(useMapExportStore())
 let { shareDialog } = storeToRefs(useMapShareStore())
+let { onboardingTutorial } = storeToRefs(useTutorialStore())
+
 
 const toggleLanguage =(lang) => {
     locale.value = lang;
