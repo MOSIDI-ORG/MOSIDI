@@ -101,18 +101,27 @@ export function useIndicatorDeepLink(addLayerToMap) {
   ? JSON.stringify(chartStore.selectedFeature)
   : null
   
+  const hasAddedLayers = Object.keys(
+    addedDatasetsStore.addedLayers ?? {}
+  ).length > 0
+
   router.replace({
     query: {
       ...route.query,
 
-      dataset: datasetSearchStore.selectedDataset,
-      type,
-      ...(selectedFeature && { selected_feature: selectedFeature }),
+      dataset: hasAddedLayers
+        ? datasetSearchStore.selectedDataset
+        : undefined,
 
+      type: hasAddedLayers
+        ? type
+        : undefined,
 
-      ...(addedDatasets.length && {
-        added_datasets: addedDatasets.join(",")
-      })
+      selected_feature: selectedFeature || undefined,
+
+      added_datasets: addedDatasets.length
+        ? addedDatasets.join(",")
+        : undefined
     }
   })
 }

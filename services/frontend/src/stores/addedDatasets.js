@@ -38,6 +38,13 @@ export const useaddedDatasetsStore = defineStore ({
             }
             
           },
+          removeLayer(layerName) {
+            if (!layerName) return;
+
+            if (this.addedLayers[layerName]) {
+              delete this.addedLayers[layerName];
+            }
+          },
           declareReadyToCartographyDeepLink() {
             this.readyForCartography = true;
           }
