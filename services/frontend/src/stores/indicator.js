@@ -51,7 +51,6 @@ export const useIndicatorStore = defineStore ({
         },
         setTernaryData(payload){
             this.indicatorArray[payload.existingSourceId]['ternaryData']= payload
-            console.log(this.indicatorArray, "indicator array in store")
         }
        
     }

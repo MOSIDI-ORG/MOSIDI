@@ -19,7 +19,9 @@
         
         <v-card 
             class="header mx-auto d-flex animated-transform" 
-            width="371"    
+            width="371"
+            id="dataset-filter-header"
+            
         >
             <v-card v-show="filterInitiated==true" density="compact" width="371" style="background-color: var(--color-background, black); color: white;">
                 <div class="d-flex align-center" style="padding: 8px;">
@@ -147,7 +149,7 @@
             width="371"
             >
 
-            <div :style="{ height: activatedDatasetSearch === 'indicator' ? '81%' : '100%' }" class="ml-1 mr-1">
+            <div id="dataset-filter-body"  :style="{ height: activatedDatasetSearch === 'indicator' ? '81%' : '100%' }" class="ml-1 mr-1">
                 <span style="font-size: 1rem; font-weight: 500;" class="ml-2">
                 {{ filteredItems?.length + ' ' + $t('dataset-filter.results') }}
                 </span>
@@ -216,6 +218,7 @@
                 :title="$t('dataset-filter.custom.title')"
                 v-if="activatedDatasetSearch === 'indicator'"
                 @click="customIndicatorUI = true, metadataUI = false"  
+                id="custom-indicator-btn"
             >
                 <template v-slot:prepend>
                 <v-avatar style="cursor: pointer;">
@@ -226,7 +229,7 @@
             </v-card>
         
     </div>
-    <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
+    <v-card id="custom-indicator-ui-tour" :style="{ left: isMinimized ? '461px' : '753px' }" v-show="filterInitiated==true && customIndicatorUI==true" class="custom-formula-ui mx-auto text-left animated-metadata-transform"  width="371">
         <v-card  density="compact" width="371" style="background-color: var(--color-background, black); color: white;position: sticky; top: 0; z-index: 100;">
             <div class="d-flex align-center" style="padding: 8px;">
                 <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
@@ -293,7 +296,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, defineEmits, watch, nextTick } from 'vue';
+import { onMounted, ref, computed, defineEmits, watch, nextTick, onUnmounted } from 'vue';
 import {getTableMetadata, getIndicatorData, classification, externalLayerFromDB} from "../services/backend.calls";
 import { getObservedProperties } from '@/services/frost.service';
 import { useDatasetSearchStore } from '../stores/datasetSearch'
@@ -383,7 +386,20 @@ let isLoading = ref({
 })
 //let availableYearsForIndicatorFilter =ref(null)
 
-
+function handleTourAddLayer(event) {
+  const { title, geometryType, geocodingLevel } = event.detail
+  addLayerToMap(title, geometryType, geocodingLevel)
+}
+function handleTourAddCustomLayer(event) {
+   
+  const { mode } = event.detail
+    if (mode==true){
+       customIndicatorUI.value=true
+    }
+    else if (mode==false){
+       customIndicatorUI.value=false
+    }
+}
 onMounted(async () => {
     const deepLink = useIndicatorDeepLink(addLayerToMap);
 
@@ -405,7 +421,14 @@ onMounted(async () => {
             isLoading.value.SensorThings = false;
         })
         .catch(err => console.log(err));
+    
+    window.addEventListener('tour:add-layer', handleTourAddLayer)
+    window.addEventListener('tour:open-custom-indicator-ui', handleTourAddCustomLayer)
 });
+onUnmounted(() => {
+  window.removeEventListener('tour:add-layer', handleTourAddLayer)
+  window.removeEventListener('tour:open-custom-indicator-ui', handleTourAddCustomLayer)
+})
 
 const doTableMetadatRequest = async() => {
     await Promise.all([

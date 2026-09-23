@@ -11,6 +11,7 @@
       <AppHeader @addLayerToMap="addLayerToMap"  @removeLayerFromMap="removeLayerFromMap" @fitBoundsToBBOX="fitBoundsToBBOX"></AppHeader>
        <!--<CartographyUI v-if="catographyUIVisibility==true" @setLayerPintProperty="setLayerPintProperty"  @addLayerToMap="addLayerToMap" @setLayerLayoutProperty="setLayerLayoutProperty" @removeLayerFromMap="removeLayerFromMap" @setLayerZoomrange="setLayerZoomrange"></CartographyUI>-->
       <DatasetSearchUI v-if="mapIsLoaded==true" @updateDeckglLayer="updateDeckglLayer" @addDeckglLayer="addDeckglLayer" @moveLayerToTop="moveLayerToTop" @toggleLayerVisibilityWithValue="toggleLayerVisibilityWithValue" @setLayerPintProperty="setLayerPintProperty" @setLayerLayoutProperty="setLayerLayoutProperty"  @addLayerToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @toggleLayerVisibility="toggleLayerVisibility" @removeLayerFromMap="removeLayerFromMap" @addStyleExpressionByYear="addStyleExpressionByYear" @addExternaWMSLayerToMap="addExternaWMSLayerToMap" @addTernaryLayerToMap="addTernaryLayerToMap" @addSensorThingsLayerToMap="addSensorThingsLayerToMap" @removeSensorThingsLayerFromMap="removeSensorThingsLayerFromMap" @handleLayersReordered="handleLayersReordered"></DatasetSearchUI>
+       <TutorialUI :map="map"></TutorialUI>
     </div>
   </v-app>
   <AlertUI> </AlertUI>
@@ -38,6 +39,7 @@ import TimeSliderUI from "@/components/TimeSliderUI.vue";
 import AppHeader from "@/components/AppHeader.vue";
 //import CartographyUI from "@/components/CartographyUI.vue";
 import DatasetSearchUI from "@/components/DatasetSearchUI.vue";
+import TutorialUI from '@/components/TutorialUI.vue';
 
 import { addPopupToMap, addHoverPopup, removeHoverPopup, addWMSLayerFromExternalProvider, getSelectedFeatureInfo,/*addWMSLayerToMap, toggleWMSLayerVisibility*/ 
 addZoomOnClusterLayer,
@@ -64,7 +66,6 @@ import { useMapCameraDeepLink } from "../utils/useMapCameraDeepLink"
 import {getFeatureInstanceFromDB} from "../services/backend.calls";
 import { getThings } from '@/services/frost.service';
 import { DatasetTypes } from '@/utils/datasetTypes';
-
 
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 
@@ -173,7 +174,6 @@ const addLayerToMap = (layerSpecification)=>{
 
   // 2. ADD SOURCE
   if (layerSpecification.sourceType == "vector_tile") {
-    console.log("layerID", layerId)
     map.addSource(layerId, {
         "type": "vector",
         "scheme": 'tms',
@@ -213,7 +213,6 @@ const addLayerToMap = (layerSpecification)=>{
 
   // 4. ATTACH INTERACTIONS
   map.on('click', layerId, async function(e) {
-    console.log(layerId, "Layer clicked")
     if (layerId.includes('kommunales_gebiet_dashboard') || layerId == 'kommunales_gebiet_centroid'){
       selectedFeature.value = getSelectedFeatureInfo(e, layerSpecification, indicatorArray)
       removeLayerFromMap({layerId: "highlight", sourceId: "highlight"})
@@ -238,7 +237,6 @@ const addLayerToMap = (layerSpecification)=>{
   map.on('mouseleave', 'kommunales_gebiet_dashboard', () => {
     removeHoverPopup(map)
   });
-  console.log(map.getLayer(layerId), "Layer added to map with ID: " + layerId);
 }
 const addHighlightLayer = async (tablename, featureId, layerId)=>{
   const featureInstance = await getFeatureInstanceFromDB({tablename: tablename, featureId:featureId})

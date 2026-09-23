@@ -209,7 +209,7 @@
 </template>
 
 <script setup>
-import {ref, computed, watch, defineEmits, defineExpose} from "vue"
+import {ref, computed, watch, defineEmits, defineExpose, onMounted, onUnmounted} from "vue"
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { storeToRefs } from 'pinia'
 import { useIndicatorStore } from '@/stores/indicator'
@@ -224,6 +224,23 @@ let {  tableMetadata, selectedDataset } = storeToRefs(useDatasetSearchStore())
 let {indicatorArray} = storeToRefs(useIndicatorStore())
 let selectedIndicators = ref([])
 
+function handleTrivariateTourAddIndicators(event) {
+  const detail = event.detail
+   addIndicator(detail)
+}
+function handleTrivariateTourAddMap() {
+  
+   applyIndicators()
+}
+onMounted( () => {
+  
+  window.addEventListener('tour:add-trivariate-indicators', handleTrivariateTourAddIndicators)
+  window.addEventListener('tour:add-trivariate-map', handleTrivariateTourAddMap)
+})
+onUnmounted(() => {
+  window.removeEventListener('tour:add-trivariate-indicators', handleTrivariateTourAddIndicators)
+  window.addEventListener('tour:add-trivariate-map', handleTrivariateTourAddMap)
+})
 watch(
     () => indicatorArray.value[selectedDataset.value] ,
     (newVal ) => {

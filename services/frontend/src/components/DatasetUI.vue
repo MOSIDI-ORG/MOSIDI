@@ -28,7 +28,7 @@
                     </span>
                 </div>
                    
-                <div  v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset] && addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='indikator'">
+                <div id="added-dataset-time"  v-if="indicatorStore.indicatorArray[datasetSearchStore.selectedDataset] && addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='indikator'">
                     <v-row >
                         <v-col cols="12" sm="7" class="ml-3 mt-3">
                             <v-select
@@ -59,7 +59,8 @@
             </v-card>
         </v-card>
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='indikator'"  class="added-indikator-ui mx-auto animated-transform"  width="371">
-             <v-row no-gutters style="" class="d-flex mt-6 mb-0">
+            <div id="added-dataset-detailed-operations">
+            <v-row no-gutters style="" class="d-flex mt-6 mb-0">
                 <v-col cols="12" sm="4" class=" ">
                     <div class="v-label" >Map type</div>
                 </v-col>
@@ -188,10 +189,13 @@
 
                 </v-col>
             </v-row>
+            </div>
+             
             <v-divider style="margin-left: 15px; margin-right: 15px;" class="mt-2"></v-divider>
             <v-menu>
                 <template v-slot:activator="{ props }">
                     <v-list-item
+                        id="data-combine-btn"
                         v-bind="props"
                         :subtitle="$t('bivariate.subtitle')"
                         :title="$t('bivariate.title')"
@@ -206,7 +210,7 @@
                     </v-list-item>
                 </template>
 
-                <v-list>
+                <v-list id="data-combine-list">
                     <v-list-item
                         @click="bivariateUI = true; trivariateUI = false"
                         prepend-icon="mdi-chart-scatter-plot"
@@ -292,7 +296,7 @@
                 </v-col>
             </v-row>
         </v-card>
-        <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="bivariateUI==true" class="dataset-bivariate-ui mx-auto text-left animated-transform"  width="371">
+        <v-card id="bivariate-ui-element" :style="{ left: isMinimized ? '461px' : '753px' }" v-show="bivariateUI==true" class="dataset-bivariate-ui mx-auto text-left animated-transform"  width="371">
             <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
@@ -310,10 +314,10 @@
                
                     
             </v-card>
-            <BivariateUI ref="bivariateRef" @addStyleExpressionByYear="addStyleExpressionByYear" @backtoUnivariateMap="backtoUnivariateMap" class="mb-2"></BivariateUI>
+            <BivariateUI id="bivariate-ui-element" ref="bivariateRef" @addStyleExpressionByYear="addStyleExpressionByYear" @backtoUnivariateMap="backtoUnivariateMap" class="mb-2"></BivariateUI>
             
         </v-card>
-        <v-card :style="{ left: isMinimized ? '461px' : '753px' }" v-show="trivariateUI==true" class="dataset-trivariate-ui mx-auto text-left animated-transform"  width="371">
+        <v-card id="trivariate-ui-element" :style="{ left: isMinimized ? '461px' : '753px' }" v-show="trivariateUI==true" class="dataset-trivariate-ui mx-auto text-left animated-transform"  width="371">
             <v-card  density="compact" width="371" style="background-color: black; color: white;position: sticky; top: 0; z-index: 100;">
                 <div class="d-flex align-center" style="padding: 8px;">
                     <span style="font-size: 1.25rem; font-weight: 500;" class="ml-2">
@@ -331,7 +335,7 @@
                
                     
             </v-card>
-            <TrivariateUI ref="trivariateRef"  @addTernaryLayerToMap="addTernaryLayerToMap" @backtoUnivariateMap="backtoUnivariateMap" style="flex: 1; min-height: 0; overflow: hidden;"></TrivariateUI>
+            <TrivariateUI id="trivariate-ui-element" ref="trivariateRef"  @addTernaryLayerToMap="addTernaryLayerToMap" @backtoUnivariateMap="backtoUnivariateMap" style="flex: 1; min-height: 0; overflow: hidden;"></TrivariateUI>
 
         </v-card>
         <v-card :style="{ left: isMinimized ? '90px' : '382px' }" v-show="addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='table' || addedDatasetsStore?.addedLayers[datasetSearchStore?.selectedDataset]?.dct_type=='raster'" class="added-table-ui mx-auto animated-transform"  width="371">
@@ -341,7 +345,7 @@
 </template>
 
 <script setup>
-import { defineEmits, ref, onMounted, nextTick } from "vue"
+import { defineEmits, ref, onMounted, nextTick, onUnmounted } from "vue"
 import { storeToRefs } from "pinia";
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { useIndicatorStore } from '@/stores/indicator'
@@ -367,6 +371,20 @@ const datasetSearchStore = useDatasetSearchStore()
 const indicatorStore = useIndicatorStore()
 const addedDatasetsStore = useaddedDatasetsStore()
 const timeSliderStore = useTimeSliderStore()
+function handleCombineUI(event) {
+   
+  const { mode } = event.detail
+    if (mode==='bivariate'){
+        trivariateUI.value=false
+        bivariateUI.value=true
+    }
+    else if (mode==='trivariate'){
+        trivariateUI.value=true
+        bivariateUI.value=false
+    }
+}
+
+
 
 onMounted(async () => {
   const { attach } = useCartographyDeepLink({
@@ -376,6 +394,12 @@ onMounted(async () => {
   })
    await nextTick()
   attach() 
+
+window.addEventListener('tour:open-combine-ui', handleCombineUI)
+
+})
+onUnmounted(() => {
+  window.removeEventListener('tour:open-combine-ui', handleCombineUI)
 })
 
 const bivariateRef = ref(null)

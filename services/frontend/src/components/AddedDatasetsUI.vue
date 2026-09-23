@@ -47,6 +47,7 @@
         handle=".drag-handle"
         animation="200"
         ghost-class="drag-ghost"
+        id="added-indicator-tour"
     >
         <template #item="{ element: addedLayer, index }">
 
@@ -146,6 +147,7 @@
                                 density="compact"
                                 variant="text"
                                 icon
+                                id="added-layer-ellipsis-btn"
                             >
                                 <img
                                     src="icons/ellipsis-vertical.svg"
@@ -163,6 +165,8 @@
                                 border-radius: 8px;
                                 border: 1px solid rgba(0, 0, 0, 0.2);
                             "
+                             id="added-layer-ellipsis-list"
+                            
                         >
 
                             <!-- SHOW / HIDE -->
@@ -318,6 +322,7 @@
                                 open-on-click
                                 location="end"
                                 offset-x
+                                
                             >
                                 <template #activator="{ props }">
 
@@ -329,6 +334,7 @@
                                         "
                                         v-bind="props"
                                         class="v-list-item-export"
+                                        
                                     >
 
                                         <template #prepend>
@@ -337,6 +343,7 @@
                                                 variant="text"
                                                 icon
                                                 aria-label="Export Menu"
+                                                id="added-layer-ellipsis-export-data-btn"
                                             >
                                                 <img
                                                     src="icons/export.svg"
@@ -362,7 +369,7 @@
                                 </template>
 
 
-                                <v-list>
+                                <v-list id="added-layer-ellipsis-export-data-list">
 
                                     <v-list-item
                                         @click.stop="
@@ -415,7 +422,7 @@
 </template>
 
 <script setup>
-import {ref, defineEmits, computed} from 'vue'
+import {ref, defineEmits, computed, onMounted, onUnmounted} from 'vue'
 import { storeToRefs } from 'pinia'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useDatasetSearchStore } from '../stores/datasetSearch'
@@ -475,6 +482,25 @@ let { filterInitiated} = storeToRefs(useDatasetSearchStore())
 
 
 let hoveredItem = ref(null)
+
+function handleTourAddDataUI(event) {
+  const { title, layerType, geometryType, geocodingLevel } = event.detail
+  addDataUI(title, layerType, geometryType, geocodingLevel)
+}
+function handleTourRemoveLayer(event) {
+    const { layerName, layerType } = event.detail
+  removeLayer(layerName, layerType)
+}
+onMounted(() => {
+    window.addEventListener('tour:add-data-ui', handleTourAddDataUI)
+    window.addEventListener('tour:remove-layer', handleTourRemoveLayer)
+
+})
+onUnmounted(() => {
+    window.removeEventListener('tour:add-data-ui', handleTourAddDataUI)
+    window.removeEventListener('tour:remove-layer', handleTourRemoveLayer)
+
+})
 const orderedLayers = computed({
     get() {
         return Object.keys(addedLayers.value)
@@ -670,7 +696,6 @@ const toggleLayerVisibility = (layerName)=>{
 }
 
 const removeLayer = (layerName, layerType)=>{
-    console.log(datasetSearchStore.selectedDataset, "datasetSearchStore.selectedDataset")
     if (layerName===datasetSearchStore.selectedDataset){
         datasetSearchStore.toggleDataUI({
             dataUiInitiated : false
@@ -692,8 +717,11 @@ const removeLayer = (layerName, layerType)=>{
     else if (layerType==DatasetTypes.Indicator){
         emit("removeLayerFromMap",  {layerId:  'kommunales_gebiet_dashboard' + layerName, sourceId: 'kommunales_gebiet_dashboard' + layerName})
         emit("removeLayerFromMap",  {layerId: "highlight", sourceId: "highlight"})
+        console.log(addedDatasetsStore.addedLayers[layerName], "added layers before emoval")
+
         mapLegendStore.removeLegendItem(layerName);
         indicatorStore.removeIndicator(layerName)
+        
     }
     else if(layerType=='raster'){
         
@@ -714,6 +742,8 @@ const removeLayer = (layerName, layerType)=>{
     }
    
     delete addedLayers.value[layerName];
+    addedDatasetsStore.removeLayer(layerName)
+    console.log(addedDatasetsStore.addedLayers[layerName], "added layers after emoval")
 }
 const activateStylePanel = (datasetName,geomType)=>{
    cartographyStore.setVisibility({catographyUIVisibility:true, geomTtype: geomType})

@@ -1,6 +1,6 @@
 export const createHTMLAttributeTable = (zoomLng, zoomLat, list) => {
     const tableDiv = document.createElement('div');
-    
+    tableDiv.id = 'attribute-popup-div';
     // Width defaults to max-content so short entries stay small
     tableDiv.style.cssText = 'max-height: 200px; min-width: 100px; max-width: 300px !important; overflow-y: auto; overflow-x: hidden; background:transparent;';
     

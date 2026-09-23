@@ -154,7 +154,7 @@
 </template>
 
 <script setup>
-import {ref, defineEmits, computed, onMounted, nextTick, watch, defineExpose} from "vue"
+import {ref, defineEmits, computed, onMounted, nextTick, watch, defineExpose, onUnmounted} from "vue"
 import { useDatasetSearchStore } from '../stores/datasetSearch'
 import { storeToRefs } from 'pinia'
 import {getIndicatorData, classification} from "@/services/backend.calls";
@@ -210,13 +210,26 @@ const datasetTypes = computed(() => {
     ];
   }
 });
+
+
+function handleBivariateTour(event) {
+  const detail = event.detail
+   addSecondIndicator(detail)
+}
 onMounted(async () => {
   const { attach } = useCartographyDeepLink({
     addSecondIndicator
   })
   await nextTick()
   attach()
+
+  window.addEventListener('tour:add-second-indicator', handleBivariateTour)
 })
+onUnmounted(() => {
+  window.removeEventListener('tour:add-second-indicator', handleBivariateTour)
+})
+
+
 watch(
   () => tableMetadata.value,
   (newVal) => {
@@ -334,7 +347,6 @@ const getIcon = (layerName, index, geomType)=> {
     
   }
 const addSecondIndicator =  async (indicator) => {
-   
     if(indicator.dct_title ==indicatorArray?.value[selectedDataset?.value]['secondIndicator']?.secondIndicatorName){
         //selectedSecondIndicator.value = null
         indicatorStore.setSecondIndicatordata({

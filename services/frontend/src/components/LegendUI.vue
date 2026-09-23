@@ -35,7 +35,7 @@
         
         </div>
   
-        <v-card class="legend-ui" max-width="400">
+        <v-card id="legend-ui-tour" class="legend-ui" max-width="400">
         
             <v-card-item v-if="isMaximized && Object.keys(addedLayersLegendSpec).length>0">
                 <div v-if="classIntervalsAndColorHexagon" >

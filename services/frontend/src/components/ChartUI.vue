@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import { watch, onUnmounted, defineProps, ref } from "vue";
+import { watch, onUnmounted, defineProps, ref, onMounted } from "vue";
 import { storeToRefs } from 'pinia';
 import * as d3 from 'd3';
 import { useChartStore } from '../stores/chart';
@@ -361,7 +361,15 @@ const renderChart = (data, timeAttributeName, valueAttributeName, isTimeScaled=f
             });
     }
 }
-
+function handleTourCloseD3Chart() {
+    closeChart()
+}
+onMounted(() => {
+  window.addEventListener('tour:close-d3-chart', handleTourCloseD3Chart)
+})
+onUnmounted(() => {
+  window.removeEventListener('tour:close-d3-chart', handleTourCloseD3Chart)
+})
 const closeChart = () => {
     selectedFeature.value = null;
 

@@ -100,7 +100,7 @@
         </v-card>
        
 
-        <div style="background-color:transparent; height: 310px; max-height: 310px;">
+        <div id="tour-custom-indicator-ui" style="background-color:transparent; height: 310px; max-height: 310px;">
         
             <span style="font-size: 1rem; font-weight: 500;" class="ml-3 d-block my-1">
                 {{ filteredItems?.length + ' ' + $t('dataset-filter.results') }}
