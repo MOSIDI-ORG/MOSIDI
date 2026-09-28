@@ -74,16 +74,16 @@
     },
     "dataset-search-landing":{
         "indicator":{
-            "title":"Add Indicator",
-            "subtitle": "Start by searching and adding an indicator from the library."
+            "title":"Add Geodata",
+            "subtitle": "Visualize, analyze, and export spatial data"
         },
         "geo":{
-            "title":"Add geodata",
-            "subtitle": "Start by searching and adding a geodata from the library."
+            "title":"Add Web Map Services",
+            "subtitle": "Search and visualize external map layers"
         },
         "things":{
-            "title":"Add sensor data",
-            "subtitle": "Start by searching an adding an observed property of a sensor from the library"
+            "title":"Add Sensor Data",
+            "subtitle": "Visualize location and time series from sensors"
         }
     },
     

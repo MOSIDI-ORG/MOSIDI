@@ -74,16 +74,16 @@
     },
     "dataset-search-landing":{
         "indicator":{
-            "title":"Indikator hinzufügen",
-            "subtitle": "Beginne mit dem Suchen und Hinzufügen eines Indikator aus dem Katalog."
+            "title":"Geodaten hinzufügen",
+            "subtitle": "Visualisiere, analysiere und exportiere räumliche Daten"
         },
         "geo":{
-            "title":"Geodaten hinzufügen",
-            "subtitle": "Beginne mit dem Suchen und Hinzufügen eines Geodaten aus dem Katalog."
+            "title":"Web Map Services hinzufügen ",
+            "subtitle": "Suche und visualisiere externe Kartenebenen"
         },
         "things":{
             "title":"Sensordaten hinzufügen",
-            "subtitle": "Beginne mit dem Suchen und Hinzufügen von Sensordaten aus dem Katalog."
+            "subtitle": "Visualisiere Standort und Zeitreihen von Sensoren"
         }
     },
     "added-datasets":{
