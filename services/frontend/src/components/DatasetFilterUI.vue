@@ -506,7 +506,7 @@ const filteredItems = computed(() => {
     const typeFilter = activatedDatasetSearch.value?.toLowerCase()
     return tableMetadata.value.filter(item => {
         const matchesSearchText = layerSearchText.value
-            ? item.dct_title.toLowerCase().includes(layerSearchText.value.toLowerCase())
+            ? item?.dct_title?.toLowerCase().includes(layerSearchText.value.toLowerCase())
             : true;
         const matchesDatasetType = selectedDatasetType.value && selectedDatasetType.value !== 'all'
             ? item.dct_type === selectedDatasetType.value
