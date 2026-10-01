@@ -1,8 +1,8 @@
 <template>
     <v-card class="line-style-ui mx-auto">
       
-        <div class="text-body-2 font-weight-bold mb-1 mt-4" style="text-align: left;margin-left: 15px;">{{ $t('cartography.line.style') }}</div>
-        <v-container >
+        <div v-if="addedLineLayersStyles[lineLayerSpecification.name]['columnNames']" class="text-body-2 font-weight-bold mb-1 mt-4" style="text-align: left;margin-left: 15px;">{{ $t('cartography.line.style') }}</div>
+        <v-container v-if="addedLineLayersStyles[lineLayerSpecification.name]['columnNames']">
             <v-row no-gutters style="text-align: left;" >
             
                 <v-col cols="12" sm="4" class=" mt-3">
@@ -38,7 +38,7 @@
             </v-row>
         </v-container>
         <v-container v-if="addedLineLayersStyles[lineLayerSpecification.name].selectedLineStyle=='Simple'">
-            <v-divider  class="mt-0"></v-divider>
+            <v-divider v-if="addedLineLayersStyles[lineLayerSpecification.name]['columnNames']" class="mt-0"></v-divider>
        
             <v-row no-gutters class="text-body-2 font-weight-bold mb-1" style="text-align: left">
                 <v-col cols="12" sm="4" class="">
@@ -178,7 +178,7 @@
             
         </v-container>
         <v-container v-if="addedLineLayersStyles[lineLayerSpecification.name].selectedLineStyle=='Graduated'">
-            <v-divider  class="mt-0"></v-divider>
+            <v-divider v-if="addedLineLayersStyles[lineLayerSpecification.name]['columnNames']" class="mt-0"></v-divider>
             <v-row no-gutters class="text-body-2 font-weight-bold mb-1" style="text-align: left">
                 <v-col cols="12" sm="4" class="">
                     <p class="text-body-2 font-weight-bold mb-1" >{{ $t('cartography.line.graduated.category') }}</p>
@@ -295,7 +295,7 @@ let { lineLayerSpecification, lineStyles, addedLineLayersStyles, colorRecommenda
 
 const addAssociatedLayer = async(item)=> {
     if(item=='Graduated'){
-       
+       console.log(lineLayerSpecification.value, "item line")
         if(!addedLineLayersStyles.value[lineLayerSpecification.value.name].columnNames){
             const numericalCulumnNames = await getNumericalColumnNamesForClassification(lineLayerSpecification.value.name)
             lineStyleStore.addLayerColumnNames(lineLayerSpecification.value.name, numericalCulumnNames)

@@ -5,7 +5,8 @@ export const useaddedDatasetsStore = defineStore ({
     id: 'addedDatasets',
     state: () => ({
         addedLayers: {},
-        readyForCartography: false
+        readyForCartography: false,
+        addedExternallayers: {},
     }),
     actions: {
         addLayer(payload) {
@@ -45,8 +46,38 @@ export const useaddedDatasetsStore = defineStore ({
               delete this.addedLayers[layerName];
             }
           },
+          removeExternallayer(layerName){
+            if (!layerName) return;
+
+            if (this.addedExternallayers[layerName]) {
+              delete this.addedExternallayers[layerName];
+            }
+          },
           declareReadyToCartographyDeepLink() {
             this.readyForCartography = true;
+          },
+          addExternalLayer (payload){
+            const { layerName, metadata } = payload;
+            if (!layerName || !metadata) {
+              console.error('Invalid payload: missing layerName or metadata');
+              return;
+            }
+            let compositeKey
+            if (metadata.dct_type=='raster'){
+              compositeKey = `${layerName}`;
+            }
+            
+            else {
+
+              compositeKey = `${layerName}`;
+            }
+            this.addedExternallayers[compositeKey] = { ...metadata, checked: true };
+
+            /*for (const key in this.addedExternallayers) {
+              if (key !== compositeKey && this.addedExternallayers[key].dct_type === 'geojson') {
+                this.addedExternallayers[key].checked = false;
+              }
+            }*/
           }
     }
 })

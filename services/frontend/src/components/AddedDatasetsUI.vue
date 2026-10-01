@@ -18,7 +18,7 @@
     
     
 <v-list
-    v-show="Object.keys(addedLayers).length > 0"
+   v-show="Object.keys(addedLayers).length > 0 || Object.keys(addedExternallayers || {}).length > 0"
     lines="two"
     style="background-color: transparent;"
     class="ml-1 mr-1 text-left"
@@ -416,6 +416,154 @@
 
         </template>
     </draggable>
+    <!-- ========== EXTERNAL / UPLOADED LAYERS ========== -->
+<!-- ========== EXTERNAL / UPLOADED LAYERS ========== -->
+<template v-if="Object.keys(addedExternallayers || {}).length > 0">
+  <span
+    v-show="!isMinimized"
+    style="font-size: 1rem; font-weight: 500;"
+    class="ml-2 mt-3 d-block"
+  >
+    Uploaded layers
+    ({{ Object.keys(addedExternallayers).length }})
+  </span>
+
+  <v-divider
+    style="margin-left: 15px; margin-right: 15px;"
+    class="mt-1 mb-1"
+  />
+
+  <draggable
+    v-model="orderedExternalLayers"
+    item-key="_layerKey"
+    handle=".drag-handle"
+    animation="200"
+    ghost-class="drag-ghost"
+  >
+    <template #item="{ element: externalLayer, index }">
+      <v-list-item
+        :key="externalLayer._layerKey"
+        style="border-radius: 5px;"
+        @mouseover="hoveredExternalItem = index"
+        @mouseleave="hoveredExternalItem = null"
+        @click="addDataUI(
+                    externalLayer.dct_title,
+                    externalLayer.dct_type,
+                    externalLayer.geometry_type,
+                    externalLayer.dcatde_politicalgeocodingleveluri
+                )"
+      >
+        <template #prepend>
+          <v-icon class="drag-handle mr-2" size="20">
+            mdi-drag-vertical
+          </v-icon>
+
+          <v-avatar>
+            <v-img
+              :src="getIcon(externalLayer.checked, externalLayer.geometry_type)"
+              max-height="40"
+              max-width="40"
+            />
+          </v-avatar>
+        </template>
+
+        <v-list-item-title v-show="!isMinimized" class="text-wrap">
+          {{ externalLayer.dct_title || externalLayer.name }}
+        </v-list-item-title>
+
+        <v-list-item-subtitle
+          v-show="!isMinimized"
+          class="text-wrap text-caption"
+        >
+          {{ externalLayer.geometry_type }}
+          <span v-if="externalLayer.source"> · {{ externalLayer.source }}</span>
+        </v-list-item-subtitle>
+
+        <template #append>
+          <v-menu
+              activator="parent"
+              offset-y
+              close-on-click
+              close-on-content-click
+            >
+              <template #activator="{ props }">
+                <v-btn
+                  v-show="!isMinimized"
+                  v-bind="props"
+                  density="compact"
+                  variant="text"
+                  icon
+                >
+                  <img
+                    src="icons/ellipsis-vertical.svg"
+                    alt="More Options"
+                    width="30"
+                    height="30"
+                  />
+                </v-btn>
+              </template>
+
+              <v-list
+                style="border-radius: 8px; border: 1px solid rgba(0, 0, 0, 0.2);"
+              >
+                <!-- SHOW / HIDE -->
+                <v-list-item @click.stop="toggleLayerVisibility(externalLayer)">
+                  <template #prepend>
+                    <v-btn density="compact" variant="text" icon>
+                      <img
+                        :src="externalLayer.checked ? 'icons/eye-close.svg' : 'icons/eye-open.svg'"
+                        alt="Visibility"
+                        width="18"
+                        height="18"
+                      />
+                    </v-btn>
+                    <v-list-item-title class="ml-3">
+                      {{ externalLayer.checked
+                        ? $t('added-datasets.hide')
+                        : $t('added-datasets.show') }}
+                    </v-list-item-title>
+                  </template>
+                </v-list-item>
+
+                <!-- ZOOM (uses bbox from turf) -->
+                <v-list-item
+                  v-if="externalLayer.dct_bbox"
+                  @click.stop="getLayerExtentFromDB(externalLayer)"
+                >
+                  <template #prepend>
+                    <v-btn density="compact" variant="text" icon>
+                      <img src="icons/search.svg" alt="Zoom" width="18" height="18" />
+                    </v-btn>
+                    <v-list-item-title class="ml-3">
+                      {{ $t('added-datasets.zoom') }}
+                    </v-list-item-title>
+                  </template>
+                </v-list-item>
+
+                <!-- REMOVE -->
+                <v-list-item
+                  v-show="route?.query?.mode === 'edit'"
+                  @click.stop="removeLayer(
+                                            externalLayer.dct_title,
+                                            externalLayer.dct_type
+                                )"
+                >
+                  <template #prepend>
+                    <v-btn density="compact" variant="text" icon>
+                      <img src="icons/delete.svg" alt="Remove" width="18" height="18" />
+                    </v-btn>
+                    <v-list-item-title class="ml-3">
+                      {{ $t('added-datasets.remove') }}
+                    </v-list-item-title>
+                  </template>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+        </template>
+      </v-list-item>
+    </template>
+  </draggable>
+</template>
 
 </v-list>
 
@@ -477,10 +625,48 @@ const datasetSearchStore = useDatasetSearchStore()
 
 const addedDatasetsStore = useaddedDatasetsStore()
 
-let { addedLayers} = storeToRefs(useaddedDatasetsStore())
+let { addedLayers, addedExternallayers} = storeToRefs(useaddedDatasetsStore())
 let { filterInitiated} = storeToRefs(useDatasetSearchStore())
 
+const hoveredExternalItem = ref(null)
 
+const orderedExternalLayers = computed({
+  get() {
+        return Object.keys(addedExternallayers.value)
+            .reverse()
+            .map(key => ({
+                ...addedExternallayers.value[key],
+                _layerKey: key
+            }))
+    },
+
+    set(newOrder) {
+        const reordered = {}
+
+        newOrder.forEach(layer => {
+            reordered[layer._layerKey] =
+                addedExternallayers.value[layer._layerKey]
+        })
+
+        addedExternallayers.value = Object.fromEntries(
+            Object.entries(reordered).reverse()
+        )
+        console.log(newOrder, "newOrder")
+        emit('layers-reordered', newOrder)
+        
+       addDataUI(
+            newOrder[0].dct_title,
+            newOrder[0].dct_type,
+            newOrder[0].geometry_type,
+            newOrder[0].dcatde_politicalgeocodingleveluri
+        )
+        datasetSearchStore.toggleDataUI({
+                dataUiInitiated : false
+        })
+       
+       
+    }
+})
 let hoveredItem = ref(null)
 
 function handleTourAddDataUI(event) {
@@ -585,17 +771,26 @@ const addDataUI = (datasettitle, datasetType, geomType, granularity)=> {
             datasetSearchStore.setSelecteddatasetType({
                 selectedDatasetType: "indikator"
             })
+            emit("moveLayerToTop", 'kommunales_gebiet_dashboard' + datasetName)
 
         }
-        else if (datasetType==DatasetTypes.Table){
-            activateStylePanel(datasetName,geomType)
-            emit("moveLayerToTop", datasetName)
+        else if (datasetType==DatasetTypes.Table || datasetType==DatasetTypes.UploadedGeojson){
+           
+            
+            datasetSearchStore.setSelecteddatasetName({
+                selectedDataset: datasettitle
+            })
+            activateStylePanel(datasettitle,geomType)
+            
+            
         }
         else if(datasetType=='raster'){
             activateStylePanel(datasettitle,geomType)
             datasetSearchStore.setSelecteddatasetType({
                 selectedDatasetType: "raster"
             })
+            emit("moveLayerToTop", datasettitle)
+            
         }
         else if(datasetType=='custom indikator'){
             datasetName = datasettitle
@@ -672,6 +867,9 @@ const getLayerExtentFromDB = async (addedLayer)=>{
         emit("fitBoundsToBBOX", [layerExtent['x-min'], layerExtent['y-min'], layerExtent['x-max'], layerExtent['y-max']])
        
     }
+    else if (addedLayer.dct_type=='geojson'){
+        emit("fitBoundsToBBOX", addedLayer.dct_bbox)
+    }
     
 }
 
@@ -687,11 +885,16 @@ const toggleLayerVisibility = (layerName)=>{
     }
     else if (layerName.dct_type==DatasetTypes.Indicator){
         emit("toggleLayerVisibility", 'kommunales_gebiet_dashboard' + layerName.dct_title)
+         addedLayers.value[layerName.dct_title]['checked'] =! addedLayers.value[layerName.dct_title]['checked']
+    }
+    else if (layerName.dct_type=='geojson'){
+        emit("toggleLayerVisibility", layerName.dct_title)
+        addedExternallayers.value[layerName.dct_title]['checked'] =! addedExternallayers.value[layerName.dct_title]['checked']
     }
     
 
     
-   addedLayers.value[layerName.dct_title]['checked'] =! addedLayers.value[layerName.dct_title]['checked']
+  
     
 }
 
@@ -740,6 +943,10 @@ const removeLayer = (layerName, layerType)=>{
     else if (layerType == DatasetTypes.SensorThings) {
         emit("removeSensorThingsLayerFromMap", layerName);
     }
+    else if(layerType=='geojson'){
+         emit("removeLayerFromMap",  {layerId:  layerName, sourceId: layerName})
+        addedDatasetsStore.removeExternallayer(layerName)
+    }
    
     delete addedLayers.value[layerName];
     addedDatasetsStore.removeLayer(layerName)
@@ -767,8 +974,6 @@ const activateStylePanel = (datasetName,geomType)=>{
        lineStyleStore.addLayerStyle(datasetName)
    }
    else if (geomType == "raster"){
-   console.log(addedDatasetsStore.addedLayers, "addedDatasetsStore.addedLayers")
-   console.log(datasetName, "datasetName")
         rasterLayerSpecification.value=layerSpec
         rasterStyleStore.addLayerStyle(datasetName)
         mapLegendStore.setActivatedWMSLegendItem({

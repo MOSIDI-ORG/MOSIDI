@@ -2,8 +2,8 @@
     
     <v-card class="point-style-ui mx-auto">
         
-        <div class="text-body-2 font-weight-bold mb-1 mt-4" style="text-align: left;margin-left: 15px;">{{ $t('cartography.point.style') }}</div>
-        <v-container >
+        <div v-if="addedLayersStyles[layerSpecification.name]['columnNames']" class="text-body-2 font-weight-bold mb-1 mt-4" style="text-align: left;margin-left: 15px;">{{ $t('cartography.point.style') }}</div>
+        <v-container v-if="addedLayersStyles[layerSpecification.name]['columnNames']">
             <v-row no-gutters style="text-align: left;" >
             
                 <v-col cols="12" sm="4" class=" mt-3">
@@ -39,7 +39,7 @@
             </v-row>
         </v-container>
         <v-container v-if="addedLayersStyles[layerSpecification.name].selectedPointStyle=='Hexagon'">
-            <v-divider  class="mt-0"></v-divider>
+            <v-divider  v-if="addedLayersStyles[layerSpecification.name]['columnNames']" class="mt-0"></v-divider>
             <div class="text-body-2 font-weight-bold mb-1" style="text-align: left;">Hexagon Parameters</div>
             <v-row no-gutters style="text-align: left;" class="d-flex justify-center align-center mt-4">
                 <v-col cols="12" sm="2" class=" ">
@@ -148,7 +148,7 @@
             </v-row>
         </v-container>
         <v-container v-if="addedLayersStyles[layerSpecification.name].selectedPointStyle=='Heatmap'">
-            <v-divider  class="mt-0"></v-divider>
+            <v-divider v-if="addedLayersStyles[layerSpecification.name]['columnNames']" class="mt-0"></v-divider>
             <div class="text-body-2 font-weight-bold mb-1" style="text-align: left;">Heatmap Parameters</div>
             <v-row no-gutters style="text-align: left;" class="d-flex justify-center align-center mt-4">
                 <v-col cols="12" sm="2" class=" ">
@@ -197,7 +197,7 @@
             </v-row>
         </v-container>
         <v-container v-if="addedLayersStyles[layerSpecification.name].selectedPointStyle=='Circle' || addedLayersStyles[layerSpecification.name].selectedPointStyle=='Heatmap'">
-            <v-divider  class="mt-0"></v-divider>
+            <v-divider v-if="addedLayersStyles[layerSpecification.name]['columnNames']" class="mt-0"></v-divider>
             <div class="text-body-2 font-weight-bold mb-1" style="text-align: left;">{{ $t('cartography.point.circle-parameters') }}</div>
         
             <v-row no-gutters  style="text-align: left;" class="d-flex justify-center align-center mt-4">
@@ -370,8 +370,8 @@
             
         </v-container>
        
-        <v-container v-if="addedLayersStyles[layerSpecification.name].selectedPointStyle=='Circle' || addedLayersStyles[layerSpecification.name].selectedPointStyle=='Heatmap'">
-        <v-divider  class="mt-0"></v-divider>
+        <v-container v-if="(addedLayersStyles[layerSpecification.name].selectedPointStyle=='Circle' || addedLayersStyles[layerSpecification.name].selectedPointStyle=='Heatmap') && addedLayersStyles[layerSpecification.name]['columnNames']">
+        <v-divider v-if="addedLayersStyles[layerSpecification.name]['columnNames']" class="mt-0"></v-divider>
        
             <v-row no-gutters class="text-body-2 font-weight-bold mb-1" style="text-align: left">
                 <v-col cols="12" sm="2" class="">

@@ -17,6 +17,8 @@
   <AlertUI> </AlertUI>
   <MapExport @export-map="onExportMap"> </MapExport>
   <MapShare > </MapShare>
+  <MapImport @addGeojsonToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX"> </MapImport>
+
   <ProgressUI> </ProgressUI>
   
 </template>
@@ -34,6 +36,7 @@ import LegendUI from "@/components/LegendUI.vue";
 import AlertUI from "@/components/AlertUI.vue";
 import MapExport from "@/components/MapExport.vue";
 import MapShare from "@/components/MapShare.vue";
+import MapImport from "@/components/MapImport.vue";
 import ProgressUI from "@/components/ProgressUI.vue";
 import TimeSliderUI from "@/components/TimeSliderUI.vue";
 import AppHeader from "@/components/AppHeader.vue";
@@ -195,6 +198,7 @@ const addLayerToMap = (layerSpecification)=>{
     map.addLayer(layer);
   } 
   else if (layerSpecification.sourceType == "geojson") {
+    console.log(layerId, "added Layer ID")
     map.addSource(layerId, {
       'type': 'geojson',
       'data': layerSpecification.geoGjsonData
@@ -275,9 +279,15 @@ const getMapLayerId = (metadata) => {
         return metadata.dct_title;
     }
 
-    if (metadata.dct_type === 'indikator') {
+    else if (metadata.dct_type === 'indikator') {
         return `kommunales_gebiet_dashboard${metadata.dct_title}` +'_'+`${metadata.dcatde_politicalgeocodingleveluri}`;
     }
+    else if (metadata.dct_type === 'geojson') {
+        return metadata.dct_title;
+    }
+
+
+
 
     return null;
 };

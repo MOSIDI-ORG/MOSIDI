@@ -38,6 +38,7 @@ export const useLineStyleStore = defineStore ({
                 }
                 this.addedLineLayersStyles[name]['classifiedStyle']=JSON.parse(JSON.stringify(this.lineStyleParams))
             }
+            console.log(this.addedLineLayersStyles[name], name, "this.addedLineLayersStyles[name]")
             
         },
         addLayerColumnNames(layerName, columns){

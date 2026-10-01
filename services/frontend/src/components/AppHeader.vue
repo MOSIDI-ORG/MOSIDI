@@ -126,6 +126,23 @@
                                 </template>
                                
                             </v-list-item>
+                            <v-list-item
+                                @click="importDialog=true"
+                            
+                            >
+                                <template  v-slot:prepend>
+                                    <v-btn 
+                                        density="compact" 
+                                        variant="text" 
+                                        icon 
+                                        
+                                    >
+                                        <img src="icons/import.svg"  width="18" height="18" />
+                                    </v-btn> 
+                                    <v-list-item-title class="ml-3">Import</v-list-item-title>
+                                </template>
+                               
+                            </v-list-item>
                             <v-divider style="margin-left: 15px; margin-right: 15px;"  class=" mt-1 mb-1"></v-divider>
                             <v-list-item
                             :to="{ path: '/landing-page' }" target="_blank"
@@ -177,6 +194,7 @@ import { storeToRefs } from "pinia"
 import { useI18n } from 'vue-i18n';
 import { useMapExportStore } from '../stores/mapExport'
 import { useMapShareStore } from '../stores/mapShare'
+import { useMapImportStore } from '../stores/mapImport'
 import { useMenuStore } from '../stores/menu'
 import { useTutorialStore } from '../stores/tutorial'
 import { getConfig } from '../services/config'
@@ -191,6 +209,7 @@ const toggleMinimize = ()=>{
 let { isMinimized } = storeToRefs(useMenuStore())
 
 let { exportDialog } = storeToRefs(useMapExportStore())
+let { importDialog } = storeToRefs(useMapImportStore())
 let { shareDialog } = storeToRefs(useMapShareStore())
 let { onboardingTutorial } = storeToRefs(useTutorialStore())
 

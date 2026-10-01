@@ -1,45 +1,47 @@
 <template>
  <v-card class="polygon-style-ui mx-auto">
    
-    <div class="text-body-2 font-weight-bold mb-1 mt-4" style="text-align: left;margin-left: 15px;">{{ $t('cartography.polygon.style') }}</div>
-
-    <v-container >
-        <v-row no-gutters style="text-align: left;" >
-        
-            <v-col cols="12" sm="4" class=" mt-3">
-                <p class="v-label" >{{ $t('cartography.polygon.type') }}</p>
-            </v-col>
-            <v-col cols="12"  sm="8" >
+    <div v-if="addedPolygonLayersStyles[polygonLayerSpecification.name]['columnNames']" class="text-body-2 font-weight-bold mb-1 mt-4" style="text-align: left;margin-left: 15px;">{{ $t('cartography.polygon.style') }}</div>
+        <div v-if="addedPolygonLayersStyles[polygonLayerSpecification.name]['columnNames']">
+            <v-container  >
+                <v-row no-gutters style="text-align: left;" >
             
-                <v-autocomplete
-                        :items="polygonStyles"
-                        label="style"
-                        density="compact"
-                        variant="solo"
-                        hide-details
-                        :menu-props="{ 'max-height': '200', 'max-width': '300'}"
-                        item-value="name"
-                        item-title="name"
-                        v-model="addedPolygonLayersStyles[polygonLayerSpecification.name].selectedPolygonStyle"
-                > 
+                    <v-col cols="12" sm="4" class=" mt-3">
+                        <p class="v-label" >{{ $t('cartography.polygon.type') }}</p>
+                    </v-col>
+                    <v-col cols="12"  sm="8" >
+                    
+                        <v-autocomplete
+                                :items="polygonStyles"
+                                label="style"
+                                density="compact"
+                                variant="solo"
+                                hide-details
+                                :menu-props="{ 'max-height': '200', 'max-width': '300'}"
+                                item-value="name"
+                                item-title="name"
+                                v-model="addedPolygonLayersStyles[polygonLayerSpecification.name].selectedPolygonStyle"
+                        > 
 
-                    
-                    <template v-slot:item="{ props, item }">
-                    
-                        <v-list-item
-                            prepend-avatar= 'polygon.png'
-                            v-bind="props"
-                            @click=addAssociatedLayer(item.title) 
-                        >
                             
-                        </v-list-item>
-                    </template>
-                </v-autocomplete>
-            </v-col>
-        </v-row>
-    </v-container>
+                            <template v-slot:item="{ props, item }">
+                            
+                                <v-list-item
+                                    prepend-avatar= 'polygon.png'
+                                    v-bind="props"
+                                    @click=addAssociatedLayer(item.title) 
+                                >
+                                    
+                                </v-list-item>
+                            </template>
+                        </v-autocomplete>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </div>
+        
     <v-container v-if="addedPolygonLayersStyles[polygonLayerSpecification.name].selectedPolygonStyle=='Simple'">
-        <v-divider  class="mt-0"></v-divider>
+        <v-divider v-if="addedPolygonLayersStyles[polygonLayerSpecification.name]['columnNames']" class="mt-0"></v-divider>
             <div class="text-body-2 font-weight-bold mb-1" style="text-align: left;">{{ $t('cartography.polygon.fill.fill') }}</div>
         
             <v-row no-gutters  style="text-align: left;" class="d-flex justify-center align-center mt-4">
@@ -221,7 +223,7 @@
         </div>
         
     </v-container>
-    <v-container v-if="addedPolygonLayersStyles[polygonLayerSpecification.name].selectedPolygonStyle=='Simple' || addedPolygonLayersStyles[polygonLayerSpecification.name].selectedPolygonStyle=='Categorized'">
+    <v-container v-if="(addedPolygonLayersStyles[polygonLayerSpecification.name].selectedPolygonStyle=='Simple' || addedPolygonLayersStyles[polygonLayerSpecification.name].selectedPolygonStyle=='Categorized') && addedPolygonLayersStyles[polygonLayerSpecification.name]['columnNames']">
         <v-divider  class="mt-0"></v-divider>
        
             <v-row no-gutters class="text-body-2 font-weight-bold mb-1" style="text-align: left">

@@ -3,5 +3,6 @@ export const DatasetTypes = {
     Table: 'table',
     Raster: 'raster',
     CustomIndicator: 'custom indikator',
-    SensorThings: 'SensorThings'
+    SensorThings: 'SensorThings',
+    UploadedGeojson: 'geojson'
 }
