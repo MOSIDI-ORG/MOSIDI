@@ -139,7 +139,10 @@ export function addWMSLayerFromExternalProvider (map, item) {
             '&SRS=EPSG:3857' +
             '&WIDTH=256' +
             '&HEIGHT=256' +
-            '&BBOX={bbox-epsg-3857}'
+            '&BBOX={bbox-epsg-3857}' +
+            Object.entries(item.wms_parameters || {})
+              .map(([key, value]) => `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+              .join('')
 
         ],
         'tileSize': 256
