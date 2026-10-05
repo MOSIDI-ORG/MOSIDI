@@ -5,80 +5,163 @@
       max-width="500"
     >
       <v-card class="dialog-ui">
-        <v-card-title>
+        <v-card-title class="d-flex align-center">
           <span class="text-h6">Import Data</span>
+
+          <v-spacer />
+
+          <v-btn-toggle
+            v-model="importType"
+            mandatory
+            density="compact"
+            variant="outlined"
+            color="primary"
+          >
+            <v-btn value="geojson" size="small">
+              <v-icon start size="18">mdi-file-code-outline</v-icon>
+              GeoJSON
+            </v-btn>
+
+            <v-btn value="wms" size="small">
+              <v-icon start size="18">mdi-map-outline</v-icon>
+              WMS
+            </v-btn>
+          </v-btn-toggle>
         </v-card-title>
         <v-divider></v-divider>
 
         <v-card-text>
-          <!-- Upload zone -->
-          <div
-            class="upload-area"
-            :class="{
-              'drag-over': isDragOver,
-              'is-loading': isLoading,
-              'is-success': isSuccess
-            }"
-            @dragover.prevent="isDragOver = true"
-            @dragleave.prevent="isDragOver = false"
-            @drop.prevent="onDrop"
-            @click="!isLoading && !isSuccess && triggerFileInput()"
-          >
-            <input
-              ref="fileInput"
-              type="file"
-              accept=".geojson,.json,application/geo+json,application/json"
-              class="d-none"
-              @change="onFileSelected"
-            />
+          <template v-if="importType === 'geojson'">
+            <!-- Upload zone -->
+            <div
+              class="upload-area"
+              :class="{
+                'drag-over': isDragOver,
+                'is-loading': isLoading,
+                'is-success': isSuccess
+              }"
+              @dragover.prevent="isDragOver = true"
+              @dragleave.prevent="isDragOver = false"
+              @drop.prevent="onDrop"
+              @click="!isLoading && !isSuccess && triggerFileInput()"
+            >
+              <input
+                ref="fileInput"
+                type="file"
+                accept=".geojson,.json,application/geo+json,application/json"
+                class="d-none"
+                @change="onFileSelected"
+              />
 
-            <!-- Default state -->
-            <template v-if="!isLoading && !isSuccess">
-              <v-icon size="40" color="primary" class="mb-2">
-                mdi-cloud-upload-outline
-              </v-icon>
-              <div class="text-body-1 font-weight-medium">
-                Click or drag & drop a GeoJSON file
-              </div>
-              <div class="text-caption text-medium-emphasis mt-1">
-                Supported formats: .geojson, .json
-              </div>
-            </template>
+              <!-- Default state -->
+              <template v-if="!isLoading && !isSuccess">
+                <v-icon size="40" color="primary" class="mb-2">
+                  mdi-cloud-upload-outline
+                </v-icon>
+                <div class="text-body-1 font-weight-medium">
+                  Click or drag & drop a GeoJSON file
+                </div>
+                <div class="text-caption text-medium-emphasis mt-1">
+                  Supported formats: .geojson, .json
+                </div>
+              </template>
 
-            <!-- Loading / Progress -->
-            <template v-else-if="isLoading">
-              <v-progress-circular
-                :model-value="progress"
-                :size="56"
-                :width="5"
-                color="primary"
-                class="mb-3"
-              >
-                <span class="text-caption">{{ progress }}%</span>
-              </v-progress-circular>
-              <div class="text-body-2">
-                Processing {{ selectedFileName }}...
-              </div>
-            </template>
+              <!-- Loading / Progress -->
+              <template v-else-if="isLoading">
+                <v-progress-circular
+                  :model-value="progress"
+                  :size="56"
+                  :width="5"
+                  color="primary"
+                  class="mb-3"
+                >
+                  <span class="text-caption">{{ progress }}%</span>
+                </v-progress-circular>
+                <div class="text-body-2">
+                  Processing {{ selectedFileName }}...
+                </div>
+              </template>
 
-            <!-- Success -->
-            <template v-else>
-              <v-icon size="48" color="success" class="mb-2">
-                mdi-check-circle
-              </v-icon>
-              <div class="text-body-1 font-weight-medium text-success">
-                Ready to add to map
-              </div>
-              <div class="text-caption text-medium-emphasis mt-1">
-                Name: {{ selectedFileName }}
-              </div>
-              <div class="text-caption text-medium-emphasis mt-1">
-                Size: {{ selectedFileSize }}
-              </div>
-            </template>
-          </div>
+              <!-- Success -->
+              <template v-else>
+                <v-icon size="48" color="success" class="mb-2">
+                  mdi-check-circle
+                </v-icon>
+                <div class="text-body-1 font-weight-medium text-success">
+                  Ready to add to map
+                </div>
+                <div class="text-caption text-medium-emphasis mt-1">
+                  Name: {{ selectedFileName }}
+                </div>
+                <div class="text-caption text-medium-emphasis mt-1">
+                  Size: {{ selectedFileSize }}
+                </div>
+              </template>
+            </div>
+          </template>
+          <template v-else>
 
-          <!-- Error -->
+            <div class="wms-import">
+
+              <v-text-field
+                v-model="wmsUrl"
+                label="WMS service URL"
+                placeholder="https://example.com/geoserver/wms"
+                variant="outlined"
+                density="comfortable"
+                prepend-inner-icon="mdi-link-variant"
+                hint="Paste the URL of the WMS service"
+                persistent-hint
+                clearable
+                @click:clear="  wmsUrl = '', wmsMetadata = [], selectedWmsLayers.value = [], wmsError = ''"
+                :error-messages="wmsError"
+                @paste="onWmsPaste"
+              />
+              <!-- Available WMS layers -->
+              <div v-if="wmsMetadata.length" class="mt-4">
+
+                <div class="text-subtitle-2 mb-2">
+                  Available layers ({{ wmsMetadata.length }})
+                </div>
+
+                <v-card
+                  variant="outlined"
+                  rounded="lg"
+                >
+                  <v-list density="compact">
+                    <v-list-item
+                      v-for="layer in wmsMetadata"
+                      :key="layer.name"
+                      :title="layer.title"
+                      :subtitle="layer.name"
+                    >
+                      <template #prepend>
+                        <v-checkbox
+                          v-model="selectedWmsLayers"
+                          :value="layer.name"
+                          hide-details
+                          density="compact"
+                        />
+                      </template>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+
+                <div class="text-caption text-medium-emphasis mt-2">
+                  {{ selectedWmsLayers.length }} layer(s) selected
+                </div>
+
+              </div>
+
+              <div class="text-caption text-medium-emphasis mt-3">
+                Example:
+                <code>https://example.com/geoserver/wms</code>
+              </div>
+
+            </div>
+
+          </template>
+            <!-- Error -->
           <v-alert
             v-if="errorMessage"
             type="error"
@@ -90,7 +173,9 @@
           >
             {{ errorMessage }}
           </v-alert>
+          
         </v-card-text>
+       
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -112,6 +197,16 @@
           >
             Add to map
           </v-btn>
+
+          <v-btn
+            v-if="importType === 'wms'"
+            color="primary"
+            variant="flat"
+            :disabled="selectedWmsLayers.length === 0"
+            @click="addSelectedWmsLayers"
+          >
+            Add {{ selectedWmsLayers.length || '' }} layer(s) to map
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -123,20 +218,33 @@ import { ref, defineEmits } from 'vue'
 import { useMapImportStore } from '../stores/mapImport'
 import { storeToRefs } from 'pinia'
 import {validateGeoJSON, formatFileSize} from '../utils/validateGeojson'
+import {parseWMSCapabilities} from '../utils/mapUtils'
 import { useLayerStyleStore } from '../stores/layerStyle'
 import * as turf from '@turf/turf'
 import { useaddedDatasetsStore } from '../stores/addedDatasets'
 import { useDatasetSearchStore } from '../stores/datasetSearch'
+import { useMapLegendStore } from '@/stores/mapLegend'
 
+const importType = ref('geojson')
+
+const wmsUrl = ref('')
+const wmsError = ref('')
 const datasetSearchStore = useDatasetSearchStore()
 const addedDatasetsStore = useaddedDatasetsStore()
 
-const emit = defineEmits(["addGeojsonToMap", "fitBoundsToBBOX"]);
+const emit = defineEmits([
+  "addGeojsonToMap",
+  "addWmsToMap",
+  "fitBoundsToBBOX"
+])
 
 let { styles } = storeToRefs(useLayerStyleStore())
+const selectedWmsLayers = ref([])
+const wmsMetadata = ref([])
 
 const mapImportStore = useMapImportStore()
 const { importDialog } = storeToRefs(mapImportStore)
+const mapLegendStore = useMapLegendStore();
 
 const fileInput = ref(null)
 const selectedFile = ref(null)
@@ -163,13 +271,25 @@ const closeDialog = () => {
 const reset = () => {
   selectedFile.value = null
   selectedFileName.value = ''
+  selectedFileSize.value = null
   parsedGeoJSON.value = null
+
   isLoading.value = false
   isSuccess.value = false
   progress.value = 0
   errorMessage.value = ''
   isDragOver.value = false
-  if (fileInput.value) fileInput.value.value = ''
+
+  wmsUrl.value = ''
+
+  importType.value = 'geojson'
+  wmsMetadata.value = []
+  selectedWmsLayers.value = []
+  wmsError.value = ''
+
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
 }
 
 const triggerFileInput = () => {
@@ -284,7 +404,6 @@ const addToMap = () => {
             geoGjsonData:parsedGeoJSON.value,
             sourceType: "geojson"
         }
-        console.log(layerSpecification)
         emit("addGeojsonToMap", layerSpecification);
         layerMetadata.value = {
                 _layerKey: selectedFileName.value,
@@ -304,6 +423,122 @@ const addToMap = () => {
 
 
   closeDialog()
+}
+const onWmsPaste = async (event) => {
+  const pastedText = event.clipboardData?.getData('text')?.trim()
+
+  if (!pastedText) return
+  console.log(pastedText, "pastedText")
+  wmsUrl.value = pastedText
+
+  await extractWMSInfo()
+}
+const extractWMSInfo = async () => {
+  wmsError.value = ''
+
+  if (!wmsUrl.value?.trim()) {
+    wmsError.value = 'Please enter a WMS service URL.'
+    return
+  }
+
+  try {
+    const url = new URL(wmsUrl.value.trim())
+
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      throw new Error('Invalid protocol')
+    }
+
+    // Keep only the WMS service URL.
+    // Remove request-specific parameters.
+    url.searchParams.delete('SERVICE')
+    url.searchParams.delete('REQUEST')
+    url.searchParams.delete('VERSION')
+
+    const serviceUrl = url.toString()
+
+    // Build GetCapabilities request from a copy
+    const capabilitiesUrl = new URL(serviceUrl)
+
+    capabilitiesUrl.searchParams.set('SERVICE', 'WMS')
+    capabilitiesUrl.searchParams.set('REQUEST', 'GetCapabilities')
+
+    console.log('Service URL:', serviceUrl)
+    console.log('Capabilities URL:', capabilitiesUrl.toString())
+
+    const response = await fetch(capabilitiesUrl.toString())
+
+    if (!response.ok) {
+      throw new Error(
+        `WMS service returned ${response.status}`
+      )
+    }
+
+    const xmlText = await response.text()
+
+    const WMSMetadata = parseWMSCapabilities(xmlText)
+
+    if (!WMSMetadata.length) {
+      throw new Error('No WMS layers were found.')
+    }
+
+    // Store ONLY the clean service URL
+    wmsUrl.value = serviceUrl
+
+    wmsMetadata.value = WMSMetadata
+    selectedWmsLayers.value = []
+
+  } catch (err) {
+    console.error('WMS import error:', err)
+
+    wmsError.value =
+      err.message || 'Failed to read WMS service.'
+  }
+}
+const addSelectedWmsLayers = () => {
+  wmsError.value = ''
+
+  if (!selectedWmsLayers.value.length) {
+    wmsError.value = 'Please select at least one WMS layer.'
+    return
+  }
+
+  const layers = wmsMetadata.value
+    .filter(layer =>
+     
+      selectedWmsLayers.value.includes(layer.name)
+      
+    )
+    .map(layer => ({
+      dct_title: layer.title,
+      dct_type: 'raster',
+      url: wmsUrl.value.trim(),
+      layer: layer.name,
+      legend_url:layer.styles?.[0]?.legendUrl || null,
+      // Keep the discovered metadata as well
+      abstract: layer.abstract,
+      crs:'EPSG:3857',
+      styles: layer.styles,
+      dct_bbox: layer.bbox,
+      geometry_type: 'raster',
+    }))
+    console.log('Adding WMS layers to map:', layers)
+    layers.forEach(item => {
+      console.log(item, "item")
+        emit('addWmsToMap', item)
+        addedDatasetsStore.addExternalLayer({layerName:item.dct_title, metadata:item})
+        mapLegendStore.setActivatedWMSLegendItem({
+            legend_url: item.legend_url,
+            legend_title: item.dct_title
+      })
+       emit("fitBoundsToBBOX", item.dct_bbox)
+    })
+    datasetSearchStore.activateDatasetSearch({
+            searchInitiated: true,
+    })
+    
+     
+
+  //closeDialog()
 }
 </script>
 
