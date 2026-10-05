@@ -124,25 +124,41 @@
                   Available layers ({{ wmsMetadata.length }})
                 </div>
 
-                <v-card
+               <v-card
                   variant="outlined"
                   rounded="lg"
                 >
-                  <v-list density="compact">
+                  <v-list
+                    density="comfortable"
+                    lines="two"
+                    class="py-1"
+                  >
                     <v-list-item
                       v-for="layer in wmsMetadata"
                       :key="layer.name"
-                      :title="layer.title"
-                      :subtitle="layer.name"
+                      :value="layer.name"
+                      :active="selectedWmsLayers.includes(layer.name)"
+                      active-color="primary"
+                      rounded="lg"
+                      class="mx-2 my-1"
                     >
                       <template #prepend>
-                        <v-checkbox
+                        <v-checkbox-btn
                           v-model="selectedWmsLayers"
                           :value="layer.name"
-                          hide-details
+                          color="primary"
                           density="compact"
+                          hide-details
                         />
                       </template>
+
+                      <v-list-item-title class="text-body-2 font-weight-medium">
+                        {{ layer.title }}
+                      </v-list-item-title>
+
+                      <v-list-item-subtitle class="text-caption text-medium-emphasis">
+                        {{ layer.name }}
+                      </v-list-item-subtitle>
                     </v-list-item>
                   </v-list>
                 </v-card>
