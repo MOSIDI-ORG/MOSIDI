@@ -527,7 +527,7 @@
 
                 <!-- ZOOM (uses bbox from turf) -->
                 <v-list-item
-                  v-if="externalLayer.dct_bbox"
+                  v-if="externalLayer.dct_bbox || externalLayer.bbox"
                   @click.stop="getLayerExtentFromDB(externalLayer)"
                 >
                   <template #prepend>
@@ -838,24 +838,17 @@ const getLayerExtentFromDB = async (addedLayer)=>{
         so it needs to be transfromed to Maplibre fitBounds format
         */
         try {
-            /*const geojson = addedLayer.dct_bbox;
-        
-            const bbox = geojson?.coordinates?.[0]?.length 
-            ? [
-                Math.min(...geojson.coordinates[0].map(p => p[1])),   // minLng
-                Math.min(...geojson.coordinates[0].map(p => p[0])),   // minLat
-                Math.max(...geojson.coordinates[0].map(p => p[1])),   // maxLng
-                Math.max(...geojson.coordinates[0].map(p => p[0]))    // maxLat
-              ]
-            : null;
-
-        */
-       const bbox = addedLayer.bbox[0]
-       console.log(bbox, "bbox")
-
-            if (bbox) {
-                emit("fitBoundsToBBOX", [bbox.miny, bbox.minx, bbox.maxy, bbox.maxx])
-            }
+            
+       
+       if ( addedLayer.bbox && addedLayer.bbox.length > 0) {
+         // for external WMS layersstored in DB
+            const bbox = addedLayer.bbox[0];
+            emit("fitBoundsToBBOX", [bbox.miny, bbox.minx, bbox.maxy, bbox.maxx]);
+        } else {
+            // for external WMS layers uploaded by user
+           emit("fitBoundsToBBOX", addedLayer.dct_bbox)
+        }
+       
 
         } catch (e) {
             console.error("Failed to parse bbox:", e);
@@ -891,6 +884,10 @@ const toggleLayerVisibility = (layerName)=>{
         emit("toggleLayerVisibility", layerName.dct_title)
         addedExternallayers.value[layerName.dct_title]['checked'] =! addedExternallayers.value[layerName.dct_title]['checked']
     }
+    else if (layerName.dct_type=='raster'){
+        emit("toggleLayerVisibility", layerName.dct_title)
+        addedExternallayers.value[layerName.dct_title]['checked'] =! addedExternallayers.value[layerName.dct_title]['checked']
+    }
     
 
     
@@ -904,10 +901,7 @@ const removeLayer = (layerName, layerType)=>{
             dataUiInitiated : false
         })
     }
-    /*datasetSearchStore.toggleDataUI({
-        dataUiInitiated : false
-       
-    })*/
+    
     if (layerType==DatasetTypes.Table){
         emit("removeLayerFromMap",  {layerId:  layerName, sourceId: layerName})
         if(addedDatasetsStore.addedLayers[layerName]['sublayers']){
@@ -929,10 +923,23 @@ const removeLayer = (layerName, layerType)=>{
     else if(layerType=='raster'){
         
         emit("removeLayerFromMap",  {layerId:  layerName, sourceId: layerName})
-        mapLegendStore.removeWMSLegendItem({
-            legend_url: addedDatasetsStore.addedLayers[layerName].legend_url,
-            layername: layerName
-        })
+
+        // for external uploaded WMS layers 
+        if (addedDatasetsStore.addedLayers[layerName]==undefined){
+            mapLegendStore.removeWMSLegendItem({
+                        legend_url: addedDatasetsStore.addedExternallayers[layerName].legend_url,
+                        layername: layerName
+            })
+            addedDatasetsStore.removeExternallayer(layerName)
+        }
+        // for external WMS layers stored in DB
+        else {
+            mapLegendStore.removeWMSLegendItem({
+                        legend_url: addedDatasetsStore.addedLayers[layerName].legend_url,
+                        layername: layerName
+            })
+        }
+        
     }
     else if (layerType==DatasetTypes.CustomIndicator){
         emit("removeLayerFromMap",  {layerId:  'kommunales_gebiet_dashboard' + layerName, sourceId: 'kommunales_gebiet_dashboard' + layerName})
@@ -974,17 +981,35 @@ const activateStylePanel = (datasetName,geomType)=>{
        lineStyleStore.addLayerStyle(datasetName)
    }
    else if (geomType == "raster"){
+    console.log(layerSpec, datasetName, geomType, "layerSpec")
+
         rasterLayerSpecification.value=layerSpec
         rasterStyleStore.addLayerStyle(datasetName)
-        mapLegendStore.setActivatedWMSLegendItem({
-            legend_url: addedDatasetsStore.addedLayers[datasetName].legend_url,
-            legend_title: datasetName
-        })
-        if (addedDatasetsStore.addedLayers[datasetName].legend_url== undefined){
-        alertStore.setAlert({
-                text: `There is no legend for ${addedDatasetsStore.addedLayers[datasetName].dct_title}`,
-                timeout: 2000
-            });
+        // for external user uploaded WMS layer
+        if (addedDatasetsStore.addedLayers[datasetName]==undefined){
+            mapLegendStore.setActivatedWMSLegendItem({
+                legend_url: addedDatasetsStore.addedExternallayers[datasetName].legend_url,
+                legend_title: datasetName
+            })
+            if (addedDatasetsStore.addedExternallayers[datasetName].legend_url== undefined){
+                alertStore.setAlert({
+                        text: `There is no legend for ${addedDatasetsStore.addedExternallayers[datasetName].dct_title}`,
+                        timeout: 2000
+                    });
+            }
+        }
+        // for external WMS layer stored in DB
+        else {
+            mapLegendStore.setActivatedWMSLegendItem({
+                legend_url: addedDatasetsStore.addedLayers[datasetName].legend_url,
+                legend_title: datasetName
+            })
+            if (addedDatasetsStore.addedLayers[datasetName]?.legend_url== undefined){
+                alertStore.setAlert({
+                        text: `There is no legend for ${addedDatasetsStore.addedLayers[datasetName]?.dct_title}`,
+                        timeout: 2000
+                    });
+            }
         }
 
    }

@@ -17,7 +17,7 @@
   <AlertUI> </AlertUI>
   <MapExport @export-map="onExportMap"> </MapExport>
   <MapShare > </MapShare>
-  <MapImport @addGeojsonToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX"> </MapImport>
+  <MapImport @addGeojsonToMap="addLayerToMap" @fitBoundsToBBOX="fitBoundsToBBOX" @addWmsToMap="addExternaWMSLayerToMap"> </MapImport>
 
   <ProgressUI> </ProgressUI>
   
