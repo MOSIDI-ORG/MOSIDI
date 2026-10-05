@@ -316,3 +316,113 @@ export function addCursorStyleHovering(map, layerName) {
     map.getCanvas().style.cursor = '';
   });
 }
+
+export function parseWMSCapabilities(xmlText) {
+
+    const parser = new DOMParser();
+
+    const xml = parser.parseFromString(
+        xmlText,
+        'text/xml'
+    );
+
+    const parserError = xml.querySelector('parsererror');
+
+    if (parserError) {
+        throw new Error('Invalid WMS GetCapabilities XML.');
+    }
+
+    const layers = [];
+
+    xml.querySelectorAll('Layer').forEach(layer => {
+
+        const name = layer.querySelector(':scope > Name')?.textContent?.trim();
+
+        // Only layers with a Name can be requested using GetMap.
+        if (!name) return;
+
+        const title =
+            layer.querySelector(':scope > Title')?.textContent?.trim()
+            || name;
+
+        const abstract =
+            layer.querySelector(':scope > Abstract')?.textContent?.trim()
+            || '';
+
+        const crs = [
+            ...layer.querySelectorAll(':scope > CRS, :scope > SRS')
+        ].map(el => el.textContent.trim());
+
+        const styles = [
+            ...layer.querySelectorAll(':scope > Style')
+        ].map(style => ({
+            name:
+                style.querySelector(':scope > Name')
+                    ?.textContent?.trim(),
+
+            title:
+                style.querySelector(':scope > Title')
+                    ?.textContent?.trim(),
+
+            legendUrl:
+                style.querySelector(
+                    'LegendURL OnlineResource'
+                )?.getAttribute('xlink:href')
+                || style.querySelector(
+                    'LegendURL OnlineResource'
+                )?.getAttribute('href')
+                || null
+        }));
+
+        const geographicBbox =
+            layer.querySelector(':scope > EX_GeographicBoundingBox')
+
+        const latLonBbox =
+            layer.querySelector(':scope > LatLonBoundingBox')
+
+        let bbox = null
+
+        if (geographicBbox) {
+            bbox = [
+                parseFloat(
+                    geographicBbox
+                        .querySelector(':scope > westBoundLongitude')
+                        ?.textContent
+                ),
+                parseFloat(
+                    geographicBbox
+                        .querySelector(':scope > southBoundLatitude')
+                        ?.textContent
+                ),
+                parseFloat(
+                    geographicBbox
+                        .querySelector(':scope > eastBoundLongitude')
+                        ?.textContent
+                ),
+                parseFloat(
+                    geographicBbox
+                        .querySelector(':scope > northBoundLatitude')
+                        ?.textContent
+                )
+            ]
+        }
+        else if (latLonBbox) {
+            bbox = [
+                parseFloat(latLonBbox.getAttribute('minx')),
+                parseFloat(latLonBbox.getAttribute('miny')),
+                parseFloat(latLonBbox.getAttribute('maxx')),
+                parseFloat(latLonBbox.getAttribute('maxy'))
+            ]
+        }
+        layers.push({
+            name,
+            title,
+            abstract,
+            crs,
+            styles,
+            bbox
+        });
+    });
+
+    return layers;
+}
